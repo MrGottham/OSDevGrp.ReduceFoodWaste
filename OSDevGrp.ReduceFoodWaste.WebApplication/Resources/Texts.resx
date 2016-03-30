@@ -129,4 +129,7 @@
   <data name="LogOff" xml:space="preserve">
     <value>Log off</value>
   </data>
+  <data name="ReduceFoodWasteProject" xml:space="preserve">
+    <value>The Minimize Food Waste Project</value>
+  </data>
 </root>

@@ -95,5 +95,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
                 return ResourceManager.GetString("LogOff", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Minimize Food Waste Project.
+        /// </summary>
+        public static string ReduceFoodWasteProject {
+            get {
+                return ResourceManager.GetString("ReduceFoodWasteProject", resourceCulture);
+            }
+        }
     }
 }

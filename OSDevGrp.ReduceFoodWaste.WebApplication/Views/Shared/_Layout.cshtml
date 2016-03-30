@@ -1,8 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using System
+@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+        <title>@ViewBag.Title - @Texts.ReduceFoodWasteProject</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
@@ -12,7 +14,7 @@
         <header>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
+                    <p class="site-title">@Html.ActionLink(Texts.ReduceFoodWasteProject, "Index", "Home")</p>
                 </div>
                 <div class="float-right">
                     <section id="culture">
@@ -40,7 +42,7 @@
         <footer>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
+                    <p>Copyright &copy; OS Development Group @DateTime.Now.Year - @Texts.ReduceFoodWasteProject</p>
                 </div>
             </div>
         </footer>
