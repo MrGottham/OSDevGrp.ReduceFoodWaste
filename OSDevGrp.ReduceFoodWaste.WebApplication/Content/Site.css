@@ -177,6 +177,33 @@ footer {
     }
 
 
+/* culture
+----------------------------------------------------------*/
+#culture {
+    display: block;
+    font-size: .85em;
+    margin: 0 0 10px;
+    text-align: right;
+}
+
+    #culture a {
+        background-color: #d3dce0;
+        margin-left: 10px;
+        margin-right: 3px;
+        padding: 2px 3px;
+        text-decoration: none;
+    }
+
+    #culture ul {
+        margin: 0;
+    }
+
+    #culture li {
+        display: inline;
+        list-style: none;
+    }
+
+
 /* menu
 ----------------------------------------------------------*/
 ul#menu {
