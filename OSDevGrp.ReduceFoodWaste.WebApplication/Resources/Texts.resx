@@ -123,6 +123,15 @@
   <data name="English" xml:space="preserve">
     <value>English</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ErrorOccurredProcessingRequest" xml:space="preserve">
+    <value>An error occurred while processing your request.</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
   <data name="LogIn" xml:space="preserve">
     <value>Log in</value>
   </data>
