@@ -127,7 +127,7 @@
     <value>Fejl</value>
   </data>
   <data name="ErrorOccurredProcessingRequest" xml:space="preserve">
-    <value>Der opstod en fejl ved behandling af din forespørgsel.</value>
+    <value>Der opstod en fejl ved behandling af din forespørgsel</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Hjem</value>
@@ -138,8 +138,17 @@
   <data name="LogIn" xml:space="preserve">
     <value>Log ind</value>
   </data>
+  <data name="LogInUsingAnotherService" xml:space="preserve">
+    <value>Log ind ved hjælp af en anden service</value>
+  </data>
+  <data name="LogInUsingYourAccount" xml:space="preserve">
+    <value>Log ind ved hjælp af din {0} konto</value>
+  </data>
   <data name="LogOff" xml:space="preserve">
     <value>Log ud</value>
+  </data>
+  <data name="PleaseLogIn" xml:space="preserve">
+    <value>Log ind for at starte brugen af</value>
   </data>
   <data name="Reason" xml:space="preserve">
     <value>Årsag</value>

@@ -7,7 +7,7 @@ using System.Web.Mvc;
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class CultureAttribute : ActionFilterAttribute
+    public sealed class CultureAttribute : ActionFilterAttribute
     {
         #region Private constants
 

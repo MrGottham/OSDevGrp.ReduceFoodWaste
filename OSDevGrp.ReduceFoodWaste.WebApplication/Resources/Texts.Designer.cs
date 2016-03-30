@@ -88,7 +88,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occurred while processing your request..
+        ///   Looks up a localized string similar to An error occurred while processing your request.
         /// </summary>
         public static string ErrorOccurredProcessingRequest {
             get {
@@ -124,11 +124,38 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log in using another service.
+        /// </summary>
+        public static string LogInUsingAnotherService {
+            get {
+                return ResourceManager.GetString("LogInUsingAnotherService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in using your {0} account.
+        /// </summary>
+        public static string LogInUsingYourAccount {
+            get {
+                return ResourceManager.GetString("LogInUsingYourAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log off.
         /// </summary>
         public static string LogOff {
             get {
                 return ResourceManager.GetString("LogOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please log in to start using.
+        /// </summary>
+        public static string PleaseLogIn {
+            get {
+                return ResourceManager.GetString("PleaseLogIn", resourceCulture);
             }
         }
         

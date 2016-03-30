@@ -1,13 +1,14 @@
-﻿@{
-    ViewBag.Title = "Log in";
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@{
+    ViewBag.Title = Texts.LogIn;
 }
 
 <hgroup class="title">
     <h1>@ViewBag.Title.</h1>
+    <h2>@Texts.LogInUsingAnotherService.</h2>
 </hgroup>
 
 <section class="social" id="socialLoginForm">
-    <h2>Use another service to log in.</h2>
     @Html.Action("ExternalLoginsList", new { ViewBag.ReturnUrl })
 </section>
 

@@ -1,5 +1,6 @@
 ﻿@using System.Collections.Generic
 @using Microsoft.Web.WebPages.OAuth
+@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model ICollection<AuthenticationClientData>
 
 @if (Model.Count == 0)
@@ -15,11 +16,11 @@ else
     {
     @Html.AntiForgeryToken()
     <fieldset id="socialLoginList">
-        <legend>Log in using another service</legend>
+        <legend>@Texts.LogInUsingAnotherService</legend>
         <p>
         @foreach (AuthenticationClientData p in Model)
         {
-            <button type="submit" name="provider" value="@p.AuthenticationClient.ProviderName" title="Log in using your @p.DisplayName account">@p.DisplayName</button>
+            <button type="submit" name="provider" value="@p.AuthenticationClient.ProviderName" title="@string.Format(Texts.LogInUsingYourAccount, @p.DisplayName)">@p.DisplayName</button>
         }
         </p>
     </fieldset>
