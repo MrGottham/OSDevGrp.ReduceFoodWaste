@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 {
@@ -6,7 +7,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
+            ViewBag.Message = string.Format("{0} {1}", Texts.WelcomeTo, Texts.ReduceFoodWasteProject);
 
             return View();
         }

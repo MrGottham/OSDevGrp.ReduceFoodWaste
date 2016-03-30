@@ -6,10 +6,10 @@
 }
 
 <hgroup class="title">
-    <h1 class="error">@Texts.Error</h1>
+    <h1 class="error">@Texts.Error.</h1>
     <h2 class="error">@Texts.ErrorOccurredProcessingRequest</h2>
-    @if (Model.Exception != null)
-    {
-        <text>x</text>
-    }
 </hgroup>
+@if (Model.Exception != null)
+{
+    <p>@Texts.Reason: @Model.Exception.Message</p>
+}
