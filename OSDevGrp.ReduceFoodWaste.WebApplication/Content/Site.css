@@ -125,6 +125,17 @@ footer {
     height: 100px;
 }
 
+    footer ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        footer ul li {
+            display: inline;
+            list-style: none;
+            padding: 2px 0 2px 20px;
+        }
+
 
 /* site title
 ----------------------------------------------------------*/
@@ -172,33 +183,6 @@ footer {
     }
 
     #login li {
-        display: inline;
-        list-style: none;
-    }
-
-
-/* culture
-----------------------------------------------------------*/
-#culture {
-    display: block;
-    font-size: .85em;
-    margin: 0 0 10px;
-    text-align: right;
-}
-
-    #culture a {
-        background-color: #d3dce0;
-        margin-left: 10px;
-        margin-right: 3px;
-        padding: 2px 3px;
-        text-decoration: none;
-    }
-
-    #culture ul {
-        margin: 0;
-    }
-
-    #culture li {
         display: inline;
         list-style: none;
     }
@@ -780,4 +764,15 @@ tr.pager td {
         footer p {
             margin: 0;
         }
+
+        footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+            footer ul li {
+                display: inline;
+                list-style: none;
+                padding: 2px 0 2px 20px;
+            }
 }

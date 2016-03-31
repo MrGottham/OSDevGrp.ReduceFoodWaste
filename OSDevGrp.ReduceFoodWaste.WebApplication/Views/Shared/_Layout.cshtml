@@ -17,9 +17,6 @@
                     <p class="site-title">@Html.ActionLink(Texts.ReduceFoodWasteProject, "Index", "Home")</p>
                 </div>
                 <div class="float-right">
-                    <section id="culture">
-                        @Html.Partial("_CulturePartial")
-                    </section>
                     <section id="login">
                         @Html.Partial("_LoginPartial")
                     </section>
@@ -41,6 +38,11 @@
             <div class="content-wrapper">
                 <div class="float-left">
                     <p>Copyright &copy; OS Development Group @DateTime.Now.Year - @Texts.ReduceFoodWasteProject</p>
+                </div>
+                <div class="float-right">
+                    <section>
+                        @Html.Partial("_CulturePartial")
+                    </section>
                 </div>
             </div>
         </footer>

@@ -11,7 +11,7 @@
             </hgroup>
             @if (Request.IsAuthenticated == false)
             {
-                <p>@Texts.PleaseLogIn @Texts.ReduceFoodWasteProject.</p>
+                <p>@string.Format(@Texts.PleaseLogIn, Texts.ReduceFoodWasteProject)</p>
             }
         </div>
     </section>

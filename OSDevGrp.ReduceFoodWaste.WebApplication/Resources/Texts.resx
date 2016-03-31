@@ -127,7 +127,7 @@
     <value>Error</value>
   </data>
   <data name="ErrorOccurredProcessingRequest" xml:space="preserve">
-    <value>An error occurred while processing your request</value>
+    <value>An error occurred while processing your request.</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
@@ -139,16 +139,16 @@
     <value>Log in</value>
   </data>
   <data name="LogInUsingAnotherService" xml:space="preserve">
-    <value>Log in using another service</value>
+    <value>Log in using another service.</value>
   </data>
   <data name="LogInUsingYourAccount" xml:space="preserve">
-    <value>Log in using your {0} account</value>
+    <value>Log in using your {0} account.</value>
   </data>
   <data name="LogOff" xml:space="preserve">
     <value>Log off</value>
   </data>
   <data name="PleaseLogIn" xml:space="preserve">
-    <value>Please log in to start using</value>
+    <value>Please log in to start using {0}.</value>
   </data>
   <data name="Reason" xml:space="preserve">
     <value>Reason</value>
@@ -157,6 +157,6 @@
     <value>The Minimize Food Waste Project</value>
   </data>
   <data name="WelcomeTo" xml:space="preserve">
-    <value>Welcome to</value>
+    <value>Welcome to {0}.</value>
   </data>
 </root>
