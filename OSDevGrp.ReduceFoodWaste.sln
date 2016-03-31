@@ -10,13 +10,13 @@ EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
 		SccNumberOfProjects = 3
+		SccProjectUniqueName0 = OSDevGrp.ReduceFoodWaste.WebApplication.Tests\\OSDevGrp.ReduceFoodWaste.WebApplication.Tests.csproj
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = OSDevGrp.ReduceFoodWaste.WebApplication.Tests\\OSDevGrp.ReduceFoodWaste.WebApplication.Tests.csproj
+		SccProjectFilePathRelativizedFromConnection0 = OSDevGrp.ReduceFoodWaste.WebApplication.Tests\\
+		SccProjectUniqueName1 = OSDevGrp.ReduceFoodWaste.WebApplication\\OSDevGrp.ReduceFoodWaste.WebApplication.csproj
 		SccLocalPath1 = .
-		SccProjectFilePathRelativizedFromConnection1 = OSDevGrp.ReduceFoodWaste.WebApplication.Tests\\
-		SccProjectUniqueName2 = OSDevGrp.ReduceFoodWaste.WebApplication\\OSDevGrp.ReduceFoodWaste.WebApplication.csproj
+		SccProjectFilePathRelativizedFromConnection1 = OSDevGrp.ReduceFoodWaste.WebApplication\\
 		SccLocalPath2 = .
-		SccProjectFilePathRelativizedFromConnection2 = OSDevGrp.ReduceFoodWaste.WebApplication\\
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
