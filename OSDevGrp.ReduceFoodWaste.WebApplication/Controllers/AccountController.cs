@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Transactions;
 using System.Web.Mvc;
+using System.Web.Routing;
 using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using WebMatrix.WebData;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
@@ -84,7 +88,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+            return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new {ReturnUrl = returnUrl}));
         }
 
         //
@@ -92,10 +96,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [AllowAnonymous]
         public ActionResult ExternalLoginCallback(string returnUrl)
         {
-            AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+            AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new {ReturnUrl = returnUrl}));
             if (!result.IsSuccessful)
             {
-                return RedirectToAction("ExternalLoginFailure");
+                return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnsuccessfulLoginWithService});
+            }
+
+            string mailAddress = GetMailAddress(result);
+            if (string.IsNullOrWhiteSpace(mailAddress))
+            {
+                return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnableToObtainEmailAddressFromService});
             }
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
@@ -115,7 +125,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 string loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
                 ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
                 ViewBag.ReturnUrl = returnUrl;
-                return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = result.UserName, ExternalLoginData = loginData });
+                return View("ExternalLoginConfirmation",
+                    new RegisterExternalLoginModel {UserName = result.UserName, ExternalLoginData = loginData});
             }
         }
 
@@ -167,8 +178,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         //
         // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
+        public ActionResult ExternalLoginFailure(string reason)
         {
+            ViewBag.Message = reason;
             return View();
         }
 
@@ -202,6 +214,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         }
 
         #region Helpers
+
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -212,6 +225,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+        }
+
+        private string GetMailAddress(AuthenticationResult authenticationResult)
+        {
+            if (authenticationResult == null)
+            {
+                throw new ArgumentNullException("authenticationResult");
+            }
+
+            if (authenticationResult.ExtraData == null || authenticationResult.ExtraData.ContainsKey("email") == false)
+            {
+                return null;
+            }
+
+            return authenticationResult.ExtraData["email"];
         }
 
         public enum ManageMessageId
@@ -275,6 +303,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
         }
+
         #endregion
     }
 }

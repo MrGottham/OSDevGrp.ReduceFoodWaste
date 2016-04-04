@@ -124,6 +124,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login Failure.
+        /// </summary>
+        public static string LoginFailure {
+            get {
+                return ResourceManager.GetString("LoginFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log in using another service..
         /// </summary>
         public static string LogInUsingAnotherService {
@@ -174,6 +183,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         public static string ReduceFoodWasteProject {
             get {
                 return ResourceManager.GetString("ReduceFoodWasteProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to obtain email address from your login account..
+        /// </summary>
+        public static string UnableToObtainEmailAddressFromService {
+            get {
+                return ResourceManager.GetString("UnableToObtainEmailAddressFromService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsuccessful login with service..
+        /// </summary>
+        public static string UnsuccessfulLoginWithService {
+            get {
+                return ResourceManager.GetString("UnsuccessfulLoginWithService", resourceCulture);
             }
         }
         

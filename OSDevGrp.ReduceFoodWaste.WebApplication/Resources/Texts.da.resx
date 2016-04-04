@@ -138,6 +138,9 @@
   <data name="LogIn" xml:space="preserve">
     <value>Log ind</value>
   </data>
+  <data name="LoginFailure" xml:space="preserve">
+    <value>Fejl ved log ind</value>
+  </data>
   <data name="LogInUsingAnotherService" xml:space="preserve">
     <value>Log ind med en anden tjeneste.</value>
   </data>
@@ -155,6 +158,12 @@
   </data>
   <data name="ReduceFoodWasteProject" xml:space="preserve">
     <value>Projektet Formindsk Madspild</value>
+  </data>
+  <data name="UnableToObtainEmailAddressFromService" xml:space="preserve">
+    <value>En mailadresse til din loginkonto kunne ikke hentes.</value>
+  </data>
+  <data name="UnsuccessfulLoginWithService" xml:space="preserve">
+    <value>Log ind med anden tjeneste mislykkedes.</value>
   </data>
   <data name="WelcomeTo" xml:space="preserve">
     <value>Velkommen til {0}.</value>

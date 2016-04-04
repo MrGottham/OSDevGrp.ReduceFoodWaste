@@ -138,6 +138,9 @@
   <data name="LogIn" xml:space="preserve">
     <value>Log in</value>
   </data>
+  <data name="LoginFailure" xml:space="preserve">
+    <value>Login Failure</value>
+  </data>
   <data name="LogInUsingAnotherService" xml:space="preserve">
     <value>Log in using another service.</value>
   </data>
@@ -155,6 +158,12 @@
   </data>
   <data name="ReduceFoodWasteProject" xml:space="preserve">
     <value>The Minimize Food Waste Project</value>
+  </data>
+  <data name="UnableToObtainEmailAddressFromService" xml:space="preserve">
+    <value>Unable to obtain email address from your login account.</value>
+  </data>
+  <data name="UnsuccessfulLoginWithService" xml:space="preserve">
+    <value>Unsuccessful login with service.</value>
   </data>
   <data name="WelcomeTo" xml:space="preserve">
     <value>Welcome to {0}.</value>
