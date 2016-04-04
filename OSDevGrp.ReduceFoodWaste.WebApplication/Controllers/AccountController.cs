@@ -102,13 +102,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnsuccessfulLoginWithService});
             }
 
+            var claimsIdentity = ToClaimsIdentity(result);
+
+            var claims = claimsIdentity.Claims.ToList();
+
             string mailAddress = GetMailAddress(result);
             if (string.IsNullOrWhiteSpace(mailAddress))
             {
                 return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnableToObtainEmailAddressFromService});
             }
-
-            var y = User.Identity;
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
@@ -195,6 +197,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+
+        private static ClaimsIdentity ToClaimsIdentity(AuthenticationResult authenticationResult)
+        {
+            if (authenticationResult == null)
+            {
+                throw new ArgumentNullException("authenticationResult");
+            }
+
+            var claimCollection = new List<Claim>
+            {
+                new Claim(ClaimTypes.Actor, authenticationResult.Provider)
+            };
+            return new ClaimsIdentity(claimCollection);
+        }
+
+
 
         private static string GetMailAddress(AuthenticationResult authenticationResult)
         {
