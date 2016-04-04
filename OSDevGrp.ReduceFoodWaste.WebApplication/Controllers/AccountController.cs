@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Transactions;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
@@ -108,71 +108,40 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnableToObtainEmailAddressFromService});
             }
 
+            var y = User.Identity;
+
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
+                var x = GenerateClaimsIdentity(result, mailAddress);
+
                 return RedirectToLocal(returnUrl);
             }
 
             if (User.Identity.IsAuthenticated)
             {
-                // If the current user is logged in add the new account
-                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, User.Identity.Name);
+                // If the current user is logged in then add the new account.
+                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, mailAddress);
+                if (User.Identity as ClaimsIdentity == null)
+                {
+                }
                 return RedirectToLocal(returnUrl);
             }
-            else
-            {
-                // User is new, ask for their desired membership name
-                string loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
-                ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
-                ViewBag.ReturnUrl = returnUrl;
-                return View("ExternalLoginConfirmation",
-                    new RegisterExternalLoginModel {UserName = result.UserName, ExternalLoginData = loginData});
-            }
-        }
 
-        //
-        // POST: /Account/ExternalLoginConfirmation
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ExternalLoginConfirmation(RegisterExternalLoginModel model, string returnUrl)
-        {
-            string provider = null;
-            string providerUserId = null;
-
-            if (User.Identity.IsAuthenticated || !OAuthWebSecurity.TryDeserializeProviderUserId(model.ExternalLoginData, out provider, out providerUserId))
+            using (var context = new UsersContext())
             {
-                return RedirectToAction("Manage");
-            }
-
-            if (ModelState.IsValid)
-            {
-                // Insert a new user into the database
-                using (UsersContext db = new UsersContext())
+                var userProfile = context.UserProfiles.FirstOrDefault(up => string.Compare(mailAddress, up.UserName, StringComparison.OrdinalIgnoreCase) == 0);
+                if (userProfile == null)
                 {
-                    UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
-                    // Check if user already exists
-                    if (user == null)
-                    {
-                        // Insert name into the profile table
-                        db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
-                        db.SaveChanges();
-
-                        OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
-                        OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
-
-                        return RedirectToLocal(returnUrl);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("UserName", "User name already exists. Please enter a different user name.");
-                    }
+                    context.UserProfiles.Add(new UserProfile {UserName = mailAddress});
+                    context.SaveChanges();
                 }
+
+                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, mailAddress);
+                OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false);
             }
 
-            ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(provider).DisplayName;
-            ViewBag.ReturnUrl = returnUrl;
-            return View(model);
+            return RedirectToLocal(returnUrl);
+
         }
 
         //
@@ -227,7 +196,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
         }
 
-        private string GetMailAddress(AuthenticationResult authenticationResult)
+        private static string GetMailAddress(AuthenticationResult authenticationResult)
         {
             if (authenticationResult == null)
             {
@@ -241,6 +210,28 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             return authenticationResult.ExtraData["email"];
         }
+
+        private static IIdentity GenerateClaimsIdentity(AuthenticationResult authenticationResult, string mailAddress)
+        {
+            if (authenticationResult == null)
+            {
+                throw new ArgumentNullException("authenticationResult");
+            }
+            if (mailAddress == null)
+            {
+                throw new ArgumentNullException("mailAddress");
+            }
+
+            var claimCollection = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, authenticationResult.UserName, ClaimValueTypes.String, authenticationResult.Provider),
+            };
+            var claimsIdentity = new ClaimsIdentity(claimCollection);
+            return claimsIdentity;
+        }
+
+
+        // TODO Check whether we should use these...
 
         public enum ManageMessageId
         {
