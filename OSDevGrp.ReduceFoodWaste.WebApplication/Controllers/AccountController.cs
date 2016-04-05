@@ -103,12 +103,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             var claimsIdentity = ToClaimsIdentity(result);
 
-            string mailAddress = null;
-            var mailClaim = claimsIdentity.FindFirst(ClaimTypes.Email);
-            if (mailClaim != null)
-            {
-                mailAddress = mailClaim.Value;
-            }
+            string mailAddress = GetMailAddress(claimsIdentity);
             if (string.IsNullOrWhiteSpace(mailAddress))
             {
                 return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnableToObtainEmailAddressFromService});
@@ -192,10 +187,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 return Redirect(returnUrl);
             }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            return RedirectToAction("Index", "Home");
         }
 
         private static ClaimsIdentity ToClaimsIdentity(AuthenticationResult authenticationResult)
@@ -236,6 +228,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     break;
             }
             return new ClaimsIdentity(claimCollection);
+        }
+
+        private static string GetMailAddress(ClaimsIdentity claimsIdentity)
+        {
+            if (claimsIdentity == null)
+            {
+                throw new ArgumentNullException("claimsIdentity");
+            }
+            var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email);
+            return emailClaim == null ? null : emailClaim.Value;
         }
 
 
