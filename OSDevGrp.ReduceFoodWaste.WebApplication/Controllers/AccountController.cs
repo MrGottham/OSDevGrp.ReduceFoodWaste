@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Transactions;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
+using Newtonsoft.Json;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
@@ -111,6 +113,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
+                Response.Cookies.Add(CreateAuthenticationTicket(claimsIdentity));
                 return RedirectToLocal(returnUrl);
             }
 
@@ -118,9 +121,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 // If the current user is logged in then add the new account.
                 OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, mailAddress);
-                if (User.Identity as ClaimsIdentity == null)
-                {
-                }
+                Response.Cookies.Add(CreateAuthenticationTicket(claimsIdentity));
                 return RedirectToLocal(returnUrl);
             }
 
@@ -134,11 +135,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 }
 
                 OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, mailAddress);
-                OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false);
+                if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
+                {
+                    Response.Cookies.Add(CreateAuthenticationTicket(claimsIdentity));
+                }
             }
-
             return RedirectToLocal(returnUrl);
-
         }
 
         //
@@ -238,6 +240,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
             var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email);
             return emailClaim == null ? null : emailClaim.Value;
+        }
+
+        private static HttpCookie CreateAuthenticationTicket(ClaimsIdentity claimsIdentity)
+        {
+            if (claimsIdentity == null)
+            {
+                throw new ArgumentNullException("claimsIdentity");
+            }
+
+            var userData = JsonConvert.SerializeObject(new ClaimsPrincipal(claimsIdentity), Formatting.None, new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+
+            var formsAuthenticationTicket = new FormsAuthenticationTicket(1, GetMailAddress(claimsIdentity), DateTime.Now, DateTime.Now.AddHours(1), false, userData);
+
+            return new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(formsAuthenticationTicket));
         }
 
 
