@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Transactions;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -104,9 +103,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             var claimsIdentity = ToClaimsIdentity(result);
 
-            var claims = claimsIdentity.Claims.ToList();
-
-            string mailAddress = GetMailAddress(result);
+            string mailAddress = null;
+            var mailClaim = claimsIdentity.FindFirst(ClaimTypes.Email);
+            if (mailClaim != null)
+            {
+                mailAddress = mailClaim.Value;
+            }
             if (string.IsNullOrWhiteSpace(mailAddress))
             {
                 return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnableToObtainEmailAddressFromService});
@@ -114,8 +116,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
-                var x = GenerateClaimsIdentity(result, mailAddress);
-
                 return RedirectToLocal(returnUrl);
             }
 
@@ -207,45 +207,35 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             var claimCollection = new List<Claim>
             {
-                new Claim(ClaimTypes.Actor, authenticationResult.Provider)
+                new Claim(ClaimTypes.NameIdentifier, authenticationResult.ProviderUserId, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider),
+                new Claim(ClaimTypes.Name, authenticationResult.UserName, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider)
             };
+            if (authenticationResult.ExtraData != null && authenticationResult.ExtraData.ContainsKey("link"))
+            {
+                claimCollection.Add(new Claim(ClaimTypes.Webpage, authenticationResult.ExtraData["link"], ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
+            }
+            if (authenticationResult.ExtraData != null && authenticationResult.ExtraData.ContainsKey("gender"))
+            {
+                claimCollection.Add(new Claim(ClaimTypes.Gender, authenticationResult.ExtraData["gender"], ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
+            }
+            switch (authenticationResult.Provider.ToLower())
+            {
+                case "microsoft":
+                    if (authenticationResult.ExtraData != null && authenticationResult.ExtraData.ContainsKey("firstname"))
+                    {
+                        claimCollection.Add(new Claim(ClaimTypes.GivenName, authenticationResult.ExtraData["firstname"], ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
+                    }
+                    if (authenticationResult.ExtraData != null && authenticationResult.ExtraData.ContainsKey("lastname"))
+                    {
+                        claimCollection.Add(new Claim(ClaimTypes.Surname, authenticationResult.ExtraData["lastname"], ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
+                    }
+                    if (authenticationResult.ExtraData != null && authenticationResult.ExtraData.ContainsKey("emails.account"))
+                    {
+                        claimCollection.Add(new Claim(ClaimTypes.Email, authenticationResult.ExtraData["emails.account"], ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
+                    }
+                    break;
+            }
             return new ClaimsIdentity(claimCollection);
-        }
-
-
-
-        private static string GetMailAddress(AuthenticationResult authenticationResult)
-        {
-            if (authenticationResult == null)
-            {
-                throw new ArgumentNullException("authenticationResult");
-            }
-
-            if (authenticationResult.ExtraData == null || authenticationResult.ExtraData.ContainsKey("email") == false)
-            {
-                return null;
-            }
-
-            return authenticationResult.ExtraData["email"];
-        }
-
-        private static IIdentity GenerateClaimsIdentity(AuthenticationResult authenticationResult, string mailAddress)
-        {
-            if (authenticationResult == null)
-            {
-                throw new ArgumentNullException("authenticationResult");
-            }
-            if (mailAddress == null)
-            {
-                throw new ArgumentNullException("mailAddress");
-            }
-
-            var claimCollection = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, authenticationResult.UserName, ClaimValueTypes.String, authenticationResult.Provider),
-            };
-            var claimsIdentity = new ClaimsIdentity(claimCollection);
-            return claimsIdentity;
         }
 
 
