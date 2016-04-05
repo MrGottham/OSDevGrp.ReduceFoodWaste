@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
@@ -165,21 +166,28 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ChildActionOnly]
         public ActionResult RemoveExternalLogins()
         {
-            ICollection<OAuthAccount> accounts = OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name);
-            List<ExternalLogin> externalLogins = new List<ExternalLogin>();
-            foreach (OAuthAccount account in accounts)
+            var mailAddress = GetMailAddress(System.Web.HttpContext.Current.User.Identity);
+            if (string.IsNullOrWhiteSpace(mailAddress))
             {
-                AuthenticationClientData clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
-
-                externalLogins.Add(new ExternalLogin
-                {
-                    Provider = account.Provider,
-                    ProviderDisplayName = clientData.DisplayName,
-                    ProviderUserId = account.ProviderUserId,
-                });
+                ViewBag.ShowRemoveButton = false;
+                return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
             }
 
-            ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
+            var externalLogins = OAuthWebSecurity.GetAccountsFromUserName(mailAddress)
+                .Select(account =>
+                {
+                    var clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
+
+                    return new ExternalLogin
+                    {
+                        Provider = account.Provider,
+                        ProviderDisplayName = clientData.DisplayName,
+                        ProviderUserId = account.ProviderUserId
+                    };
+                })
+                .ToArray();
+
+            ViewBag.ShowRemoveButton = externalLogins.Any() || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(mailAddress));
             return PartialView("_RemoveExternalLoginsPartial", externalLogins);
         }
 
@@ -271,6 +279,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 }
             }
             return new ClaimsIdentity(claimCollection);
+        }
+
+        private static string GetMailAddress(IIdentity identity)
+        {
+            return (identity as ClaimsIdentity) == null ? null : GetMailAddress(identity as ClaimsIdentity);
         }
 
         private static string GetMailAddress(ClaimsIdentity claimsIdentity)
