@@ -168,4 +168,16 @@
   <data name="WelcomeTo" xml:space="preserve">
     <value>Velkommen til {0}.</value>
   </data>
+  <data name="Account" xml:space="preserve">
+    <value>Konto</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hej</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Administrér</value>
+  </data>
+  <data name="YouAreLoggedInAs" xml:space="preserve">
+    <value>Du er logget ind som &lt;strong&gt;{0}&lt;/strong&gt;.</value>
+  </data>
 </root>

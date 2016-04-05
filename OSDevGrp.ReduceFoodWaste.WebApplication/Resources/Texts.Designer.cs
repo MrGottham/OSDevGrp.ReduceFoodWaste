@@ -61,6 +61,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string Account {
+            get {
+                return ResourceManager.GetString("Account", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dansk.
         /// </summary>
         public static string Danish {
@@ -93,6 +102,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         public static string ErrorOccurredProcessingRequest {
             get {
                 return ResourceManager.GetString("ErrorOccurredProcessingRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello.
+        /// </summary>
+        public static string Hello {
+            get {
+                return ResourceManager.GetString("Hello", resourceCulture);
             }
         }
         
@@ -160,6 +178,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage.
+        /// </summary>
+        public static string Manage {
+            get {
+                return ResourceManager.GetString("Manage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please log in to start using {0}..
         /// </summary>
         public static string PleaseLogIn {
@@ -210,6 +237,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         public static string WelcomeTo {
             get {
                 return ResourceManager.GetString("WelcomeTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You&apos;re logged in as &lt;strong&gt;{0}&lt;/strong&gt;..
+        /// </summary>
+        public static string YouAreLoggedInAs {
+            get {
+                return ResourceManager.GetString("YouAreLoggedInAs", resourceCulture);
             }
         }
     }

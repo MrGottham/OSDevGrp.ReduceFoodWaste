@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Security.Claims;
 using System.Transactions;
 using System.Web;
@@ -8,7 +11,6 @@ using System.Web.Mvc;
 using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
-using Newtonsoft.Json;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
@@ -202,32 +204,71 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             var claimCollection = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, authenticationResult.ProviderUserId, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider),
-                new Claim(ClaimTypes.Name, authenticationResult.UserName, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider)
+                new Claim(ClaimTypes.Name, authenticationResult.UserName, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider),
+                new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", authenticationResult.Provider, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider)
             };
-            if (authenticationResult.ExtraData != null && authenticationResult.ExtraData.ContainsKey("link"))
+            foreach (var extraData in authenticationResult.ExtraData.Where(m => string.IsNullOrWhiteSpace(m.Value) == false))
             {
-                claimCollection.Add(new Claim(ClaimTypes.Webpage, authenticationResult.ExtraData["link"], ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
-            }
-            if (authenticationResult.ExtraData != null && authenticationResult.ExtraData.ContainsKey("gender"))
-            {
-                claimCollection.Add(new Claim(ClaimTypes.Gender, authenticationResult.ExtraData["gender"], ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
-            }
-            switch (authenticationResult.Provider.ToLower())
-            {
-                case "microsoft":
-                    if (authenticationResult.ExtraData != null && authenticationResult.ExtraData.ContainsKey("firstname"))
-                    {
-                        claimCollection.Add(new Claim(ClaimTypes.GivenName, authenticationResult.ExtraData["firstname"], ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
-                    }
-                    if (authenticationResult.ExtraData != null && authenticationResult.ExtraData.ContainsKey("lastname"))
-                    {
-                        claimCollection.Add(new Claim(ClaimTypes.Surname, authenticationResult.ExtraData["lastname"], ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
-                    }
-                    if (authenticationResult.ExtraData != null && authenticationResult.ExtraData.ContainsKey("emails.account"))
-                    {
-                        claimCollection.Add(new Claim(ClaimTypes.Email, authenticationResult.ExtraData["emails.account"], ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
-                    }
-                    break;
+                switch (extraData.Key)
+                {
+                    case "id":
+                        // This has already been handled.
+                        break;
+
+                    case "name":
+                        switch (authenticationResult.Provider)
+                        {
+                            case "facebook":
+                                // Remove the existing claim for the name (it contains the mail address).
+                                var nameClaim = claimCollection.Single(claim => string.Compare(claim.Type, ClaimTypes.Name, StringComparison.Ordinal) == 0);
+                                claimCollection.Remove(nameClaim);
+                                // Add new claim for the name containing the users name.
+                                claimCollection.Add(new Claim(ClaimTypes.Name, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
+                                break;
+                        }
+                        break;
+
+                    case "link":
+                        claimCollection.Add(new Claim(ClaimTypes.Webpage, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
+                        break;
+
+                    case "gender":
+                        claimCollection.Add(new Claim(ClaimTypes.Gender, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
+                        break;
+
+                    case "username":
+                        switch (authenticationResult.Provider)
+                        {
+                            case "facebook":
+                                claimCollection.Add(new Claim(ClaimTypes.Email, extraData.Value, ClaimValueTypes.Email, authenticationResult.Provider, authenticationResult.Provider));
+                                break;
+                        }
+                        break;
+
+                    case "firstname":
+                        claimCollection.Add(new Claim(ClaimTypes.GivenName, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
+                        break;
+
+                    case "lastname":
+                        claimCollection.Add(new Claim(ClaimTypes.Surname, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
+                        break;
+
+                    case "birthday":
+                        claimCollection.Add(new Claim(ClaimTypes.DateOfBirth, extraData.Value, ClaimValueTypes.Date, authenticationResult.Provider, authenticationResult.Provider));
+                        break;
+
+                    case "country":
+                        claimCollection.Add(new Claim(ClaimTypes.Country, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
+                        break;
+
+                    case "email":
+                    case "emails.preferred":
+                    case "emails.account":
+                    case "emails.personal":
+                    case "emails.business":
+                        claimCollection.Add(new Claim(ClaimTypes.Email, extraData.Value, ClaimValueTypes.Email, authenticationResult.Provider, authenticationResult.Provider));
+                        break;
+                }
             }
             return new ClaimsIdentity(claimCollection);
         }
@@ -249,9 +290,30 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 throw new ArgumentNullException("claimsIdentity");
             }
 
-            var userData = JsonConvert.SerializeObject(new ClaimsPrincipal(claimsIdentity), Formatting.None, new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+            byte[] userData;
+            using (var memoryStream = new MemoryStream())
+            {
+                var serializer = new DataContractJsonSerializer(typeof (IEnumerable<Claim>));
+                serializer.WriteObject(memoryStream, claimsIdentity.Claims);
 
-            var formsAuthenticationTicket = new FormsAuthenticationTicket(1, GetMailAddress(claimsIdentity), DateTime.Now, DateTime.Now.AddHours(1), false, userData);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                using (var compressMemoryStream = new MemoryStream())
+                {
+                    using (var deflateStream = new DeflateStream(compressMemoryStream, CompressionMode.Compress))
+                    {
+                        memoryStream.CopyTo(deflateStream);
+                        deflateStream.Flush();
+                        deflateStream.Close();
+                    }
+                    userData = compressMemoryStream.ToArray();
+
+                    compressMemoryStream.Close();
+                }
+                memoryStream.Close();
+            }
+
+            var timeOut = FormsAuthentication.Timeout;
+            var formsAuthenticationTicket = new FormsAuthenticationTicket(1, GetMailAddress(claimsIdentity), DateTime.Now, DateTime.Now.Add(timeOut), false, Convert.ToBase64String(userData));
 
             return new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(formsAuthenticationTicket));
         }

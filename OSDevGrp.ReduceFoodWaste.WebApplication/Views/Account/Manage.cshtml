@@ -1,5 +1,6 @@
-﻿@{
-    ViewBag.Title = "Manage Account";
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@{
+    ViewBag.Title = string.Format("{0} {1}", Texts.Manage, Texts.Account.ToLower());
 }
 
 <hgroup class="title">
@@ -8,7 +9,7 @@
 
 <p class="message-success">@ViewBag.StatusMessage</p>
 
-<p>You're logged in as <strong>@User.Identity.Name</strong>.</p>
+<p>@Html.Raw(string.Format(Texts.YouAreLoggedInAs, User.Identity.Name))</p>
 
 <section id="externalLogins">
     @Html.Action("RemoveExternalLogins")
