@@ -180,4 +180,16 @@
   <data name="YouAreLoggedInAs" xml:space="preserve">
     <value>Du er logget ind som &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
+  <data name="RegisteredExternalLogins" xml:space="preserve">
+    <value>Registrerede eksterne tjenester til log ind:</value>
+  </data>
+  <data name="RemoveCredentialFromYourAccount" xml:space="preserve">
+    <value>Fjern {0} log ind oplysninger fra din konto.</value>
+  </data>
+  <data name="TheExternalLoginWasRemoved" xml:space="preserve">
+    <value>Den eksterne tjeneste til log ind er fjernet fra din konto.</value>
+  </data>
+  <data name="AddAnExternalLogin" xml:space="preserve">
+    <value>Tilføj en ekstern tjeneste til log ind:</value>
+  </data>
 </root>

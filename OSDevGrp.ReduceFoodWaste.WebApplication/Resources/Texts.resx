@@ -180,4 +180,16 @@
   <data name="YouAreLoggedInAs" xml:space="preserve">
     <value>You're logged in as &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
+  <data name="RegisteredExternalLogins" xml:space="preserve">
+    <value>Registered external logins:</value>
+  </data>
+  <data name="RemoveCredentialFromYourAccount" xml:space="preserve">
+    <value>Remove this {0} credential from your account.</value>
+  </data>
+  <data name="TheExternalLoginWasRemoved" xml:space="preserve">
+    <value>The external login was removed.</value>
+  </data>
+  <data name="AddAnExternalLogin" xml:space="preserve">
+    <value>Add an external login:</value>
+  </data>
 </root>

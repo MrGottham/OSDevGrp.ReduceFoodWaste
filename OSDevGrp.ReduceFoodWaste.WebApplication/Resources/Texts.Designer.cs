@@ -70,6 +70,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add an external login:.
+        /// </summary>
+        public static string AddAnExternalLogin {
+            get {
+                return ResourceManager.GetString("AddAnExternalLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dansk.
         /// </summary>
         public static string Danish {
@@ -210,6 +219,33 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         public static string ReduceFoodWasteProject {
             get {
                 return ResourceManager.GetString("ReduceFoodWasteProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registered external logins:.
+        /// </summary>
+        public static string RegisteredExternalLogins {
+            get {
+                return ResourceManager.GetString("RegisteredExternalLogins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove this {0} credential from your account..
+        /// </summary>
+        public static string RemoveCredentialFromYourAccount {
+            get {
+                return ResourceManager.GetString("RemoveCredentialFromYourAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The external login was removed..
+        /// </summary>
+        public static string TheExternalLoginWasRemoved {
+            get {
+                return ResourceManager.GetString("TheExternalLoginWasRemoved", resourceCulture);
             }
         }
         

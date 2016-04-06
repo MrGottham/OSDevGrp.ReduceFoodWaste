@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Transactions;
 using System.Web.Mvc;
-using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
@@ -66,38 +63,54 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Disassociate(string provider, string providerUserId)
         {
-            string ownerAccount = OAuthWebSecurity.GetUserName(provider, providerUserId);
-            ManageMessageId? message = null;
-
-            // Only disassociate the account if the currently logged in user is the owner
-            if (ownerAccount == User.Identity.Name)
+            var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
+            if (string.IsNullOrWhiteSpace(mailAddress))
             {
-                // Use a transaction to prevent the user from deleting their last login credential
-                using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
+            }
+
+            var accountOwner = OAuthWebSecurity.GetUserName(provider, providerUserId);
+            if (string.Compare(accountOwner, mailAddress, StringComparison.Ordinal) != 0)
+            {
+                return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
+            }
+
+            var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
+            if (string.IsNullOrWhiteSpace(userNameIdentifier) || string.Compare(providerUserId, userNameIdentifier, StringComparison.Ordinal) == 0)
+            {
+                return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
+            }
+
+            ManageMessageId? manageMessageId = null;
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.Serializable}))
+            {
+                var hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(mailAddress));
+                if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(mailAddress).Count > 1)
                 {
-                    bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-                    if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name).Count > 1)
-                    {
-                        OAuthWebSecurity.DeleteAccount(provider, providerUserId);
-                        scope.Complete();
-                        message = ManageMessageId.RemoveLoginSuccess;
-                    }
+                    OAuthWebSecurity.DeleteAccount(provider, providerUserId);
+                    scope.Complete();
+                    manageMessageId = ManageMessageId.RemoveLoginSuccess;
                 }
             }
 
-            return RedirectToAction("Manage", new { Message = message });
+            return RedirectToAction("Manage", new {Message = manageMessageId});
         }
 
         //
         // GET: /Account/Manage
         public ActionResult Manage(ManageMessageId? message)
         {
-            ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : "";
-            ViewBag.HasLocalPassword = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
+            ViewBag.StatusMessage = string.Empty;
+            if (message.HasValue)
+            {
+                switch (message.Value)
+                {
+                    case ManageMessageId.RemoveLoginSuccess:
+                        ViewBag.StatusMessage = Texts.TheExternalLoginWasRemoved;
+                        break;
+                }
+            }
+
             ViewBag.ReturnUrl = Url.Action("Manage");
             return View();
         }
@@ -125,7 +138,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             var claimsIdentity = result.ToClaimsIdentity();
 
-            string mailAddress = GetMailAddress(claimsIdentity);
+            string mailAddress = _claimValueProvider.GetMailAddress(claimsIdentity);
             if (string.IsNullOrWhiteSpace(mailAddress))
             {
                 return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnableToObtainEmailAddressFromService});
@@ -183,10 +196,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ChildActionOnly]
         public ActionResult RemoveExternalLogins()
         {
-            var mailAddress = GetMailAddress(System.Web.HttpContext.Current.User.Identity);
+            var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
             if (string.IsNullOrWhiteSpace(mailAddress))
             {
-                ViewBag.ShowRemoveButton = false;
+                return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
+            }
+
+            var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
+            if (string.IsNullOrWhiteSpace(userNameIdentifier))
+            {
                 return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
             }
 
@@ -199,12 +217,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     {
                         Provider = account.Provider,
                         ProviderDisplayName = clientData.DisplayName,
-                        ProviderUserId = account.ProviderUserId
+                        ProviderUserId = account.ProviderUserId,
+                        Removable = string.Compare(account.ProviderUserId, userNameIdentifier, StringComparison.Ordinal) != 0
                     };
                 })
                 .ToArray();
 
-            ViewBag.ShowRemoveButton = externalLogins.Any() || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(mailAddress));
             return PartialView("_RemoveExternalLoginsPartial", externalLogins);
         }
 
@@ -219,33 +237,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        private static string GetMailAddress(IIdentity identity)
-        {
-            return (identity as ClaimsIdentity) == null ? null : GetMailAddress(identity as ClaimsIdentity);
-        }
-
-        private static string GetMailAddress(ClaimsIdentity claimsIdentity)
-        {
-            if (claimsIdentity == null)
-            {
-                throw new ArgumentNullException("claimsIdentity");
-            }
-            var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email);
-            return emailClaim == null ? null : emailClaim.Value;
-        }
-
-
-
-        // TODO Check whether we should use these...
-
         public enum ManageMessageId
         {
-            ChangePasswordSuccess,
-            SetPasswordSuccess,
-            RemoveLoginSuccess,
+            RemoveLoginSuccess
         }
 
-        internal class ExternalLoginResult : ActionResult
+        private class ExternalLoginResult : ActionResult
         {
             public ExternalLoginResult(string provider, string returnUrl)
             {
@@ -253,50 +250,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 ReturnUrl = returnUrl;
             }
 
-            public string Provider { get; private set; }
-            public string ReturnUrl { get; private set; }
+            private string Provider { get; set; }
+            private string ReturnUrl { get; set; }
 
             public override void ExecuteResult(ControllerContext context)
             {
                 OAuthWebSecurity.RequestAuthentication(Provider, ReturnUrl);
-            }
-        }
-
-        private static string ErrorCodeToString(MembershipCreateStatus createStatus)
-        {
-            // See http://go.microsoft.com/fwlink/?LinkID=177550 for
-            // a full list of status codes.
-            switch (createStatus)
-            {
-                case MembershipCreateStatus.DuplicateUserName:
-                    return "User name already exists. Please enter a different user name.";
-
-                case MembershipCreateStatus.DuplicateEmail:
-                    return "A user name for that e-mail address already exists. Please enter a different e-mail address.";
-
-                case MembershipCreateStatus.InvalidPassword:
-                    return "The password provided is invalid. Please enter a valid password value.";
-
-                case MembershipCreateStatus.InvalidEmail:
-                    return "The e-mail address provided is invalid. Please check the value and try again.";
-
-                case MembershipCreateStatus.InvalidAnswer:
-                    return "The password retrieval answer provided is invalid. Please check the value and try again.";
-
-                case MembershipCreateStatus.InvalidQuestion:
-                    return "The password retrieval question provided is invalid. Please check the value and try again.";
-
-                case MembershipCreateStatus.InvalidUserName:
-                    return "The user name provided is invalid. Please check the value and try again.";
-
-                case MembershipCreateStatus.ProviderError:
-                    return "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
-
-                case MembershipCreateStatus.UserRejected:
-                    return "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
-
-                default:
-                    return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
         }
 
