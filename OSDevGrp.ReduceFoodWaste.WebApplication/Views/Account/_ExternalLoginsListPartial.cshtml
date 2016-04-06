@@ -20,7 +20,7 @@ else
         <p>
         @foreach (AuthenticationClientData p in Model)
         {
-            <button style="cursor:pointer;color:transparent;border:none;background:url(@p.ExtraData["Icon"]);width:200px;height:48px;margin-right:20px;" type="submit" name="provider" value="@p.AuthenticationClient.ProviderName" title="@string.Format(Texts.LogInUsingYourAccount, @p.DisplayName)">@p.DisplayName</button>
+            <button style="cursor:pointer;color:transparent;border:none;background:url(@p.ExtraData["Icon"]);width:200px;height:48px;margin-right:20px;margin-bottom:30px" type="submit" name="provider" value="@p.AuthenticationClient.ProviderName" title="@string.Format(Texts.LogInUsingYourAccount, @p.DisplayName)">@p.DisplayName</button>
         }
         </p>
     </fieldset>
