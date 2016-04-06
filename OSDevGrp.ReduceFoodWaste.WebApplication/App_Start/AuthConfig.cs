@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web;
 using Microsoft.Web.WebPages.OAuth;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Security.Authentication;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication
 {
