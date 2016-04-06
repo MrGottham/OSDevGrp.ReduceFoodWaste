@@ -61,18 +61,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
 
             var serviceLoginUrl = base.GetServiceLoginUrl(returnUrl);
 
-            var elements = serviceLoginUrl.ToString().Split(new[] {'&'});
-            var scopeElement = elements.SingleOrDefault(m => m.StartsWith("scope="));
-            if (scopeElement == null)
+            var queryData = HttpUtility.ParseQueryString(serviceLoginUrl.Query);
+            if (queryData["scope"] == null)
             {
-                return new Uri(string.Format("{0}&{1}", serviceLoginUrl.ToString(), GenerateScopes(string.Empty)));
+                queryData.Add("scope", GenerateScopes(string.Empty));
             }
-            return new Uri(serviceLoginUrl.ToString().Replace(scopeElement, GenerateScopes(scopeElement.Substring(scopeElement.IndexOf('=') + 1))));
+            else
+            {
+                queryData["scope"] = GenerateScopes(queryData["scope"]);
+            }
+
+            return new Uri(string.Format("{0}?{1}", serviceLoginUrl.GetLeftPart(UriPartial.Path), queryData));
         }
 
         protected override IDictionary<string, string> GetUserData(string accessToken)
         {
-            if (string.IsNullOrWhiteSpace(accessToken))
+            if (string.IsNullOrEmpty(accessToken))
             {
                 throw new ArgumentNullException("accessToken");
             }
@@ -80,7 +84,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
             var userData = new Dictionary<string, string>(base.GetUserData(accessToken));
 
             ExtendedMicrosoftClientUserData extendedMicrosoftClientUserData;
-            var request = WebRequest.Create(string.Format("https://apis.live.net/v5.0/me?access_token={0}", accessToken));
+            var request = WebRequest.Create(string.Format("https://apis.live.net/v5.0/me?access_token={0}", Uri.EscapeDataString(accessToken)));
             using (var response = request.GetResponse())
             {
                 using (var responseStream = response.GetResponseStream())
@@ -124,7 +128,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
             {
                 throw new ArgumentNullException("existingScopes");
             }
-            var scopeBuilder = new StringBuilder(HttpUtility.UrlDecode(existingScopes));
+            var scopeBuilder = new StringBuilder(existingScopes);
             foreach (var scope in _scopes.Where(m => string.IsNullOrWhiteSpace(m) == false))
             {
                 if (existingScopes.Contains(scope))
@@ -138,7 +142,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
                 }
                 scopeBuilder.AppendFormat(" {0}", scope);
             }
-            return string.Format("scope={0}", scopeBuilder.ToString());
+            return scopeBuilder.ToString();
         }
 
         #endregion

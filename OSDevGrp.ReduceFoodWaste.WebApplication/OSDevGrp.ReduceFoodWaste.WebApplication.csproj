@@ -217,6 +217,7 @@
     </Compile>
     <Compile Include="Infrastructure\DependencyInjection\Bootstrapper.cs" />
     <Compile Include="Infrastructure\Security\Authentication\FormsAuthenticationHelper.cs" />
+    <Compile Include="Infrastructure\Security\Authentication\GooglePlusClient.cs" />
     <Compile Include="Infrastructure\Security\Authentication\MicrosoftScopedClient.cs" />
     <Compile Include="Infrastructure\Security\Providers\ClaimValueProvider.cs" />
     <Compile Include="Infrastructure\Security\Providers\IClaimValueProvider.cs" />
@@ -291,6 +292,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Images\google.png" />
     <Content Include="Images\microsoft.png" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />

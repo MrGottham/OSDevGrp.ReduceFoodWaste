@@ -19,6 +19,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             };
             OAuthWebSecurity.RegisterClient(microsoftScopedClient, "Microsoft", microsoftExtraData);
 
+            var googlePlusClient = new GooglePlusClient("913030417905-08vqe17eck6s2nf0jl56ls91plqlvaou.apps.googleusercontent.com", "2mHZVafOFxKkTiCRghfpeiqi");
+            var googleExtraData = new Dictionary<string, object>
+            {
+                {"Icon", VirtualPathUtility.ToAbsolute("~/Images/google.png")}
+            };
+            OAuthWebSecurity.RegisterClient(googlePlusClient, "Google", googleExtraData);
+
             //OAuthWebSecurity.RegisterTwitterClient(
             //    consumerKey: "",
             //    consumerSecret: "");
@@ -26,8 +33,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             //OAuthWebSecurity.RegisterFacebookClient(
             //    appId: "",
             //    appSecret: "");
-
-            //OAuthWebSecurity.RegisterGoogleClient();
         }
     }
 }

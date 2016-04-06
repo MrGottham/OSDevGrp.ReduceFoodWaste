@@ -130,6 +130,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [AllowAnonymous]
         public ActionResult ExternalLoginCallback(string returnUrl)
         {
+            GooglePlusClient.RewriteRequest(HttpContext);
+
             AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new {ReturnUrl = returnUrl}));
             if (!result.IsSuccessful)
             {
