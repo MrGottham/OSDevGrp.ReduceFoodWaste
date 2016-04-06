@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Runtime.Serialization.Json;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Transactions;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using WebMatrix.WebData;
@@ -106,7 +103,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnsuccessfulLoginWithService});
             }
 
-            var claimsIdentity = ToClaimsIdentity(result);
+            var claimsIdentity = result.ToClaimsIdentity();
 
             string mailAddress = GetMailAddress(claimsIdentity);
             if (string.IsNullOrWhiteSpace(mailAddress))
@@ -116,7 +113,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
-                Response.Cookies.Add(CreateAuthenticationTicket(claimsIdentity));
+                Response.Cookies.Add(claimsIdentity.Claims.ToAuthenticationTicket(mailAddress));
                 return RedirectToLocal(returnUrl);
             }
 
@@ -124,7 +121,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 // If the current user is logged in then add the new account.
                 OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, mailAddress);
-                Response.Cookies.Add(CreateAuthenticationTicket(claimsIdentity));
+                Response.Cookies.Add(claimsIdentity.Claims.ToAuthenticationTicket(mailAddress));
                 return RedirectToLocal(returnUrl);
             }
 
@@ -140,7 +137,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, mailAddress);
                 if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
                 {
-                    Response.Cookies.Add(CreateAuthenticationTicket(claimsIdentity));
+                    Response.Cookies.Add(claimsIdentity.Claims.ToAuthenticationTicket(mailAddress));
                 }
             }
             return RedirectToLocal(returnUrl);
@@ -202,85 +199,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        private static ClaimsIdentity ToClaimsIdentity(AuthenticationResult authenticationResult)
-        {
-            if (authenticationResult == null)
-            {
-                throw new ArgumentNullException("authenticationResult");
-            }
-
-            var claimCollection = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, authenticationResult.ProviderUserId, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider),
-                new Claim(ClaimTypes.Name, authenticationResult.UserName, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider),
-                new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", authenticationResult.Provider, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider)
-            };
-            foreach (var extraData in authenticationResult.ExtraData.Where(m => string.IsNullOrWhiteSpace(m.Value) == false))
-            {
-                switch (extraData.Key)
-                {
-                    case "id":
-                        // This has already been handled.
-                        break;
-
-                    case "name":
-                        switch (authenticationResult.Provider)
-                        {
-                            case "facebook":
-                                // Remove the existing claim for the name (it contains the mail address).
-                                var nameClaim = claimCollection.Single(claim => string.Compare(claim.Type, ClaimTypes.Name, StringComparison.Ordinal) == 0);
-                                claimCollection.Remove(nameClaim);
-                                // Add new claim for the name containing the users name.
-                                claimCollection.Add(new Claim(ClaimTypes.Name, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
-                                break;
-                        }
-                        break;
-
-                    case "link":
-                        claimCollection.Add(new Claim(ClaimTypes.Webpage, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
-                        break;
-
-                    case "gender":
-                        claimCollection.Add(new Claim(ClaimTypes.Gender, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
-                        break;
-
-                    case "username":
-                        switch (authenticationResult.Provider)
-                        {
-                            case "facebook":
-                                claimCollection.Add(new Claim(ClaimTypes.Email, extraData.Value, ClaimValueTypes.Email, authenticationResult.Provider, authenticationResult.Provider));
-                                break;
-                        }
-                        break;
-
-                    case "firstname":
-                        claimCollection.Add(new Claim(ClaimTypes.GivenName, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
-                        break;
-
-                    case "lastname":
-                        claimCollection.Add(new Claim(ClaimTypes.Surname, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
-                        break;
-
-                    case "birthday":
-                        claimCollection.Add(new Claim(ClaimTypes.DateOfBirth, extraData.Value, ClaimValueTypes.Date, authenticationResult.Provider, authenticationResult.Provider));
-                        break;
-
-                    case "country":
-                        claimCollection.Add(new Claim(ClaimTypes.Country, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
-                        break;
-
-                    case "email":
-                    case "emails.preferred":
-                    case "emails.account":
-                    case "emails.personal":
-                    case "emails.business":
-                        claimCollection.Add(new Claim(ClaimTypes.Email, extraData.Value, ClaimValueTypes.Email, authenticationResult.Provider, authenticationResult.Provider));
-                        break;
-                }
-            }
-            return new ClaimsIdentity(claimCollection);
-        }
-
         private static string GetMailAddress(IIdentity identity)
         {
             return (identity as ClaimsIdentity) == null ? null : GetMailAddress(identity as ClaimsIdentity);
@@ -296,40 +214,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             return emailClaim == null ? null : emailClaim.Value;
         }
 
-        private static HttpCookie CreateAuthenticationTicket(ClaimsIdentity claimsIdentity)
-        {
-            if (claimsIdentity == null)
-            {
-                throw new ArgumentNullException("claimsIdentity");
-            }
-
-            byte[] userData;
-            using (var memoryStream = new MemoryStream())
-            {
-                var serializer = new DataContractJsonSerializer(typeof (IEnumerable<Claim>));
-                serializer.WriteObject(memoryStream, claimsIdentity.Claims);
-
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                using (var compressMemoryStream = new MemoryStream())
-                {
-                    using (var deflateStream = new DeflateStream(compressMemoryStream, CompressionMode.Compress))
-                    {
-                        memoryStream.CopyTo(deflateStream);
-                        deflateStream.Flush();
-                        deflateStream.Close();
-                    }
-                    userData = compressMemoryStream.ToArray();
-
-                    compressMemoryStream.Close();
-                }
-                memoryStream.Close();
-            }
-
-            var timeOut = FormsAuthentication.Timeout;
-            var formsAuthenticationTicket = new FormsAuthenticationTicket(1, GetMailAddress(claimsIdentity), DateTime.Now, DateTime.Now.Add(timeOut), false, Convert.ToBase64String(userData));
-
-            return new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(formsAuthenticationTicket));
-        }
 
 
         // TODO Check whether we should use these...

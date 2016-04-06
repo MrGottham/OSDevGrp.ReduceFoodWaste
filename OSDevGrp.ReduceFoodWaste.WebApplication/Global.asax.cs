@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using System.Web.Security;
-using System.Runtime.Serialization.Json;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication
 {
@@ -28,39 +23,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
 
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs eventArgs)
         {
-            var formsAuthenticationCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
-            if (formsAuthenticationCookie == null)
+            var formsAuthenticationTicket = Request.ToFormsAuthenticationTicket();
+            if (formsAuthenticationTicket == null)
             {
                 return;
             }
 
-            var formsAuthenticationTicket = FormsAuthentication.Decrypt(formsAuthenticationCookie.Value);
-            if (string.IsNullOrEmpty(formsAuthenticationTicket.UserData) || formsAuthenticationTicket.UserData == "OAuth")
+            var claimsPrincipal = formsAuthenticationTicket.ToClaimsPrincipal();
+            if (claimsPrincipal == null)
             {
                 return;
             }
 
-            using (var memoryStream = new MemoryStream())
-            {
-                using (var compressedMemoryStream = new MemoryStream(Convert.FromBase64String(formsAuthenticationTicket.UserData)))
-                {
-                    using (var deflateStream = new DeflateStream(compressedMemoryStream, CompressionMode.Decompress))
-                    {
-                        deflateStream.CopyTo(memoryStream);
-                        deflateStream.Close();
-                    }
-                    compressedMemoryStream.Close();
-                }
-
-                memoryStream.Seek(0, SeekOrigin.Begin);
-
-                var serializer = new DataContractJsonSerializer(typeof (IEnumerable<Claim>));
-                var claims = (IEnumerable<Claim>) serializer.ReadObject(memoryStream);
-
-                HttpContext.Current.User = new ClaimsPrincipal(new ClaimsIdentity(claims, "Forms"));
-
-                memoryStream.Close();
-            }
+            HttpContext.Current.User = claimsPrincipal;
         }
     }
 }

@@ -3,7 +3,7 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication
 {
-    public class FilterConfig
+    public static class FilterConfig
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
