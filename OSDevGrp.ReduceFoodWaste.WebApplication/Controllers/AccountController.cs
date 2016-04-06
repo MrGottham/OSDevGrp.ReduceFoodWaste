@@ -10,6 +10,7 @@ using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using WebMatrix.WebData;
@@ -20,6 +21,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
+        #region Private variables
+
+        private readonly IClaimValueProvider _claimValueProvider;
+
+        #endregion
+
+        #region Constructor
+
+        public AccountController(IClaimValueProvider claimValueProvider)
+        {
+            if (claimValueProvider == null)
+            {
+                throw new ArgumentNullException("claimValueProvider");
+            }
+            _claimValueProvider = claimValueProvider;
+        }
+
+        #endregion
+
         //
         // GET: /Account/Login
         [AllowAnonymous]

@@ -197,6 +197,8 @@
     </Compile>
     <Compile Include="Infrastructure\Security\Authentication\FormsAuthenticationHelper.cs" />
     <Compile Include="Infrastructure\Security\Authentication\MicrosoftScopedClient.cs" />
+    <Compile Include="Infrastructure\Security\Providers\ClaimValueProvider.cs" />
+    <Compile Include="Infrastructure\Security\Providers\IClaimValueProvider.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Texts.da.Designer.cs">
