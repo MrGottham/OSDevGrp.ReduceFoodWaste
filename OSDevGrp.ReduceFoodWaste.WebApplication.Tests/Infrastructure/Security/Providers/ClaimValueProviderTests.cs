@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Ploeh.AutoFixture;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.Providers
@@ -12,7 +13,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
     /// Tests the provider which can get values from claims.
     /// </summary>
     [TestFixture]
-    public class ClaimValueProviderTests
+    public class ClaimValueProviderTests : TestBase
     {
         /// <summary>
         /// Tests that the constructor initialize the provider which can get values from claims.
@@ -80,14 +81,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [Test]
         public void TestThatGetUserNameIdentifierWhenCalledWithClaimsIdentityReturnsNullWhenClaimForUserNameIdentifierDoesNotExist()
         {
-            var fixture = new Fixture();
-
             var claimValueProvider = new ClaimValueProvider();
             Assert.That(claimValueProvider, Is.Not.Null);
 
             var claimCollection = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, fixture.Create<string>(), ClaimValueTypes.String)
+                new Claim(ClaimTypes.Name, Fixture.Create<string>(), ClaimValueTypes.String)
             };
             var claimsIdentity = new ClaimsIdentity(claimCollection);
 
@@ -101,16 +100,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [Test]
         public void TestThatGetUserNameIdentifierWhenCalledWithClaimsIdentityReturnsUserNameIdentifierWhenClaimForUserNameIdentifierDoesExist()
         {
-            var fixture = new Fixture();
-
             var claimValueProvider = new ClaimValueProvider();
             Assert.That(claimValueProvider, Is.Not.Null);
 
-            var userNameIdentifier = fixture.Create<string>();
+            var userNameIdentifier = Fixture.Create<string>();
             var claimCollection = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userNameIdentifier, ClaimValueTypes.String),
-                new Claim(ClaimTypes.Name, fixture.Create<string>(), ClaimValueTypes.String),
+                new Claim(ClaimTypes.Name, Fixture.Create<string>(), ClaimValueTypes.String),
             };
             var claimsIdentity = new ClaimsIdentity(claimCollection);
 
@@ -176,15 +173,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [Test]
         public void TestThatGetMailAddressWhenCalledWithClaimsIdentityReturnsNullWhenClaimForMailAddressDoesNotExist()
         {
-            var fixture = new Fixture();
-
             var claimValueProvider = new ClaimValueProvider();
             Assert.That(claimValueProvider, Is.Not.Null);
 
             var claimCollection = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, fixture.Create<string>(), ClaimValueTypes.String),
-                new Claim(ClaimTypes.Name, fixture.Create<string>(), ClaimValueTypes.String)
+                new Claim(ClaimTypes.NameIdentifier, Fixture.Create<string>(), ClaimValueTypes.String),
+                new Claim(ClaimTypes.Name, Fixture.Create<string>(), ClaimValueTypes.String)
             };
             var claimsIdentity = new ClaimsIdentity(claimCollection);
 
@@ -198,16 +193,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [Test]
         public void TestThatGetMailAddressWhenCalledWithClaimsIdentityReturnsMailAddressWhenClaimForMailAddressDoesExist()
         {
-            var fixture = new Fixture();
-
             var claimValueProvider = new ClaimValueProvider();
             Assert.That(claimValueProvider, Is.Not.Null);
 
-            var mailAddress = fixture.Create<string>();
+            var mailAddress = Fixture.Create<string>();
             var claimCollection = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, fixture.Create<string>(), ClaimValueTypes.String),
-                new Claim(ClaimTypes.Name, fixture.Create<string>(), ClaimValueTypes.String),
+                new Claim(ClaimTypes.NameIdentifier, Fixture.Create<string>(), ClaimValueTypes.String),
+                new Claim(ClaimTypes.Name, Fixture.Create<string>(), ClaimValueTypes.String),
                 new Claim(ClaimTypes.Email, mailAddress, ClaimValueTypes.String)
             };
             var claimsIdentity = new ClaimsIdentity(claimCollection);

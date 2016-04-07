@@ -47,8 +47,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\Security\Exceptions\ReduceFoodWasteSystemExceptionTests.cs" />
     <Compile Include="Infrastructure\Security\Providers\ClaimValueProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestUtilities\TestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OSDevGrp.ReduceFoodWaste.WebApplication\OSDevGrp.ReduceFoodWaste.WebApplication.csproj">
