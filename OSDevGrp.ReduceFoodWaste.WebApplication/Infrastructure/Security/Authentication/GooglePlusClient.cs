@@ -11,7 +11,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
 {
     public class GooglePlusClient : OAuth2Client
     {
-
         #region Private constants
 
         private const string Google = "google";
@@ -45,6 +44,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
         }
 
         #endregion
+
+        #region Methods
 
         protected override Uri GetServiceLoginUrl(Uri returnUrl)
         {
@@ -153,5 +154,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
 
             httpContext.RewritePath(string.Format("{0}?{1}", httpContext.Request.Path, requestData));
         }
+
+        #endregion
     }
 }
