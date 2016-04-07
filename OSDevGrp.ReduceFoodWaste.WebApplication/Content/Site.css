@@ -125,17 +125,6 @@ footer {
     height: 100px;
 }
 
-    footer ul {
-        list-style: none;
-        padding: 0;
-    }
-
-        footer ul li {
-            display: inline;
-            list-style: none;
-            padding: 2px 0 2px 20px;
-        }
-
 
 /* site title
 ----------------------------------------------------------*/
@@ -764,15 +753,4 @@ tr.pager td {
         footer p {
             margin: 0;
         }
-
-        footer ul {
-            list-style: none;
-            padding: 0;
-        }
-
-            footer ul li {
-                display: inline;
-                list-style: none;
-                padding: 2px 0 2px 20px;
-            }
 }
