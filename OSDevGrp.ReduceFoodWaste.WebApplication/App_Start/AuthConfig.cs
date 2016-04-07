@@ -26,13 +26,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             var facebookClient = new FacebookScopedClient("1065427026850786", "ad34aaf2adb862bdd7d690a8ee355a29");
             var facebookExtraData = new Dictionary<string, object>
             {
-                {"Icon", VirtualPathUtility.ToAbsolute("~/Images/google.png")}
+                {"Icon", VirtualPathUtility.ToAbsolute("~/Images/facebook.png")}
             };
             OAuthWebSecurity.RegisterClient(facebookClient, "Facebook", facebookExtraData);
-
-            //OAuthWebSecurity.RegisterFacebookClient(
-            //    appId: "",
-            //    appSecret: "");
         }
     }
 }

@@ -72,11 +72,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
                         break;
 
                     case "firstname":
+                    case "first_name":
                     case "given_name":
                         claimCollection.Add(new Claim(ClaimTypes.GivenName, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
                         break;
 
                     case "lastname":
+                    case "last_name":
                     case "family_name":
                         claimCollection.Add(new Claim(ClaimTypes.Surname, extraData.Value, ClaimValueTypes.String, authenticationResult.Provider, authenticationResult.Provider));
                         break;
