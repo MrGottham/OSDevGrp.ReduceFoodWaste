@@ -216,8 +216,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\DependencyInjection\Bootstrapper.cs" />
+    <Compile Include="Infrastructure\Security\Authentication\FacebookScopedClient.cs" />
     <Compile Include="Infrastructure\Security\Authentication\FormsAuthenticationHelper.cs" />
-    <Compile Include="Infrastructure\Security\Authentication\GooglePlusClient.cs" />
+    <Compile Include="Infrastructure\Security\Authentication\GooglePlusScopedClient.cs" />
     <Compile Include="Infrastructure\Security\Authentication\MicrosoftScopedClient.cs" />
     <Compile Include="Infrastructure\Security\Providers\ClaimValueProvider.cs" />
     <Compile Include="Infrastructure\Security\Providers\IClaimValueProvider.cs" />

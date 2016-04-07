@@ -9,9 +9,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
     {
         public static void RegisterAuth()
         {
-            // To let users of this site log in using their accounts from other sites such as Microsoft, Facebook, and Twitter,
-            // you must update this site. For more information visit http://go.microsoft.com/fwlink/?LinkID=252166
-
             var microsoftScopedClient = new MicrosoftScopedClient("000000004818F090", "Ht2m6n7P83LT4rgfXwgLbIGqQ3SKoqSB", new List<string> {"wl.basic", "wl.emails"});
             var microsoftExtraData = new Dictionary<string, object>
             {
@@ -19,16 +16,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             };
             OAuthWebSecurity.RegisterClient(microsoftScopedClient, "Microsoft", microsoftExtraData);
 
-            var googlePlusClient = new GooglePlusClient("913030417905-08vqe17eck6s2nf0jl56ls91plqlvaou.apps.googleusercontent.com", "2mHZVafOFxKkTiCRghfpeiqi");
-            var googleExtraData = new Dictionary<string, object>
+            var googlePlusScopedClient = new GooglePlusScopedClient("913030417905-08vqe17eck6s2nf0jl56ls91plqlvaou.apps.googleusercontent.com", "2mHZVafOFxKkTiCRghfpeiqi");
+            var googlePlusExtraData = new Dictionary<string, object>
             {
                 {"Icon", VirtualPathUtility.ToAbsolute("~/Images/google.png")}
             };
-            OAuthWebSecurity.RegisterClient(googlePlusClient, "Google", googleExtraData);
+            OAuthWebSecurity.RegisterClient(googlePlusScopedClient, "Google", googlePlusExtraData);
 
-            //OAuthWebSecurity.RegisterTwitterClient(
-            //    consumerKey: "",
-            //    consumerSecret: "");
+            var facebookClient = new FacebookScopedClient("1065427026850786", "ad34aaf2adb862bdd7d690a8ee355a29");
+            var facebookExtraData = new Dictionary<string, object>
+            {
+                {"Icon", VirtualPathUtility.ToAbsolute("~/Images/google.png")}
+            };
+            OAuthWebSecurity.RegisterClient(facebookClient, "Facebook", facebookExtraData);
 
             //OAuthWebSecurity.RegisterFacebookClient(
             //    appId: "",
