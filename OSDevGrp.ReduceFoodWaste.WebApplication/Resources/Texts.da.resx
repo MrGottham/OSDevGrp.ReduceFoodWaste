@@ -130,10 +130,10 @@
     <value>En fejl opstod under behandlingen af ​​din anmodning.</value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>Start</value>
+    <value>Forside</value>
   </data>
   <data name="HomePage" xml:space="preserve">
-    <value>Startside</value>
+    <value>Forside</value>
   </data>
   <data name="LogIn" xml:space="preserve">
     <value>Log ind</value>
