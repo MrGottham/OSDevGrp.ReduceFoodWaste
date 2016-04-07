@@ -70,15 +70,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add an external login:.
-        /// </summary>
-        public static string AddAnExternalLogin {
-            get {
-                return ResourceManager.GetString("AddAnExternalLogin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Dansk.
         /// </summary>
         public static string Danish {

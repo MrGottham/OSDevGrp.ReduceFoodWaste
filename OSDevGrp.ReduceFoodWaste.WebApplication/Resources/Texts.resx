@@ -189,7 +189,4 @@
   <data name="TheExternalLoginWasRemoved" xml:space="preserve">
     <value>The external login was removed.</value>
   </data>
-  <data name="AddAnExternalLogin" xml:space="preserve">
-    <value>Add an external login:</value>
-  </data>
 </root>

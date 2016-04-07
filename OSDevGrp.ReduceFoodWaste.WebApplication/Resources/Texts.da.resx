@@ -189,7 +189,4 @@
   <data name="TheExternalLoginWasRemoved" xml:space="preserve">
     <value>Den eksterne tjeneste til log ind er fjernet fra din konto.</value>
   </data>
-  <data name="AddAnExternalLogin" xml:space="preserve">
-    <value>Tilføj en ekstern tjeneste til log ind:</value>
-  </data>
 </root>
