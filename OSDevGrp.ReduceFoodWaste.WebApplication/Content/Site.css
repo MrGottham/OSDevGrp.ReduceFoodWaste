@@ -177,6 +177,18 @@ footer {
     }
 
 
+/* culture
+----------------------------------------------------------*/
+#culture {
+    font-size: .8em;
+}
+
+    #culture li {
+        display: inline;
+        list-style: none;
+    }
+
+
 /* menu
 ----------------------------------------------------------*/
 ul#menu {
@@ -634,6 +646,15 @@ tr.pager td {
 
         #login a:hover {
             color: #333;
+        }
+
+    /* culture */
+    #culture {
+        text-align: center;
+    }
+        #culture li {
+            display: inline;
+            list-style: none;
         }
 
     /* menu */
