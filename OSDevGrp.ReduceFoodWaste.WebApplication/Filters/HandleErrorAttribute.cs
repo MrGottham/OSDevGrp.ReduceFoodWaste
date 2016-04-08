@@ -20,21 +20,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
         /// <summary>
         /// Handles an exception which has occourred in the MVC controllers.
         /// </summary>
-        /// <param name="filterContext">Filter context.</param>
-        public override void OnException(ExceptionContext filterContext)
+        /// <param name="exceptionContext">Exception context.</param>
+        public override void OnException(ExceptionContext exceptionContext)
         {
-            if (filterContext == null)
+            if (exceptionContext == null)
             {
-                throw new ArgumentNullException("filterContext");
+                throw new ArgumentNullException("exceptionContext");
             }
 
-            filterContext.ExceptionHandled = true;
-            if (filterContext.Exception is ReduceFoodWasteBusinessException)
+            exceptionContext.ExceptionHandled = true;
+            if (exceptionContext.Exception is ReduceFoodWasteBusinessException)
             {
-                filterContext.Result = new ViewResult
+                exceptionContext.Result = new ViewResult
                 {
                     ViewName = ErrorViewName,
-                    ViewData = new ViewDataDictionary(GenerateModel(filterContext.Exception as ReduceFoodWasteBusinessException, (string) filterContext.RouteData.Values["controller"], (string) filterContext.RouteData.Values["action"]))
+                    ViewData =
+                        new ViewDataDictionary(
+                            GenerateModel(exceptionContext.Exception as ReduceFoodWasteBusinessException,
+                                (string) exceptionContext.RouteData.Values["controller"],
+                                (string) exceptionContext.RouteData.Values["action"]))
                 };
                 return;
             }
