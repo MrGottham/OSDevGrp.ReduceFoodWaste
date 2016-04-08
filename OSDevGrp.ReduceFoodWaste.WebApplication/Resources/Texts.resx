@@ -189,4 +189,16 @@
   <data name="TheExternalLoginWasRemoved" xml:space="preserve">
     <value>The external login was removed.</value>
   </data>
+  <data name="BusinessException" xml:space="preserve">
+    <value>Business related error.</value>
+  </data>
+  <data name="RepositoryException" xml:space="preserve">
+    <value>Repository error in {0}.</value>
+  </data>
+  <data name="SystemException" xml:space="preserve">
+    <value>System critical error.</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Routing;
 using NUnit.Framework;
@@ -15,6 +16,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
     [TestFixture]
     public class HandleErrorAttributeTests : TestBase
     {
+        #region Private constants
+
+        private const string ErrorViewName = "Error";
+
+        #endregion
+
         /// <summary>
         /// Tests that the constructor initialize an attribute which handle an exception in the MVC controllers.
         /// </summary>
@@ -59,11 +66,171 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(exceptionContext, Is.Not.Null);
             Assert.That(exceptionContext.Result, Is.Not.Null);
             Assert.That(exceptionContext.Result, Is.TypeOf<EmptyResult>());
+            Assert.That(exceptionContext.ExceptionHandled, Is.False);
 
             handleErrorAttribute.OnException(exceptionContext);
 
             Assert.That(exceptionContext.Result, Is.Not.Null);
             Assert.That(exceptionContext.Result, Is.TypeOf<ViewResult>());
+            Assert.That(exceptionContext.ExceptionHandled, Is.True);
+
+            var viewResult = (ViewResult) exceptionContext.Result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo(ErrorViewName));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.TypeOf<HandleErrorInfo>());
+
+            var handleErrorInfo = (HandleErrorInfo) viewResult.Model;
+            Assert.That(handleErrorInfo, Is.Not.Null);
+            Assert.That(handleErrorInfo.Exception, Is.Not.Null);
+            Assert.That(handleErrorInfo.Exception, Is.TypeOf<ReduceFoodWasteBusinessException>());
+            Assert.That(handleErrorInfo.Exception, Is.EqualTo(reduceFoodWasteBusinessException));
+            Assert.That(handleErrorInfo.ControllerName, Is.Not.Null);
+            Assert.That(handleErrorInfo.ControllerName, Is.Not.Empty);
+            Assert.That(handleErrorInfo.ControllerName, Is.EqualTo(controllerName));
+            Assert.That(handleErrorInfo.ActionName, Is.Not.Null);
+            Assert.That(handleErrorInfo.ActionName, Is.Not.Empty);
+            Assert.That(handleErrorInfo.ActionName, Is.EqualTo(actionName));
+        }
+
+        /// <summary>
+        /// Tests that OnException return a view result for the system exception used by the Reduce Food Waste Web Application.
+        /// </summary>
+        [Test]
+        public void TestThatOnExceptionReturnViewResultForReduceFoodWasteSystemException()
+        {
+            var handleErrorAttribute = new HandleErrorAttribute();
+            Assert.That(handleErrorAttribute, Is.Not.Null);
+
+            var reduceFoodWasteSystemException = new ReduceFoodWasteSystemException(Fixture.Create<string>());
+            var controllerName = Fixture.Create<string>();
+            var actionName = Fixture.Create<string>();
+
+            var exceptionContext = CreateExceptionContext(reduceFoodWasteSystemException, controllerName, actionName);
+            Assert.That(exceptionContext, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.TypeOf<EmptyResult>());
+            Assert.That(exceptionContext.ExceptionHandled, Is.False);
+
+            handleErrorAttribute.OnException(exceptionContext);
+
+            Assert.That(exceptionContext.Result, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.TypeOf<ViewResult>());
+            Assert.That(exceptionContext.ExceptionHandled, Is.True);
+
+            var viewResult = (ViewResult)exceptionContext.Result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo(ErrorViewName));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.TypeOf<HandleErrorInfo>());
+
+            var handleErrorInfo = (HandleErrorInfo) viewResult.Model;
+            Assert.That(handleErrorInfo, Is.Not.Null);
+            Assert.That(handleErrorInfo.Exception, Is.Not.Null);
+            Assert.That(handleErrorInfo.Exception, Is.TypeOf<ReduceFoodWasteSystemException>());
+            Assert.That(handleErrorInfo.Exception, Is.EqualTo(reduceFoodWasteSystemException));
+            Assert.That(handleErrorInfo.ControllerName, Is.Not.Null);
+            Assert.That(handleErrorInfo.ControllerName, Is.Not.Empty);
+            Assert.That(handleErrorInfo.ControllerName, Is.EqualTo(controllerName));
+            Assert.That(handleErrorInfo.ActionName, Is.Not.Null);
+            Assert.That(handleErrorInfo.ActionName, Is.Not.Empty);
+            Assert.That(handleErrorInfo.ActionName, Is.EqualTo(actionName));
+        }
+
+        /// <summary>
+        /// Tests that OnException return a view result for the repository exception used by the Reduce Food Waste Web Application.
+        /// </summary>
+        [Test]
+        public void TestThatOnExceptionReturnViewResultForReduceFoodWasteRepositoryException()
+        {
+            var handleErrorAttribute = new HandleErrorAttribute();
+            Assert.That(handleErrorAttribute, Is.Not.Null);
+
+            var reduceFoodWasteRepositoryException = new ReduceFoodWasteRepositoryException(Fixture.Create<string>(), MethodBase.GetCurrentMethod());
+            var controllerName = Fixture.Create<string>();
+            var actionName = Fixture.Create<string>();
+
+            var exceptionContext = CreateExceptionContext(reduceFoodWasteRepositoryException, controllerName, actionName);
+            Assert.That(exceptionContext, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.TypeOf<EmptyResult>());
+            Assert.That(exceptionContext.ExceptionHandled, Is.False);
+
+            handleErrorAttribute.OnException(exceptionContext);
+
+            Assert.That(exceptionContext.Result, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.TypeOf<ViewResult>());
+            Assert.That(exceptionContext.ExceptionHandled, Is.True);
+
+            var viewResult = (ViewResult) exceptionContext.Result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo(ErrorViewName));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.TypeOf<HandleErrorInfo>());
+
+            var handleErrorInfo = (HandleErrorInfo) viewResult.Model;
+            Assert.That(handleErrorInfo, Is.Not.Null);
+            Assert.That(handleErrorInfo.Exception, Is.Not.Null);
+            Assert.That(handleErrorInfo.Exception, Is.TypeOf<ReduceFoodWasteRepositoryException>());
+            Assert.That(handleErrorInfo.Exception, Is.EqualTo(reduceFoodWasteRepositoryException));
+            Assert.That(handleErrorInfo.ControllerName, Is.Not.Null);
+            Assert.That(handleErrorInfo.ControllerName, Is.Not.Empty);
+            Assert.That(handleErrorInfo.ControllerName, Is.EqualTo(controllerName));
+            Assert.That(handleErrorInfo.ActionName, Is.Not.Null);
+            Assert.That(handleErrorInfo.ActionName, Is.Not.Empty);
+            Assert.That(handleErrorInfo.ActionName, Is.EqualTo(actionName));
+        }
+
+        /// <summary>
+        /// Tests that OnException return a view result for an exception.
+        /// </summary>
+        [Test]
+        public void TestThatOnExceptionReturnViewResultForException()
+        {
+            var handleErrorAttribute = new HandleErrorAttribute();
+            Assert.That(handleErrorAttribute, Is.Not.Null);
+
+            var exception = Fixture.Create<Exception>();
+            var controllerName = Fixture.Create<string>();
+            var actionName = Fixture.Create<string>();
+
+            var exceptionContext = CreateExceptionContext(exception, controllerName, actionName);
+            Assert.That(exceptionContext, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.TypeOf<EmptyResult>());
+            Assert.That(exceptionContext.ExceptionHandled, Is.False);
+
+            handleErrorAttribute.OnException(exceptionContext);
+
+            Assert.That(exceptionContext.Result, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.TypeOf<ViewResult>());
+            Assert.That(exceptionContext.ExceptionHandled, Is.True);
+
+            var viewResult = (ViewResult)exceptionContext.Result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo(ErrorViewName));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.TypeOf<HandleErrorInfo>());
+
+            var handleErrorInfo = (HandleErrorInfo)viewResult.Model;
+            Assert.That(handleErrorInfo, Is.Not.Null);
+            Assert.That(handleErrorInfo.Exception, Is.Not.Null);
+            Assert.That(handleErrorInfo.Exception, Is.TypeOf<Exception>());
+            Assert.That(handleErrorInfo.Exception, Is.EqualTo(exception));
+            Assert.That(handleErrorInfo.ControllerName, Is.Not.Null);
+            Assert.That(handleErrorInfo.ControllerName, Is.Not.Empty);
+            Assert.That(handleErrorInfo.ControllerName, Is.EqualTo(controllerName));
+            Assert.That(handleErrorInfo.ActionName, Is.Not.Null);
+            Assert.That(handleErrorInfo.ActionName, Is.Not.Empty);
+            Assert.That(handleErrorInfo.ActionName, Is.EqualTo(actionName));
         }
 
         /// <summary>

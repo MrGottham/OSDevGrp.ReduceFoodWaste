@@ -189,4 +189,16 @@
   <data name="TheExternalLoginWasRemoved" xml:space="preserve">
     <value>Den eksterne tjeneste til log ind er fjernet fra din konto.</value>
   </data>
+  <data name="BusinessException" xml:space="preserve">
+    <value>Forretningsmæssig fejl.</value>
+  </data>
+  <data name="RepositoryException" xml:space="preserve">
+    <value>Repository fejl i {0}.</value>
+  </data>
+  <data name="SystemException" xml:space="preserve">
+    <value>Systemkritisk fejl.</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
 </root>

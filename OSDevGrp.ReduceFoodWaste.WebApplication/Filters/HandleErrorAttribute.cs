@@ -39,8 +39,30 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                 };
                 return;
             }
+            if (exceptionContext.Exception is ReduceFoodWasteSystemException)
+            {
+                exceptionContext.Result = new ViewResult
+                {
+                    ViewName = ErrorViewName,
+                    ViewData = new ViewDataDictionary(GenerateHandleErrorInfo(exceptionContext.Exception as ReduceFoodWasteSystemException, GetControllerName(exceptionContext.RouteData), GetActionName(exceptionContext.RouteData)))
+                };
+                return;
+            }
+            if (exceptionContext.Exception is ReduceFoodWasteRepositoryException)
+            {
+                exceptionContext.Result = new ViewResult
+                {
+                    ViewName = ErrorViewName,
+                    ViewData = new ViewDataDictionary(GenerateHandleErrorInfo(exceptionContext.Exception as ReduceFoodWasteRepositoryException, GetControllerName(exceptionContext.RouteData), GetActionName(exceptionContext.RouteData)))
+                };
+                return;
+            }
 
-            throw new NotImplementedException();
+            exceptionContext.Result = new ViewResult
+            {
+                ViewName = ErrorViewName,
+                ViewData = new ViewDataDictionary(GenerateHandleErrorInfo(exceptionContext.Exception, GetControllerName(exceptionContext.RouteData), GetActionName(exceptionContext.RouteData)))
+            };
         }
 
         /// <summary>

@@ -70,6 +70,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Business related error..
+        /// </summary>
+        public static string BusinessException {
+            get {
+                return ResourceManager.GetString("BusinessException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dansk.
         /// </summary>
         public static string Danish {
@@ -232,11 +241,38 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Repository error in {0}..
+        /// </summary>
+        public static string RepositoryException {
+            get {
+                return ResourceManager.GetString("RepositoryException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System critical error..
+        /// </summary>
+        public static string SystemException {
+            get {
+                return ResourceManager.GetString("SystemException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The external login was removed..
         /// </summary>
         public static string TheExternalLoginWasRemoved {
             get {
                 return ResourceManager.GetString("TheExternalLoginWasRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
             }
         }
         
