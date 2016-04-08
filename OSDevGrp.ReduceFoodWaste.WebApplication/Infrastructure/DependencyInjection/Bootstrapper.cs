@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
-using Unity.Mvc4;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.DependencyInjection
 {
