@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using System.Web.Routing;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -42,22 +43,62 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         }
 
         /// <summary>
-        /// Tests that OnException throws an ArgumentNullException when the filter context is null.
+        /// Tests that OnException return a view result for the business exception used by the Reduce Food Waste Web Application.
         /// </summary>
         [Test]
-        public void X_TestThatOnExceptionThrowsArgumentNullExceptionWhenFilterContextIsNull()
+        public void TestThatOnExceptionReturnViewResultForReduceFoodWasteBusinessException()
         {
             var handleErrorAttribute = new HandleErrorAttribute();
             Assert.That(handleErrorAttribute, Is.Not.Null);
 
             var reduceFoodWasteBusinessException = new ReduceFoodWasteBusinessException(Fixture.Create<string>());
-            var exceptionContext = new ExceptionContext
-            {
-                Exception = reduceFoodWasteBusinessException,
-                ExceptionHandled = false
-            };
+            var controllerName = Fixture.Create<string>();
+            var actionName = Fixture.Create<string>();
+
+            var exceptionContext = CreateExceptionContext(reduceFoodWasteBusinessException, controllerName, actionName);
+            Assert.That(exceptionContext, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.TypeOf<EmptyResult>());
 
             handleErrorAttribute.OnException(exceptionContext);
+
+            Assert.That(exceptionContext.Result, Is.Not.Null);
+            Assert.That(exceptionContext.Result, Is.TypeOf<ViewResult>());
+        }
+
+        /// <summary>
+        /// Creates an exception context which can be used for the tests.
+        /// </summary>
+        /// <typeparam name="TException">Type of the exception which should be handled.</typeparam>
+        /// <param name="exception">Exception which should be handled.</param>
+        /// <param name="controllerName">Name of the controller where the exception has occurred.</param>
+        /// <param name="actionName">Name of the action where the exception has occurred.</param>
+        /// <returns>Exception context.</returns>
+        private static ExceptionContext CreateExceptionContext<TException>(TException exception, string controllerName, string actionName) where TException : Exception
+        {
+            if (exception == null)
+            {
+                throw new ArgumentNullException("exception");
+            }
+            if (string.IsNullOrEmpty(controllerName))
+            {
+                throw new ArgumentNullException("controllerName");
+            }
+            if (string.IsNullOrEmpty("actionName"))
+            {
+                throw new ArgumentNullException("actionName");
+            }
+
+            var routeData = new RouteData();
+            routeData.Values.Add("controller", controllerName);
+            routeData.Values.Add("action", actionName);
+            
+            return new ExceptionContext
+            {
+                Exception = exception,
+                ExceptionHandled = false,
+                RouteData = routeData
+            };
         }
     }
 }

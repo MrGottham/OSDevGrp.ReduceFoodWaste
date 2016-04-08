@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using System.Web.Routing;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
@@ -18,7 +19,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
         #region Methods
 
         /// <summary>
-        /// Handles an exception which has occourred in the MVC controllers.
+        /// Handles an exception which has occurred in the MVC controllers.
         /// </summary>
         /// <param name="exceptionContext">Exception context.</param>
         public override void OnException(ExceptionContext exceptionContext)
@@ -34,11 +35,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                 exceptionContext.Result = new ViewResult
                 {
                     ViewName = ErrorViewName,
-                    ViewData =
-                        new ViewDataDictionary(
-                            GenerateModel(exceptionContext.Exception as ReduceFoodWasteBusinessException,
-                                (string) exceptionContext.RouteData.Values["controller"],
-                                (string) exceptionContext.RouteData.Values["action"]))
+                    ViewData = new ViewDataDictionary(GenerateHandleErrorInfo(exceptionContext.Exception as ReduceFoodWasteBusinessException, GetControllerName(exceptionContext.RouteData), GetActionName(exceptionContext.RouteData)))
                 };
                 return;
             }
@@ -46,7 +43,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
             throw new NotImplementedException();
         }
 
-        private HandleErrorInfo GenerateModel(Exception exception, string controllerName, string actionName)
+        /// <summary>
+        /// Creates a handle error info.
+        /// </summary>
+        /// <param name="exception">Exception which has occurred.</param>
+        /// <param name="controllerName">Name of the controller where the exception occurred.</param>
+        /// <param name="actionName">Name of the action where the exception occurred.</param>
+        /// <returns>Handle error info.</returns>
+        private static HandleErrorInfo GenerateHandleErrorInfo(Exception exception, string controllerName, string actionName)
         {
             if (exception == null)
             {
@@ -57,6 +61,34 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                 throw new ArgumentNullException("controllerName");
             }
             return new HandleErrorInfo(exception, controllerName, actionName);
+        }
+
+        /// <summary>
+        /// Gets the name of the controller where the exception occurred.
+        /// </summary>
+        /// <param name="routeData">Route data.</param>
+        /// <returns>Name of the controller where the exception occurred.</returns>
+        private static string GetControllerName(RouteData routeData)
+        {
+            if (routeData == null)
+            {
+                throw new ArgumentNullException("routeData");
+            }
+            return (string) routeData.Values["controller"];
+        }
+
+        /// <summary>
+        /// Gets the name of the action where the exception occurred.
+        /// </summary>
+        /// <param name="routeData">Route data.</param>
+        /// <returns>Name of the action where the exception occurred.</returns>
+        private static string GetActionName(RouteData routeData)
+        {
+            if (routeData == null)
+            {
+                throw new ArgumentNullException("routeData");
+            }
+            return (string)routeData.Values["action"];
         }
 
         #endregion
