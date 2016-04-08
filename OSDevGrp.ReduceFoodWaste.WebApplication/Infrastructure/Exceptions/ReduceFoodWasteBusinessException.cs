@@ -3,28 +3,27 @@
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions
 {
     /// <summary>
-    /// System exception used by the Reduce Food Waste Web Application.
+    /// Business exception used by the Reduce Food Waste Web Application.
     /// </summary>
-    [Serializable]
-    public class ReduceFoodWasteSystemException : ReduceFoodWasteExceptionBase
+    public class ReduceFoodWasteBusinessException : ReduceFoodWasteExceptionBase
     {
         #region Constructors
 
         /// <summary>
-        /// Creates a system exception used by the Reduce Food Waste Web Application.
+        /// Creates a business exception used by the Reduce Food Waste Web Application.
         /// </summary>
         /// <param name="message">Message.</param>
-        public ReduceFoodWasteSystemException(string message) 
+        public ReduceFoodWasteBusinessException(string message) 
             : base(message)
         {
         }
 
         /// <summary>
-        /// Creates a system exception used by the Reduce Food Waste Web Application.
+        /// Creates a business exception used by the Reduce Food Waste Web Application.
         /// </summary>
         /// <param name="message">Message.</param>
         /// <param name="innerException">Inner exception.</param>
-        public ReduceFoodWasteSystemException(string message, Exception innerException)
+        public ReduceFoodWasteBusinessException(string message, Exception innerException) 
             : base(message, innerException)
         {
         }

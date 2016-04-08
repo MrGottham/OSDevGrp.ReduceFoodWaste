@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
+using HandleErrorAttribute = OSDevGrp.ReduceFoodWaste.WebApplication.Filters.HandleErrorAttribute;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication
 {

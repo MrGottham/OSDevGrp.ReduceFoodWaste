@@ -31,6 +31,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions
         protected ReduceFoodWasteExceptionBase(string message, Exception innerException)
             : base(message, innerException)
         {
+            if (string.IsNullOrEmpty(message))
+            {
+                throw new ArgumentNullException("message");
+            }
+            if (innerException == null)
+            {
+                throw new ArgumentNullException("innerException");
+            }
         }
 
         #endregion

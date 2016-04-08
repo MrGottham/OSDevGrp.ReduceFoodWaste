@@ -7,25 +7,25 @@ using Ploeh.AutoFixture;
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.Exceptions
 {
     /// <summary>
-    /// Tests the system exception used by the Reduce Food Waste Web Application.
+    /// Tests the business exception used by the Reduce Food Waste Web Application.
     /// </summary>
     [TestFixture]
-    public class ReduceFoodWasteSystemExceptionTests : TestBase
+    public class ReduceFoodWasteBusinessExceptionTests : TestBase
     {
         /// <summary>
-        /// Tests that the constructor without an inner exception initialize a system exception used by the Reduce Food Waste Web Application.
+        /// Tests that the constructor without an inner exception initialize a business exception used by the Reduce Food Waste Web Application.
         /// </summary>
         [Test]
-        public void TestThatConstructorWithoutInnerExceptionInitializeReduceFoodWasteSystemException()
+        public void TestThatConstructorWithoutInnerExceptionInitializeReduceFoodWasteBusinessException()
         {
             var message = Fixture.Create<string>();
 
-            var reduceFoodWasteSystemException = new ReduceFoodWasteSystemException(message);
-            Assert.That(reduceFoodWasteSystemException, Is.Not.Null);
-            Assert.That(reduceFoodWasteSystemException.Message, Is.Not.Null);
-            Assert.That(reduceFoodWasteSystemException.Message, Is.Not.Empty);
-            Assert.That(reduceFoodWasteSystemException.Message, Is.EqualTo(message));
-            Assert.That(reduceFoodWasteSystemException.InnerException, Is.Null);
+            var reduceFoodWasteBusinessException = new ReduceFoodWasteBusinessException(message);
+            Assert.That(reduceFoodWasteBusinessException, Is.Not.Null);
+            Assert.That(reduceFoodWasteBusinessException.Message, Is.Not.Null);
+            Assert.That(reduceFoodWasteBusinessException.Message, Is.Not.Empty);
+            Assert.That(reduceFoodWasteBusinessException.Message, Is.EqualTo(message));
+            Assert.That(reduceFoodWasteBusinessException.InnerException, Is.Null);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [TestCase("")]
         public void TestThatConstructorWithoutInnerExceptionThrowsArgumentNullExceptionWhenMessageIsNullOrEmpty(string testValue)
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new ReduceFoodWasteSystemException(testValue));
+            var exception = Assert.Throws<ArgumentNullException>(() => new ReduceFoodWasteBusinessException(testValue));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -45,21 +45,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         }
 
         /// <summary>
-        /// Tests that the constructor with an inner exception initialize a system exception used by the Reduce Food Waste Web Application.
+        /// Tests that the constructor with an inner exception initialize a business exception used by the Reduce Food Waste Web Application.
         /// </summary>
         [Test]
-        public void TestThatConstructorWithInnerExceptionInitializeReduceFoodWasteSystemException()
+        public void TestThatConstructorWithInnerExceptionInitializeReduceFoodWasteBusinessException()
         {
             var message = Fixture.Create<string>();
             var innerException = Fixture.Create<Exception>();
 
-            var reduceFoodWasteSystemException = new ReduceFoodWasteSystemException(message, innerException);
-            Assert.That(reduceFoodWasteSystemException, Is.Not.Null);
-            Assert.That(reduceFoodWasteSystemException.Message, Is.Not.Null);
-            Assert.That(reduceFoodWasteSystemException.Message, Is.Not.Empty);
-            Assert.That(reduceFoodWasteSystemException.Message, Is.EqualTo(message));
-            Assert.That(reduceFoodWasteSystemException.InnerException, Is.Not.Null);
-            Assert.That(reduceFoodWasteSystemException.InnerException, Is.EqualTo(innerException));
+            var reduceFoodWasteBusinessException = new ReduceFoodWasteBusinessException(message, innerException);
+            Assert.That(reduceFoodWasteBusinessException, Is.Not.Null);
+            Assert.That(reduceFoodWasteBusinessException.Message, Is.Not.Null);
+            Assert.That(reduceFoodWasteBusinessException.Message, Is.Not.Empty);
+            Assert.That(reduceFoodWasteBusinessException.Message, Is.EqualTo(message));
+            Assert.That(reduceFoodWasteBusinessException.InnerException, Is.Not.Null);
+            Assert.That(reduceFoodWasteBusinessException.InnerException, Is.EqualTo(innerException));
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [TestCase("")]
         public void TestThatConstructorWithInnerExceptionThrowsArgumentNullExceptionWhenMessageIsNullOrEmpty(string testValue)
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new ReduceFoodWasteSystemException(testValue, Fixture.Create<Exception>()));
+            var exception = Assert.Throws<ArgumentNullException>(() => new ReduceFoodWasteBusinessException(testValue, Fixture.Create<Exception>()));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -84,7 +84,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [Test]
         public void TestThatConstructorWithInnerExceptionThrowsArgumentNullExceptionWhenInnerExceptionIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new ReduceFoodWasteSystemException(Fixture.Create<string>(), null));
+            var exception = Assert.Throws<ArgumentNullException>(() => new ReduceFoodWasteBusinessException(Fixture.Create<string>(), null));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);

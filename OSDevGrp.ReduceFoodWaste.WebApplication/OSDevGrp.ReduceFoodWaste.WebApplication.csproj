@@ -211,12 +211,15 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LanguageController.cs" />
     <Compile Include="Filters\CultureAttribute.cs" />
+    <Compile Include="Filters\HandleErrorAttribute.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\DependencyInjection\Bootstrapper.cs" />
+    <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteBusinessException.cs" />
     <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteExceptionBase.cs" />
+    <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteRepositoryException.cs" />
     <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteSystemException.cs" />
     <Compile Include="Infrastructure\Security\Authentication\FacebookScopedClient.cs" />
     <Compile Include="Infrastructure\Security\Authentication\FormsAuthenticationHelper.cs" />

@@ -47,6 +47,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HandleErrorAttributeTests.cs" />
+    <Compile Include="Infrastructure\Security\Exceptions\ReduceFoodWasteBusinessExceptionTests.cs" />
+    <Compile Include="Infrastructure\Security\Exceptions\ReduceFoodWasteRepositoryExceptionTests.cs" />
     <Compile Include="Infrastructure\Security\Exceptions\ReduceFoodWasteSystemExceptionTests.cs" />
     <Compile Include="Infrastructure\Security\Providers\ClaimValueProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
