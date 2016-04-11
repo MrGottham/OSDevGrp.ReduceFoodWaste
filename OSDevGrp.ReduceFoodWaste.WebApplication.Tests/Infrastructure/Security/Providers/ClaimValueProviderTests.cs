@@ -6,6 +6,7 @@ using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Ploeh.AutoFixture;
+using Rhino.Mocks;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.Providers
 {
@@ -23,6 +24,62 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         {
             var claimValueProvider = new ClaimValueProvider();
             Assert.That(claimValueProvider, Is.Not.Null);
+        }
+
+        /// <summary>
+        /// Tests that IsAuthenticated throws an ArgumentNullException when the identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatIsAuthenticatedThrowsArgumentNullExceptionWhenIdentityIsNull()
+        {
+            var claimValueProvider = new ClaimValueProvider();
+            Assert.That(claimValueProvider, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => claimValueProvider.IsAuthenticated(null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that IsAuthenticated calls IsAuthenticated on the identity.
+        /// </summary>
+        [Test]
+        public void TestThatIsAuthenticatedCallsIsAuthenticatedOnIdentity()
+        {
+            var claimValueProvider = new ClaimValueProvider();
+            Assert.That(claimValueProvider, Is.Not.Null);
+
+            var identityMock = MockRepository.GenerateMock<IIdentity>();
+            identityMock.Stub(m => m.IsAuthenticated)
+                .Return(Fixture.Create<bool>())
+                .Repeat.Any();
+
+            claimValueProvider.IsAuthenticated(identityMock);
+
+            identityMock.AssertWasCalled(m => m.IsAuthenticated);
+        }
+
+        /// <summary>
+        /// Tests that IsAuthenticated returns the result from IsAuthenticated on the identity.
+        /// </summary>
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestThatIsAuthenticatedReturnsResultFromIsAuthenticatedOnIdentity(bool expectedValue)
+        {
+            var claimValueProvider = new ClaimValueProvider();
+            Assert.That(claimValueProvider, Is.Not.Null);
+
+            var identityMock = MockRepository.GenerateMock<IIdentity>();
+            identityMock.Stub(m => m.IsAuthenticated)
+                .Return(expectedValue)
+                .Repeat.Any();
+
+            var result = claimValueProvider.IsAuthenticated(identityMock);
+            Assert.That(result, Is.EqualTo(expectedValue));
         }
 
         /// <summary>

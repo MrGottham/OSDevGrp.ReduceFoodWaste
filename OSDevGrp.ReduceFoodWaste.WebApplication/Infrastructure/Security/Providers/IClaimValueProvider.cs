@@ -9,6 +9,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
     public interface IClaimValueProvider
     {
         /// <summary>
+        /// Checks whether an identitiy has been authenticated.
+        /// </summary>
+        /// <param name="identity">Identity.</param>
+        /// <returns>True when the identity has been authenticated otherwise false.</returns>
+        bool IsAuthenticated(IIdentity identity);
+
+        /// <summary>
         /// Gets the user name identifier for a given identity.
         /// </summary>
         /// <param name="identity">Identity on which to get the user name identifier.</param>

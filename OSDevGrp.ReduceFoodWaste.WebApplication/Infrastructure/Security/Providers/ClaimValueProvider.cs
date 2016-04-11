@@ -9,6 +9,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
     /// </summary>
     public sealed class ClaimValueProvider : IClaimValueProvider
     {
+        #region Constants
+
+        public string ValidatedHouseholdMember = "http://osdevgrp.local/foodwaste/security/validatedhouseholdmember";
+
+        #endregion
+
+        /// <summary>
+        /// Checks whether an identitiy has been authenticated.
+        /// </summary>
+        /// <param name="identity">Identity.</param>
+        /// <returns>True when the identity has been authenticated otherwise false.</returns>
+        public bool IsAuthenticated(IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            return identity.IsAuthenticated;
+        }
+
         /// <summary>
         /// Gets the user name identifier for a given identity.
         /// </summary>
