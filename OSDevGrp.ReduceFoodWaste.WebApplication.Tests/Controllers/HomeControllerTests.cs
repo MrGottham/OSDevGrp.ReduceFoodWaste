@@ -22,7 +22,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <summary>
         /// Initialize each test.
         /// </summary>
-        [SetUp] // TODO: Find the right way....
+        [SetUp]
         public void TestInitialize()
         {
             _claimValueProvider = MockRepository.GenerateMock<IClaimValueProvider>();
