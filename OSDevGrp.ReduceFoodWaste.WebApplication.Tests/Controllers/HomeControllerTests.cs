@@ -22,10 +22,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <summary>
         /// Initialize each test.
         /// </summary>
-        [OneTimeSetUp]
+        [SetUp] // TODO: Find the right way....
         public void TestInitialize()
         {
             _claimValueProvider = MockRepository.GenerateMock<IClaimValueProvider>();
+        }
+
+        /// <summary>
+        /// Tests that the constructor initialize the Home controller.
+        /// </summary>
+        [Test]
+        public void TestThatConstructorInitializeHomeController()
+        {
+            var homeController = new HomeController(_claimValueProvider);
+            Assert.That(homeController, Is.Not.Null);
         }
 
         /// <summary>
