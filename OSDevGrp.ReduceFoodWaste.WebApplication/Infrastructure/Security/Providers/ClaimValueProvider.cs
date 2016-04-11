@@ -11,7 +11,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
     {
         #region Constants
 
-        public string ValidatedHouseholdMember = "http://osdevgrp.local/foodwaste/security/validatedhouseholdmember";
+        public const string ValidatedHouseholdMemberClaim = "http://osdevgrp.local/foodwaste/security/validatedhouseholdmember";
 
         #endregion
 
@@ -27,6 +27,39 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
                 throw new ArgumentNullException("identity");
             }
             return identity.IsAuthenticated;
+        }
+
+        /// <summary>
+        /// Checks whether a given identity is a validated household member.
+        /// </summary>
+        /// <param name="identity">Identity which should be checked.</param>
+        /// <returns>True when the given identity is a validated household member otherwise false.</returns>
+        public bool IsValidatedHouseholdMember(IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (identity is ClaimsIdentity)
+            {
+                return IsValidatedHouseholdMember(identity as ClaimsIdentity);
+            }
+            return IsValidatedHouseholdMember(new ClaimsIdentity(identity));
+        }
+
+        /// <summary>
+        /// Checks whether a given claims identity is a validated household member.
+        /// </summary>
+        /// <param name="claimsIdentity">Claims identity which should be checked.</param>
+        /// <returns>True when the given claims identity is a validated household member otherwise false.</returns>
+        public bool IsValidatedHouseholdMember(ClaimsIdentity claimsIdentity)
+        {
+            if (claimsIdentity == null)
+            {
+                throw new ArgumentNullException("claimsIdentity");
+            }
+            var validatedHouseholdMemberClaim = claimsIdentity.FindFirst(ValidatedHouseholdMemberClaim);
+            return validatedHouseholdMemberClaim != null && Convert.ToBoolean(validatedHouseholdMemberClaim.Value);
         }
 
         /// <summary>

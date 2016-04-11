@@ -86,6 +86,99 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that GetUserNameIdentifier when called with a identity throws an ArgumentNullException when the identity is null.
         /// </summary>
         [Test]
+        public void TestThatIsValidatedHouseholdMemberWhenCalledWithIdentityThrowsArgumentNullExceptionWhenIdentityIsNull()
+        {
+            var claimValueProvider = new ClaimValueProvider();
+            Assert.That(claimValueProvider, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => claimValueProvider.IsValidatedHouseholdMember((IIdentity) null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that IsValidatedHouseholdMember when called with a claims identity throws an ArgumentNullException when the claims identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatIsValidatedHouseholdMemberWhenCalledWithClaimsIdentityThrowsArgumentNullExceptionWhenClaimsIdentityIsNull()
+        {
+            var claimValueProvider = new ClaimValueProvider();
+            Assert.That(claimValueProvider, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => claimValueProvider.IsValidatedHouseholdMember(null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("claimsIdentity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that IsValidatedHouseholdMember when called with a claims identity returns false when the claim collection is empty.
+        /// </summary>
+        [Test]
+        public void TestThatIsValidatedHouseholdMemberWhenCalledWithClaimsIdentityReturnsFalseWhenClaimCollectionIsEmpty()
+        {
+            var claimValueProvider = new ClaimValueProvider();
+            Assert.That(claimValueProvider, Is.Not.Null);
+
+            var claimCollection = new List<Claim>(0);
+            var claimsIdentity = new ClaimsIdentity(claimCollection);
+
+            var result = claimValueProvider.IsValidatedHouseholdMember(claimsIdentity);
+            Assert.That(result, Is.False);
+        }
+
+        /// <summary>
+        /// Tests that IsValidatedHouseholdMember when called with a claims identity returns false when a claim for validated household member does not exist.
+        /// </summary>
+        [Test]
+        public void TestThatIsValidatedHouseholdMemberWhenCalledWithClaimsIdentityReturnsFalseWhenClaimForValidatedHouseholdMemberDoesNotExist()
+        {
+            var claimValueProvider = new ClaimValueProvider();
+            Assert.That(claimValueProvider, Is.Not.Null);
+
+            var claimCollection = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, Fixture.Create<string>(), ClaimValueTypes.String),
+                new Claim(ClaimTypes.Name, Fixture.Create<string>(), ClaimValueTypes.String)
+            };
+            var claimsIdentity = new ClaimsIdentity(claimCollection);
+
+            var result = claimValueProvider.IsValidatedHouseholdMember(claimsIdentity);
+            Assert.That(result, Is.False);
+        }
+
+        /// <summary>
+        /// Tests that IsValidatedHouseholdMember when called with a claims identity returns the value from the claim for validated household member when the claim does exist.
+        /// </summary>
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestThatIsValidatedHouseholdMemberWhenCalledWithClaimsIdentityReturnsValueFromClaimForValidatedHouseholdMemberWhenClaimDoesExist(bool expectedValue)
+        {
+            var claimValueProvider = new ClaimValueProvider();
+            Assert.That(claimValueProvider, Is.Not.Null);
+
+            var claimCollection = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, Fixture.Create<string>(), ClaimValueTypes.String),
+                new Claim(ClaimTypes.Name, Fixture.Create<string>(), ClaimValueTypes.String),
+                new Claim(ClaimValueProvider.ValidatedHouseholdMemberClaim, Convert.ToString(expectedValue), ClaimValueTypes.Boolean)
+            };
+            var claimsIdentity = new ClaimsIdentity(claimCollection);
+
+            var result = claimValueProvider.IsValidatedHouseholdMember(claimsIdentity);
+            Assert.That(result, Is.EqualTo(expectedValue));
+        }
+
+        /// <summary>
+        /// Tests that GetUserNameIdentifier when called with a identity throws an ArgumentNullException when the identity is null.
+        /// </summary>
+        [Test]
         public void TestThatGetUserNameIdentifierWhenCalledWithIdentityThrowsArgumentNullExceptionWhenIdentityIsNull()
         {
             var claimValueProvider = new ClaimValueProvider();

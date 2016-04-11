@@ -246,6 +246,7 @@
     <Compile Include="Infrastructure\Security\Authentication\FacebookScopedClient.cs" />
     <Compile Include="Infrastructure\Security\Authentication\FormsAuthenticationHelper.cs" />
     <Compile Include="Infrastructure\Security\Authentication\GooglePlusScopedClient.cs" />
+    <Compile Include="Infrastructure\Security\Authentication\IdentityHelper.cs" />
     <Compile Include="Infrastructure\Security\Authentication\MicrosoftScopedClient.cs" />
     <Compile Include="Infrastructure\Security\Providers\ClaimValueProvider.cs" />
     <Compile Include="Infrastructure\Security\Providers\IClaimValueProvider.cs" />
