@@ -28,8 +28,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Message = string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject);
+            if (User == null || User.Identity == null)
+            {
+                ViewBag.Message = string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject);
+                return View();
+            }
 
+            var isValidatedHouseholdMember = _claimValueProvider.IsValidatedHouseholdMember(User.Identity);
+
+            ViewBag.Message = string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject);
             return View();
         }
     }
