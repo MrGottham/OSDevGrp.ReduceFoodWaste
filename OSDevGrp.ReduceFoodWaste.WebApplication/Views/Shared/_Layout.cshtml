@@ -9,7 +9,6 @@
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
-        @Styles.Render("~/Content/angular-busy-css")
         @Scripts.Render("~/bundles/modernizr")
     </head>
     <body>
@@ -34,7 +33,7 @@
                 </div>
             </div>
         </header>
-        <div id="body" cg-busy="myPromise">
+        <div id="body">
             @RenderSection("featured", required: false)
             <section class="content-wrapper main-content clear-fix">
                 @RenderBody()
@@ -54,7 +53,6 @@
         </footer>
 
         @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/angular-busy")
         @RenderSection("scripts", required: false)
     </body>
 </html>

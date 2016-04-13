@@ -263,8 +263,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\angular-busy.css" />
-    <Content Include="Content\angular-busy.min.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -304,8 +302,6 @@
     <Content Include="Images\google.png" />
     <Content Include="Images\microsoft.png" />
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
-    <Content Include="Scripts\angular-busy.js" />
-    <Content Include="Scripts\angular-busy.min.js" />
     <Content Include="Scripts\jquery-2.2.3.js" />
     <Content Include="Scripts\jquery-2.2.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.js" />
