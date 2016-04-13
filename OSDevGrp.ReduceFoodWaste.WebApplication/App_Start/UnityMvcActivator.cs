@@ -2,16 +2,16 @@ using System.Linq;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity.Mvc;
 
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(OSDevGrp.ReduceFoodWaste.WebApplication.App_Start.UnityWebActivator), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(OSDevGrp.ReduceFoodWaste.WebApplication.App_Start.UnityWebActivator), "Shutdown")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(OSDevGrp.ReduceFoodWaste.WebApplication.UnityWebActivator), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(OSDevGrp.ReduceFoodWaste.WebApplication.UnityWebActivator), "Shutdown")]
 
-namespace OSDevGrp.ReduceFoodWaste.WebApplication.App_Start
+namespace OSDevGrp.ReduceFoodWaste.WebApplication
 {
     /// <summary>Provides the bootstrapping for integrating Unity with ASP.NET MVC.</summary>
     public static class UnityWebActivator
     {
         /// <summary>Integrates Unity when the application starts.</summary>
-        public static void Start() 
+        public static void Start()
         {
             var container = UnityConfig.GetConfiguredContainer();
 

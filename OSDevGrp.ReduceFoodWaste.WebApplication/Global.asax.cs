@@ -4,7 +4,6 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.DependencyInjection;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication
@@ -20,8 +19,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
-
-            Bootstrapper.Initialize();
         }
 
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs eventArgs)

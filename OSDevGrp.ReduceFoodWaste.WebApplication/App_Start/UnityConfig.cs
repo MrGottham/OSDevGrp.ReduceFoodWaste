@@ -1,16 +1,17 @@
 using System;
 using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 
-namespace OSDevGrp.ReduceFoodWaste.WebApplication.App_Start
+namespace OSDevGrp.ReduceFoodWaste.WebApplication
 {
     /// <summary>
     /// Specifies the Unity configuration for the main container.
     /// </summary>
-    public class UnityConfig
+    public static class UnityConfig
     {
         #region Unity Container
-        private static Lazy<IUnityContainer> container = new Lazy<IUnityContainer>(() =>
+
+        private static readonly Lazy<IUnityContainer> Container = new Lazy<IUnityContainer>(() =>
         {
             var container = new UnityContainer();
             RegisterTypes(container);
@@ -22,21 +23,35 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.App_Start
         /// </summary>
         public static IUnityContainer GetConfiguredContainer()
         {
-            return container.Value;
+            return Container.Value;
         }
+
         #endregion
 
         /// <summary>Registers the type mappings with the Unity container.</summary>
         /// <param name="container">The unity container to configure.</param>
         /// <remarks>There is no need to register concrete types such as controllers or API controllers (unless you want to 
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
-        public static void RegisterTypes(IUnityContainer container)
+        private static void RegisterTypes(IUnityContainer container)
         {
+            if (container == null)
+            {
+                throw new ArgumentNullException("container");
+            }
+
             // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
             // container.LoadConfiguration();
 
-            // TODO: Register your types here
-            // container.RegisterType<IProductRepository, ProductRepository>();
+            RegisterInfrastructureTypes(container);
+        }
+
+        private static void RegisterInfrastructureTypes(IUnityContainer container)
+        {
+            if (container == null)
+            {
+                throw new ArgumentNullException("container");
+            }
+            container.RegisterType<IClaimValueProvider, ClaimValueProvider>();
         }
     }
 }
