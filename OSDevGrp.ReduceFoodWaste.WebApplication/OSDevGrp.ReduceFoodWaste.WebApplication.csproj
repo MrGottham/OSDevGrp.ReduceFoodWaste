@@ -263,6 +263,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\progress.overlay.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -298,6 +299,7 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\ajax-loader_bigspinner_green.gif" />
     <Content Include="Images\facebook.png" />
     <Content Include="Images\google.png" />
     <Content Include="Images\microsoft.png" />
@@ -317,6 +319,7 @@
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\progress.overlay.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

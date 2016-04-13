@@ -9,6 +9,7 @@
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/progress.overlay/css")
         @Scripts.Render("~/bundles/modernizr")
     </head>
     <body>
@@ -53,6 +54,7 @@
         </footer>
 
         @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/progress.overlay")
         @RenderSection("scripts", required: false)
     </body>
 </html>
