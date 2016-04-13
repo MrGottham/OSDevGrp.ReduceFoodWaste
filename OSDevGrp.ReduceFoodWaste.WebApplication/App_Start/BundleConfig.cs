@@ -38,13 +38,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
                 "~/Content/themes/base/jquery.ui.progressbar.css",
                 "~/Content/themes/base/jquery.ui.theme.css"));
 
-            bundles.Add(new StyleBundle("~/Content/angular-busy-css").Include(
-                "~/Content/angular-busy.css",
-                "~/Content/angular-busy.min.css"));
+            bundles.Add(new StyleBundle("~/Content/angular-busy-css").Include("~/Content/angular-busy.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/angular-busy").Include(
-                "~/Scripts/angular-busy.js",
-                "~/Scripts/angular-busy.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/angular-busy").Include("~/Scripts/angular-busy.js"));
         }
     }
 }
