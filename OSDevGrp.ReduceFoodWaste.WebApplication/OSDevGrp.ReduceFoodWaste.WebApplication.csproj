@@ -136,6 +136,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Spatial, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
@@ -264,6 +265,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Texts.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service References\HouseholdDataService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\progress.overlay.css" />
@@ -323,6 +329,40 @@
     <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\progress.overlay.js" />
+    <None Include="Service References\HouseholdDataService\foodwastehouseholddataservice.disco" />
+    <None Include="Service References\HouseholdDataService\configuration91.svcinfo" />
+    <None Include="Service References\HouseholdDataService\configuration.svcinfo" />
+    <Content Include="Service References\HouseholdDataService\OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.BooleanResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\HouseholdDataService\OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.DataProviderView.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\HouseholdDataService\OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.FoodGroupTreeView.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\HouseholdDataService\OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.FoodItemCollectionView.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\HouseholdDataService\OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.HouseholdMemberView.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\HouseholdDataService\OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.HouseholdView.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\HouseholdDataService\OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.ServiceReceipt.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\HouseholdDataService\OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StaticTextView.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\HouseholdDataService\OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.TranslationInfoSystemView.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\HouseholdDataService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -357,6 +397,14 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\_CulturePartial.cshtml" />
+    <None Include="Service References\HouseholdDataService\foodwastehouseholddataservice.wsdl" />
+    <None Include="Service References\HouseholdDataService\foodwastehouseholddataservice.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\HouseholdDataService\FoodWasteHouseholdDataService1.wsdl" />
+    <None Include="Service References\HouseholdDataService\foodwastehouseholddataservice1.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -378,6 +426,12 @@
       <LastGenOutput>Texts.Designer.cs</LastGenOutput>
       <CustomToolNamespace>OSDevGrp.ReduceFoodWaste.WebApplication.Resources</CustomToolNamespace>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\HouseholdDataService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
