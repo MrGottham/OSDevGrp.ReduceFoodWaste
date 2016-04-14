@@ -79,6 +79,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannet resolve a mail address from your identity..
+        /// </summary>
+        public static string CannotResolveMailAddressFromIdentity {
+            get {
+                return ResourceManager.GetString("CannotResolveMailAddressFromIdentity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannet resolve a user name identifier from your identity..
+        /// </summary>
+        public static string CannotResolveUserNameIdentifierFromIdentity {
+            get {
+                return ResourceManager.GetString("CannotResolveUserNameIdentifierFromIdentity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dansk.
         /// </summary>
         public static string Danish {

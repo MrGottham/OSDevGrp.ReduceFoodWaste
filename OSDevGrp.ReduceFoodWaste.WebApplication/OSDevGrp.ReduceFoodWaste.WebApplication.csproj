@@ -255,6 +255,10 @@
     <Compile Include="Infrastructure\Security\Providers\IClaimValueProvider.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\CredentialsProvider.cs" />
+    <Compile Include="Repositories\HouseholdDataRepository.cs" />
+    <Compile Include="Repositories\ICredentialsProvider.cs" />
+    <Compile Include="Repositories\IHouseholdDataRepository.cs" />
     <Compile Include="Resources\Texts.da.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

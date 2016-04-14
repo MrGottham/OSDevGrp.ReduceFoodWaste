@@ -20,7 +20,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
     {
         #region Private variables
 
-        private IClaimValueProvider _claimValueProvider;
+        private IClaimValueProvider _claimValueProviderMock;
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [SetUp]
         public void TestInitialize()
         {
-            _claimValueProvider = MockRepository.GenerateMock<IClaimValueProvider>();
+            _claimValueProviderMock = MockRepository.GenerateMock<IClaimValueProvider>();
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorInitializeHomeController()
         {
-            var homeController = new HomeController(_claimValueProvider);
+            var homeController = new HomeController(_claimValueProviderMock);
             Assert.That(homeController, Is.Not.Null);
         }
 
@@ -69,7 +69,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             homeController.Index();
 
-            _claimValueProvider.AssertWasNotCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything));
+            _claimValueProviderMock.AssertWasNotCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything));
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             homeController.Index();
 
-            _claimValueProvider.AssertWasNotCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything));
+            _claimValueProviderMock.AssertWasNotCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything));
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             homeController.Index();
 
-            _claimValueProvider.AssertWasCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Equal(homeController.User.Identity)));
+            _claimValueProviderMock.AssertWasCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Equal(homeController.User.Identity)));
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <returns>Home controller for unit testing.</returns>
         private HomeController CreateHomeController(bool hasUser = true, bool hasIdentity = true, bool isValidatedHouseholdMember = false)
         {
-            _claimValueProvider.Stub(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything))
+            _claimValueProviderMock.Stub(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything))
                 .Return(isValidatedHouseholdMember)
                 .Repeat.Any();
 
@@ -178,7 +178,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(hasUser ? userMock : null)
                 .Repeat.Any();
 
-            var homeController = new HomeController(_claimValueProvider);
+            var homeController = new HomeController(_claimValueProviderMock);
             homeController.ControllerContext = new ControllerContext(httpContextMock, new RouteData(), homeController);
             return homeController;
         }

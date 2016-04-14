@@ -201,4 +201,10 @@
   <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
+  <data name="CannotResolveMailAddressFromIdentity" xml:space="preserve">
+    <value>Cannet resolve a mail address from your identity.</value>
+  </data>
+  <data name="CannotResolveUserNameIdentifierFromIdentity" xml:space="preserve">
+    <value>Cannet resolve a user name identifier from your identity.</value>
+  </data>
 </root>

@@ -9,9 +9,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
     /// </summary>
     public sealed class ClaimValueProvider : IClaimValueProvider
     {
-        #region Constants
-
-        #endregion
+        #region Methods
 
         /// <summary>
         /// Checks whether an identitiy has been authenticated.
@@ -125,5 +123,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
             var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email);
             return emailClaim == null ? null : emailClaim.Value;
         }
+
+        #endregion
     }
 }
