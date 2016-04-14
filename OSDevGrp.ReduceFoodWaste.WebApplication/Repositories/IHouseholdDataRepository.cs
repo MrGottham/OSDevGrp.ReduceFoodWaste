@@ -13,6 +13,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// </summary>
         /// <param name="identity">Identity which should be examined.</param>
         /// <returns>True when the given identity has been created as a household member otherwise false.</returns>
-        Task<bool> IsHouseholdMemberCreated(IIdentity identity);
+        Task<bool> IsHouseholdMemberCreatedAsync(IIdentity identity);
     }
 }

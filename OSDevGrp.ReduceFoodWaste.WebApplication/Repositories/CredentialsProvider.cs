@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.Security.Principal;
-using System.ServiceModel.Security;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
@@ -39,11 +38,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         #region Methods
 
         /// <summary>
-        /// Creates a user name and password client credential for a given identity.
+        /// Creates a user name and password credential for a given identity.
         /// </summary>
-        /// <param name="identity">Identity for which to create a user name and password client credential.</param>
-        /// <returns>User name and password client credential for the given identity.</returns>
-        public UserNamePasswordClientCredential CreateUserNamePasswordClientCredential(IIdentity identity)
+        /// <param name="identity">Identity for which to create a user name and password credential.</param>
+        /// <returns>User name and password credential for the given identity.</returns>
+        public UserNamePasswordCredential CreateUserNamePasswordCredential(IIdentity identity)
         {
             if (identity == null)
             {
@@ -62,11 +61,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 throw new ReduceFoodWasteRepositoryException(Texts.CannotResolveUserNameIdentifierFromIdentity, MethodBase.GetCurrentMethod());
             }
 
-            return new UserNamePasswordClientCredential
-            {
-                UserName = mailAddress,
-                Password = userNameIdentifier
-            };
+            return new UserNamePasswordCredential(mailAddress, userNameIdentifier);
         }
 
         #endregion

@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Practices.Unity;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication
 {
@@ -43,6 +44,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             // container.LoadConfiguration();
 
             RegisterInfrastructureTypes(container);
+            RegisterRepositoryTypes(container);
         }
 
         private static void RegisterInfrastructureTypes(IUnityContainer container)
@@ -53,6 +55,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             }
             container.RegisterType<IClaimValueProvider, ClaimValueProvider>();
             container.RegisterType<ILocalClaimProvider, LocalClaimProvider>();
+        }
+
+        private static void RegisterRepositoryTypes(IUnityContainer container)
+        {
+            if (container == null)
+            {
+                throw new ArgumentNullException("container");
+            }
+            container.RegisterType<ICredentialsProvider, CredentialsProvider>();
         }
     }
 }

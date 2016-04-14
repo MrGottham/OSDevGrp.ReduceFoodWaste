@@ -33,10 +33,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
-        /// Tests that the constructor initialize the Home controller.
+        /// Tests that the constructor initialize the provider which can creates credentials.
         /// </summary>
         [Test]
-        public void TestThatConstructorInitializeHomeController()
+        public void TestThatConstructorInitializeCredentialsProvider()
         {
             var credentialsProvider = new CredentialsProvider(_claimValueProviderMock);
             Assert.That(credentialsProvider, Is.Not.Null);
@@ -57,15 +57,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
-        /// Tests that CreateUserNamePasswordClientCredential throws an ArgumentNullException when the identity is null.
+        /// Tests that CreateUserNamePasswordCredential throws an ArgumentNullException when the identity is null.
         /// </summary>
         [Test]
-        public void TestThatCreateUserNamePasswordClientCredentialThrowsArgumentNullExceptionWhenIdentityIsNull()
+        public void TestThatCreateUserNamePasswordCredentialThrowsArgumentNullExceptionWhenIdentityIsNull()
         {
             var credentialsProvider = CreateCredentialsProvider();
             Assert.That(credentialsProvider, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => credentialsProvider.CreateUserNamePasswordClientCredential(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => credentialsProvider.CreateUserNamePasswordCredential(null));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -74,10 +74,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
-        /// Tests that CreateUserNamePasswordClientCredential calls GetMailAddress on the provider which can get values from claims.
+        /// Tests that CreateUserNamePasswordCredential calls GetMailAddress on the provider which can get values from claims.
         /// </summary>
         [Test]
-        public void TestThatCreateUserNamePasswordClientCredentialCallsGetMailAddressOnClaimValueProvider()
+        public void TestThatCreateUserNamePasswordCredentialCallsGetMailAddressOnClaimValueProvider()
         {
             var credentialsProvider = CreateCredentialsProvider();
             Assert.That(credentialsProvider, Is.Not.Null);
@@ -85,16 +85,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var identityMock = MockRepository.GenerateMock<IIdentity>();
             Assert.That(identityMock, Is.Not.Null);
 
-            credentialsProvider.CreateUserNamePasswordClientCredential(identityMock);
+            credentialsProvider.CreateUserNamePasswordCredential(identityMock);
 
             _claimValueProviderMock.AssertWasCalled(m => m.GetMailAddress(Arg<IIdentity>.Is.Equal(identityMock)));
         }
 
         /// <summary>
-        /// Tests that CreateUserNamePasswordClientCredential calls GetUserNameIdentifier on the provider which can get values from claims.
+        /// Tests that CreateUserNamePasswordCredential calls GetUserNameIdentifier on the provider which can get values from claims.
         /// </summary>
         [Test]
-        public void TestThatCreateUserNamePasswordClientCredentialCallsGetUserNameIdentifierOnClaimValueProvider()
+        public void TestThatCreateUserNamePasswordCredentialCallsGetUserNameIdentifierOnClaimValueProvider()
         {
             var credentialsProvider = CreateCredentialsProvider();
             Assert.That(credentialsProvider, Is.Not.Null);
@@ -102,21 +102,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var identityMock = MockRepository.GenerateMock<IIdentity>();
             Assert.That(identityMock, Is.Not.Null);
 
-            credentialsProvider.CreateUserNamePasswordClientCredential(identityMock);
+            credentialsProvider.CreateUserNamePasswordCredential(identityMock);
 
             _claimValueProviderMock.AssertWasCalled(m => m.GetUserNameIdentifier(Arg<IIdentity>.Is.Equal(identityMock)));
         }
 
         /// <summary>
-        /// Tests that CreateUserNamePasswordClientCredential throws an ReduceFoodWasteRepositoryException when a mail address cannot be resolved through the identity.
+        /// Tests that CreateUserNamePasswordCredential throws an ReduceFoodWasteRepositoryException when a mail address cannot be resolved through the identity.
         /// </summary>
         [Test]
-        public void TestThatCreateUserNamePasswordClientCredentialThrowsReduceFoodWasteRepositoryExceptionWhenMailAddressForIdentityIsNull()
+        public void TestThatCreateUserNamePasswordCredentialThrowsReduceFoodWasteRepositoryExceptionWhenMailAddressForIdentityIsNull()
         {
             var credentialsProvider = CreateCredentialsProvider(hasMailAddress: false);
             Assert.That(credentialsProvider, Is.Not.Null);
 
-            var exception = Assert.Throws<ReduceFoodWasteRepositoryException>(() => credentialsProvider.CreateUserNamePasswordClientCredential(MockRepository.GenerateMock<IIdentity>()));
+            var exception = Assert.Throws<ReduceFoodWasteRepositoryException>(() => credentialsProvider.CreateUserNamePasswordCredential(MockRepository.GenerateMock<IIdentity>()));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -125,15 +125,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
-        /// Tests that CreateUserNamePasswordClientCredential throws an ReduceFoodWasteRepositoryException when a user name identifier cannot be resolved through the identity.
+        /// Tests that CreateUserNamePasswordCredential throws an ReduceFoodWasteRepositoryException when a user name identifier cannot be resolved through the identity.
         /// </summary>
         [Test]
-        public void TestThatCreateUserNamePasswordClientCredentialThrowsReduceFoodWasteRepositoryExceptionWhenUserNameIdentifierForIdentityIsNull()
+        public void TestThatCreateUserNamePasswordCredentialThrowsReduceFoodWasteRepositoryExceptionWhenUserNameIdentifierForIdentityIsNull()
         {
             var credentialsProvider = CreateCredentialsProvider(hasUserNameIdentifier: false);
             Assert.That(credentialsProvider, Is.Not.Null);
 
-            var exception = Assert.Throws<ReduceFoodWasteRepositoryException>(() => credentialsProvider.CreateUserNamePasswordClientCredential(MockRepository.GenerateMock<IIdentity>()));
+            var exception = Assert.Throws<ReduceFoodWasteRepositoryException>(() => credentialsProvider.CreateUserNamePasswordCredential(MockRepository.GenerateMock<IIdentity>()));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -142,10 +142,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
-        /// Tests that CreateUserNamePasswordClientCredential creates a user name and password client credential containing mail address and user name identifier.
+        /// Tests that CreateUserNamePasswordCredential creates a user name and password credential containing mail address and user name identifier.
         /// </summary>
         [Test]
-        public void TestThatCreateUserNamePasswordClientCredentialCreatesUserNamePasswordClientCredentialContainingMailAddressAndUserNameIdentifier()
+        public void TestThatCreateUserNamePasswordCredentialCreatesUserNamePasswordCredentialContainingMailAddressAndUserNameIdentifier()
         {
             var mailAddress = Fixture.Create<string>();
             var userNameIdentifier = Fixture.Create<string>();
@@ -153,14 +153,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var credentialsProvider = CreateCredentialsProvider(mailAddress: mailAddress, userNameIdentifier: userNameIdentifier);
             Assert.That(credentialsProvider, Is.Not.Null);
 
-            var userNamePasswordClientCredential = credentialsProvider.CreateUserNamePasswordClientCredential(MockRepository.GenerateMock<IIdentity>());
-            Assert.That(userNamePasswordClientCredential, Is.Not.Null);
-            Assert.That(userNamePasswordClientCredential.UserName, Is.Not.Null);
-            Assert.That(userNamePasswordClientCredential.UserName, Is.Not.Empty);
-            Assert.That(userNamePasswordClientCredential.UserName, Is.EqualTo(mailAddress));
-            Assert.That(userNamePasswordClientCredential.Password, Is.Not.Null);
-            Assert.That(userNamePasswordClientCredential.Password, Is.Not.Empty);
-            Assert.That(userNamePasswordClientCredential.Password, Is.EqualTo(userNameIdentifier));
+            var userNamePasswordCredential = credentialsProvider.CreateUserNamePasswordCredential(MockRepository.GenerateMock<IIdentity>());
+            Assert.That(userNamePasswordCredential, Is.Not.Null);
+            Assert.That(userNamePasswordCredential.UserName, Is.Not.Null);
+            Assert.That(userNamePasswordCredential.UserName, Is.Not.Empty);
+            Assert.That(userNamePasswordCredential.UserName, Is.EqualTo(mailAddress));
+            Assert.That(userNamePasswordCredential.Password, Is.Not.Null);
+            Assert.That(userNamePasswordCredential.Password, Is.Not.Empty);
+            Assert.That(userNamePasswordCredential.Password, Is.EqualTo(userNameIdentifier));
         }
 
         /// <summary>

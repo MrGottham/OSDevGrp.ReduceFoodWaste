@@ -30,7 +30,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
             var localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => localClaimProvider.AddLocalClaimsAsync(null).Wait());
+            var exception = Assert.Throws<ArgumentNullException>(() => localClaimProvider.AddLocalClaimsAsync(null));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);

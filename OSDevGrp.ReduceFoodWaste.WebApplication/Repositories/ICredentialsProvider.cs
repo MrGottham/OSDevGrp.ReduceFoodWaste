@@ -1,5 +1,4 @@
 ﻿using System.Security.Principal;
-using System.ServiceModel.Security;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 {
@@ -9,10 +8,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
     public interface ICredentialsProvider
     {
         /// <summary>
-        /// Creates a user name and password client credential for a given identity.
+        /// Creates a user name and password credential for a given identity.
         /// </summary>
-        /// <param name="identity">Identity for which to create a user name and password client credential.</param>
-        /// <returns>User name and password client credential for the given identity.</returns>
-        UserNamePasswordClientCredential CreateUserNamePasswordClientCredential(IIdentity identity);
+        /// <param name="identity">Identity for which to create a user name and password credential.</param>
+        /// <returns>User name and password credential for the given identity.</returns>
+        UserNamePasswordCredential CreateUserNamePasswordCredential(IIdentity identity);
     }
 }
