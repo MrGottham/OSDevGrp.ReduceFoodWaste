@@ -247,6 +247,7 @@
     <Compile Include="Infrastructure\Security\Authentication\GooglePlusScopedClient.cs" />
     <Compile Include="Infrastructure\Security\Authentication\IdentityHelper.cs" />
     <Compile Include="Infrastructure\Security\Authentication\MicrosoftScopedClient.cs" />
+    <Compile Include="Infrastructure\Security\Providers\LocalClaimTypes.cs" />
     <Compile Include="Infrastructure\Security\Providers\ClaimValueProvider.cs" />
     <Compile Include="Infrastructure\Security\Providers\IClaimValueProvider.cs" />
     <Compile Include="Models\AccountModels.cs" />

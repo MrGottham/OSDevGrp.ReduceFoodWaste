@@ -11,8 +11,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
     {
         #region Constants
 
-        public const string ValidatedHouseholdMemberClaim = "http://osdevgrp.local/foodwaste/security/validatedhouseholdmember";
-
         #endregion
 
         /// <summary>
@@ -58,7 +56,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
             {
                 throw new ArgumentNullException("claimsIdentity");
             }
-            var validatedHouseholdMemberClaim = claimsIdentity.FindFirst(ValidatedHouseholdMemberClaim);
+            var validatedHouseholdMemberClaim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
             return validatedHouseholdMemberClaim != null && Convert.ToBoolean(validatedHouseholdMemberClaim.Value);
         }
 

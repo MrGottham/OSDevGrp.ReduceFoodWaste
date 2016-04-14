@@ -167,7 +167,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
             {
                 new Claim(ClaimTypes.NameIdentifier, Fixture.Create<string>(), ClaimValueTypes.String),
                 new Claim(ClaimTypes.Name, Fixture.Create<string>(), ClaimValueTypes.String),
-                new Claim(ClaimValueProvider.ValidatedHouseholdMemberClaim, Convert.ToString(expectedValue), ClaimValueTypes.Boolean)
+                new Claim(LocalClaimTypes.ValidatedHouseholdMember, Convert.ToString(expectedValue), ClaimValueTypes.Boolean)
             };
             var claimsIdentity = new ClaimsIdentity(claimCollection);
 
