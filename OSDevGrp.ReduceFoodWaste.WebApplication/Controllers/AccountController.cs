@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Transactions;
 using System.Web.Mvc;
 using DotNetOpenAuth.AspNet;
@@ -21,18 +22,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         #region Private variables
 
         private readonly IClaimValueProvider _claimValueProvider;
+        private readonly ILocalClaimProvider _localClaimProvider;
 
         #endregion
 
         #region Constructor
 
-        public AccountController(IClaimValueProvider claimValueProvider)
+        public AccountController(IClaimValueProvider claimValueProvider, ILocalClaimProvider localClaimProvider)
         {
             if (claimValueProvider == null)
             {
                 throw new ArgumentNullException("claimValueProvider");
             }
+            if (localClaimProvider == null)
+            {
+                throw new ArgumentNullException("localClaimProvider");
+            }
             _claimValueProvider = claimValueProvider;
+            _localClaimProvider = localClaimProvider;
         }
 
         #endregion
@@ -148,6 +155,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
+                AddLocalClaims(claimsIdentity);
                 Response.Cookies.Add(claimsIdentity.Claims.ToAuthenticationTicket(mailAddress));
                 return RedirectToLocal(returnUrl);
             }
@@ -156,6 +164,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 // If the current user is logged in then add the new account.
                 OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, mailAddress);
+                AddLocalClaims(claimsIdentity);
                 Response.Cookies.Add(claimsIdentity.Claims.ToAuthenticationTicket(mailAddress));
                 return RedirectToLocal(returnUrl);
             }
@@ -172,6 +181,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, mailAddress);
                 if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
                 {
+                    AddLocalClaims(claimsIdentity);
                     Response.Cookies.Add(claimsIdentity.Claims.ToAuthenticationTicket(mailAddress));
                 }
             }
@@ -229,6 +239,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         }
 
         #region Helpers
+
+        private void AddLocalClaims(ClaimsIdentity claimsIdentity)
+        {
+            if (claimsIdentity == null)
+            {
+                throw new ArgumentNullException("claimsIdentity");
+            }
+            var addLocalClaimsTask = _localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
+            addLocalClaimsTask.Wait();
+            if (addLocalClaimsTask.IsFaulted)
+            {
+                throw addLocalClaimsTask.Exception;
+            }
+        }
 
         private ActionResult RedirectToLocal(string returnUrl)
         {
