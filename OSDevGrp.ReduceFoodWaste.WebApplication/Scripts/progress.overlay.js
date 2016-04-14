@@ -1,11 +1,11 @@
 ﻿(function($) {
     var methods = {
-        show: function () {
+        show: function() {
             $("#loadProgressOuterContainer").fadeIn('fast');
 
             // Need to perform a 'fake' setTimeout here to force the browser to process everything after we have showed the elements.
             setTimeout(function() {
-                if ($.browser.msie) {
+                if (/msie|trident|edge/g.test(window.navigator.userAgent.toLowerCase())) {
                     // IE specific hack to make the spinner continue spinning after submit.
                     var progressSpinner = $("#loadProgressOuterContainer #progressSpinner");
                     progressSpinner.remove();
@@ -15,8 +15,6 @@
         },
 
         hide: function() {
-            alert('hide');
-
             $("#loadProgressOuterContainer").fadeOut('fast');
         }
     };
@@ -26,15 +24,13 @@
         $('body').append(overlayElement);
     }
 
-    $().ready(function () {
+    $().ready(function() {
         // Runs on page load no matter what.
         insertProgressHtmlOnPageAndShow();
-        window.onunload = function () {
+        window.onunload = function() {
             // Must hide when unloading page to prevent the overlay being visible when using browser Back button.
             methods.hide().call();
         }
-
-        $().progressOverlay("show");
     });
 
     $.fn.progressOverlay = function(method) {
