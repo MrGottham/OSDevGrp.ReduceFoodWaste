@@ -127,7 +127,7 @@
     <value>Fejl</value>
   </data>
   <data name="ErrorOccurredProcessingRequest" xml:space="preserve">
-    <value>En fejl opstod under behandlingen af ​​din anmodning.</value>
+    <value>Der opstod en fejl under behandlingen af ​​din anmodning.</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Forside</value>
