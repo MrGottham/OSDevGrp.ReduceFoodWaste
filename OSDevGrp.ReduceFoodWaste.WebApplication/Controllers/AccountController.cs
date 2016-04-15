@@ -246,11 +246,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 throw new ArgumentNullException("claimsIdentity");
             }
-            var addLocalClaimsTask = _localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            addLocalClaimsTask.Wait();
-            if (addLocalClaimsTask.IsFaulted)
+            try
             {
-                throw addLocalClaimsTask.Exception;
+                var addLocalClaimsTask = _localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
+                addLocalClaimsTask.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                Exception exceptionToThrow = null;
+                ex.Handle(exceptionToHandle =>
+                {
+                    exceptionToThrow = exceptionToHandle;
+                    return true;
+                });
+                throw exceptionToThrow;
             }
         }
 

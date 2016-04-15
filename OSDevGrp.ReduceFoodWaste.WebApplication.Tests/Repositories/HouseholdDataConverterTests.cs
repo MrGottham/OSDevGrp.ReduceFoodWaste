@@ -1,7 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
+using OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
+using Ploeh.AutoFixture;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
 {
@@ -36,6 +38,27 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("source"));
             Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that Convert converts a BooleanResult to a Boolean.
+        /// </summary>
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestThatConvertConvertsBooleanResultToBoolean(bool testValue)
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var booleanResult = Fixture.Build<BooleanResult>()
+                .With(m => m.Result, testValue)
+                .With(m => m.EventDate, DateTime.Now)
+                .With(m => m.ExtensionData, null)
+                .Create();
+
+            var result = householdDataConverter.Convert<BooleanResult, bool>(booleanResult);
+            Assert.That(result, Is.EqualTo(testValue));
         }
 
         /// <summary>

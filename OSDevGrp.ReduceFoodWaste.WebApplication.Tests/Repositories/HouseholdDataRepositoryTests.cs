@@ -15,6 +15,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         #region Private variables
 
         private ICredentialsProvider _credentialsProviderMock;
+        private IHouseholdDataConverter _householdDataConverterMock;
 
         #endregion
 
@@ -25,6 +26,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         public void TestInitialize()
         {
             _credentialsProviderMock = MockRepository.GenerateMock<ICredentialsProvider>();
+            _householdDataConverterMock = MockRepository.GenerateMock<IHouseholdDataConverter>();
         }
 
         /// <summary>
@@ -33,7 +35,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         [Test]
         public void TestThatConstructorInitializeHouseholdDataRepository()
         {
-            var householdDataRepository = new HouseholdDataRepository(_credentialsProviderMock);
+            var householdDataRepository = new HouseholdDataRepository(_credentialsProviderMock, _householdDataConverterMock);
             Assert.That(householdDataRepository, Is.Not.Null);
         }
 
@@ -43,11 +45,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenCredentialsProviderIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdDataRepository(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdDataRepository(null, _householdDataConverterMock));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("credentialsProvider"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that the constructor throws an ArgumentNullException when the converter which can convert household data is null.
+        /// </summary>
+        [Test]
+        public void TestThatConstructorThrowsArgumentNullExceptionWhenHouseholdDataConverterIsNull()
+        {
+            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdDataRepository(_credentialsProviderMock, null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("householdDataConverter"));
             Assert.That(exception.InnerException, Is.Null);
         }
 
@@ -69,12 +85,46 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that IsHouseholdMemberActivatedAsync throws an ArgumentNullException when the identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatIsHouseholdMemberActivatedAsyncThrowsArgumentNullExceptionWhenIdentityIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.IsHouseholdMemberActivatedAsync(null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that HasHouseholdMemberAcceptedPrivacyPolicyAsync throws an ArgumentNullException when the identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatHasHouseholdMemberAcceptedPrivacyPolicyAsyncThrowsArgumentNullExceptionWhenIdentityIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.HasHouseholdMemberAcceptedPrivacyPolicyAsync(null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
         /// Creates a repository which can access household data for unit testing.
         /// </summary>
         /// <returns>Repository which can access household data for unit testing.</returns>
         private IHouseholdDataRepository CreateHouseholdDataRepository()
         {
-            return new HouseholdDataRepository(_credentialsProviderMock);
+            return new HouseholdDataRepository(_credentialsProviderMock, _householdDataConverterMock);
         }
     }
 }

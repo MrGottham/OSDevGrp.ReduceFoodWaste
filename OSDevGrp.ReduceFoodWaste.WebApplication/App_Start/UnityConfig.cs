@@ -64,6 +64,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
                 throw new ArgumentNullException("container");
             }
             container.RegisterType<ICredentialsProvider, CredentialsProvider>();
+            container.RegisterType<IHouseholdDataConverter, HouseholdDataConverter>();
+            container.RegisterType<IHouseholdDataRepository, HouseholdDataRepository>();
         }
     }
 }

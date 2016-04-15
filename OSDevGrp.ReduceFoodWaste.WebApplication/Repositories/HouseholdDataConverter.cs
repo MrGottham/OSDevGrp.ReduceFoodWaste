@@ -1,4 +1,6 @@
 ﻿using System;
+using AutoMapper;
+using OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 {
@@ -7,6 +9,31 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
     /// </summary>
     public class HouseholdDataConverter : IHouseholdDataConverter
     {
+        #region Private variables
+
+        private readonly IMapper _mapper;
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Creates a converter which can convert household data.
+        /// </summary>
+        public HouseholdDataConverter()
+        {
+            var mapperConfiguration = new MapperConfiguration(configuration =>
+            {
+                configuration.CreateMap<BooleanResult, bool>()
+                    .ConvertUsing(src => src.Result);
+            });
+            mapperConfiguration.AssertConfigurationIsValid();
+
+            _mapper = mapperConfiguration.CreateMapper();
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -22,7 +49,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             {
                 throw new ArgumentNullException("source");
             }
-            throw new NotImplementedException();
+            return _mapper.Map<TSource, TTarget>(source);
         }
 
         #endregion

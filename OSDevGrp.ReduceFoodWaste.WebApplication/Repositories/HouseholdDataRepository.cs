@@ -22,6 +22,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         #region Private variables
 
         private readonly ICredentialsProvider _credentialsProvider;
+        private readonly IHouseholdDataConverter _householdDataConverter;
 
         #endregion
 
@@ -31,13 +32,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// Creates a repository which can access household data.
         /// </summary>
         /// <param name="credentialsProvider">Implementation of a provider which can creates credentials.</param>
-        public HouseholdDataRepository(ICredentialsProvider credentialsProvider)
+        /// <param name="householdDataConverter">Implementation of a converter which can convert household data.</param>
+        public HouseholdDataRepository(ICredentialsProvider credentialsProvider, IHouseholdDataConverter householdDataConverter)
         {
             if (credentialsProvider == null)
             {
                 throw new ArgumentNullException("credentialsProvider");
             }
+            if (householdDataConverter == null)
+            {
+                throw new ArgumentNullException("householdDataConverter");
+            }
             _credentialsProvider = credentialsProvider;
+            _householdDataConverter = householdDataConverter;
         }
 
         #endregion
@@ -61,7 +68,53 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 var query = new HouseholdMemberIsCreatedQuery();
                 var result = channel.HouseholdMemberIsCreated(query);
 
-                return false;
+                return _householdDataConverter.Convert<BooleanResult, bool>(result);
+            };
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+        }
+
+        /// <summary>
+        /// Determinates whether the household member for a given identity has been activated.
+        /// </summary>
+        /// <param name="identity">Identity which should be examined.</param>
+        /// <returns>True when the household member for the given identity has been activated otherwise false.</returns>
+        public Task<bool> IsHouseholdMemberActivatedAsync(IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+
+            Func<HouseholdDataServiceChannel, bool> callbackFunc = channel =>
+            {
+                var query = new HouseholdMemberIsActivatedQuery();
+                var result = channel.HouseholdMemberIsActivated(query);
+
+                return _householdDataConverter.Convert<BooleanResult, bool>(result);
+            };
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+        }
+
+        /// <summary>
+        /// Determinates whether the household member for a given identity has accepted the privacy policies.
+        /// </summary>
+        /// <param name="identity">Identity which should be examined.</param>
+        /// <returns>True when the household membner for the given identity has accepted the privacy policies otherwise false.</returns>
+        public Task<bool> HasHouseholdMemberAcceptedPrivacyPolicyAsync(IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+
+            Func<HouseholdDataServiceChannel, bool> callbackFunc = channel =>
+            {
+                var query = new HouseholdMemberHasAcceptedPrivacyPolicyQuery();
+                var result = channel.HouseholdMemberHasAcceptedPrivacyPolicy(query);
+
+                return _householdDataConverter.Convert<BooleanResult, bool>(result);
             };
 
             return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
@@ -94,17 +147,28 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             {
                 try
                 {
-                    TResult result;
-                    using (var channelFactory = CreateChannelFactory(identity))
+                    var channelFactory = CreateChannelFactory(identity);
+                    var channel = channelFactory.CreateChannel();
+                    try
                     {
-                        using (var channel = channelFactory.CreateChannel())
-                        {
-                            result = callbackFunc.Invoke(channel);
-                            channel.Close();
-                        }
-                        channelFactory.Close();
+                        var result = callbackFunc.Invoke(channel);
+                        channel.Close();
+
+                        return result;
                     }
-                    return result;
+                    catch
+                    {
+                        channel.Abort();
+                        throw;
+                    }
+                    finally
+                    {
+                        var dispoableChannel = channel as IDisposable;
+                        if (dispoableChannel != null)
+                        {
+                            dispoableChannel.Dispose();
+                        }
+                    }
                 }
                 catch (FaultException<Fault> ex)
                 {
