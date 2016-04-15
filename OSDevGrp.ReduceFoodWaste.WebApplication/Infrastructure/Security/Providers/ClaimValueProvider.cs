@@ -67,6 +67,129 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
         }
 
         /// <summary>
+        /// Checks whether a given identity is a created household member.
+        /// </summary>
+        /// <param name="identity">Identity which should be checked.</param>
+        /// <returns>True when the given identity is a created household member otherwise false.</returns>
+        public bool IsCreatedHouseholdMember(IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (identity is ClaimsIdentity)
+            {
+                return IsCreatedHouseholdMember(identity as ClaimsIdentity);
+            }
+            return IsCreatedHouseholdMember(new ClaimsIdentity(identity));
+        }
+
+        /// <summary>
+        /// Checks whether a given claims identity is a created household member.
+        /// </summary>
+        /// <param name="claimsIdentity">Claims identity which should be checked.</param>
+        /// <returns>True when the given claims identity is a created household member otherwise false.</returns>
+        public bool IsCreatedHouseholdMember(ClaimsIdentity claimsIdentity)
+        {
+            if (claimsIdentity == null)
+            {
+                throw new ArgumentNullException("claimsIdentity");
+            }
+            var createdHouseholdMemberClaim = claimsIdentity.FindFirst(LocalClaimTypes.CreatedHouseholdMember);
+            if (createdHouseholdMemberClaim == null)
+            {
+                return false;
+            }
+            if (string.Compare(createdHouseholdMemberClaim.Issuer, LocalClaimProvider.LocalClaimIssuer, StringComparison.Ordinal) != 0)
+            {
+                return false;
+            }
+            return string.Compare(createdHouseholdMemberClaim.OriginalIssuer, LocalClaimProvider.LocalClaimIssuer, StringComparison.Ordinal) == 0 && Convert.ToBoolean(createdHouseholdMemberClaim.Value);
+        }
+
+        /// <summary>
+        /// Checks whether a given identity is an activated household member.
+        /// </summary>
+        /// <param name="identity">Identity which should be checked.</param>
+        /// <returns>True when the given identity is an activated household member otherwise false.</returns>
+        public bool IsActivatedHouseholdMember(IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (identity is ClaimsIdentity)
+            {
+                return IsActivatedHouseholdMember(identity as ClaimsIdentity);
+            }
+            return IsActivatedHouseholdMember(new ClaimsIdentity(identity));
+        }
+
+        /// <summary>
+        /// Checks whether a given claims identity is an activated  household member.
+        /// </summary>
+        /// <param name="claimsIdentity">Claims identity which should be checked.</param>
+        /// <returns>True when the given claims identity is an activated household member otherwise false.</returns>
+        public bool IsActivatedHouseholdMember(ClaimsIdentity claimsIdentity)
+        {
+            if (claimsIdentity == null)
+            {
+                throw new ArgumentNullException("claimsIdentity");
+            }
+            var activatedHouseholdMemberClaim = claimsIdentity.FindFirst(LocalClaimTypes.ActivatedHouseholdMember);
+            if (activatedHouseholdMemberClaim == null)
+            {
+                return false;
+            }
+            if (string.Compare(activatedHouseholdMemberClaim.Issuer, LocalClaimProvider.LocalClaimIssuer, StringComparison.Ordinal) != 0)
+            {
+                return false;
+            }
+            return string.Compare(activatedHouseholdMemberClaim.OriginalIssuer, LocalClaimProvider.LocalClaimIssuer, StringComparison.Ordinal) == 0 && Convert.ToBoolean(activatedHouseholdMemberClaim.Value);
+        }
+
+        /// <summary>
+        /// Checks whether a given identity has accepted the privacy policies.
+        /// </summary>
+        /// <param name="identity">Identity which should be checked.</param>
+        /// <returns>True when the given identity has accepted the privacy policies otherwise false.</returns>
+        public bool IsPrivacyPoliciesAccepted(IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (identity is ClaimsIdentity)
+            {
+                return IsPrivacyPoliciesAccepted(identity as ClaimsIdentity);
+            }
+            return IsPrivacyPoliciesAccepted(new ClaimsIdentity(identity));
+        }
+
+        /// <summary>
+        /// Checks whether a given claims identity has accepted the privacy policies.
+        /// </summary>
+        /// <param name="claimsIdentity">Claims identity which should be checked.</param>
+        /// <returns>True when the given claims identity has accepted the privacy policies otherwise false.</returns>
+        public bool IsPrivacyPoliciesAccepted(ClaimsIdentity claimsIdentity)
+        {
+            if (claimsIdentity == null)
+            {
+                throw new ArgumentNullException("claimsIdentity");
+            }
+            var privacyPoliciesAcceptedClaim = claimsIdentity.FindFirst(LocalClaimTypes.PrivacyPoliciesAccepted);
+            if (privacyPoliciesAcceptedClaim == null)
+            {
+                return false;
+            }
+            if (string.Compare(privacyPoliciesAcceptedClaim.Issuer, LocalClaimProvider.LocalClaimIssuer, StringComparison.Ordinal) != 0)
+            {
+                return false;
+            }
+            return string.Compare(privacyPoliciesAcceptedClaim.OriginalIssuer, LocalClaimProvider.LocalClaimIssuer, StringComparison.Ordinal) == 0 && Convert.ToBoolean(privacyPoliciesAcceptedClaim.Value);
+        }
+
+        /// <summary>
         /// Gets the user name identifier for a given identity.
         /// </summary>
         /// <param name="identity">Identity on which to get the user name identifier.</param>

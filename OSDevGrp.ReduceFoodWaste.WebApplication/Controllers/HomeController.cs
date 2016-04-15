@@ -34,6 +34,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 return View();
             }
 
+            var isAuthenticated = _claimValueProvider.IsAuthenticated(User.Identity);
+            // TODO: Hvis falsk...
+
             var isValidatedHouseholdMember = _claimValueProvider.IsValidatedHouseholdMember(User.Identity);
 
             ViewBag.Message = string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject);

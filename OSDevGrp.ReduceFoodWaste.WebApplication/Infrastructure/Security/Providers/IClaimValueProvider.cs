@@ -30,6 +30,48 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
         bool IsValidatedHouseholdMember(ClaimsIdentity claimsIdentity);
 
         /// <summary>
+        /// Checks whether a given identity is a created household member.
+        /// </summary>
+        /// <param name="identity">Identity which should be checked.</param>
+        /// <returns>True when the given identity is a created household member otherwise false.</returns>
+        bool IsCreatedHouseholdMember(IIdentity identity);
+
+        /// <summary>
+        /// Checks whether a given claims identity is a created household member.
+        /// </summary>
+        /// <param name="claimsIdentity">Claims identity which should be checked.</param>
+        /// <returns>True when the given claims identity is a created household member otherwise false.</returns>
+        bool IsCreatedHouseholdMember(ClaimsIdentity claimsIdentity);
+
+        /// <summary>
+        /// Checks whether a given identity is an activated household member.
+        /// </summary>
+        /// <param name="identity">Identity which should be checked.</param>
+        /// <returns>True when the given identity is an activated household member otherwise false.</returns>
+        bool IsActivatedHouseholdMember(IIdentity identity);
+
+        /// <summary>
+        /// Checks whether a given claims identity is an activated  household member.
+        /// </summary>
+        /// <param name="claimsIdentity">Claims identity which should be checked.</param>
+        /// <returns>True when the given claims identity is an activated household member otherwise false.</returns>
+        bool IsActivatedHouseholdMember(ClaimsIdentity claimsIdentity);
+
+        /// <summary>
+        /// Checks whether a given identity has accepted the privacy policies.
+        /// </summary>
+        /// <param name="identity">Identity which should be checked.</param>
+        /// <returns>True when the given identity has accepted the privacy policies otherwise false.</returns>
+        bool IsPrivacyPoliciesAccepted(IIdentity identity);
+
+        /// <summary>
+        /// Checks whether a given claims identity has accepted the privacy policies.
+        /// </summary>
+        /// <param name="claimsIdentity">Claims identity which should be checked.</param>
+        /// <returns>True when the given claims identity has accepted the privacy policies otherwise false.</returns>
+        bool IsPrivacyPoliciesAccepted(ClaimsIdentity claimsIdentity);
+
+        /// <summary>
         /// Gets the user name identifier for a given identity.
         /// </summary>
         /// <param name="identity">Identity on which to get the user name identifier.</param>
