@@ -83,23 +83,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         }
 
         /// <summary>
-        /// Tests that GetUserNameIdentifier when called with a identity throws an ArgumentNullException when the identity is null.
-        /// </summary>
-        [Test]
-        public void TestThatIsValidatedHouseholdMemberWhenCalledWithIdentityThrowsArgumentNullExceptionWhenIdentityIsNull()
-        {
-            var claimValueProvider = new ClaimValueProvider();
-            Assert.That(claimValueProvider, Is.Not.Null);
-
-            var exception = Assert.Throws<ArgumentNullException>(() => claimValueProvider.IsValidatedHouseholdMember((IIdentity) null));
-            Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.Not.Empty);
-            Assert.That(exception.ParamName, Is.EqualTo("identity"));
-            Assert.That(exception.InnerException, Is.Null);
-        }
-
-        /// <summary>
         /// Tests that IsValidatedHouseholdMember when called with a claims identity throws an ArgumentNullException when the claims identity is null.
         /// </summary>
         [Test]
@@ -156,9 +139,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that IsValidatedHouseholdMember when called with a claims identity returns the value from the claim for validated household member when the claim does exist.
         /// </summary>
         [Test]
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TestThatIsValidatedHouseholdMemberWhenCalledWithClaimsIdentityReturnsValueFromClaimForValidatedHouseholdMemberWhenClaimDoesExist(bool expectedValue)
+        [TestCase(true, LocalClaimProvider.LocalClaimIssuer, LocalClaimProvider.LocalClaimIssuer, true)]
+        [TestCase(false, LocalClaimProvider.LocalClaimIssuer, LocalClaimProvider.LocalClaimIssuer, false)]
+        [TestCase(true, "XYZ", LocalClaimProvider.LocalClaimIssuer, false)]
+        [TestCase(false, "XYZ", LocalClaimProvider.LocalClaimIssuer, false)]
+        [TestCase(true, LocalClaimProvider.LocalClaimIssuer, "XYZ", false)]
+        [TestCase(false, LocalClaimProvider.LocalClaimIssuer, "XYZ", false)]
+        [TestCase(true, null, null, false)]
+        [TestCase(false, null, null, false)]
+        [TestCase(true, "", "", false)]
+        [TestCase(false, "", "", false)]
+        [TestCase(true, "XYZ", "XYZ", false)]
+        [TestCase(false, "XYZ", "XYZ", false)]
+        public void TestThatIsValidatedHouseholdMemberWhenCalledWithClaimsIdentityReturnsValueFromClaimForValidatedHouseholdMemberWhenClaimDoesExist(bool claimValue, string claimIssuer, string claimOriginalIssuer, bool expectedValue)
         {
             var claimValueProvider = new ClaimValueProvider();
             Assert.That(claimValueProvider, Is.Not.Null);
@@ -167,12 +160,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
             {
                 new Claim(ClaimTypes.NameIdentifier, Fixture.Create<string>(), ClaimValueTypes.String),
                 new Claim(ClaimTypes.Name, Fixture.Create<string>(), ClaimValueTypes.String),
-                new Claim(LocalClaimTypes.ValidatedHouseholdMember, Convert.ToString(expectedValue), ClaimValueTypes.Boolean)
+                new Claim(LocalClaimTypes.ValidatedHouseholdMember, Convert.ToString(claimValue), ClaimValueTypes.Boolean, claimIssuer, claimOriginalIssuer)
             };
             var claimsIdentity = new ClaimsIdentity(claimCollection);
 
             var result = claimValueProvider.IsValidatedHouseholdMember(claimsIdentity);
             Assert.That(result, Is.EqualTo(expectedValue));
+        }
+
+        /// <summary>
+        /// Tests that GetUserNameIdentifier when called with a identity throws an ArgumentNullException when the identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatIsValidatedHouseholdMemberWhenCalledWithIdentityThrowsArgumentNullExceptionWhenIdentityIsNull()
+        {
+            var claimValueProvider = new ClaimValueProvider();
+            Assert.That(claimValueProvider, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => claimValueProvider.IsValidatedHouseholdMember((IIdentity)null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
         }
 
         /// <summary>

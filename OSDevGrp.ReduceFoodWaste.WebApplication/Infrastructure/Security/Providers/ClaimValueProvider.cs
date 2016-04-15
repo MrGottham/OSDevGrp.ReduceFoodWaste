@@ -55,7 +55,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
                 throw new ArgumentNullException("claimsIdentity");
             }
             var validatedHouseholdMemberClaim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
-            return validatedHouseholdMemberClaim != null && Convert.ToBoolean(validatedHouseholdMemberClaim.Value);
+            if (validatedHouseholdMemberClaim == null)
+            {
+                return false;
+            }
+            if (string.Compare(validatedHouseholdMemberClaim.Issuer, LocalClaimProvider.LocalClaimIssuer, StringComparison.Ordinal) != 0)
+            {
+                return false;
+            }
+            return string.Compare(validatedHouseholdMemberClaim.OriginalIssuer, LocalClaimProvider.LocalClaimIssuer, StringComparison.Ordinal) == 0 && Convert.ToBoolean(validatedHouseholdMemberClaim.Value);
         }
 
         /// <summary>
