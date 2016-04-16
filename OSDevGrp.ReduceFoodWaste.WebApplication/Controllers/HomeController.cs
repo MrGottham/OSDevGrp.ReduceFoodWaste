@@ -35,9 +35,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
 
             var isAuthenticated = _claimValueProvider.IsAuthenticated(User.Identity);
-            // TODO: Hvis falsk...
+            if (isAuthenticated == false)
+            {
+                ViewBag.Message = string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject);
+                return View();
+            }
 
             var isValidatedHouseholdMember = _claimValueProvider.IsValidatedHouseholdMember(User.Identity);
+            var isCreatedHouseholdMember = _claimValueProvider.IsCreatedHouseholdMember(User.Identity);
+            var isActivatedHouseholdMember = _claimValueProvider.IsActivatedHouseholdMember(User.Identity);
+            var isPrivacyPoliciesAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
 
             ViewBag.Message = string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject);
             return View();

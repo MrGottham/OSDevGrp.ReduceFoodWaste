@@ -280,19 +280,166 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Index calls IsValidatedHouseholdMember on the provider which can get values from claims when the controller does have a user with an identity.
+        /// Tests that Index does not call IsValidatedHouseholdMember on the provider which can get values from claims when the controller does have a user with an unauthenticated identity.
         /// </summary>
         [Test]
-        public void TestThatIndexCallsIsValidatedHouseholdMemberOnClaimValueProviderWhenControllerDoesHaveUserWithIdentity()
+        public void TestThatIndexDoesNotCallIsValidatedHouseholdMemberOnClaimValueProviderWhenControllerDoesHaveUserWithUnauthenticatedIdentity()
+        {
+            var homeController = CreateHomeController(isAuthenticated: false);
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.False);
+
+            homeController.Index();
+
+            _claimValueProviderMock.AssertWasNotCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that Index does not call IsCreatedHouseholdMember on the provider which can get values from claims when the controller does have a user with an unauthenticated identity.
+        /// </summary>
+        [Test]
+        public void TestThatIndexDoesNotCallIsCreatedHouseholdMemberOnClaimValueProviderWhenControllerDoesHaveUserWithUnauthenticatedIdentity()
+        {
+            var homeController = CreateHomeController(isAuthenticated: false);
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.False);
+
+            homeController.Index();
+
+            _claimValueProviderMock.AssertWasNotCalled(m => m.IsCreatedHouseholdMember(Arg<IIdentity>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that Index does not call IsActivatedHouseholdMember on the provider which can get values from claims when the controller does have a user with an unauthenticated identity.
+        /// </summary>
+        [Test]
+        public void TestThatIndexDoesNotCallIsActivatedHouseholdMemberOnClaimValueProviderWhenControllerDoesHaveUserWithUnauthenticatedIdentity()
+        {
+            var homeController = CreateHomeController(isAuthenticated: false);
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.False);
+
+            homeController.Index();
+
+            _claimValueProviderMock.AssertWasNotCalled(m => m.IsActivatedHouseholdMember(Arg<IIdentity>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that Index does not call IsPrivacyPoliciesAccepted on the provider which can get values from claims when the controller does have a user with an unauthenticated identity.
+        /// </summary>
+        [Test]
+        public void TestThatIndexDoesNotCallIsPrivacyPoliciesAcceptedOnClaimValueProviderWhenControllerDoesHaveUserWithUnauthenticatedIdentity()
+        {
+            var homeController = CreateHomeController(isAuthenticated: false);
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.False);
+
+            homeController.Index();
+
+            _claimValueProviderMock.AssertWasNotCalled(m => m.IsPrivacyPoliciesAccepted(Arg<IIdentity>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that Index returns a ViewResult with the welcome message when the controller does have a user with an unauthenticated identity.
+        /// </summary>
+        [Test]
+        public void TestThatIndexReturnsViewResultWithWelcomeMessageWhenControllerDoesHaveUserWithUnauthenticatedIdentity()
+        {
+            var homeController = CreateHomeController(isAuthenticated: false);
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.False);
+
+            var result = homeController.Index();
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult)result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Empty);
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["Message"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["Message"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["Message"], Is.EqualTo(string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject)));
+        }
+
+        /// <summary>
+        /// Tests that Index calls IsValidatedHouseholdMember on the provider which can get values from claims when the controller does have a user with an authenticated identity.
+        /// </summary>
+        [Test]
+        public void TestThatIndexCallsIsValidatedHouseholdMemberOnClaimValueProviderWhenControllerDoesHaveUserWithAuthenticatedIdentity()
         {
             var homeController = CreateHomeController();
             Assert.That(homeController, Is.Not.Null);
             Assert.That(homeController.User, Is.Not.Null);
             Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
 
             homeController.Index();
 
             _claimValueProviderMock.AssertWasCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Equal(homeController.User.Identity)));
+        }
+
+        /// <summary>
+        /// Tests that Index calls IsCreatedHouseholdMember on the provider which can get values from claims when the controller does have a user with an authenticated identity.
+        /// </summary>
+        [Test]
+        public void TestThatIndexCallsIsCreatedHouseholdMemberOnClaimValueProviderWhenControllerDoesHaveUserWithAuthenticatedIdentity()
+        {
+            var homeController = CreateHomeController();
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
+
+            homeController.Index();
+
+            _claimValueProviderMock.AssertWasCalled(m => m.IsCreatedHouseholdMember(Arg<IIdentity>.Is.Equal(homeController.User.Identity)));
+        }
+
+        /// <summary>
+        /// Tests that Index calls IsActivatedHouseholdMember on the provider which can get values from claims when the controller does have a user with an authenticated identity.
+        /// </summary>
+        [Test]
+        public void TestThatIndexCallsIsActivatedHouseholdMemberOnClaimValueProviderWhenControllerDoesHaveUserWithAuthenticatedIdentity()
+        {
+            var homeController = CreateHomeController();
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
+
+            homeController.Index();
+
+            _claimValueProviderMock.AssertWasCalled(m => m.IsActivatedHouseholdMember(Arg<IIdentity>.Is.Equal(homeController.User.Identity)));
+        }
+
+        /// <summary>
+        /// Tests that Index calls IsPrivacyPoliciesAccepted on the provider which can get values from claims when the controller does have a user with an authenticated identity.
+        /// </summary>
+        [Test]
+        public void TestThatIndexCallsIsPrivacyPoliciesAcceptedOnClaimValueProviderWhenControllerDoesHaveUserWithAuthenticatedIdentity()
+        {
+            var homeController = CreateHomeController();
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
+
+            homeController.Index();
+
+            _claimValueProviderMock.AssertWasCalled(m => m.IsPrivacyPoliciesAccepted(Arg<IIdentity>.Is.Equal(homeController.User.Identity)));
         }
 
         /// <summary>
@@ -324,9 +471,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(hasAcceptedPrivacyPolicies)
                 .Repeat.Any();
 
+            var identityMock = MockRepository.GenerateMock<IIdentity>();
+            identityMock.Stub(m => m.IsAuthenticated)
+                .Return(isAuthenticated)
+                .Repeat.Any();
+
             var userMock = MockRepository.GenerateMock<IPrincipal>();
             userMock.Stub(m => m.Identity)
-                .Return(hasIdentity ? MockRepository.GenerateMock<IIdentity>() : null)
+                .Return(hasIdentity ? identityMock : null)
                 .Repeat.Any();
 
             var httpContextMock = MockRepository.GenerateMock<HttpContextBase>();
