@@ -443,6 +443,66 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Index throws NotImplementedException when the controller does have a user with an authenticated identity who are a validated household member.
+        /// </summary>
+        [Test]
+        public void TestThatIndexThrowsNotImplementedExceptionWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreValidatedHouseholdMember()
+        {
+            var homeController = CreateHomeController(isValidatedHouseholdMember: true);
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
+
+            Assert.Throws<NotImplementedException>(() => homeController.Index());
+        }
+
+        /// <summary>
+        /// Tests that Index throws NotImplementedException when the controller does have a user with an authenticated identity who are not created as a household member.
+        /// </summary>
+        [Test]
+        public void TestThatIndexThrowsNotImplementedExceptionWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreNotCreatedHouseholdMember()
+        {
+            var homeController = CreateHomeController();
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
+
+            Assert.Throws<NotImplementedException>(() => homeController.Index());
+        }
+
+        /// <summary>
+        /// Tests that Index throws NotImplementedException when the controller does have a user with an authenticated identity who are created as a household member but not activated.
+        /// </summary>
+        [Test]
+        public void TestThatIndexThrowsNotImplementedExceptionWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreCreatedHouseholdMemberButNotActivated()
+        {
+            var homeController = CreateHomeController(isCreatedHouseholdMember: true, hasAcceptedPrivacyPolicies: true);
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
+
+            Assert.Throws<NotImplementedException>(() => homeController.Index());
+        }
+
+        /// <summary>
+        /// Tests that Index throws NotImplementedException when the controller does have a user with an authenticated identity who are created as a household member but don't have accepted privacy policies.
+        /// </summary>
+        [Test]
+        public void TestThatIndexThrowsNotImplementedExceptionWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreCreatedHouseholdMemberButNotAcceptedPrivacyPolicies()
+        {
+            var homeController = CreateHomeController(isCreatedHouseholdMember: true, isActivatedHouseholdMember: true);
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
+
+            Assert.Throws<NotImplementedException>(() => homeController.Index());
+        }
+
+        /// <summary>
         /// Creates a home controller for unit testing.
         /// </summary>
         /// <param name="hasUser">Sets whether the controller should have an user.</param>

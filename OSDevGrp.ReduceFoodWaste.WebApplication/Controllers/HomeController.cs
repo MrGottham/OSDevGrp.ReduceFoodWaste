@@ -46,6 +46,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             var isActivatedHouseholdMember = _claimValueProvider.IsActivatedHouseholdMember(User.Identity);
             var isPrivacyPoliciesAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
 
+            if (isValidatedHouseholdMember)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (isCreatedHouseholdMember == false)
+            {
+                throw new NotImplementedException();
+            }
+            if (isActivatedHouseholdMember == false || isPrivacyPoliciesAccepted == false)
+            {
+                throw new NotImplementedException();
+            }
+
             ViewBag.Message = string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject);
             return View();
         }
