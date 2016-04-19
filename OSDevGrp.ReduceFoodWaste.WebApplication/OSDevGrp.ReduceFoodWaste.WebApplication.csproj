@@ -237,10 +237,12 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HouseholdMemberController.cs" />
     <Compile Include="Controllers\LanguageController.cs" />
     <Compile Include="Filters\CultureAttribute.cs" />
     <Compile Include="Filters\HandleErrorAttribute.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Filters\IsAuthenticatedAttribute.cs" />
     <Compile Include="Filters\IsValidatedHouseholdMemberAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Security.Authentication;
-using System.Web.Mvc;
+using System.Security.Principal;
 using Microsoft.Practices.Unity;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 
@@ -10,7 +9,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
     /// Attribute which can insure that the user is a validated household member.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class IsValidatedHouseholdMemberAttribute : ActionFilterAttribute
+    public class IsValidatedHouseholdMemberAttribute : IsAuthenticatedAttribute
     {
         #region Private variables
 
@@ -46,32 +45,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
         #region Methods
 
         /// <summary>
-        /// Validates whether the user is a validated household member for each action.
+        /// Validates whether a given identity is a validated household member.
         /// </summary>
-        /// <param name="filterContext">Filter context.</param>
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        /// <param name="identity">Identity which should be examined.</param>
+        /// <returns>True when the given identity is a validated household member otherwise false.</returns>
+        protected override bool ValidateIdentity(IIdentity identity)
         {
-            if (filterContext == null)
-            {
-                throw new ArgumentNullException("filterContext");
-            }
-
-            if (filterContext.HttpContext == null || filterContext.HttpContext.User == null)
-            {
-                throw new AuthenticationException();
-            }
-        }
-
-        /// <summary>
-        /// Validated whether the user is a validated houehold member for each result.
-        /// </summary>
-        /// <param name="filterContext">Filter context.</param>
-        public override void OnResultExecuting(ResultExecutingContext filterContext)
-        {
-            if (filterContext == null)
-            {
-                throw new ArgumentNullException("filterContext");
-            }
+            return identity != null && _claimValueProvider.IsValidatedHouseholdMember(identity);
         }
 
         #endregion

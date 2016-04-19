@@ -441,10 +441,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Index throws NotImplementedException when the controller does have a user with an authenticated identity who are a validated household member.
+        /// Tests that Index returns a redirect to the dashboard when the controller does have a user with an authenticated identity who are a validated household member.
         /// </summary>
         [Test]
-        public void TestThatIndexThrowsNotImplementedExceptionWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreValidatedHouseholdMember()
+        public void TestThatIndexReturnsRedirectToDashboardWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreValidatedHouseholdMember()
         {
             var homeController = CreateHomeController(isValidatedHouseholdMember: true);
             Assert.That(homeController, Is.Not.Null);
@@ -452,7 +452,23 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(homeController.User.Identity, Is.Not.Null);
             Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
 
-            Assert.Throws<NotImplementedException>(() => homeController.Index());
+            var result = homeController.Index();
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
+
+            var redirectToRouteResult = (RedirectToRouteResult) result;
+            Assert.That(redirectToRouteResult, Is.Not.Null);
+
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("action"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.EqualTo("Dashboard"));
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("controller"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.EqualTo("Dashboard"));
         }
 
         /// <summary>

@@ -50,7 +50,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             if (isValidatedHouseholdMember)
             {
-                throw new NotImplementedException();
+                return RedirectToAction("Dashboard", "Dashboard");
             }
 
             if (isCreatedHouseholdMember == false)
