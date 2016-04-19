@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 
@@ -17,6 +18,30 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             var householdMemberController = new HouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
+        }
+
+        /// <summary>
+        /// Tests that Create throws NotImplementedException.
+        /// </summary>
+        [Test]
+        public void TestThatDashboardThrowsNotImplementedException()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            Assert.Throws<NotImplementedException>(() => householdMemberController.Create());
+        }
+
+        /// <summary>
+        /// Tests that Prepare throws NotImplementedException.
+        /// </summary>
+        [Test]
+        public void TestThatPrepareThrowsNotImplementedException()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            Assert.Throws<NotImplementedException>(() => householdMemberController.Prepare());
         }
 
         /// <summary>

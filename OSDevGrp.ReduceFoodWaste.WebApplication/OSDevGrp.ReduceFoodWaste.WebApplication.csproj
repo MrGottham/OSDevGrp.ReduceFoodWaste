@@ -243,6 +243,7 @@
     <Compile Include="Filters\HandleErrorAttribute.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Filters\IsAuthenticatedAttribute.cs" />
+    <Compile Include="Filters\IsCreatedHouseholdMemberAttribute.cs" />
     <Compile Include="Filters\IsValidatedHouseholdMemberAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

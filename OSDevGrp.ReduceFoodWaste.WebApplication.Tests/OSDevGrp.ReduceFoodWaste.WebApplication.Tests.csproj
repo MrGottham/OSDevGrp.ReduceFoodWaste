@@ -102,6 +102,7 @@
     <Compile Include="Filters\FilterTestHelper.cs" />
     <Compile Include="Filters\HandleErrorAttributeTests.cs" />
     <Compile Include="Filters\IsAuthenticatedAttributeTests.cs" />
+    <Compile Include="Filters\IsCreatedHouseholdMemberAttributeTests.cs" />
     <Compile Include="Filters\IsValidatedHouseholdMemberAttributeTests.cs" />
     <Compile Include="Infrastructure\Security\Exceptions\ReduceFoodWasteBusinessExceptionTests.cs" />
     <Compile Include="Infrastructure\Security\Exceptions\ReduceFoodWasteRepositoryExceptionTests.cs" />

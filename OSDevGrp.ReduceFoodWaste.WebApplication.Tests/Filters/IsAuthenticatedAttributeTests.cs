@@ -228,7 +228,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         /// <summary>
         /// Creates an attribute which can insure that the user is authenticated for unit testing.
         /// </summary>
-        /// <returns>Attribute which can insure that the user is authenticated for unit testing</returns>
+        /// <returns>Attribute which can insure that the user is authenticated for unit testing.</returns>
         private static IsAuthenticatedAttribute CreateIsAuthenticatedAttribute()
         {
             return new IsAuthenticatedAttribute();

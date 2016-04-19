@@ -171,7 +171,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         /// <param name="hasUserNameIdentifier">Sets whether a user name identifier can be resolved from the identity.</param>
         /// <param name="userNameIdentifier">Sets the user name identifier which should be resolved from the identity.</param>
         /// <returns>Provider which can creates credentials for unit testing.</returns>
-        [Test]
         private ICredentialsProvider CreateCredentialsProvider(bool hasMailAddress = true, string mailAddress = null, bool hasUserNameIdentifier = true, string userNameIdentifier = null)
         {
             _claimValueProviderMock.Stub(m => m.GetMailAddress(Arg<IIdentity>.Is.Anything))

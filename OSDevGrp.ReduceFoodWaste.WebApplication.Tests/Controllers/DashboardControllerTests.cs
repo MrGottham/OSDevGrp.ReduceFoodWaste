@@ -27,10 +27,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatDashboardThrowsNotImplementedException()
         {
-            var createDashboardController = CreateDashboardController();
-            Assert.That(createDashboardController, Is.Not.Null);
+            var dashboardController = CreateDashboardController();
+            Assert.That(dashboardController, Is.Not.Null);
 
-            Assert.Throws<NotImplementedException>(() => createDashboardController.Dashboard());
+            Assert.Throws<NotImplementedException>(() => dashboardController.Dashboard());
         }
 
         /// <summary>
