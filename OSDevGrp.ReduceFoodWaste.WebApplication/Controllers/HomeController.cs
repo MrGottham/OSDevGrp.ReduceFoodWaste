@@ -26,6 +26,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
         #endregion
 
+        #region Methods
+
         public ActionResult Index()
         {
             if (User == null || User.Identity == null)
@@ -63,5 +65,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             ViewBag.Message = string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject);
             return View();
         }
+
+        #endregion
     }
 }
