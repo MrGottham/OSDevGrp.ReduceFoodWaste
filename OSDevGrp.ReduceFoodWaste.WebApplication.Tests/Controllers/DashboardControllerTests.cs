@@ -42,7 +42,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// Creates a controller for a household members dashboard for unit testing.
         /// </summary>
         /// <returns>Controller for a household members dashboard for unit testing.</returns>
-        private DashboardController CreateDashboardController()
+        private static DashboardController CreateDashboardController()
         {
             var identityMock = MockRepository.GenerateMock<IIdentity>();
             identityMock.Stub(m => m.IsAuthenticated)
