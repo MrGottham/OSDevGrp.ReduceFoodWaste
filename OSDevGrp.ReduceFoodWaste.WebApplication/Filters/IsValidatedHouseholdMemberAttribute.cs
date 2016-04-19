@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Authentication;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
@@ -54,7 +55,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
             {
                 throw new ArgumentNullException("filterContext");
             }
-            throw new NotImplementedException();
+
+            if (filterContext.HttpContext == null || filterContext.HttpContext.User == null)
+            {
+                throw new AuthenticationException();
+            }
         }
 
         /// <summary>
@@ -67,7 +72,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
             {
                 throw new ArgumentNullException("filterContext");
             }
-            throw new NotImplementedException();
         }
 
         #endregion

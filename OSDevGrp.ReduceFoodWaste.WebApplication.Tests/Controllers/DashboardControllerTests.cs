@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Security.Principal;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Rhino.Mocks;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 {
@@ -44,23 +39,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <returns>Controller for a household members dashboard for unit testing.</returns>
         private static DashboardController CreateDashboardController()
         {
-            var identityMock = MockRepository.GenerateMock<IIdentity>();
-            identityMock.Stub(m => m.IsAuthenticated)
-                .Return(true)
-                .Repeat.Any();
-
-            var userMock = MockRepository.GenerateMock<IPrincipal>();
-            userMock.Stub(m => m.Identity)
-                .Return(identityMock)
-                .Repeat.Any();
-
-            var httpContextMock = MockRepository.GenerateMock<HttpContextBase>();
-            httpContextMock.Stub(m => m.User)
-                .Return(userMock)
-                .Repeat.Any();
-
             var dashboardController = new DashboardController();
-            dashboardController.ControllerContext = new ControllerContext(httpContextMock, new RouteData(), dashboardController);
+            dashboardController.ControllerContext = ControllerTestHelper.CreateControllerContext(dashboardController);
             return dashboardController;
         }
     }

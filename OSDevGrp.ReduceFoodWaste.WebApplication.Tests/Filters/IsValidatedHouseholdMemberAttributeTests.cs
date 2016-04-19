@@ -1,10 +1,7 @@
 ﻿using System;
+using System.Security.Authentication;
 using System.Security.Principal;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
 using NUnit.Framework;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -75,6 +72,51 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         }
 
         /// <summary>
+        /// Tests that OnActionExecuting throws an X when the HTTP context on the filter context does not have an user.
+        /// </summary>
+        [Test]
+        public void TestThatOnActionExecutingThrowsXWhenHttpContextOnFilterContextDoesNotHaveUser()
+        {
+            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
+            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+
+            var filterContext = FilterTestHelper.CreateActionExecutingContext(hasUser: false);
+            Assert.That(filterContext, Is.Not.Null);
+            Assert.That(filterContext.HttpContext, Is.Not.Null);
+            Assert.That(filterContext.HttpContext.User, Is.Null);
+
+            var exception = Assert.Throws<AuthenticationException>(() => isValidatedHouseholdMemberAttribute.OnActionExecuting(filterContext));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo("XYZ"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+
+
+
+        /// <summary>
+        /// Tests that OnActionExecuting calls IsActivatedHouseholdMember on the provider which can get values from claims.
+        /// </summary>
+        [Test]
+        public void TestThatOnActionExecutingCallsIsActivatedHouseholdMemberOnClaimValueProvide()
+        {
+            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
+            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+
+            var filterContext = FilterTestHelper.CreateActionExecutingContext();
+            Assert.That(filterContext, Is.Not.Null);
+            Assert.That(filterContext.HttpContext, Is.Not.Null);
+            Assert.That(filterContext.HttpContext.User, Is.Not.Null);
+            Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
+
+            isValidatedHouseholdMemberAttribute.OnActionExecuting(filterContext);
+
+            _claimValueProviderMock.AssertWasCalled(m => m.IsActivatedHouseholdMember(Arg<IIdentity>.Is.Equal(filterContext.HttpContext.User.Identity)));
+        }
+
+        /// <summary>
         /// Tests that OnResultExecuting throws an ArgumentNullException when the filter context is null.
         /// </summary>
         [Test]
@@ -92,6 +134,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         }
 
         /// <summary>
+        /// Tests that OnResultExecuting calls IsActivatedHouseholdMember on the provider which can get values from claims.
+        /// </summary>
+        [Test]
+        public void TestThatOnResultExecutingCallsIsActivatedHouseholdMemberOnClaimValueProvide()
+        {
+            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
+            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+
+            var filterContext = FilterTestHelper.CreateResultExecutingContext();
+            Assert.That(filterContext, Is.Not.Null);
+            Assert.That(filterContext.HttpContext, Is.Not.Null);
+            Assert.That(filterContext.HttpContext.User, Is.Not.Null);
+            Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
+
+            isValidatedHouseholdMemberAttribute.OnResultExecuting(filterContext);
+
+            _claimValueProviderMock.AssertWasCalled(m => m.IsActivatedHouseholdMember(Arg<IIdentity>.Is.Equal(filterContext.HttpContext.User.Identity)));
+        }
+
+        /// <summary>
         /// Creates an attribute which can insure that the user is a validated household member for unit testing.
         /// </summary>
         /// <param name="isValidatedHouseholdMember">Sets whether the user is a validated household member.</param>
@@ -103,49 +165,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
                 .Repeat.Any();
 
             return new IsValidatedHouseholdMemberAttribute(_claimValueProviderMock);
-        }
-
-        /// <summary>
-        /// Creates an action executing context which can be used in unit tests.
-        /// </summary>
-        /// <returns>Action executing context which can be used in unit tests.</returns>
-        private static ActionExecutingContext CreateActionExecutingContext()
-        {
-            return new ActionExecutingContext(null, null, null);
-        }
-
-        /// <summary>
-        /// Creates a result executing context which can be used in unit tests.
-        /// </summary>
-        /// <returns>Result executing context which can be used in unit tests.</returns>
-        private static ResultExecutingContext CreateResultExecutingContext()
-        {
-            return new ResultExecutingContext(null, null);
-        }
-
-        /// <summary>
-        /// Creates a controller context which can be used in unit tests.
-        /// </summary>
-        /// <returns>Controller context which can be used in unit tests.</returns>
-        private static ControllerContext CreateControllerContext()
-        {
-            var identityMock = MockRepository.GenerateMock<IIdentity>();
-            identityMock.Stub(m => m.IsAuthenticated)
-                .Return(true)
-                .Repeat.Any();
-
-            var userMock = MockRepository.GenerateMock<IPrincipal>();
-            userMock.Stub(m => m.Identity)
-                .Return(identityMock)
-                .Repeat.Any();
-
-            var httpContextMock = MockRepository.GenerateMock<HttpContextBase>();
-            httpContextMock.Stub(m => m.User)
-                .Return(userMock)
-                .Repeat.Any();
-
-            return new ControllerContext(httpContextMock, new RouteData(), null);
-
         }
     }
 }

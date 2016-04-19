@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Security.Principal;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
@@ -531,23 +529,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(hasAcceptedPrivacyPolicies)
                 .Repeat.Any();
 
-            var identityMock = MockRepository.GenerateMock<IIdentity>();
-            identityMock.Stub(m => m.IsAuthenticated)
-                .Return(isAuthenticated)
-                .Repeat.Any();
-
-            var userMock = MockRepository.GenerateMock<IPrincipal>();
-            userMock.Stub(m => m.Identity)
-                .Return(hasIdentity ? identityMock : null)
-                .Repeat.Any();
-
-            var httpContextMock = MockRepository.GenerateMock<HttpContextBase>();
-            httpContextMock.Stub(m => m.User)
-                .Return(hasUser ? userMock : null)
-                .Repeat.Any();
-
             var homeController = new HomeController(_claimValueProviderMock);
-            homeController.ControllerContext = new ControllerContext(httpContextMock, new RouteData(), homeController);
+            homeController.ControllerContext = ControllerTestHelper.CreateControllerContext(homeController, hasUser, hasIdentity, isAuthenticated);
             return homeController;
         }
     }
