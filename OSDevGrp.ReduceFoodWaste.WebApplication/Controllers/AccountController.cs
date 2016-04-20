@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
@@ -253,13 +254,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
             catch (AggregateException ex)
             {
-                Exception exceptionToThrow = null;
-                ex.Handle(exceptionToHandle =>
-                {
-                    exceptionToThrow = exceptionToHandle;
-                    return true;
-                });
-                throw exceptionToThrow;
+                throw ex.ToReduceFoodWasteException();
             }
         }
 

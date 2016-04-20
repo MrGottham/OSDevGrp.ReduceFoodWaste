@@ -90,18 +90,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
                 }
                 catch (AggregateException ex)
                 {
-                    Exception exceptionToThrow = null;
-                    ex.Handle(exceptionToHandle =>
-                    {
-                        if (exceptionToHandle is ReduceFoodWasteExceptionBase)
-                        {
-                            exceptionToThrow = exceptionToHandle;
-                            return true;
-                        }
-                        exceptionToThrow = new ReduceFoodWasteSystemException(exceptionToHandle.Message, exceptionToHandle);
-                        return true;
-                    });
-                    throw exceptionToThrow;
+                    throw ex.ToReduceFoodWasteException();
                 }
                 catch (Exception ex)
                 {
