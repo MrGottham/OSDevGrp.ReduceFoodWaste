@@ -472,10 +472,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Index throws NotImplementedException when the controller does have a user with an authenticated identity who are not created as a household member.
+        /// Tests that Index returns a redirect to the creation of a household member when the controller does have a user with an authenticated identity who are not created as a household member.
         /// </summary>
         [Test]
-        public void TestThatIndexThrowsNotImplementedExceptionWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreNotCreatedHouseholdMember()
+        public void TestThatIndexRedirectToCreateHouseholdMemberWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreNotCreatedHouseholdMember()
         {
             var homeController = CreateHomeController();
             Assert.That(homeController, Is.Not.Null);
@@ -483,14 +483,30 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(homeController.User.Identity, Is.Not.Null);
             Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
 
-            Assert.Throws<NotImplementedException>(() => homeController.Index());
+            var result = homeController.Index();
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
+
+            var redirectToRouteResult = (RedirectToRouteResult) result;
+            Assert.That(redirectToRouteResult, Is.Not.Null);
+
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("action"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.EqualTo("Create"));
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("controller"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.EqualTo("HouseholdMember"));
         }
 
         /// <summary>
-        /// Tests that Index throws NotImplementedException when the controller does have a user with an authenticated identity who are created as a household member but not activated.
+        /// Tests that Index returns a redirect to the preparation of a household member when the controller does have a user with an authenticated identity who are created as a household member but not activated.
         /// </summary>
         [Test]
-        public void TestThatIndexThrowsNotImplementedExceptionWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreCreatedHouseholdMemberButNotActivated()
+        public void TestThatIndexReturnsRedirectToPrepareHouseholdMemberWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreCreatedHouseholdMemberButNotActivated()
         {
             var homeController = CreateHomeController(isCreatedHouseholdMember: true, hasAcceptedPrivacyPolicies: true);
             Assert.That(homeController, Is.Not.Null);
@@ -498,14 +514,30 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(homeController.User.Identity, Is.Not.Null);
             Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
 
-            Assert.Throws<NotImplementedException>(() => homeController.Index());
+            var result = homeController.Index();
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
+
+            var redirectToRouteResult = (RedirectToRouteResult) result;
+            Assert.That(redirectToRouteResult, Is.Not.Null);
+
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("action"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.EqualTo("Prepare"));
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("controller"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.EqualTo("HouseholdMember"));
         }
 
         /// <summary>
-        /// Tests that Index throws NotImplementedException when the controller does have a user with an authenticated identity who are created as a household member but don't have accepted privacy policies.
+        /// Tests that Index returns a redirect to the preparation of a household member when the controller does have a user with an authenticated identity who are created as a household member but don't have accepted privacy policies.
         /// </summary>
         [Test]
-        public void TestThatIndexThrowsNotImplementedExceptionWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreCreatedHouseholdMemberButNotAcceptedPrivacyPolicies()
+        public void TestThatIndexReturnsRedirectToPrepareHouseholdMemberWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreCreatedHouseholdMemberButNotAcceptedPrivacyPolicies()
         {
             var homeController = CreateHomeController(isCreatedHouseholdMember: true, isActivatedHouseholdMember: true);
             Assert.That(homeController, Is.Not.Null);
@@ -513,7 +545,38 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(homeController.User.Identity, Is.Not.Null);
             Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
 
-            Assert.Throws<NotImplementedException>(() => homeController.Index());
+            var result = homeController.Index();
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
+
+            var redirectToRouteResult = (RedirectToRouteResult) result;
+            Assert.That(redirectToRouteResult, Is.Not.Null);
+
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("action"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.EqualTo("Prepare"));
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("controller"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.EqualTo("HouseholdMember"));
+        }
+
+        /// <summary>
+        /// Tests that Index throws NotSupportedException when the controller does have a user with an authenticated identity who are a created and activated household member with accepted privacy policies but not validated.
+        /// </summary>
+        [Test]
+        public void TestThatIndexThrowsNotSupportedExceptionWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreCreatedAndActivatedHouseholdMemberWithAcceptedPrivacyPoliciesButNotValidated()
+        {
+            var homeController = CreateHomeController(isCreatedHouseholdMember: true, isActivatedHouseholdMember: true, hasAcceptedPrivacyPolicies: true);
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
+
+            Assert.Throws<NotSupportedException>(() => homeController.Index());
         }
 
         /// <summary>

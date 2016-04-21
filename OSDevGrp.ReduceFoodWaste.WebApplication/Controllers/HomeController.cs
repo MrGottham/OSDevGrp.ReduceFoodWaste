@@ -55,15 +55,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             if (isCreatedHouseholdMember == false)
             {
-                throw new NotImplementedException();
+                return RedirectToAction("Create", "HouseholdMember");
             }
             if (isActivatedHouseholdMember == false || isPrivacyPoliciesAccepted == false)
             {
-                throw new NotImplementedException();
+                return RedirectToAction("Prepare", "HouseholdMember");
             }
 
-            ViewBag.Message = string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject);
-            return View();
+            throw new NotSupportedException();
         }
 
         #endregion
