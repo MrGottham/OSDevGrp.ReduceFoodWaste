@@ -109,6 +109,9 @@
     <Compile Include="Infrastructure\Security\Exceptions\ReduceFoodWasteSystemExceptionTests.cs" />
     <Compile Include="Infrastructure\Security\Providers\ClaimValueProviderTests.cs" />
     <Compile Include="Infrastructure\Security\Providers\LocalClaimProviderTests.cs" />
+    <Compile Include="Models\HouseholdMemberModelTests.cs" />
+    <Compile Include="Models\HouseholdModelTests.cs" />
+    <Compile Include="Models\PrivacyPolicyModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CredentialsProviderTests.cs" />
     <Compile Include="Repositories\HouseholdDataConverterTests.cs" />

@@ -264,6 +264,9 @@
     <Compile Include="Infrastructure\Security\Providers\ClaimValueProvider.cs" />
     <Compile Include="Infrastructure\Security\Providers\IClaimValueProvider.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\HouseholdMemberModel.cs" />
+    <Compile Include="Models\HouseholdModel.cs" />
+    <Compile Include="Models\PrivacyPolicyModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CredentialsProvider.cs" />
     <Compile Include="Repositories\HouseholdDataConverter.cs" />
