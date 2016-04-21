@@ -116,8 +116,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         [Test]
         public void TestThatOnActionExecutingThrowsUnauthorizedAccessExceptionWhenHttpContextOnFilterContextDoesHaveUserWithoutIdentity()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateActionExecutingContext(hasIdentity: false);
             Assert.That(filterContext, Is.Not.Null);
@@ -125,7 +125,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity, Is.Null);
 
-            var exception = Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnActionExecuting(filterContext));
+            var exception = Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnActionExecuting(filterContext));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -133,13 +133,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         }
 
         /// <summary>
-        /// Tests that OnActionExecuting does not call IsValidatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user without an identity.
+        /// Tests that OnActionExecuting does not call IsCreatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user without an identity.
         /// </summary>
         [Test]
-        public void TestThatOnActionExecutingDoesNotCallIsValidatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithoutIdentity()
+        public void TestThatOnActionExecutingDoesNotCallIsCreatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithoutIdentity()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateActionExecutingContext(hasIdentity: false);
             Assert.That(filterContext, Is.Not.Null);
@@ -147,9 +147,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity, Is.Null);
 
-            Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnActionExecuting(filterContext));
+            Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnActionExecuting(filterContext));
 
-            _claimValueProviderMock.AssertWasNotCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything));
+            _claimValueProviderMock.AssertWasNotCalled(m => m.IsCreatedHouseholdMember(Arg<IIdentity>.Is.Anything));
         }
 
         /// <summary>
@@ -158,8 +158,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         [Test]
         public void TestThatOnActionExecutingThrowsUnauthorizedAccessExceptionWhenHttpContextOnFilterContextDoesHaveUserWithUnauthenticatedIdentity()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateActionExecutingContext(isAuthenticated: false);
             Assert.That(filterContext, Is.Not.Null);
@@ -168,7 +168,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity.IsAuthenticated, Is.False);
 
-            var exception = Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnActionExecuting(filterContext));
+            var exception = Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnActionExecuting(filterContext));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -176,13 +176,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         }
 
         /// <summary>
-        /// Tests that OnActionExecuting does not call IsValidatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user with an unauthenticated identity.
+        /// Tests that OnActionExecuting does not call IsCreatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user with an unauthenticated identity.
         /// </summary>
         [Test]
-        public void TestThatOnActionExecutingDoesNotCallIsValidatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithUnauthenticatedIdentity()
+        public void TestThatOnActionExecutingDoesNotCallIsCreatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithUnauthenticatedIdentity()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateActionExecutingContext(isAuthenticated: false);
             Assert.That(filterContext, Is.Not.Null);
@@ -191,19 +191,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity.IsAuthenticated, Is.False);
 
-            Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnActionExecuting(filterContext));
+            Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnActionExecuting(filterContext));
 
-            _claimValueProviderMock.AssertWasNotCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything));
+            _claimValueProviderMock.AssertWasNotCalled(m => m.IsCreatedHouseholdMember(Arg<IIdentity>.Is.Anything));
         }
 
         /// <summary>
-        /// Tests that OnActionExecuting calls IsValidatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user with an authenticated identity.
+        /// Tests that OnActionExecuting calls IsCreatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user with an authenticated identity.
         /// </summary>
         [Test]
-        public void TestThatOnActionExecutingCallsIsValidatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentity()
+        public void TestThatOnActionExecutingCallsIsCreatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentity()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateActionExecutingContext();
             Assert.That(filterContext, Is.Not.Null);
@@ -212,19 +212,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity.IsAuthenticated, Is.True);
 
-            isValidatedHouseholdMemberAttribute.OnActionExecuting(filterContext);
+            isCreatedHouseholdMemberAttribute.OnActionExecuting(filterContext);
 
-            _claimValueProviderMock.AssertWasCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Equal(filterContext.HttpContext.User.Identity)));
+            _claimValueProviderMock.AssertWasCalled(m => m.IsCreatedHouseholdMember(Arg<IIdentity>.Is.Equal(filterContext.HttpContext.User.Identity)));
         }
 
         /// <summary>
-        /// Tests that OnActionExecuting throws an UnauthorizedAccessException when the HTTP context on the filter context does have a user with an authenticated identity who are not a validated household member.
+        /// Tests that OnActionExecuting throws an UnauthorizedAccessException when the HTTP context on the filter context does have a user with an authenticated identity who are not a created household member.
         /// </summary>
         [Test]
-        public void TestThatOnActionExecutingThrowsUnauthorizedAccessExceptionWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentityWhoAreNotValidatedHouseholdMember()
+        public void TestThatOnActionExecutingThrowsUnauthorizedAccessExceptionWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentityWhoAreNotCreatedHouseholdMember()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute(isValidatedHouseholdMember: false);
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute(isCreatedHouseholdMember: false);
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateActionExecutingContext();
             Assert.That(filterContext, Is.Not.Null);
@@ -233,7 +233,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity.IsAuthenticated, Is.True);
 
-            var exception = Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnActionExecuting(filterContext));
+            var exception = Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnActionExecuting(filterContext));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -241,13 +241,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         }
 
         /// <summary>
-        /// Tests that OnActionExecuting does not throw an Exception when the HTTP context on the filter context does have a user with an authenticated identity who are a validated household member.
+        /// Tests that OnActionExecuting does not throw an Exception when the HTTP context on the filter context does have a user with an authenticated identity who are a created household member.
         /// </summary>
         [Test]
-        public void TestThatOnActionExecutingDoesNotThrowExceptionWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentityWhoAreValidatedHouseholdMember()
+        public void TestThatOnActionExecutingDoesNotThrowExceptionWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentityWhoAreCreatedHouseholdMember()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateActionExecutingContext();
             Assert.That(filterContext, Is.Not.Null);
@@ -256,7 +256,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity.IsAuthenticated, Is.True);
 
-            isValidatedHouseholdMemberAttribute.OnActionExecuting(filterContext);
+            isCreatedHouseholdMemberAttribute.OnActionExecuting(filterContext);
         }
 
         /// <summary>
@@ -265,10 +265,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         [Test]
         public void TestThatOnResultExecutingThrowsArgumentNullExceptionWhenFilterContextIsNull()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => isValidatedHouseholdMemberAttribute.OnResultExecuting(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => isCreatedHouseholdMemberAttribute.OnResultExecuting(null));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -282,15 +282,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         [Test]
         public void TestThatOnResultExecutingThrowsUnauthorizedAccessExceptionWhenHttpContextOnFilterContextDoesNotHaveUser()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateResultExecutingContext(hasUser: false);
             Assert.That(filterContext, Is.Not.Null);
             Assert.That(filterContext.HttpContext, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User, Is.Null);
 
-            var exception = Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
+            var exception = Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -298,22 +298,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         }
 
         /// <summary>
-        /// Tests that OnResultExecuting does not call IsValidatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does not have an user.
+        /// Tests that OnResultExecuting does not call IsCreatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does not have an user.
         /// </summary>
         [Test]
-        public void TestThatOnResultExecutingDoesNotCallIsValidatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesNotHaveUser()
+        public void TestThatOnResultExecutingDoesNotCallIsCreatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesNotHaveUser()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateResultExecutingContext(hasUser: false);
             Assert.That(filterContext, Is.Not.Null);
             Assert.That(filterContext.HttpContext, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User, Is.Null);
 
-            Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
+            Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
 
-            _claimValueProviderMock.AssertWasNotCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything));
+            _claimValueProviderMock.AssertWasNotCalled(m => m.IsCreatedHouseholdMember(Arg<IIdentity>.Is.Anything));
         }
 
         /// <summary>
@@ -322,8 +322,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         [Test]
         public void TestThatOnResultExecutingThrowsUnauthorizedAccessExceptionWhenHttpContextOnFilterContextDoesHaveUserWithoutIdentity()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateResultExecutingContext(hasIdentity: false);
             Assert.That(filterContext, Is.Not.Null);
@@ -331,7 +331,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity, Is.Null);
 
-            var exception = Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
+            var exception = Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -339,13 +339,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         }
 
         /// <summary>
-        /// Tests that OnResultExecuting does not call IsValidatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user without an identity.
+        /// Tests that OnResultExecuting does not call IsCreatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user without an identity.
         /// </summary>
         [Test]
-        public void TestThatOnResultExecutingDoesNotCallIsValidatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithoutIdentity()
+        public void TestThatOnResultExecutingDoesNotCallIsCreatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithoutIdentity()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateResultExecutingContext(hasIdentity: false);
             Assert.That(filterContext, Is.Not.Null);
@@ -353,9 +353,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity, Is.Null);
 
-            Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
+            Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
 
-            _claimValueProviderMock.AssertWasNotCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything));
+            _claimValueProviderMock.AssertWasNotCalled(m => m.IsCreatedHouseholdMember(Arg<IIdentity>.Is.Anything));
         }
 
         /// <summary>
@@ -364,8 +364,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         [Test]
         public void TestThatOnResultExecutingThrowsUnauthorizedAccessExceptionWhenHttpContextOnFilterContextDoesHaveUserWithUnauthenticatedIdentity()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateResultExecutingContext(isAuthenticated: false);
             Assert.That(filterContext, Is.Not.Null);
@@ -374,7 +374,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity.IsAuthenticated, Is.False);
 
-            var exception = Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
+            var exception = Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -382,13 +382,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         }
 
         /// <summary>
-        /// Tests that OnResultExecuting does not call IsValidatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user with an unauthenticated identity.
+        /// Tests that OnResultExecuting does not call IsCreatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user with an unauthenticated identity.
         /// </summary>
         [Test]
-        public void TestThatOnResultExecutingDoesNotCallIsValidatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithUnauthenticatedIdentity()
+        public void TestThatOnResultExecutingDoesNotCallIsCreatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithUnauthenticatedIdentity()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateResultExecutingContext(isAuthenticated: false);
             Assert.That(filterContext, Is.Not.Null);
@@ -397,19 +397,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity.IsAuthenticated, Is.False);
 
-            Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
+            Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
 
-            _claimValueProviderMock.AssertWasNotCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Anything));
+            _claimValueProviderMock.AssertWasNotCalled(m => m.IsCreatedHouseholdMember(Arg<IIdentity>.Is.Anything));
         }
 
         /// <summary>
-        /// Tests that OnResultExecuting calls IsValidatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user with an authenticated identity.
+        /// Tests that OnResultExecuting calls IsCreatedHouseholdMember on the provider which can get values from claims when the HTTP context on the filter context does have a user with an authenticated identity.
         /// </summary>
         [Test]
-        public void TestThatOnResultExecutingCallsIsValidatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentity()
+        public void TestThatOnResultExecutingCallsIsCreatedHouseholdMemberOnClaimValueProviderWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentity()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateResultExecutingContext();
             Assert.That(filterContext, Is.Not.Null);
@@ -418,19 +418,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity.IsAuthenticated, Is.True);
 
-            isValidatedHouseholdMemberAttribute.OnResultExecuting(filterContext);
+            isCreatedHouseholdMemberAttribute.OnResultExecuting(filterContext);
 
-            _claimValueProviderMock.AssertWasCalled(m => m.IsValidatedHouseholdMember(Arg<IIdentity>.Is.Equal(filterContext.HttpContext.User.Identity)));
+            _claimValueProviderMock.AssertWasCalled(m => m.IsCreatedHouseholdMember(Arg<IIdentity>.Is.Equal(filterContext.HttpContext.User.Identity)));
         }
 
         /// <summary>
-        /// Tests that OnResultExecuting throws an UnauthorizedAccessException when the HTTP context on the filter context does have a user with an authenticated identity who are not a validated household member.
+        /// Tests that OnResultExecuting throws an UnauthorizedAccessException when the HTTP context on the filter context does have a user with an authenticated identity who are not a created household member.
         /// </summary>
         [Test]
-        public void TestThatOnResultExecutingThrowsUnauthorizedAccessExceptionWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentityWhoAreNotValidatedHouseholdMember()
+        public void TestThatOnResultExecutingThrowsUnauthorizedAccessExceptionWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentityWhoAreNotCreatedHouseholdMember()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute(isValidatedHouseholdMember: false);
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute(isCreatedHouseholdMember: false);
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateResultExecutingContext();
             Assert.That(filterContext, Is.Not.Null);
@@ -439,7 +439,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity.IsAuthenticated, Is.True);
 
-            var exception = Assert.Throws<UnauthorizedAccessException>(() => isValidatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
+            var exception = Assert.Throws<UnauthorizedAccessException>(() => isCreatedHouseholdMemberAttribute.OnResultExecuting(filterContext));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -447,13 +447,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
         }
 
         /// <summary>
-        /// Tests that OnResultExecuting does not throw an Exception when the HTTP context on the filter context does have a user with an authenticated identity who are a validated household member.
+        /// Tests that OnResultExecuting does not throw an Exception when the HTTP context on the filter context does have a user with an authenticated identity who are a created household member.
         /// </summary>
         [Test]
-        public void TestThatOnResultExecutingDoesNotThrowExceptionWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentityWhoAreValidatedHouseholdMember()
+        public void TestThatOnResultExecutingDoesNotThrowExceptionWhenHttpContextOnFilterContextDoesHaveUserWithAuthenticatedIdentityWhoAreCreatedHouseholdMember()
         {
-            var isValidatedHouseholdMemberAttribute = CreateIsValidatedHouseholdMemberAttribute();
-            Assert.That(isValidatedHouseholdMemberAttribute, Is.Not.Null);
+            var isCreatedHouseholdMemberAttribute = CreateIsCreatedHouseholdMemberAttribute();
+            Assert.That(isCreatedHouseholdMemberAttribute, Is.Not.Null);
 
             var filterContext = FilterTestHelper.CreateResultExecutingContext();
             Assert.That(filterContext, Is.Not.Null);
@@ -462,7 +462,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters
             Assert.That(filterContext.HttpContext.User.Identity, Is.Not.Null);
             Assert.That(filterContext.HttpContext.User.Identity.IsAuthenticated, Is.True);
 
-            isValidatedHouseholdMemberAttribute.OnResultExecuting(filterContext);
+            isCreatedHouseholdMemberAttribute.OnResultExecuting(filterContext);
         }
 
         /// <summary>

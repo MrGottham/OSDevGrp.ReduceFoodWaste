@@ -25,9 +25,9 @@
                     <nav>
                         <ul id="menu">
                             <li>@Html.ActionLink(Texts.Home, "Index", "Home")</li>
-                            @if (User != null && User.Identity != null && User.Identity.IsValidatedHouseholdMember())
+                            @if (User != null && User.Identity != null && User.Identity.IsAuthenticated && User.Identity.IsValidatedHouseholdMember())
                             {
-                                <li>@Html.ActionLink("XYZ", "XYZ", "XYZ")</li>
+                                <li>@Html.ActionLink(Texts.Dashboard, "Dashboard", "Dashboard")</li>
                             }
                         </ul>
                     </nav>

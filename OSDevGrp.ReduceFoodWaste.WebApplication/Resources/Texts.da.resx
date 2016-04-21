@@ -207,4 +207,7 @@
   <data name="CannotResolveUserNameIdentifierFromIdentity" xml:space="preserve">
     <value>Kan ikke hente en identifikation for brugernavnet fra din identitet.</value>
   </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Skrivebord</value>
+  </data>
 </root>

@@ -26,6 +26,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// Prepares a household member.
         /// </summary>
         /// <returns>View for preparing a household member.</returns>
+        [IsCreatedHouseholdMember]
         public ActionResult Prepare()
         {
             throw new NotImplementedException();

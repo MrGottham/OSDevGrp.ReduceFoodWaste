@@ -207,4 +207,7 @@
   <data name="CannotResolveUserNameIdentifierFromIdentity" xml:space="preserve">
     <value>Cannet resolve a user name identifier from your identity.</value>
   </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
 </root>
