@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Ploeh.AutoFixture;
@@ -56,9 +57,71 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                 .With(m => m.EventDate, DateTime.Now)
                 .With(m => m.ExtensionData, null)
                 .Create();
+            Assert.That(booleanResult, Is.Not.Null);
+            Assert.That(booleanResult.Result, Is.EqualTo(testValue));
 
             var result = householdDataConverter.Convert<BooleanResult, bool>(booleanResult);
             Assert.That(result, Is.EqualTo(testValue));
+        }
+
+        /// <summary>
+        /// Tests that Convert converts a StaticTextView to a PrivacyPolicyModel.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsStaticTextViewToPrivacyPolicyModel()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var staticTextView = Fixture.Build<StaticTextView>()
+                .With(m => m.StaticTextIdentifier, Guid.NewGuid())
+                .With(m => m.ExtensionData, null)
+                .Create();
+            Assert.That(staticTextView, Is.Not.Null);
+            Assert.That(staticTextView.StaticTextIdentifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(staticTextView.SubjectTranslation, Is.Not.Null);
+            Assert.That(staticTextView.SubjectTranslation, Is.Not.Empty);
+            Assert.That(staticTextView.BodyTranslation, Is.Not.Null);
+            Assert.That(staticTextView.BodyTranslation, Is.Not.Empty);
+
+            var result = householdDataConverter.Convert<StaticTextView, PrivacyPolicyModel>(staticTextView);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Identifier, Is.EqualTo(staticTextView.StaticTextIdentifier));
+            Assert.That(result.Header, Is.Not.Null);
+            Assert.That(result.Header, Is.Not.Empty);
+            Assert.That(result.Header, Is.EqualTo(staticTextView.SubjectTranslation));
+            Assert.That(result.Body, Is.Not.Null);
+            Assert.That(result.Body, Is.Not.Empty);
+            Assert.That(result.Body, Is.EqualTo(staticTextView.BodyTranslation));
+            Assert.That(result.IsAccepted, Is.False);
+        }
+
+        /// <summary>
+        /// Tests that Convert removes the HTML tag from the body when converting a StaticTextView to a PrivacyPolicyModel.
+        /// </summary>
+        [Test]
+        public void TestThatConvertRemovesHtmlTagFromBodyWhenConvertingStaticTextViewToPrivacyPolicyModel()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var staticTextView = Fixture.Build<StaticTextView>()
+                .With(m => m.StaticTextIdentifier, Guid.NewGuid())
+                .With(m => m.BodyTranslation, string.Format("<html>{0}</html>", Fixture.Create<string>()))
+                .With(m => m.ExtensionData, null)
+                .Create();
+            Assert.That(staticTextView, Is.Not.Null);
+            Assert.That(staticTextView.BodyTranslation, Is.Not.Null);
+            Assert.That(staticTextView.BodyTranslation, Is.Not.Empty);
+            Assert.That(staticTextView.BodyTranslation.Contains("<html>"), Is.True);
+            Assert.That(staticTextView.BodyTranslation.Contains("</html>"), Is.True);
+
+            var result = householdDataConverter.Convert<StaticTextView, PrivacyPolicyModel>(staticTextView);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Body, Is.Not.Null);
+            Assert.That(result.Body, Is.Not.Empty);
+            Assert.That(result.Body.Contains("<html>"), Is.False);
+            Assert.That(result.Body.Contains("</html>"), Is.False);
         }
 
         /// <summary>

@@ -21,6 +21,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         #region Private constants
 
         private const string HouseholdDataServiceEndpointConfigurationName = "HouseholdDataService";
+        private const string TranslationInfoIdentifierCacheName = "OSDevGrp.ReduceFoodWaste.WebApplication.TranslationInfoIdentifierCache";
+        private const string PrivacyPolicyModelCacheName = "OSDevGrp.ReduceFoodWaste.WebApplication.PrivacyPolicyModelCache";
 
         #endregion
 
@@ -143,7 +145,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 throw new ArgumentNullException("cultureInfo");
             }
 
-            throw new NotImplementedException();
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), channel => GetPrivacyPolicies(channel, cultureInfo)));
         }
 
         /// <summary>
@@ -227,11 +229,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         }
 
         /// <summary>
-        /// 
+        /// Gets the privacy policies for a given culture.
         /// </summary>
-        /// <param name="channel"></param>
-        /// <param name="cultureInfo"></param>
-        /// <returns></returns>
+        /// <param name="channel">Channel on which to get the privacy policies.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Privacy policies for the given culture.</returns>
         private PrivacyPolicyModel GetPrivacyPolicies(HouseholdDataServiceChannel channel, CultureInfo cultureInfo)
         {
             if (channel == null)
@@ -243,13 +245,41 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 throw new ArgumentNullException("cultureInfo");
             }
 
-            var translationInfoIdentifier = GetTranslationInfoIdentifier(channel, cultureInfo);
-
-            var privacyPolicyCache = _objectCache.Get("PrivacyPolicyCache") as IDictionary<Guid, PrivacyPolicyModel>;
-            if (privacyPolicyCache == null)
+            var query = new PrivacyPolicyGetQuery
             {
-                
+                TranslationInfoIdentifier = GetTranslationInfoIdentifier(channel, cultureInfo)
+            };
+
+            StaticTextView privacyPolicyView;
+            PrivacyPolicyModel privacyPolicyModel;
+
+            var privacyPolicyModelCache = _objectCache.Get(PrivacyPolicyModelCacheName) as IDictionary<Guid, PrivacyPolicyModel>;
+            if (privacyPolicyModelCache == null)
+            {
+                privacyPolicyView = channel.PrivacyPolicyGet(query);
+                privacyPolicyModel = _householdDataConverter.Convert<StaticTextView, PrivacyPolicyModel>(privacyPolicyView);
+
+                privacyPolicyModelCache = new Dictionary<Guid, PrivacyPolicyModel>
+                {
+                    {query.TranslationInfoIdentifier, privacyPolicyModel}
+                };
+                _objectCache.Set(PrivacyPolicyModelCacheName, privacyPolicyModelCache, new DateTimeOffset(DateTime.Now.AddHours(1)));
+
+                return (PrivacyPolicyModel) privacyPolicyModelCache[query.TranslationInfoIdentifier].Clone();
             }
+
+            if (privacyPolicyModelCache.ContainsKey(query.TranslationInfoIdentifier))
+            {
+                return (PrivacyPolicyModel) privacyPolicyModelCache[query.TranslationInfoIdentifier].Clone();
+            }
+
+            privacyPolicyView = channel.PrivacyPolicyGet(query);
+            privacyPolicyModel = _householdDataConverter.Convert<StaticTextView, PrivacyPolicyModel>(privacyPolicyView);
+
+            privacyPolicyModelCache.Add(query.TranslationInfoIdentifier, privacyPolicyModel);
+            _objectCache.Set(PrivacyPolicyModelCacheName, privacyPolicyModelCache, new DateTimeOffset(DateTime.Now.AddHours(1)));
+
+            return (PrivacyPolicyModel) privacyPolicyModelCache[query.TranslationInfoIdentifier].Clone();
         }
 
         /// <summary>
@@ -269,7 +299,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 throw new ArgumentNullException("cultureInfo");
             }
 
-            var translationInfoIdentifierCache = _objectCache.Get("TranslationInfoIdentifierCache") as IDictionary<string, Guid>;
+            var translationInfoIdentifierCache = _objectCache.Get(TranslationInfoIdentifierCacheName) as IDictionary<string, Guid>;
             if (translationInfoIdentifierCache == null)
             {
                 var query = new TranslationInfoCollectionGetQuery();
@@ -277,7 +307,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 
                 translationInfoIdentifierCache = result.ToDictionary(m => m.CultureName, m => m.TranslationInfoIdentifier);
 
-                _objectCache.Set("TranslationInfoIdentifierCache", translationInfoIdentifierCache, new DateTimeOffset(DateTime.Now.AddHours(1)));
+                _objectCache.Set(TranslationInfoIdentifierCacheName, translationInfoIdentifierCache, new DateTimeOffset(DateTime.Now.AddHours(1)));
             }
 
             if (translationInfoIdentifierCache.ContainsKey(cultureInfo.Name))

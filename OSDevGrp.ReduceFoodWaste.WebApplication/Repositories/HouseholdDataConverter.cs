@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 {
@@ -26,6 +27,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             {
                 configuration.CreateMap<BooleanResult, bool>()
                     .ConvertUsing(src => src.Result);
+
+                configuration.CreateMap<StaticTextView, PrivacyPolicyModel>()
+                    .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.StaticTextIdentifier))
+                    .ForMember(dest => dest.Header, opt => opt.MapFrom(src => src.SubjectTranslation))
+                    .ForMember(dest => dest.Body, opt => opt.ResolveUsing(src =>
+                    {
+                        var body = src.BodyTranslation;
+                        if (string.IsNullOrEmpty(body))
+                        {
+                            return body;
+                        }
+                        body = body.Replace("<html>", string.Empty);
+                        body = body.Replace("</html>", string.Empty);
+                        return body;
+                    }))
+                    .ForMember(dest => dest.IsAccepted, opt => opt.Ignore());
             });
             mapperConfiguration.AssertConfigurationIsValid();
 
