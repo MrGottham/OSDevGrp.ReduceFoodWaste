@@ -1,5 +1,7 @@
-﻿using System.Security.Principal;
+﻿using System.Globalization;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 {
@@ -28,5 +30,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// <param name="identity">Identity which should be examined.</param>
         /// <returns>True when the household membner for the given identity has accepted the privacy policies otherwise false.</returns>
         Task<bool> HasHouseholdMemberAcceptedPrivacyPolicyAsync(IIdentity identity);
+
+        /// <summary>
+        /// Gets the privacy policies which should be accepted by a given identity.
+        /// </summary>
+        /// <param name="identity">Identity which should accept the privacy policies.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Privacy policies which should be accepted by a given identity.</returns>
+        Task<PrivacyPolicyModel> GetPrivacyPoliciesAsync(IIdentity identity, CultureInfo cultureInfo);
     }
 }

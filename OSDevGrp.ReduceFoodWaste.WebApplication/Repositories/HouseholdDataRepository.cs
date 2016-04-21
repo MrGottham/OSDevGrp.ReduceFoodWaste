@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.Caching;
 using System.Security.Principal;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 {
@@ -23,6 +28,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 
         private readonly ICredentialsProvider _credentialsProvider;
         private readonly IHouseholdDataConverter _householdDataConverter;
+        private readonly ObjectCache _objectCache = MemoryCache.Default; 
 
         #endregion
 
@@ -121,6 +127,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         }
 
         /// <summary>
+        /// Gets the privacy policies which should be accepted by a given identity.
+        /// </summary>
+        /// <param name="identity">Identity which should accept the privacy policies.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Privacy policies which should be accepted by a given identity.</returns>
+        public Task<PrivacyPolicyModel> GetPrivacyPoliciesAsync(IIdentity identity, CultureInfo cultureInfo)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException("cultureInfo");
+            }
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Encapsulate calls to a service method.
         /// </summary>
         /// <typeparam name="TResult">Type of the result the encapsulated call should produce.</typeparam>
@@ -198,6 +224,67 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     throw new ReduceFoodWasteRepositoryException(ex.Message, methodBase, ex);
                 }
             };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <param name="cultureInfo"></param>
+        /// <returns></returns>
+        private PrivacyPolicyModel GetPrivacyPolicies(HouseholdDataServiceChannel channel, CultureInfo cultureInfo)
+        {
+            if (channel == null)
+            {
+                throw new ArgumentNullException("channel");
+            }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException("cultureInfo");
+            }
+
+            var translationInfoIdentifier = GetTranslationInfoIdentifier(channel, cultureInfo);
+
+            var privacyPolicyCache = _objectCache.Get("PrivacyPolicyCache") as IDictionary<Guid, PrivacyPolicyModel>;
+            if (privacyPolicyCache == null)
+            {
+                
+            }
+        }
+
+        /// <summary>
+        /// Gets the identifier for the translation informations which should be used for translations.
+        /// </summary>
+        /// <param name="channel">Channel on which to get the supported translation informations.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Identifier for the translation informations which should be used for translations.</returns>
+        private Guid GetTranslationInfoIdentifier(HouseholdDataServiceChannel channel, CultureInfo cultureInfo)
+        {
+            if (channel == null)
+            {
+                throw new ArgumentNullException("channel");
+            }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException("cultureInfo");
+            }
+
+            var translationInfoIdentifierCache = _objectCache.Get("TranslationInfoIdentifierCache") as IDictionary<string, Guid>;
+            if (translationInfoIdentifierCache == null)
+            {
+                var query = new TranslationInfoCollectionGetQuery();
+                var result = channel.TranslationInfoGetAll(query);
+
+                translationInfoIdentifierCache = result.ToDictionary(m => m.CultureName, m => m.TranslationInfoIdentifier);
+
+                _objectCache.Set("TranslationInfoIdentifierCache", translationInfoIdentifierCache, new DateTimeOffset(DateTime.Now.AddHours(1)));
+            }
+
+            if (translationInfoIdentifierCache.ContainsKey(cultureInfo.Name))
+            {
+                return translationInfoIdentifierCache[cultureInfo.Name];
+            }
+            return translationInfoIdentifierCache.ContainsKey("en-US") ? translationInfoIdentifierCache["en-US"] : default(Guid);
         }
 
         /// <summary>

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Principal;
+using System.Threading;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -115,6 +117,40 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that GetPrivacyPoliciesAsync throws an ArgumentNullException when the identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatGetPrivacyPoliciesAsyncThrowsArgumentNullExceptionWhenIdentityIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.GetPrivacyPoliciesAsync(null, Thread.CurrentThread.CurrentUICulture));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that GetPrivacyPoliciesAsync throws an ArgumentNullException when the culture informations which should be used for translation is null.
+        /// </summary>
+        [Test]
+        public void TestThatGetPrivacyPoliciesAsyncThrowsArgumentNullExceptionWhenCultureInfoIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.GetPrivacyPoliciesAsync(MockRepository.GenerateMock<IIdentity>(), null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("cultureInfo"));
             Assert.That(exception.InnerException, Is.Null);
         }
 
