@@ -210,4 +210,10 @@
   <data name="Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>
+  <data name="Startup" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="TimeToCreateYourFirstHousehold" xml:space="preserve">
+    <value>Time to create your first household.</value>
+  </data>
 </root>

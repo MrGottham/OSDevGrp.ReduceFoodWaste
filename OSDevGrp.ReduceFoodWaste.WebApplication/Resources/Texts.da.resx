@@ -210,4 +210,10 @@
   <data name="Dashboard" xml:space="preserve">
     <value>Skrivebord</value>
   </data>
+  <data name="Startup" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="TimeToCreateYourFirstHousehold" xml:space="preserve">
+    <value>Det er tid til at oprette din første husholdning.</value>
+  </data>
 </root>

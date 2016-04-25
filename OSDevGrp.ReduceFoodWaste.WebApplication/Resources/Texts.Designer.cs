@@ -277,6 +277,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Startup.
+        /// </summary>
+        public static string Startup {
+            get {
+                return ResourceManager.GetString("Startup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to System critical error..
         /// </summary>
         public static string SystemException {
@@ -291,6 +300,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         public static string TheExternalLoginWasRemoved {
             get {
                 return ResourceManager.GetString("TheExternalLoginWasRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time to create your first household..
+        /// </summary>
+        public static string TimeToCreateYourFirstHousehold {
+            get {
+                return ResourceManager.GetString("TimeToCreateYourFirstHousehold", resourceCulture);
             }
         }
         
