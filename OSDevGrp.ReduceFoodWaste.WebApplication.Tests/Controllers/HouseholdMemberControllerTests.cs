@@ -1,9 +1,16 @@
 ﻿using System;
+using System.Globalization;
+using System.Security.Principal;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
+using Ploeh.AutoFixture;
 using Rhino.Mocks;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
@@ -15,7 +22,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
     {
         #region Private variables
 
-        private IHouseholdDataRepository _householdDataRepository;
+        private IHouseholdDataRepository _householdDataRepositoryMock;
 
         #endregion
 
@@ -25,7 +32,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [SetUp]
         public void TestInitialize()
         {
-            _householdDataRepository = MockRepository.GenerateMock<IHouseholdDataRepository>();
+            _householdDataRepositoryMock = MockRepository.GenerateMock<IHouseholdDataRepository>();
         }
 
         /// <summary>
@@ -34,7 +41,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorInitializeHouseholdMemberController()
         {
-            var householdMemberController = new HouseholdMemberController(_householdDataRepository);
+            var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock);
             Assert.That(householdMemberController, Is.Not.Null);
         }
 
@@ -53,15 +60,49 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Create throws NotImplementedException.
+        /// Tests that Create calls GetPrivacyPoliciesAsync on the repository which can access household data.
         /// </summary>
         [Test]
-        public void TestThatDashboardThrowsNotImplementedException()
+        public void TestThatCreateCallsGetPrivacyPoliciesAsyncOnHouseholdDataRepository()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            householdMemberController.Create();
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetPrivacyPoliciesAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that Create returns a ViewResult with a model for creating a new household member and the welcome message.
+        /// </summary>
+        [Test]
+        public void TestThatCreateReturnsViewResultWithModelForCreatingHouseholdMemberAndWelcomeMessage()
         {
             var householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            Assert.Throws<NotImplementedException>(() => householdMemberController.Create());
+            var result = householdMemberController.Create();
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("CreateHouseholdMember"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.TypeOf<HouseholdModel>());
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["Message"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["Message"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["Message"], Is.EqualTo(string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject)));
         }
 
         /// <summary>
@@ -82,7 +123,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <returns>Controller for a household member for unit testing.</returns>
         private HouseholdMemberController CreateHouseholdMemberController()
         {
-            var householdMemberController = new HouseholdMemberController(_householdDataRepository);
+            _householdDataRepositoryMock.Stub(m => m.GetPrivacyPoliciesAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
+                .Return(Task.Run(() => Fixture.Create<PrivacyPolicyModel>()))
+                .Repeat.Any();
+
+            var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock);
             householdMemberController.ControllerContext = ControllerTestHelper.CreateControllerContext(householdMemberController);
             return householdMemberController;
         }

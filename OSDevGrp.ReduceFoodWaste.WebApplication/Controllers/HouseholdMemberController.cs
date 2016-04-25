@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Threading;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
@@ -43,7 +46,23 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <returns>View for creating a new household member.</returns>
         public ActionResult Create()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var task = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
+                task.Wait();
+
+                var privacyPolicyModel = task.Result;
+                var householdModel = new HouseholdModel
+                {
+                    PrivacyPolicy = privacyPolicyModel
+                };
+
+                return View("CreateHouseholdMember", householdModel);
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.ToReduceFoodWasteException();
+            }
         }
 
         /// <summary>
