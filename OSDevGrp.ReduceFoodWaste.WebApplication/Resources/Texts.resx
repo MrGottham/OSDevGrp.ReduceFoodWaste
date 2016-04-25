@@ -216,4 +216,13 @@
   <data name="TimeToCreateYourFirstHousehold" xml:space="preserve">
     <value>Time to create your first household.</value>
   </data>
+  <data name="CreateHousehold" xml:space="preserve">
+    <value>Create a new household.</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
 </root>

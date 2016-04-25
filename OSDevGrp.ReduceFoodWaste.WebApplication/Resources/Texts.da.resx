@@ -216,4 +216,13 @@
   <data name="TimeToCreateYourFirstHousehold" xml:space="preserve">
     <value>Det er tid til at oprette din første husholdning.</value>
   </data>
+  <data name="CreateHousehold" xml:space="preserve">
+    <value>Opret en ny husholdning.</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Beskrivelse</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Navn</value>
+  </data>
 </root>

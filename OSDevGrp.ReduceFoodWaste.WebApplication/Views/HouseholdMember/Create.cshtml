@@ -12,3 +12,32 @@
         </div>
     </section>
 }
+
+<hgroup class="title">
+    <h1>@Texts.CreateHousehold</h1>
+</hgroup>
+@if (string.IsNullOrEmpty(@ViewBag.StatusMessage) == false)
+{
+    <p class="message-success">@ViewBag.StatusMessage</p>
+}
+@using (var form = @Html.BeginForm("Create", "HouseholdMember", Model, FormMethod.Post))
+{
+    <table>
+        <tbody>
+            <tr>
+                <td>@Texts.Name</td>
+                <td>@Html.TextBoxFor(m => m.Name)</td>
+            </tr>
+            <tr>
+                <td>@Texts.Description</td>
+                <td>@Html.TextAreaFor(m => m.Description)</td>
+            </tr>
+            <tr>
+                <td colspan="2"><h3>@Html.Raw(Model.PrivacyPolicy.Header)</h3></td>
+            </tr>
+            <tr>
+                <td colspan="2">@Html.Raw(@Model.PrivacyPolicy.Body)</td>
+            </tr>
+        </tbody>
+    </table>
+}
