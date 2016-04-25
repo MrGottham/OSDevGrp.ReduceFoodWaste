@@ -57,7 +57,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     PrivacyPolicy = privacyPolicyModel
                 };
 
-                return View("CreateHouseholdMember", householdModel);
+                return View("Create", householdModel);
             }
             catch (AggregateException ex)
             {

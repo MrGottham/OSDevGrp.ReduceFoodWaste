@@ -8,7 +8,6 @@ using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Ploeh.AutoFixture;
 using Rhino.Mocks;
@@ -79,12 +78,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Create returns a ViewResult with a model for creating a new household member and the welcome message.
+        /// Tests that Create returns a ViewResult with a model for creating a new household member.
         /// </summary>
         [Test]
-        public void TestThatCreateReturnsViewResultWithModelForCreatingHouseholdMemberAndWelcomeMessage()
+        public void TestThatCreateReturnsViewResultWithModelForCreatingHouseholdMember()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            var privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
+
+            var householdMemberController = CreateHouseholdMemberController(privacyPolicyModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
             var result = householdMemberController.Create();
@@ -95,14 +96,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
-            Assert.That(viewResult.ViewName, Is.EqualTo("CreateHouseholdMember"));
+            Assert.That(viewResult.ViewName, Is.EqualTo("Create"));
             Assert.That(viewResult.Model, Is.Not.Null);
             Assert.That(viewResult.Model, Is.TypeOf<HouseholdModel>());
             Assert.That(viewResult.ViewData, Is.Not.Null);
-            Assert.That(viewResult.ViewData, Is.Not.Empty);
-            Assert.That(viewResult.ViewData["Message"], Is.Not.Null);
-            Assert.That(viewResult.ViewData["Message"], Is.Not.Empty);
-            Assert.That(viewResult.ViewData["Message"], Is.EqualTo(string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject)));
+            Assert.That(viewResult.ViewData, Is.Empty);
+
+            var model = (HouseholdModel) viewResult.Model;
+            Assert.That(model, Is.Not.Null);
+            Assert.That(model.Identifier, Is.EqualTo(default(Guid)));
+            Assert.That(model.Name, Is.Null);
+            Assert.That(model.Description, Is.Null);
+            Assert.That(model.PrivacyPolicy, Is.Not.Null);
+            Assert.That(model.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
         }
 
         /// <summary>
@@ -120,11 +126,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <summary>
         /// Creates a controller for a household member for unit testing.
         /// </summary>
+        /// <param name="privacyPolicyModel">Sets the privacy policy model which should be used by the controller.</param>
         /// <returns>Controller for a household member for unit testing.</returns>
-        private HouseholdMemberController CreateHouseholdMemberController()
+        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null)
         {
             _householdDataRepositoryMock.Stub(m => m.GetPrivacyPoliciesAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
-                .Return(Task.Run(() => Fixture.Create<PrivacyPolicyModel>()))
+                .Return(Task.Run(() => privacyPolicyModel ?? Fixture.Create<PrivacyPolicyModel>()))
                 .Repeat.Any();
 
             var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock);
