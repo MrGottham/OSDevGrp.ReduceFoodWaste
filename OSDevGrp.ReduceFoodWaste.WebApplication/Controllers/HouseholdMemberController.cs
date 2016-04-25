@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 {
@@ -11,6 +12,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
     [IsAuthenticated]
     public class HouseholdMemberController : Controller
     {
+        #region Private variables
+
+        private readonly IHouseholdDataRepository _householdDataRepository;
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Creates a controller for a household member.
+        /// </summary>
+        /// <param name="householdDataRepository">Implementation of the repository which can access household data.</param>
+        public HouseholdMemberController(IHouseholdDataRepository householdDataRepository)
+        {
+            if (householdDataRepository == null)
+            {
+                throw new ArgumentNullException("householdDataRepository");
+            }
+            _householdDataRepository = householdDataRepository;
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
