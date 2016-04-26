@@ -76,6 +76,30 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         }
 
         /// <summary>
+        /// Creates a new household member.
+        /// </summary>
+        /// <param name="householdModel">Model for the household members first household.</param>
+        /// <returns>View for the next step.</returns>
+        [HttpPost]
+        public ActionResult Create(HouseholdModel householdModel)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (AggregateException ex)
+            {
+                ViewBag.StatusMessage = ex.ToReduceFoodWasteException().Message;
+                return View(householdModel);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.StatusMessage = ex.Message;
+                return View(householdModel);
+            }
+        }
+
+        /// <summary>
         /// Prepares a household member.
         /// </summary>
         /// <returns>View for preparing a household member.</returns>

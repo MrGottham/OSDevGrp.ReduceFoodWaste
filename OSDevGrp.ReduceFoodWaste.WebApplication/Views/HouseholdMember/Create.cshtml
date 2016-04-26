@@ -20,7 +20,7 @@
 {
     <p class="message-success">@ViewBag.StatusMessage</p>
 }
-@using (var form = @Html.BeginForm("Create", "HouseholdMember", Model, FormMethod.Post))
+@using (@Html.BeginForm("Create", "HouseholdMember", Model, FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     <table>
@@ -40,7 +40,7 @@
                 </tr>
             }
             <tr>
-                <td colspan="2" style="text-align: right"><input name="submit" value="Create" title="XYZ"/></td>
+                <td colspan="2" style="text-align: right"><input type="submit" value="XYZ" title="XYZ"/></td>
             </tr>
         </tbody>
     </table>

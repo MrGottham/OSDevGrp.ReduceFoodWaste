@@ -76,10 +76,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Create calls GetPrivacyPoliciesAsync on the repository which can access household data.
+        /// Tests that Create without a model calls GetPrivacyPoliciesAsync on the repository which can access household data.
         /// </summary>
         [Test]
-        public void TestThatCreateCallsGetPrivacyPoliciesAsyncOnHouseholdDataRepository()
+        public void TestThatCreateWithoutModelCallsGetPrivacyPoliciesAsyncOnHouseholdDataRepository()
         {
             var householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
@@ -95,10 +95,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Create calls IsPrivacyPoliciesAccepted on the provider which can get values from claims.
+        /// Tests that Create without a model calls IsPrivacyPoliciesAccepted on the provider which can get values from claims.
         /// </summary>
         [Test]
-        public void TestThatCreateCallsIsPrivacyPoliciesAcceptedOnClaimValueProvider()
+        public void TestThatCreateWithoutModelCallsIsPrivacyPoliciesAcceptedOnClaimValueProvider()
         {
             var householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
@@ -114,12 +114,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Create returns a ViewResult with a model for creating a new household member.
+        /// Tests that Create without a model returns a ViewResult with a model for creating a new household member.
         /// </summary>
         [Test]
         [TestCase(true)]
         [TestCase(false)]
-        public void TestThatCreateReturnsViewResultWithModelForCreatingHouseholdMember(bool isPrivacyPoliciesAccepted)
+        public void TestThatCreateWithoutModelReturnsViewResultWithModelForCreatingHouseholdMember(bool isPrivacyPoliciesAccepted)
         {
             var privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
 
