@@ -20,7 +20,11 @@
     };
 
     function insertProgressHtmlOnPageAndShow() {
-        var overlayElement = $("<div id='loadProgressOuterContainer'><div class='loadProgressOverlay'></div><div class='progressVerticalCentering'><div class='progressHorizontalCentering'><h2>Vent venligst, mens data hentes...</h2><br/><br/><img id='progressSpinner' src='../Images/ajax-loader_bigspinner_green.gif'/></div></div></div>");
+        var message = "Please wait while data is being loaded...";
+        if (/da|da-dk/g.test(window.navigator.userLanguage.toLowerCase())) {
+            message = "Vent venligst, mens data hentes...";
+        }
+        var overlayElement = $("<div id='loadProgressOuterContainer'><div class='loadProgressOverlay'></div><div class='progressVerticalCentering'><div class='progressHorizontalCentering'><h2>" + message + "</h2><br/><br/><img id='progressSpinner' src='../Images/ajax-loader_bigspinner_green.gif'/></div></div></div>");
         $('body').append(overlayElement);
     }
 

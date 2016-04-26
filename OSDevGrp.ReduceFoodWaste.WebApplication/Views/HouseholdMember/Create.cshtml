@@ -22,15 +22,16 @@
 }
 @using (var form = @Html.BeginForm("Create", "HouseholdMember", Model, FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
     <table>
         <tbody>
             <tr>
                 <td>@Texts.Name</td>
-                <td>@Html.TextBoxFor(m => m.Name)</td>
+                <td>@Html.TextBoxFor(m => m.Name) @Html.ValidationMessageFor(m => m.Name)</td>
             </tr>
             <tr>
                 <td>@Texts.Description</td>
-                <td>@Html.TextAreaFor(m => m.Description)</td>
+                <td>@Html.TextAreaFor(m => m.Description) @Html.ValidationMessageFor(m => m.Description)</td>
             </tr>
             @if (Model.PrivacyPolicy != null && Model.PrivacyPolicy.IsAccepted == false)
             {
@@ -38,6 +39,9 @@
                     <td colspan="2">@Html.Partial("_PrivacyPolicies", Model.PrivacyPolicy)</td>
                 </tr>
             }
+            <tr>
+                <td colspan="2" style="text-align: right"><input name="submit" value="Create" title="XYZ"/></td>
+            </tr>
         </tbody>
     </table>
 }

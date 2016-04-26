@@ -12,7 +12,7 @@
                 <td>@Html.Raw(Model.Body)</td>
             </tr>
             <tr>
-                <td>@Html.CheckBoxFor(m => m.IsAccepted) @Texts.AcceptTermsAndPrivacyPolicy</td>
+                <td>@Html.CheckBoxFor(m => m.IsAccepted) @Texts.AcceptTermsAndPrivacyPolicy @Html.ValidationMessageFor(m => m.IsAccepted)</td>
             </tr>
         }
     </tbody>

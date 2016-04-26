@@ -56,5 +56,17 @@
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/progress.overlay")
         @RenderSection("scripts", required: false)
+        
+        <script language="javascript">
+            $().ready(function() {
+                $("a").click(function () {
+                    if ($(this).attr("href") != null && $(this).attr("href") != '') {
+                        if ($(this).attr("progressOverlay") != 'false') {
+                            $().progressOverlay("show");
+                        }
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
