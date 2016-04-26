@@ -225,4 +225,7 @@
   <data name="Name" xml:space="preserve">
     <value>Navn</value>
   </data>
+  <data name="AcceptTermsAndPrivacyPolicy" xml:space="preserve">
+    <value>Jeg accepterer betingelserne og fortrolighedspolitikker.</value>
+  </data>
 </root>

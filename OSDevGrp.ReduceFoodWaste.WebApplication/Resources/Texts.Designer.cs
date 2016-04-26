@@ -61,6 +61,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I accept the terms and privacy policy..
+        /// </summary>
+        public static string AcceptTermsAndPrivacyPolicy {
+            get {
+                return ResourceManager.GetString("AcceptTermsAndPrivacyPolicy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account.
         /// </summary>
         public static string Account {
