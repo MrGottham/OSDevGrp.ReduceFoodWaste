@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -22,6 +23,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         #region Private variables
 
         private IHouseholdDataRepository _householdDataRepositoryMock;
+        private IClaimValueProvider _claimValueProviderMock;
 
         #endregion
 
@@ -32,6 +34,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         public void TestInitialize()
         {
             _householdDataRepositoryMock = MockRepository.GenerateMock<IHouseholdDataRepository>();
+            _claimValueProviderMock = MockRepository.GenerateMock<IClaimValueProvider>();
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorInitializeHouseholdMemberController()
         {
-            var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock);
+            var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock);
             Assert.That(householdMemberController, Is.Not.Null);
         }
 
@@ -50,11 +53,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenHouseholdDataRepositoryIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdMemberController(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdMemberController(null, _claimValueProviderMock));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("householdDataRepository"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that the constructor throws an ArgumentNullException when the provider which can get values from claims is null.
+        /// </summary>
+        [Test]
+        public void TestThatConstructorThrowsArgumentNullExceptionWhenClaimValueProviderIsNull()
+        {
+            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdMemberController(_householdDataRepositoryMock, null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("claimValueProvider"));
             Assert.That(exception.InnerException, Is.Null);
         }
 
@@ -78,14 +95,35 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Create calls IsPrivacyPoliciesAccepted on the provider which can get values from claims.
+        /// </summary>
+        [Test]
+        public void TestThatCreateCallsIsPrivacyPoliciesAcceptedOnClaimValueProvider()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            householdMemberController.Create();
+
+            _claimValueProviderMock.AssertWasCalled(m => m.IsPrivacyPoliciesAccepted(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity)));
+        }
+
+        /// <summary>
         /// Tests that Create returns a ViewResult with a model for creating a new household member.
         /// </summary>
         [Test]
-        public void TestThatCreateReturnsViewResultWithModelForCreatingHouseholdMember()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestThatCreateReturnsViewResultWithModelForCreatingHouseholdMember(bool isPrivacyPoliciesAccepted)
         {
             var privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
 
-            var householdMemberController = CreateHouseholdMemberController(privacyPolicyModel);
+            var householdMemberController = CreateHouseholdMemberController(privacyPolicyModel, isPrivacyPoliciesAccepted);
             Assert.That(householdMemberController, Is.Not.Null);
 
             var result = householdMemberController.Create();
@@ -109,6 +147,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(model.Description, Is.Null);
             Assert.That(model.PrivacyPolicy, Is.Not.Null);
             Assert.That(model.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
+            Assert.That(model.PrivacyPolicy.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
         }
 
         /// <summary>
@@ -127,14 +166,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// Creates a controller for a household member for unit testing.
         /// </summary>
         /// <param name="privacyPolicyModel">Sets the privacy policy model which should be used by the controller.</param>
+        /// <param name="isPrivacyPoliciesAccepted">Sets whether the privacy policies has been accepted.</param>
         /// <returns>Controller for a household member for unit testing.</returns>
-        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null)
+        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isPrivacyPoliciesAccepted = false)
         {
             _householdDataRepositoryMock.Stub(m => m.GetPrivacyPoliciesAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => privacyPolicyModel ?? Fixture.Create<PrivacyPolicyModel>()))
                 .Repeat.Any();
 
-            var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock);
+            _claimValueProviderMock.Stub(m => m.IsPrivacyPoliciesAccepted(Arg<IIdentity>.Is.Anything))
+                .Return(isPrivacyPoliciesAccepted)
+                .Repeat.Any();
+
+            var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock);
             householdMemberController.ControllerContext = ControllerTestHelper.CreateControllerContext(householdMemberController);
             return householdMemberController;
         }
