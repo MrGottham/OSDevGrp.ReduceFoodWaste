@@ -20,9 +20,10 @@
 {
     <p class="message-success">@ViewBag.StatusMessage</p>
 }
-@using (@Html.BeginForm("Create", "HouseholdMember", Model, FormMethod.Post))
+@using (@Html.BeginForm("Create", "HouseholdMember", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Identifier)
     <table>
         <tbody>
             <tr>
@@ -37,6 +38,9 @@
             {
                 <tr>
                     <td colspan="2">@Html.Partial("_PrivacyPolicies", Model.PrivacyPolicy)</td>
+                </tr>
+                <tr>
+                    <td>@Html.CheckBoxFor(m => m.PrivacyPolicy.IsAccepted) @Texts.AcceptTermsAndPrivacyPolicy @Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)</td>
                 </tr>
             }
             <tr>

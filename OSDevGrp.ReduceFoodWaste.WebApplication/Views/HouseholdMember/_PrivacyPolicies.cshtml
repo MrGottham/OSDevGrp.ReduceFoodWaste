@@ -1,5 +1,4 @@
-﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
-@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.PrivacyPolicyModel
+﻿@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.PrivacyPolicyModel
 
 <table>
     <tbody>
@@ -10,9 +9,6 @@
             </tr>
             <tr>
                 <td>@Html.Raw(Model.Body)</td>
-            </tr>
-            <tr>
-                <td>@Html.CheckBoxFor(m => m.IsAccepted) @Texts.AcceptTermsAndPrivacyPolicy @Html.ValidationMessageFor(m => m.IsAccepted)</td>
             </tr>
         }
     </tbody>

@@ -81,8 +81,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <param name="householdModel">Model for the household members first household.</param>
         /// <returns>View for the next step.</returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(HouseholdModel householdModel)
         {
+            if (householdModel == null)
+            {
+                throw new ArgumentNullException("householdModel");
+            }
             try
             {
                 throw new NotImplementedException();
