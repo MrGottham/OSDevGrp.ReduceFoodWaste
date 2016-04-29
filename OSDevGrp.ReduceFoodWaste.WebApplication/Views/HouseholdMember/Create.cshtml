@@ -34,7 +34,7 @@
                 <td>@Texts.Description</td>
                 <td>@Html.TextAreaFor(m => m.Description) @Html.ValidationMessageFor(m => m.Description)</td>
             </tr>
-            @if (Model.PrivacyPolicy != null && Model.PrivacyPolicy.IsAccepted == false)
+            @if (Model.PrivacyPolicy != null)
             {
                 <tr>
                     <td colspan="2">@Html.Partial("_PrivacyPolicies", Model.PrivacyPolicy)</td>

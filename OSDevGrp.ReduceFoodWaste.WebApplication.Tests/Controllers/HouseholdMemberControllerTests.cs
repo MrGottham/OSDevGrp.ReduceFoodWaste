@@ -242,6 +242,49 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Create with an ivalid model returns a ViewResult with a model for creating a new household member.
+        /// </summary>
+        [Test]
+        public void TestThatCreateWithInvalidModelReturnsViewResultWithModelForCreatingHouseholdMember()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.Identifier, Guid.NewGuid())
+                .With(m => m.Header, Fixture.Create<string>())
+                .With(m => m.Body, Fixture.Create<string>())
+                .With(m => m.IsAccepted, true)
+                .Create();
+                
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.Name, null)
+                .With(m => m.Description, Fixture.Create<string>())
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .Create();
+
+            var result = householdMemberController.Create(householdModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("Create"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(householdModel));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Empty);
+
+            var model = (HouseholdModel) viewResult.Model;
+            Assert.That(model.PrivacyPolicy, Is.Not.Null);
+            Assert.That(model.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
+            Assert.That(model.PrivacyPolicy.IsAccepted, Is.False);
+        }
+
+        /// <summary>
         /// Tests that Prepare throws NotImplementedException.
         /// </summary>
         [Test]

@@ -105,6 +105,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     householdModel.PrivacyPolicy.Body = reloadedPrivacyPolicyModel.Body;
                 }
 
+                if (ModelState.IsValid == false)
+                {
+                    return View(householdModel);
+                }
+
                 return null;
             }
             catch (AggregateException ex)
