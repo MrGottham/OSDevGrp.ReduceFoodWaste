@@ -90,7 +90,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
             try
             {
-                throw new NotImplementedException();
+                var privacyPolicyGetTask = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
+                privacyPolicyGetTask.Wait();
+
+                var reloadedPrivacyPolicyModel = privacyPolicyGetTask.Result;
+                if (householdModel.PrivacyPolicy == null)
+                {
+                    householdModel.PrivacyPolicy = reloadedPrivacyPolicyModel;
+                }
+                else
+                {
+                    householdModel.PrivacyPolicy.Identifier = reloadedPrivacyPolicyModel.Identifier;
+                    householdModel.PrivacyPolicy.Header = reloadedPrivacyPolicyModel.Header;
+                    householdModel.PrivacyPolicy.Body = reloadedPrivacyPolicyModel.Body;
+                }
+
+                return null;
             }
             catch (AggregateException ex)
             {
