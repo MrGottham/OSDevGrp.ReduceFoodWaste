@@ -97,6 +97,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 if (householdModel.PrivacyPolicy == null)
                 {
                     householdModel.PrivacyPolicy = reloadedPrivacyPolicyModel;
+                    householdModel.PrivacyPolicy.IsAccepted = false;
                 }
                 else
                 {
