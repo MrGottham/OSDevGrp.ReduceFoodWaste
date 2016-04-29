@@ -204,14 +204,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// Tests that Create with a model updates Identifier, Header and Body in the privacy policy model with values from the reloaded privacy policy model.
         /// </summary>
         [Test]
-        public void TestThatCreateWithModelUpdatesValuesInPrivacyPolicyModelWithValuesFromReloadedPrivacyPolicyModel()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestThatCreateWithModelUpdatesValuesInPrivacyPolicyModelWithValuesFromReloadedPrivacyPolicyModel(bool isPrivacyPoliciesAccepted)
         {
             var reloadedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.Identifier, Guid.NewGuid())
                 .With(m => m.Header, Fixture.Create<string>())
                 .With(m => m.Body, Fixture.Create<string>())
-                .With(m => m.IsAccepted, true)
                 .Create();
+            Assert.That(reloadedPrivacyPolicyModel, Is.Not.Null);
+            Assert.That(reloadedPrivacyPolicyModel.Identifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(reloadedPrivacyPolicyModel.Header, Is.Not.Null);
+            Assert.That(reloadedPrivacyPolicyModel.Header, Is.Not.Empty);
+            Assert.That(reloadedPrivacyPolicyModel.Body, Is.Not.Null);
+            Assert.That(reloadedPrivacyPolicyModel.Body, Is.Not.Empty);
 
             var householdMemberController = CreateHouseholdMemberController(privacyPolicyModel: reloadedPrivacyPolicyModel);
             Assert.That(householdMemberController, Is.Not.Null);
@@ -220,15 +227,23 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Identifier, Guid.NewGuid())
                 .With(m => m.Header, null)
                 .With(m => m.Body, null)
-                .With(m => m.IsAccepted, true)
+                .With(m => m.IsAccepted, isPrivacyPoliciesAccepted)
                 .Create();
+            Assert.That(privacyPolicyModel, Is.Not.Null);
+            Assert.That(privacyPolicyModel.Identifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(privacyPolicyModel.Identifier, Is.Not.EqualTo(reloadedPrivacyPolicyModel.Identifier));
+            Assert.That(privacyPolicyModel.Header, Is.Null);
+            Assert.That(privacyPolicyModel.Body, Is.Null);
+            Assert.That(privacyPolicyModel.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.Identifier, default(Guid))
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Description, Fixture.Create<string>())
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .Create();
+            Assert.That(householdModel, Is.Not.Null);
+            Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
+            Assert.That(householdModel.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
 
             householdMemberController.Create(householdModel);
 
@@ -239,30 +254,33 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.Body, Is.Not.Null);
             Assert.That(privacyPolicyModel.Body, Is.Not.Empty);
             Assert.That(privacyPolicyModel.Body, Is.EqualTo(reloadedPrivacyPolicyModel.Body));
+            Assert.That(privacyPolicyModel.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
         }
 
         /// <summary>
         /// Tests that Create with an ivalid model returns a ViewResult with a model for creating a new household member.
         /// </summary>
         [Test]
-        public void TestThatCreateWithInvalidModelReturnsViewResultWithModelForCreatingHouseholdMember()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestThatCreateWithInvalidModelReturnsViewResultWithModelForCreatingHouseholdMember(bool isPrivacyPoliciesAccepted)
         {
             var householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.ModelState, Is.Not.Null);
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
-                .With(m => m.Identifier, Guid.NewGuid())
-                .With(m => m.Header, Fixture.Create<string>())
-                .With(m => m.Body, Fixture.Create<string>())
-                .With(m => m.IsAccepted, true)
+                .With(m => m.IsAccepted, isPrivacyPoliciesAccepted)
                 .Create();
                 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.Identifier, default(Guid))
                 .With(m => m.Name, null)
-                .With(m => m.Description, Fixture.Create<string>())
+                .With(m => m.Description, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .Create();
+
+            householdMemberController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
+            Assert.That(householdMemberController.ModelState.IsValid, Is.False);
 
             var result = householdMemberController.Create(householdModel);
             Assert.That(result, Is.Not.Null);

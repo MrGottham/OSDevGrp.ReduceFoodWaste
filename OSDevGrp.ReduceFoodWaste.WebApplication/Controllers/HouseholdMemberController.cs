@@ -107,7 +107,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
                 if (ModelState.IsValid == false)
                 {
-                    return View(householdModel);
+                    householdModel.PrivacyPolicy.IsAccepted = false;
+                    return View("Create", householdModel);
                 }
 
                 return null;
@@ -115,12 +116,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             catch (AggregateException ex)
             {
                 ViewBag.StatusMessage = ex.ToReduceFoodWasteException().Message;
-                return View(householdModel);
+                return View("Create", householdModel);
             }
             catch (Exception ex)
             {
                 ViewBag.StatusMessage = ex.Message;
-                return View(householdModel);
+                return View("Create", householdModel);
             }
         }
 
