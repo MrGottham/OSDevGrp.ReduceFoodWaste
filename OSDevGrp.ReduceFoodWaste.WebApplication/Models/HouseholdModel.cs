@@ -19,13 +19,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// Gets or sets the name for the household.
         /// </summary>
         [Required]
-        [Range(1, 64)]
+        [MaxLength(64)]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description for the household.
         /// </summary>
-        [Range(0, 2048)]
+        [MaxLength(2048)]
         public string Description { get; set; }
 
         /// <summary>

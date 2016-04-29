@@ -237,8 +237,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.Name, Fixture.Create<string>())
-                .With(m => m.Description, Fixture.Create<string>())
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
@@ -274,8 +272,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Create();
                 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.Name, null)
-                .With(m => m.Description, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .Create();
 
