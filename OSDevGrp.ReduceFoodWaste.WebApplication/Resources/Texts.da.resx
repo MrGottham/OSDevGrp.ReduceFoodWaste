@@ -228,4 +228,10 @@
   <data name="AcceptTermsAndPrivacyPolicy" xml:space="preserve">
     <value>Jeg accepterer betingelserne og fortrolighedspolitikker.</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>Næste</value>
+  </data>
+  <data name="ValueIsRequired" xml:space="preserve">
+    <value>Der skal angives en værdi til denne.</value>
+  </data>
 </root>

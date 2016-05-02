@@ -259,6 +259,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        public static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please log in to start using {0}..
         /// </summary>
         public static string PleaseLogIn {
@@ -372,6 +381,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         public static string UnsuccessfulLoginWithService {
             get {
                 return ResourceManager.GetString("UnsuccessfulLoginWithService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A value is required for this field..
+        /// </summary>
+        public static string ValueIsRequired {
+            get {
+                return ResourceManager.GetString("ValueIsRequired", resourceCulture);
             }
         }
         
