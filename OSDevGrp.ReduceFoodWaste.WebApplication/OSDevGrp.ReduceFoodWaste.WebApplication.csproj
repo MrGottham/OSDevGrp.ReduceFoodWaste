@@ -228,6 +228,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AdapterConfig.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -291,6 +292,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Validations\RequiredLocalizedAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\progress.overlay.css" />

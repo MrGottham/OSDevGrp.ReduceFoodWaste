@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Validations;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
 {
@@ -19,7 +19,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// <summary>
         /// Gets or sets the name for the household.
         /// </summary>
-        [Required(ErrorMessageResourceType = typeof(Texts), ErrorMessageResourceName = "ValueIsRequired")]
+        [RequiredLocalized]
         [MaxLength(64)]
         public string Name { get; set; }
 

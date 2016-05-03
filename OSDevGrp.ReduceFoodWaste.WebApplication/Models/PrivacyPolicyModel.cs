@@ -1,6 +1,5 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Validations;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
 {
@@ -29,7 +28,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// <summary>
         /// Gets or sets whether the privacy policies has been accepted.
         /// </summary>
-        [Required(ErrorMessageResourceType = typeof(Texts), ErrorMessageResourceName = "ValueIsRequired")]
+        [RequiredLocalized]
         public bool IsAccepted { get; set; }
 
         #endregion
