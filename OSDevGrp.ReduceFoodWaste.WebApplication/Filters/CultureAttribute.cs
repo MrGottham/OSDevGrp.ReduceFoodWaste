@@ -65,7 +65,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
             httpResponse.Cookies.Add(cookie);
         }
 
-        private static string GetSavedCultureOrDefault(HttpRequestBase httpRequest)
+        internal static string GetSavedCultureOrDefault(HttpRequestBase httpRequest)
         {
             if (httpRequest == null)
             {
@@ -83,7 +83,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
             }
         }
 
-        private static void SetCultureOnThread(string cultureName)
+        internal static void SetCultureOnThread(string cultureName)
         {
             if (string.IsNullOrWhiteSpace(cultureName))
             {
