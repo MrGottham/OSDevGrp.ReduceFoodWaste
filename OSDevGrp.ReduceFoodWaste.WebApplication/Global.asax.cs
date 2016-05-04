@@ -14,9 +14,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
         {
             AreaRegistration.RegisterAllAreas();
 
+            AdapterConfig.RegisterAdapters();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            AdapterConfig.RegisterAdapters();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();

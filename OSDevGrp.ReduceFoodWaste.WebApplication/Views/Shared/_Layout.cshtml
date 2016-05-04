@@ -1,5 +1,4 @@
-﻿@using System
-@using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication
 @using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 <!DOCTYPE html>
 <html lang="en">
@@ -57,11 +56,11 @@
         @Scripts.Render("~/bundles/progress.overlay")
         @RenderSection("scripts", required: false)
         
-        <script language="javascript">
+        <script>
             $().ready(function() {
                 $("a").click(function () {
-                    if ($(this).attr("href") != null && $(this).attr("href") != '') {
-                        if ($(this).attr("progressOverlay") != 'false') {
+                    if ($(this).attr("href") != null && $(this).attr("href") !== '') {
+                        if ($(this).attr("progressOverlay") !== 'false') {
                             $().progressOverlay("show");
                         }
                     }

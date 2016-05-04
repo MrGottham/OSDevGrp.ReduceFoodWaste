@@ -1,7 +1,7 @@
 ﻿(function($) {
     var methods = {
         show: function() {
-            $("#loadProgressOuterContainer").fadeIn('fast');
+            $("#loadProgressOuterContainer").fadeIn("fast");
 
             // Need to perform a 'fake' setTimeout here to force the browser to process everything after we have showed the elements.
             setTimeout(function() {
@@ -15,17 +15,20 @@
         },
 
         hide: function() {
-            $("#loadProgressOuterContainer").fadeOut('fast');
+            $("#loadProgressOuterContainer").fadeOut("fast");
         }
     };
 
     function insertProgressHtmlOnPageAndShow() {
+        var lang = window.navigator.userLanguage || window.navigator.language;
+
         var message = "Please wait while data is being loaded...";
-        if (/da|da-dk/g.test(window.navigator.userLanguage.toLowerCase())) {
+        if (/da/g.test(lang)) {
             message = "Vent venligst, mens data hentes...";
         }
+
         var overlayElement = $("<div id='loadProgressOuterContainer'><div class='loadProgressOverlay'></div><div class='progressVerticalCentering'><div class='progressHorizontalCentering'><h2>" + message + "</h2><br/><br/><img id='progressSpinner' src='../Images/ajax-loader_bigspinner_green.gif'/></div></div></div>");
-        $('body').append(overlayElement);
+        $("body").append(overlayElement);
     }
 
     $().ready(function() {
