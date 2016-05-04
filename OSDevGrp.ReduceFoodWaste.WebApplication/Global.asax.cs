@@ -14,11 +14,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
         {
             AreaRegistration.RegisterAllAreas();
 
-            AdapterConfig.RegisterAdapters();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            AdapterConfig.RegisterAdapters();
             AuthConfig.RegisterAuth();
         }
 
