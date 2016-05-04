@@ -234,4 +234,7 @@
   <data name="ValueIsRequired" xml:space="preserve">
     <value>Der skal angives en værdi til denne.</value>
   </data>
+  <data name="ExceedsMaximumLength" xml:space="preserve">
+    <value>Værdien til denne overstiger den maksimale længe på {1} tegn.</value>
+  </data>
 </root>

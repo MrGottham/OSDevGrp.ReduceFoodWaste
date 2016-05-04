@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Validations;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
@@ -20,13 +19,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// Gets or sets the name for the household.
         /// </summary>
         [RequiredLocalized]
-        [MaxLength(64)]
+        [MaxLengthLocalized(64)]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description for the household.
         /// </summary>
-        [MaxLength(2048)]
+        [MaxLengthLocalized(2048)]
         public string Description { get; set; }
 
         /// <summary>

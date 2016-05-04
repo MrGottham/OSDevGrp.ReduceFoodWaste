@@ -234,4 +234,7 @@
   <data name="ValueIsRequired" xml:space="preserve">
     <value>A value is required for this field.</value>
   </data>
+  <data name="ExceedsMaximumLength" xml:space="preserve">
+    <value>The value exceeds the maximum length of {1} characters.</value>
+  </data>
 </root>

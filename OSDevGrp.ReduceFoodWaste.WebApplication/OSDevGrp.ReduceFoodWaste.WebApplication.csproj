@@ -292,6 +292,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Validations\MaxLengthLocalizedAttribute.cs" />
     <Compile Include="Validations\RequiredLocalizedAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

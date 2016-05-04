@@ -169,6 +169,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value exceeds the maximum length of {1} characters..
+        /// </summary>
+        public static string ExceedsMaximumLength {
+            get {
+                return ResourceManager.GetString("ExceedsMaximumLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hello.
         /// </summary>
         public static string Hello {
