@@ -103,7 +103,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
             return new ClaimsIdentity(claimCollection);
         }
 
-        public static HttpCookie ToAuthenticationTicket(this IEnumerable<Claim> claimCollection, string mailAddress)
+        public static HttpCookie ToAuthenticationTicket(this IEnumerable<Claim> claimCollection, string mailAddress, int version = 1)
         {
             if (claimCollection == null)
             {
@@ -117,7 +117,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
             var userdata = Protect(Compress(Serialize(claimCollection)), mailAddress);
 
             var timeOut = FormsAuthentication.Timeout;
-            var formsAuthenticationTicket = new FormsAuthenticationTicket(1, mailAddress, DateTime.Now, DateTime.Now.Add(timeOut), false, userdata);
+            var formsAuthenticationTicket = new FormsAuthenticationTicket(version, mailAddress, DateTime.Now, DateTime.Now.Add(timeOut), false, userdata);
 
             return new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(formsAuthenticationTicket));
         }

@@ -24,6 +24,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
         private IHouseholdDataRepository _householdDataRepositoryMock;
         private IClaimValueProvider _claimValueProviderMock;
+        private ILocalClaimProvider _localClaimProviderMock;
 
         #endregion
 
@@ -35,6 +36,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             _householdDataRepositoryMock = MockRepository.GenerateMock<IHouseholdDataRepository>();
             _claimValueProviderMock = MockRepository.GenerateMock<IClaimValueProvider>();
+            _localClaimProviderMock = MockRepository.GenerateMock<ILocalClaimProvider>();
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorInitializeHouseholdMemberController()
         {
-            var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock);
+            var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock);
             Assert.That(householdMemberController, Is.Not.Null);
         }
 
@@ -53,7 +55,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenHouseholdDataRepositoryIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdMemberController(null, _claimValueProviderMock));
+            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdMemberController(null, _claimValueProviderMock, _localClaimProviderMock));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -67,11 +69,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenClaimValueProviderIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdMemberController(_householdDataRepositoryMock, null));
+            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdMemberController(_householdDataRepositoryMock, null, _localClaimProviderMock));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("claimValueProvider"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that the constructor throws an ArgumentNullException when the provider which can append local claims to a claims identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatConstructorThrowsArgumentNullExceptionWhenLocalClaimProviderIsNull()
+        {
+            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("localClaimProvider"));
             Assert.That(exception.InnerException, Is.Null);
         }
 
@@ -326,7 +342,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(isPrivacyPoliciesAccepted)
                 .Repeat.Any();
 
-            var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock);
+            var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock);
             householdMemberController.ControllerContext = ControllerTestHelper.CreateControllerContext(householdMemberController);
             return householdMemberController;
         }

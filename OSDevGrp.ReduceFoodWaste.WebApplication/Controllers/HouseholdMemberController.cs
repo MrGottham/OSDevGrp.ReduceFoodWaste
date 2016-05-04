@@ -20,6 +20,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
         private readonly IHouseholdDataRepository _householdDataRepository;
         private readonly IClaimValueProvider _claimValueProvider;
+        private readonly ILocalClaimProvider _localClaimProvider;
 
         #endregion
 
@@ -29,8 +30,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// Creates a controller for a household member.
         /// </summary>
         /// <param name="householdDataRepository">Implementation of a repository which can access household data.</param>
-        /// <param name="claimValueProvider">Implementaton of a provider which can get values from claims.</param>
-        public HouseholdMemberController(IHouseholdDataRepository householdDataRepository, IClaimValueProvider claimValueProvider)
+        /// <param name="claimValueProvider">Implementation of a provider which can get values from claims.</param>
+        /// <param name="localClaimProvider">Implementation of a provider which can append local claims to a claims identity.</param>
+        public HouseholdMemberController(IHouseholdDataRepository householdDataRepository, IClaimValueProvider claimValueProvider, ILocalClaimProvider localClaimProvider)
         {
             if (householdDataRepository == null)
             {
@@ -40,8 +42,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 throw new ArgumentNullException("claimValueProvider");
             }
+            if (localClaimProvider == null)
+            {
+                throw new ArgumentNullException("localClaimProvider");
+            }
             _householdDataRepository = householdDataRepository;
             _claimValueProvider = claimValueProvider;
+            _localClaimProvider = localClaimProvider;
         }
 
         #endregion
