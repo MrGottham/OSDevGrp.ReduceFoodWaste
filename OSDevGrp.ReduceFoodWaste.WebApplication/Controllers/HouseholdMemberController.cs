@@ -123,12 +123,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
             catch (AggregateException ex)
             {
-                ViewBag.StatusMessage = ex.ToReduceFoodWasteException().Message;
+                ViewBag.ErrorMessage = ex.ToReduceFoodWasteException().Message;
                 return View("Create", householdModel);
             }
             catch (Exception ex)
             {
-                ViewBag.StatusMessage = ex.Message;
+                ViewBag.ErrorMessage = ex.Message;
                 return View("Create", householdModel);
             }
         }
