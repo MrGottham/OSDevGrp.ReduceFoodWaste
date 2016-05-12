@@ -120,6 +120,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return View("Create", householdModel);
                 }
 
+                // TODO: Create the household.
+
+                AddClaim(_localClaimProvider.GenerateCreatedHouseholdMemberClaim());
+
                 return null;
             }
             catch (AggregateException ex)

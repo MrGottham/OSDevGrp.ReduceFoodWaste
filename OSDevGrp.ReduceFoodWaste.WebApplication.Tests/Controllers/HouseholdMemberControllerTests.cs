@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
@@ -336,6 +337,34 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Create with an valid model calls AddLocalClaimAsync with the claim which indicates that the user has been created as a household member on the provider which can append local claims to a claims identity.
+        /// </summary>
+        [Test]
+        public void TestThatCreateWithValidModelCallsAddLocalClaimAsyncWithXOnLocalClaimProvider()
+        {
+            var claimsIdentity = new ClaimsIdentity();
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            var createdHouseholdMemberClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
+
+            var householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, createdHouseholdMemberClaim: createdHouseholdMemberClaim);
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.EqualTo(claimsPrincipal));
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.EqualTo(claimsIdentity));
+
+            var privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
+
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .Create();
+
+            householdMemberController.Create(householdModel);
+
+            _localClaimProviderMock.AssertWasCalled(m => m.AddLocalClaimAsync(Arg<ClaimsIdentity>.Is.Equal(claimsIdentity), Arg<Claim>.Is.Equal(createdHouseholdMemberClaim), Arg<HttpContext>.Is.Equal(HttpContext.Current)));
+        }
+
+        /// <summary>
         /// Tests that Prepare throws NotImplementedException.
         /// </summary>
         [Test]
@@ -352,8 +381,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// </summary>
         /// <param name="privacyPolicyModel">Sets the privacy policy model which should be used by the controller.</param>
         /// <param name="isPrivacyPoliciesAccepted">Sets whether the privacy policies has been accepted.</param>
+        /// <param name="principal">Sets the user principal for the controller.</param>
+        /// <param name="createdHouseholdMemberClaim">Sets the claim which indicates that the user has been created as a household member.</param>
         /// <returns>Controller for a household member for unit testing.</returns>
-        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isPrivacyPoliciesAccepted = false)
+        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null)
         {
             _householdDataRepositoryMock.Stub(m => m.GetPrivacyPoliciesAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => privacyPolicyModel ?? Fixture.Create<PrivacyPolicyModel>()))
@@ -363,12 +394,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(isPrivacyPoliciesAccepted)
                 .Repeat.Any();
 
+            _localClaimProviderMock.Stub(m => m.AddLocalClaimAsync(Arg<ClaimsIdentity>.Is.Anything, Arg<Claim>.Is.Anything, Arg<HttpContext>.Is.Anything))
+                .Return(Task.Run(() => { }))
+                .Repeat.Any();
             _localClaimProviderMock.Stub(m => m.GenerateCreatedHouseholdMemberClaim())
-                .Return(new Claim(Fixture.Create<string>(), Fixture.Create<string>()))
+                .Return(createdHouseholdMemberClaim ?? new Claim(Fixture.Create<string>(), Fixture.Create<string>()))
                 .Repeat.Any();
 
             var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock);
-            householdMemberController.ControllerContext = ControllerTestHelper.CreateControllerContext(householdMemberController);
+            householdMemberController.ControllerContext = ControllerTestHelper.CreateControllerContext(householdMemberController, principal: principal);
             return householdMemberController;
         }
     }

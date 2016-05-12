@@ -26,8 +26,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <param name="hasUser">Sets whether the controller should have an user.</param>
         /// <param name="hasIdentity">Sets whether the controller should have an user with an identity.</param>
         /// <param name="isAuthenticated">Sets whether the user is authenticated.</param>
+        /// <param name="principal">Sets the user principal for the controller.</param>
         /// <returns>Controller context which can be used for unit testing.</returns>
-        public static ControllerContext CreateControllerContext(Controller controller, bool hasUser = true, bool hasIdentity = true, bool isAuthenticated = true)
+        public static ControllerContext CreateControllerContext(Controller controller, bool hasUser = true, bool hasIdentity = true, bool isAuthenticated = true, IPrincipal principal = null)
         {
             if (controller == null)
             {
@@ -46,7 +47,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var httpContextMock = MockRepository.GenerateMock<HttpContextBase>();
             httpContextMock.Stub(m => m.User)
-                .Return(hasUser ? userMock : null)
+                .Return(hasUser ? (principal ?? userMock) : null)
                 .Repeat.Any();
 
             return new ControllerContext(httpContextMock, new RouteData(), controller);
@@ -58,10 +59,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <param name="hasUser">Sets whether the controller should have an user.</param>
         /// <param name="hasIdentity">Sets whether the controller should have an user with an identity.</param>
         /// <param name="isAuthenticated">Sets whether the user is authenticated.</param>
+        /// <param name="principal">Sets the user principal for the controller.</param>
         /// <returns>Controller context which can be used for unit testing.</returns>
-        public static ControllerContext CreateControllerContext(bool hasUser = true, bool hasIdentity = true, bool isAuthenticated = true)
+        public static ControllerContext CreateControllerContext(bool hasUser = true, bool hasIdentity = true, bool isAuthenticated = true, IPrincipal principal = null)
         {
-            return CreateControllerContext(new TestController(), hasUser, hasIdentity, isAuthenticated);
+            return CreateControllerContext(new TestController(), hasUser, hasIdentity, isAuthenticated, principal);
         }
     }
 }
