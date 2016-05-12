@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
@@ -272,7 +273,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Create with an ivalid model returns a ViewResult with a model for creating a new household member.
+        /// Tests that Create with an invalid model returns a ViewResult with a model for creating a new household member.
         /// </summary>
         [Test]
         [TestCase(true)]
@@ -315,6 +316,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Create with an valid model calls GenerateCreatedHouseholdMemberClaim on the provider which can append local claims to a claims identity.
+        /// </summary>
+        [Test]
+        public void TestThatCreateWithValidModelCallsGenerateCreatedHouseholdMemberClaimOnLocalClaimProvider()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
+
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .Create();
+
+            householdMemberController.Create(householdModel);
+
+            _localClaimProviderMock.AssertWasCalled(m => m.GenerateCreatedHouseholdMemberClaim());
+        }
+
+        /// <summary>
         /// Tests that Prepare throws NotImplementedException.
         /// </summary>
         [Test]
@@ -340,6 +361,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             _claimValueProviderMock.Stub(m => m.IsPrivacyPoliciesAccepted(Arg<IIdentity>.Is.Anything))
                 .Return(isPrivacyPoliciesAccepted)
+                .Repeat.Any();
+
+            _localClaimProviderMock.Stub(m => m.GenerateCreatedHouseholdMemberClaim())
+                .Return(new Claim(Fixture.Create<string>(), Fixture.Create<string>()))
                 .Repeat.Any();
 
             var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock);

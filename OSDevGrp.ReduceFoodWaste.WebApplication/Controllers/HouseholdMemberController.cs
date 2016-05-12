@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Threading;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
@@ -141,6 +142,33 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         public ActionResult Prepare()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Adds a local claim to the current user's identity.
+        /// </summary>
+        /// <param name="claim">Local claim which should be added to the current user's identity.</param>
+        private void AddClaim(Claim claim)
+        {
+            if (claim == null)
+            {
+                throw new ArgumentNullException("claim");
+            }
+            
+            if (User == null || User.Identity is ClaimsIdentity == false)
+            {
+                return;
+            }
+
+            try
+            {
+                var task = _localClaimProvider.AddLocalClaimAsync((ClaimsIdentity) User.Identity, claim, System.Web.HttpContext.Current);
+                task.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.ToReduceFoodWasteException();
+            }
         }
 
         #endregion
