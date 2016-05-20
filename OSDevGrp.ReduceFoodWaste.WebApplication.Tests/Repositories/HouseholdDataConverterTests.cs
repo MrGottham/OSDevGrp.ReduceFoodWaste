@@ -1,8 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Ploeh.AutoFixture;
 
@@ -38,6 +40,78 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("source"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that Convert converts a HouseholdModel to a HouseholdAddCommand.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsHouseholdModelToHouseholdAddCommand()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.Name, Fixture.Create<string>())
+                .With(m => m.Description, Fixture.Create<string>())
+                .Create();
+            Assert.That(householdModel, Is.Not.Null);
+            Assert.That(householdModel.Name, Is.Not.Null);
+            Assert.That(householdModel.Name, Is.Not.Empty);
+            Assert.That(householdModel.Description, Is.Not.Null);
+            Assert.That(householdModel.Description, Is.Not.Empty);
+
+            var result = householdDataConverter.Convert<HouseholdModel, HouseholdAddCommand>(householdModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Name, Is.Not.Null);
+            Assert.That(result.Name, Is.Not.Empty);
+            Assert.That(result.Name, Is.EqualTo(householdModel.Name));
+            Assert.That(result.Description, Is.Not.Null);
+            Assert.That(result.Description, Is.Not.Empty);
+            Assert.That(result.Description, Is.EqualTo(householdModel.Description));
+            Assert.That(result.TranslationInfoIdentifier, Is.EqualTo(default(Guid)));
+        }
+
+        /// <summary>
+        /// Tests that Convert converts a PrivacyPolicyModel where IsAccepted is equal to true to a HouseholdAddCommand.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsPrivacyPolicyModelWhereIsAcceptedEqualToTrueToHouseholdMemberAcceptPrivacyPolicyCommand()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var householdModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, true)
+                .Create();
+            Assert.That(householdModel, Is.Not.Null);
+            Assert.That(householdModel.IsAccepted, Is.True);
+
+            var result = householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(householdModel);
+            Assert.That(result, Is.Not.Null);
+        }
+
+        /// <summary>
+        /// Tests that Convert throws an ReduceFoodWasteSystemException when converting a PrivacyPolicyModel where IsAccepted is equal to false to a HouseholdAddCommand.
+        /// </summary>
+        [Test]
+        public void TestThatConvertThrowsReduceFoodWasteSystemExceptionWhenConvertingPrivacyPolicyModelWhereIsAcceptedEqualToFalseToHouseholdMemberAcceptPrivacyPolicyCommand()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var householdModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, false)
+                .Create();
+            Assert.That(householdModel, Is.Not.Null);
+            Assert.That(householdModel.IsAccepted, Is.False);
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(householdModel));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.PrivacyPoliciesHasNotBeenAccepted));
             Assert.That(exception.InnerException, Is.Null);
         }
 

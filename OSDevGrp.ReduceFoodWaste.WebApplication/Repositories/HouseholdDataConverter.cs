@@ -1,7 +1,9 @@
 ﻿using System;
 using AutoMapper;
 using OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 {
@@ -25,6 +27,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             var mapperConfiguration = new MapperConfiguration(configuration =>
             {
+                configuration.CreateMap<HouseholdModel, HouseholdAddCommand>()
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => string.IsNullOrWhiteSpace(src.Description) ? null : src.Description))
+                    .ForMember(dest => dest.TranslationInfoIdentifier, opt => opt.Ignore())
+                    .ForMember(dest => dest.ExtensionData, opt => opt.Ignore());
+
+                configuration.CreateMap<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>()
+                    .ConvertUsing(src =>
+                    {
+                        if (src.IsAccepted == false)
+                        {
+                            throw new ReduceFoodWasteSystemException(Texts.PrivacyPoliciesHasNotBeenAccepted);
+                        }
+                        return new HouseholdMemberAcceptPrivacyPolicyCommand();
+                    });
+
                 configuration.CreateMap<BooleanResult, bool>()
                     .ConvertUsing(src => src.Result);
 
@@ -66,7 +84,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             {
                 throw new ArgumentNullException("source");
             }
-            return _mapper.Map<TSource, TTarget>(source);
+            try
+            {
+                return _mapper.Map<TSource, TTarget>(source);
+            }
+            catch (AutoMapperMappingException mappingException)
+            {
+                if (mappingException.InnerException is ReduceFoodWasteExceptionBase)
+                {
+                    throw mappingException.InnerException;
+                }
+                throw;
+            }
         }
 
         #endregion

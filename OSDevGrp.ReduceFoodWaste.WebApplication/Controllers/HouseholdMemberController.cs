@@ -124,7 +124,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
                 AddClaim(_localClaimProvider.GenerateCreatedHouseholdMemberClaim());
 
-                return null;
+                if (householdModel.PrivacyPolicy == null || householdModel.PrivacyPolicy.IsAccepted == false)
+                {
+                    return RedirectToAction("Prepare");
+                }
+
+                // TODO: Accept the privacy policies.
+
+                AddClaim(_localClaimProvider.GeneratePrivacyPoliciesAcceptedClaim());
+
+                return RedirectToAction("Prepare");
             }
             catch (AggregateException ex)
             {

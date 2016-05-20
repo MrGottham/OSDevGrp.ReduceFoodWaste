@@ -286,6 +286,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The privacy policies has not been accepted..
+        /// </summary>
+        public static string PrivacyPoliciesHasNotBeenAccepted {
+            get {
+                return ResourceManager.GetString("PrivacyPoliciesHasNotBeenAccepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reason.
         /// </summary>
         public static string Reason {

@@ -237,4 +237,7 @@
   <data name="ExceedsMaximumLength" xml:space="preserve">
     <value>Værdien til denne overstiger den maksimale længe på {1} tegn.</value>
   </data>
+  <data name="PrivacyPoliciesHasNotBeenAccepted" xml:space="preserve">
+    <value>Fortrolighedspolitikkerne er ikke blevet accepteret.</value>
+  </data>
 </root>

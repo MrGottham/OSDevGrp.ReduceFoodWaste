@@ -237,4 +237,7 @@
   <data name="ExceedsMaximumLength" xml:space="preserve">
     <value>The value exceeds the maximum length of {1} characters.</value>
   </data>
+  <data name="PrivacyPoliciesHasNotBeenAccepted" xml:space="preserve">
+    <value>The privacy policies has not been accepted.</value>
+  </data>
 </root>

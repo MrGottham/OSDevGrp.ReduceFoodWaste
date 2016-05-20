@@ -129,6 +129,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         }
 
         /// <summary>
+        /// Creates a new household to a given identity.
+        /// </summary>
+        /// <param name="identity">Identity which should own the household.</param>
+        /// <param name="householdModel">Model for the household to create.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Model for the created household.</returns>
+        public Task<HouseholdModel> CreateHousehold(IIdentity identity, HouseholdModel householdModel, CultureInfo cultureInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Gets the privacy policies which should be accepted by a given identity.
         /// </summary>
         /// <param name="identity">Identity which should accept the privacy policies.</param>
