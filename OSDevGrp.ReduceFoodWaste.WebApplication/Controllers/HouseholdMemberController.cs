@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Security.Claims;
 using System.Threading;
 using System.Web.Mvc;
@@ -120,7 +121,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return View("Create", householdModel);
                 }
 
-                // TODO: Create the household.
+                var createHouseholdTask = _householdDataRepository.CreateHouseholdAsync(User.Identity, householdModel, CultureInfo.CurrentUICulture);
+                createHouseholdTask.Wait();
 
                 AddClaim(_localClaimProvider.GenerateCreatedHouseholdMemberClaim());
 
@@ -129,11 +131,23 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return RedirectToAction("Prepare");
                 }
 
-                // TODO: Accept the privacy policies.
+                try
+                {
+                    var acceptPrivacyPolicyTask = _householdDataRepository.AcceptPrivacyPolicyAsync(User.Identity, householdModel.PrivacyPolicy);
+                    acceptPrivacyPolicyTask.Wait();
 
-                AddClaim(_localClaimProvider.GeneratePrivacyPoliciesAcceptedClaim());
+                    AddClaim(_localClaimProvider.GeneratePrivacyPoliciesAcceptedClaim());
 
-                return RedirectToAction("Prepare");
+                    return RedirectToAction("Prepare");
+                }
+                catch (AggregateException ex)
+                {
+                    return RedirectToAction("Prepare", new {errorMessage = ex.ToReduceFoodWasteException().Message});
+                }
+                catch (Exception ex)
+                {
+                    return RedirectToAction("Prepare", new {errorMessage = ex.Message});
+                }
             }
             catch (AggregateException ex)
             {
@@ -152,9 +166,35 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// </summary>
         /// <returns>View for preparing a household member.</returns>
         [IsCreatedHouseholdMember]
-        public ActionResult Prepare()
+        public ActionResult Prepare(string errorMessage = null)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(errorMessage) == false)
+                {
+                    ViewBag.ErrorMessage = errorMessage;
+                }
+
+                var isActivatedHouseholdMember = _claimValueProvider.IsActivatedHouseholdMember(User.Identity);
+                var isPrivacyPoliciesAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
+
+                var task = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, CultureInfo.CurrentUICulture);
+                task.Wait();
+
+                var privacyPolicyModel = task.Result;
+                privacyPolicyModel.IsAccepted = isPrivacyPoliciesAccepted;
+
+                var householdMemberModel = new HouseholdMemberModel
+                {
+                    PrivacyPolicy = privacyPolicyModel
+                };
+
+                return View("Prepare", householdMemberModel);
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.ToReduceFoodWasteException();
+            }
         }
 
         /// <summary>

@@ -135,9 +135,61 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// <param name="householdModel">Model for the household to create.</param>
         /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
         /// <returns>Model for the created household.</returns>
-        public Task<HouseholdModel> CreateHousehold(IIdentity identity, HouseholdModel householdModel, CultureInfo cultureInfo)
+        public Task<HouseholdModel> CreateHouseholdAsync(IIdentity identity, HouseholdModel householdModel, CultureInfo cultureInfo)
         {
-            throw new NotImplementedException();
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (householdModel == null)
+            {
+                throw new ArgumentNullException("householdModel");
+            }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException("cultureInfo");
+            }
+
+            Func<HouseholdDataServiceChannel, HouseholdModel> callbackFunc = channel =>
+            {
+                var command = _householdDataConverter.Convert<HouseholdModel, HouseholdAddCommand>(householdModel);
+                command.TranslationInfoIdentifier = GetTranslationInfoIdentifier(channel, cultureInfo);
+
+                var result = channel.HouseholdAdd(command);
+
+                householdModel.Identifier = result.Identifier ?? default(Guid);
+                return householdModel;
+            };
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+        }
+
+        /// <summary>
+        /// Accepts the privacy policies on the household member which has been created for the given identity.
+        /// </summary>
+        /// <param name="identity">Identity on which to accept the privacy policies.</param>
+        /// <param name="privacyPolicyModel">Model for the privacy policies to accept.</param>
+        /// <returns>Model for the privacy policies which has been accepted.</returns>
+        public Task<PrivacyPolicyModel> AcceptPrivacyPolicyAsync(IIdentity identity, PrivacyPolicyModel privacyPolicyModel)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (privacyPolicyModel == null)
+            {
+                throw new ArgumentNullException("privacyPolicyModel");
+            }
+
+            Func<HouseholdDataServiceChannel, PrivacyPolicyModel> callbackFunc = channel =>
+            {
+                var command = _householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(privacyPolicyModel);
+                channel.HouseholdMemberAcceptPrivacyPolicy(command);
+
+                return privacyPolicyModel;
+            };
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
         }
 
         /// <summary>

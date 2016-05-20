@@ -38,7 +38,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// <param name="householdModel">Model for the household to create.</param>
         /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
         /// <returns>Model for the created household.</returns>
-        Task<HouseholdModel> CreateHousehold(IIdentity identity, HouseholdModel householdModel, CultureInfo cultureInfo);
+        Task<HouseholdModel> CreateHouseholdAsync(IIdentity identity, HouseholdModel householdModel, CultureInfo cultureInfo);
+
+        /// <summary>
+        /// Accepts the privacy policies on the household member which has been created for the given identity.
+        /// </summary>
+        /// <param name="identity">Identity on which to accept the privacy policies.</param>
+        /// <param name="privacyPolicyModel">Model for the privacy policies to accept.</param>
+        /// <returns>Model for the privacy policies which has been accepted.</returns>
+        Task<PrivacyPolicyModel> AcceptPrivacyPolicyAsync(IIdentity identity, PrivacyPolicyModel privacyPolicyModel);
 
         /// <summary>
         /// Gets the privacy policies which should be accepted by a given identity.
