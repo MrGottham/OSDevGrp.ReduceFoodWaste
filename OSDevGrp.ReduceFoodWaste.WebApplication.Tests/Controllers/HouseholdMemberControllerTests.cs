@@ -758,7 +758,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Empty);
 
-            var householdMemberModel = (HouseholdMemberModel)viewResult.Model;
+            var householdMemberModel = (HouseholdMemberModel) viewResult.Model;
+            Assert.That(householdMemberModel.Identifier, Is.EqualTo(default(Guid)));
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
             Assert.That(householdMemberModel.PrivacyPolicy.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
