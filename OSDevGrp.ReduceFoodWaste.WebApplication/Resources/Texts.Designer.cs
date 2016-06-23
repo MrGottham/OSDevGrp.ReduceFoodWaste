@@ -79,6 +79,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activation.
+        /// </summary>
+        public static string Activation {
+            get {
+                return ResourceManager.GetString("Activation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activation code.
+        /// </summary>
+        public static string ActivationCode {
+            get {
+                return ResourceManager.GetString("ActivationCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Business related error..
         /// </summary>
         public static string BusinessException {

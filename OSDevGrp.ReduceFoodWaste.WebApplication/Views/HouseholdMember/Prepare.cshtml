@@ -28,17 +28,24 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Identifier)
-    @Html.HiddenFor(m => m.ActivatedTime)
-    @Html.HiddenFor(m => m.PrivacyPolicyAcceptedTime)
+    if (Model.ActivatedTime.HasValue)
+    {
+        @Html.HiddenFor(m => m.ActivatedTime)
+    }
+    if (Model.PrivacyPolicyAcceptedTime.HasValue)
+    {
+        @Html.HiddenFor(m => m.PrivacyPolicyAcceptedTime)
+    }
     <table>
         <tbody>
             @if (Model.Activated == false)
             {
                 <tr>
-                    <td>@Texts.Name</td>
+                    <td colspan="2"><h3>@Texts.Activation</h3></td>
                 </tr>
                 <tr>
-                    <td>@Texts.Description</td>
+                    <td style="width: 3%" nowrap>@Texts.Description</td>
+                    <td>@Html.TextBoxFor(m => m.ActivationCode)</td>
                 </tr>
             }
             @if (Model.PrivacyPolicyAccepted == false && Model.PrivacyPolicy != null)
@@ -47,7 +54,7 @@
                     <td colspan="2">@Html.Partial("_PrivacyPolicies", Model.PrivacyPolicy)</td>
                 </tr>
                 <tr>
-                    <td>@Html.CheckBoxFor(m => m.PrivacyPolicy.IsAccepted) @Texts.AcceptTermsAndPrivacyPolicy @Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)</td>
+                    <td colspan="2">@Html.CheckBoxFor(m => m.PrivacyPolicy.IsAccepted) @Texts.AcceptTermsAndPrivacyPolicy @Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)</td>
                 </tr>
             }
             <tr>

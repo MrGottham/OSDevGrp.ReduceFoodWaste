@@ -246,4 +246,10 @@
   <data name="PrepareHouseholdMemberAccount" xml:space="preserve">
     <value>Prepare your household member account.</value>
   </data>
+  <data name="Activation" xml:space="preserve">
+    <value>Activation</value>
+  </data>
+  <data name="ActivationCode" xml:space="preserve">
+    <value>Activation code</value>
+  </data>
 </root>
