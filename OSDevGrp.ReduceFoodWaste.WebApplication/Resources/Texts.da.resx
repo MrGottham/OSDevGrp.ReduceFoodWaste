@@ -243,4 +243,7 @@
   <data name="TimeToPrepareYourHouseholdMemberAccount" xml:space="preserve">
     <value>Det er tid til at forberede kontoen til dit husstandsmedlemsskab.</value>
   </data>
+  <data name="PrepareHouseholdMemberAccount" xml:space="preserve">
+    <value>Forbered kontoen til dit husstandsmedlemsskab.</value>
+  </data>
 </root>

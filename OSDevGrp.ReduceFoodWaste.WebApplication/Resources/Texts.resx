@@ -243,4 +243,7 @@
   <data name="TimeToPrepareYourHouseholdMemberAccount" xml:space="preserve">
     <value>Time to prepare your household member account.</value>
   </data>
+  <data name="PrepareHouseholdMemberAccount" xml:space="preserve">
+    <value>Prepare your household member account.</value>
+  </data>
 </root>

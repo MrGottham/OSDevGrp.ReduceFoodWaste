@@ -14,7 +14,7 @@
 }
 
 <hgroup class="title">
-    <h1>@Texts.CreateHousehold</h1>
+    <h1>@Texts.PrepareHouseholdMemberAccount</h1>
 </hgroup>
 @if (string.IsNullOrEmpty(@ViewBag.StatusMessage) == false)
 {
@@ -24,21 +24,24 @@
 {
     <p class="message-error">@ViewBag.ErrorMessage</p>
 }
-@using (@Html.BeginForm("Create", "HouseholdMember", FormMethod.Post))
+@using (@Html.BeginForm("Prepare", "HouseholdMember", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Identifier)
+    @Html.HiddenFor(m => m.ActivatedTime)
+    @Html.HiddenFor(m => m.PrivacyPolicyAcceptedTime)
     <table>
         <tbody>
-            <tr>
-                <td>@Texts.Name</td>
-                <td>@Html.TextBoxFor(m => m.Name) @Html.ValidationMessageFor(m => m.Name)</td>
-            </tr>
-            <tr>
-                <td>@Texts.Description</td>
-                <td>@Html.TextAreaFor(m => m.Description) @Html.ValidationMessageFor(m => m.Description)</td>
-            </tr>
-            @if (Model.PrivacyPolicy != null)
+            @if (Model.Activated == false)
+            {
+                <tr>
+                    <td>@Texts.Name</td>
+                </tr>
+                <tr>
+                    <td>@Texts.Description</td>
+                </tr>
+            }
+            @if (Model.PrivacyPolicyAccepted == false && Model.PrivacyPolicy != null)
             {
                 <tr>
                     <td colspan="2">@Html.Partial("_PrivacyPolicies", Model.PrivacyPolicy)</td>

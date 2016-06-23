@@ -286,6 +286,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Prepare your household member account..
+        /// </summary>
+        public static string PrepareHouseholdMemberAccount {
+            get {
+                return ResourceManager.GetString("PrepareHouseholdMemberAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The privacy policies has not been accepted..
         /// </summary>
         public static string PrivacyPoliciesHasNotBeenAccepted {
