@@ -1,4 +1,5 @@
-﻿using Ploeh.AutoFixture;
+﻿using System;
+using Ploeh.AutoFixture;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities
 {
@@ -10,6 +11,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities
         #region Private variables
 
         private static Fixture _fixture;
+        private static Random _random;
         private static readonly object SyncRoot = new object();
 
         #endregion
@@ -26,6 +28,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities
                 lock (SyncRoot)
                 {
                     return _fixture ?? (_fixture = new Fixture());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns a singleton instance of Ranodm.
+        /// </summary>
+        protected static Random Random
+        {
+            get
+            {
+                lock (SyncRoot)
+                {
+                    return _random ?? (_random = new Random(Fixture.Create<int>()));
                 }
             }
         }

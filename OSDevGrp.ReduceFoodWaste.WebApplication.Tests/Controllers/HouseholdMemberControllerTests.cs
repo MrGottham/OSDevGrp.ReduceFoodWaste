@@ -760,11 +760,54 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdMemberModel = (HouseholdMemberModel) viewResult.Model;
             Assert.That(householdMemberModel.Identifier, Is.EqualTo(default(Guid)));
+            Assert.That(householdMemberModel.ActivationCode, Is.Null);
+            if (isActivatedHouseholdMember)
+            {
+                Assert.That(householdMemberModel.Activated, Is.True);
+                Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
+                Assert.That(householdMemberModel.ActivatedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
+                Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(householdMemberModel.Activated, Is.False);
+                Assert.That(householdMemberModel.ActivatedTime, Is.Null);
+                Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
+            }
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
             Assert.That(householdMemberModel.PrivacyPolicy.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
+            if (isPrivacyPoliciesAccepted)
+            {
+                Assert.That(householdMemberModel.PrivacyPolicyAccepted, Is.True);
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(householdMemberModel.PrivacyPolicyAccepted, Is.False);
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
+            }
         }
 
+        /// <summary>
+        /// Tests that Prepare with a model throws an ArgumentNullException when the model is null.
+        /// </summary>
+        [Test]
+        public void TestThatPrepareWithModelThrowsArgumentNullExceptionWhenModelIsNull()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.Prepare((HouseholdMemberModel) null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("householdMemberModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
 
         /// <summary>
         /// Creates a controller for a household member for unit testing.

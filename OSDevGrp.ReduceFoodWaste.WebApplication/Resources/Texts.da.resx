@@ -240,4 +240,7 @@
   <data name="PrivacyPoliciesHasNotBeenAccepted" xml:space="preserve">
     <value>Fortrolighedspolitikkerne er ikke blevet accepteret.</value>
   </data>
+  <data name="TimeToPrepareYourHouseholdMemberAccount" xml:space="preserve">
+    <value>Det er tid til at forberede kontoen til dit husstandsmedlemsskab.</value>
+  </data>
 </root>

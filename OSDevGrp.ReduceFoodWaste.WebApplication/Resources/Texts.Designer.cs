@@ -376,6 +376,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time to prepare your household member account..
+        /// </summary>
+        public static string TimeToPrepareYourHouseholdMemberAccount {
+            get {
+                return ResourceManager.GetString("TimeToPrepareYourHouseholdMemberAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type.
         /// </summary>
         public static string Type {

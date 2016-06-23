@@ -240,4 +240,7 @@
   <data name="PrivacyPoliciesHasNotBeenAccepted" xml:space="preserve">
     <value>The privacy policies has not been accepted.</value>
   </data>
+  <data name="TimeToPrepareYourHouseholdMemberAccount" xml:space="preserve">
+    <value>Time to prepare your household member account.</value>
+  </data>
 </root>

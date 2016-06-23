@@ -186,7 +186,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
                 var householdMemberModel = new HouseholdMemberModel
                 {
-                    PrivacyPolicy = privacyPolicyModel
+                    ActivatedTime = isActivatedHouseholdMember ? DateTime.Now : (DateTime?) null,
+                    PrivacyPolicy = privacyPolicyModel,
+                    PrivacyPolicyAcceptedTime = isPrivacyPoliciesAccepted ? DateTime.Now : (DateTime?) null
                 };
 
                 return View("Prepare", householdMemberModel);
@@ -195,6 +197,23 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 throw ex.ToReduceFoodWasteException();
             }
+        }
+
+        /// <summary>
+        /// Prepares a household member
+        /// </summary>
+        /// <param name="householdMemberModel">Model for the household member who to prepare.</param>
+        /// <returns>View for the next step.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Prepare(HouseholdMemberModel householdMemberModel)
+        {
+            if (householdMemberModel == null)
+            {
+                throw new ArgumentNullException("householdMemberModel");
+            }
+
+            throw new NotImplementedException();
         }
 
         /// <summary>

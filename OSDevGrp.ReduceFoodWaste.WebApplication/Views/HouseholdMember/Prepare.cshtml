@@ -1,0 +1,55 @@
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdMemberModel
+
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@Texts.Startup.</h1>
+                <h2>@string.Format(Texts.WelcomeTo, @Texts.ReduceFoodWasteProject)</h2>
+            </hgroup>
+            <p>@Texts.TimeToPrepareYourHouseholdMemberAccount</p>
+        </div>
+    </section>
+}
+
+<hgroup class="title">
+    <h1>@Texts.CreateHousehold</h1>
+</hgroup>
+@if (string.IsNullOrEmpty(@ViewBag.StatusMessage) == false)
+{
+    <p class="message-success">@ViewBag.StatusMessage</p>
+}
+@if (string.IsNullOrEmpty(@ViewBag.ErrorMessage) == false)
+{
+    <p class="message-error">@ViewBag.ErrorMessage</p>
+}
+@using (@Html.BeginForm("Create", "HouseholdMember", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Identifier)
+    <table>
+        <tbody>
+            <tr>
+                <td>@Texts.Name</td>
+                <td>@Html.TextBoxFor(m => m.Name) @Html.ValidationMessageFor(m => m.Name)</td>
+            </tr>
+            <tr>
+                <td>@Texts.Description</td>
+                <td>@Html.TextAreaFor(m => m.Description) @Html.ValidationMessageFor(m => m.Description)</td>
+            </tr>
+            @if (Model.PrivacyPolicy != null)
+            {
+                <tr>
+                    <td colspan="2">@Html.Partial("_PrivacyPolicies", Model.PrivacyPolicy)</td>
+                </tr>
+                <tr>
+                    <td>@Html.CheckBoxFor(m => m.PrivacyPolicy.IsAccepted) @Texts.AcceptTermsAndPrivacyPolicy @Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2" style="text-align: right"><input type="submit" value="@Texts.Next" title="@Texts.Next" /></td>
+            </tr>
+        </tbody>
+    </table>
+}
