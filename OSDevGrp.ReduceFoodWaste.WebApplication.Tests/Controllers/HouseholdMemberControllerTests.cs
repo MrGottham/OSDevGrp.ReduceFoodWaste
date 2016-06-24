@@ -1010,6 +1010,105 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Prepare with a valid model does not call ActivateHouseholdMemberAsync on the repository which can access household data when the household has been activated.
+        /// </summary>
+        [Test]
+        public void TestThatPrepareWithValidModelDoesNotCallActivateHouseholdMemberAsyncOnHouseholdDataRepositoryWhenHouseholdMemberHasBeenActivated()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, Fixture.Create<string>())
+                .With(m => m.ActivatedTime, DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)))
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Empty);
+            Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            _householdDataRepositoryMock.AssertWasNotCalled(m => m.ActivateHouseholdMemberAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdMemberModel>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that Prepare with a valid model without an activation code does not call ActivateHouseholdMemberAsync on the repository which can access household data when the household member has been not activated.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatPrepareWithValidModelWithoutActivationCodeDoesNotCallActivateHouseholdMemberAsyncOnHouseholdDataRepositoryWhenHouseholdMemberHasNotBeenActivated(string noActicationCode)
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, noActicationCode)
+                .With(m => m.ActivatedTime, null)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActicationCode));
+            Assert.That(householdMemberModel.ActivatedTime, Is.Null);
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            _householdDataRepositoryMock.AssertWasNotCalled(m => m.ActivateHouseholdMemberAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdMemberModel>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that Prepare with a valid model with an activation code calls ActivateHouseholdMemberAsync on the repository which can access household data when the household member has been not activated.
+        /// </summary>
+        [Test]
+        public void TestThatPrepareWithValidModelWithActivationCodeCallsActivateHouseholdMemberAsyncOnHouseholdDataRepositoryWhenHouseholdMemberHasNotBeenActivated()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, Fixture.Create<string>())
+                .With(m => m.ActivatedTime, null)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Empty);
+            Assert.That(householdMemberModel.ActivatedTime, Is.Null);
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.ActivateHouseholdMemberAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<HouseholdMemberModel>.Is.Equal(householdMemberModel)));
+        }
+
+        /// <summary>
         /// Creates a controller for a household member for unit testing.
         /// </summary>
         /// <param name="privacyPolicyModel">Sets the privacy policy model which should be used by the controller.</param>
