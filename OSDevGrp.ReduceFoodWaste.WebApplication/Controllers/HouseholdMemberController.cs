@@ -68,8 +68,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 var task = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
                 task.Wait();
 
+                var isPrivacyPoliciesAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
+
                 var privacyPolicyModel = task.Result;
-                privacyPolicyModel.IsAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
+                privacyPolicyModel.IsAccepted = isPrivacyPoliciesAccepted;
+                privacyPolicyModel.AcceptedTime = isPrivacyPoliciesAccepted ? DateTime.Now : (DateTime?) null;
 
                 var householdModel = new HouseholdModel
                 {
@@ -107,6 +110,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 {
                     householdModel.PrivacyPolicy = reloadedPrivacyPolicyModel;
                     householdModel.PrivacyPolicy.IsAccepted = false;
+                    householdModel.PrivacyPolicy.AcceptedTime = null;
                 }
                 else
                 {
@@ -118,6 +122,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 if (ModelState.IsValid == false)
                 {
                     householdModel.PrivacyPolicy.IsAccepted = false;
+                    householdModel.PrivacyPolicy.AcceptedTime = null;
                     return View("Create", householdModel);
                 }
 
@@ -183,6 +188,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
                 var privacyPolicyModel = task.Result;
                 privacyPolicyModel.IsAccepted = isPrivacyPoliciesAccepted;
+                privacyPolicyModel.AcceptedTime = isPrivacyPoliciesAccepted ? DateTime.Now : (DateTime?) null;
 
                 var householdMemberModel = new HouseholdMemberModel
                 {
@@ -222,6 +228,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 {
                     householdMemberModel.PrivacyPolicy = reloadedPrivacyPolicyModel;
                     householdMemberModel.PrivacyPolicy.IsAccepted = false;
+                    householdMemberModel.PrivacyPolicyAcceptedTime = null;
                 }
                 else
                 {
@@ -233,9 +240,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 if (ModelState.IsValid == false)
                 {
                     var privacyPoliciesHasAlreadyBeenAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
-                    householdMemberModel.PrivacyPolicyAcceptedTime = privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now : (DateTime?) null;
                     householdMemberModel.PrivacyPolicy.IsAccepted = privacyPoliciesHasAlreadyBeenAccepted;
+                    householdMemberModel.PrivacyPolicy.AcceptedTime = privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now : (DateTime?) null;
+                    householdMemberModel.PrivacyPolicyAcceptedTime = privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now : (DateTime?) null;
                     return View("Prepare", householdMemberModel);
+                }
+
+                if (householdMemberModel.IsActivated == false && string.IsNullOrWhiteSpace(householdMemberModel.ActivationCode) == false)
+                {
+                    var activateHouseholdMemberTask = _householdDataRepository.ActivateHouseholdMemberAsync(User.Identity, householdMemberModel);
+                    activateHouseholdMemberTask.Wait();
+
+                    var activatedHouseholdMemberModel = activateHouseholdMemberTask.Result;
+
+                    AddClaim(_localClaimProvider.GenerateActivatedHouseholdMemberClaim());
+
+                    householdMemberModel.ActivatedTime = activatedHouseholdMemberModel.ActivatedTime;
                 }
 
                 return null;

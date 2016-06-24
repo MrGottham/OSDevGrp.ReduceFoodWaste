@@ -224,6 +224,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.That(result.Body, Is.Not.Empty);
             Assert.That(result.Body, Is.EqualTo(staticTextView.BodyTranslation));
             Assert.That(result.IsAccepted, Is.False);
+            Assert.That(result.AcceptedTime, Is.Null);
+            Assert.That(result.AcceptedTime.HasValue, Is.False);
         }
 
         /// <summary>

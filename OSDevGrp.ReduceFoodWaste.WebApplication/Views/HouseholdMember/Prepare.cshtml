@@ -38,7 +38,7 @@
     }
     <table>
         <tbody>
-            @if (Model.Activated == false)
+            @if (Model.IsActivated == false)
             {
                 <tr>
                     <td colspan="2"><h3>@Texts.Activation</h3></td>
@@ -48,7 +48,7 @@
                     <td>@Html.TextBoxFor(m => m.ActivationCode)</td>
                 </tr>
             }
-            @if (Model.PrivacyPolicyAccepted == false && Model.PrivacyPolicy != null)
+            @if (Model.HasAcceptedPrivacyPolicy == false && Model.PrivacyPolicy != null)
             {
                 <tr>
                     <td colspan="2">@Html.Partial("_PrivacyPolicies", Model.PrivacyPolicy)</td>

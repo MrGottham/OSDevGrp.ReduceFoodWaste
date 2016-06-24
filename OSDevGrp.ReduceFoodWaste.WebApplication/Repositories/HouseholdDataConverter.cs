@@ -73,7 +73,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                         body = body.Replace("</html>", string.Empty);
                         return body;
                     }))
-                    .ForMember(dest => dest.IsAccepted, opt => opt.Ignore());
+                    .ForMember(dest => dest.IsAccepted, opt => opt.Ignore())
+                    .ForMember(dest => dest.AcceptedTime, opt => opt.Ignore());
             });
             mapperConfiguration.AssertConfigurationIsValid();
 

@@ -31,6 +31,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         [RequiredLocalized]
         public bool IsAccepted { get; set; }
 
+        /// <summary>
+        /// Gets or sets the date and time for when the privacy policies has been accepted.
+        /// </summary>
+        public DateTime? AcceptedTime { get; set; }
+
         #endregion
 
         #region Methods
@@ -46,7 +51,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
                 Identifier = Identifier,
                 Header = Header,
                 Body = Body,
-                IsAccepted = false
+                IsAccepted = false,
+                AcceptedTime = null
             };
         }
 

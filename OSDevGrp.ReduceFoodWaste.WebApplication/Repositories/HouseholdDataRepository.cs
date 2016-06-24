@@ -213,8 +213,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             Func<HouseholdDataServiceChannel, PrivacyPolicyModel> callbackFunc = channel =>
             {
                 var command = _householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(privacyPolicyModel);
-                channel.HouseholdMemberAcceptPrivacyPolicy(command);
+                var result = channel.HouseholdMemberAcceptPrivacyPolicy(command);
 
+                privacyPolicyModel.AcceptedTime = result.EventDate;
                 return privacyPolicyModel;
             };
 

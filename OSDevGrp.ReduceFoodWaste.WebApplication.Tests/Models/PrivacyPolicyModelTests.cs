@@ -24,6 +24,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(privacyPolicyModel.Header, Is.Null);
             Assert.That(privacyPolicyModel.Body, Is.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.False);
+            Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
+            Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
         }
 
         /// <summary>
@@ -97,6 +99,46 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         }
 
         /// <summary>
+        /// Tests that the setter for AcceptedTime sets the value to a given date and time.
+        /// </summary>
+        [Test]
+        public void TestThatAcceptedTimeSetterSetsValueToDateTime()
+        {
+            var privacyPolicyModel = new PrivacyPolicyModel();
+            Assert.That(privacyPolicyModel, Is.Not.Null);
+            Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
+            Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
+
+            var newValue = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120));
+
+            privacyPolicyModel.AcceptedTime = newValue;
+            Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
+            Assert.That(privacyPolicyModel.AcceptedTime, Is.EqualTo(newValue));
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+        }
+
+        /// <summary>
+        /// Tests that the setter for AcceptedTime sets the value to NULL.
+        /// </summary>
+        [Test]
+        public void TestThatAcceptedTimeSetterSetsValueToNull()
+        {
+            var privacyPolicyModel = new PrivacyPolicyModel
+            {
+                AcceptedTime = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120))
+            };
+            Assert.That(privacyPolicyModel, Is.Not.Null);
+            Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
+            Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
+
+            privacyPolicyModel.AcceptedTime = null;
+            Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
+            Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
+        }
+
+        /// <summary>
         /// Tests that Clone makes a clone of the model for the privacy policies.
         /// </summary>
         [Test]
@@ -107,6 +149,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.Identifier, Guid.NewGuid())
                 .With(m => m.IsAccepted, isAccepted)
+                .With(m => m.AcceptedTime, isAccepted ? DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.Identifier, Is.Not.EqualTo(default(Guid)));
@@ -115,6 +158,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(privacyPolicyModel.Body, Is.Not.Null);
             Assert.That(privacyPolicyModel.Body, Is.Not.Empty);
             Assert.That(privacyPolicyModel.IsAccepted, Is.EqualTo(isAccepted));
+            if (isAccepted)
+            {
+                Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
+                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
+                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
+            }
 
             var clone = (PrivacyPolicyModel) privacyPolicyModel.Clone();
             Assert.That(clone, Is.Not.Null);
@@ -127,6 +180,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(clone.Body, Is.Not.Empty);
             Assert.That(clone.Body, Is.EqualTo(privacyPolicyModel.Body));
             Assert.That(clone.IsAccepted, Is.False);
+            Assert.That(clone.AcceptedTime, Is.Null);
+            Assert.That(clone.AcceptedTime.HasValue, Is.False);
         }
     }
 }

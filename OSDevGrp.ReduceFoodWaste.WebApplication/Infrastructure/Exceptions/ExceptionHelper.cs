@@ -32,7 +32,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions
                 exceptionToThrow = new ReduceFoodWasteSystemException(exception.Message, exception);
                 return true;
             });
-            throw exceptionToThrow;
+            return exceptionToThrow;
         }
 
         #endregion

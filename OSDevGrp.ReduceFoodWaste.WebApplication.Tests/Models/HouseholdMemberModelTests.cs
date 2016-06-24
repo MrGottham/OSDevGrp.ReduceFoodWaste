@@ -22,11 +22,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.Identifier, Is.EqualTo(default(Guid)));
             Assert.That(householdMemberModel.ActivationCode, Is.Null);
-            Assert.That(householdMemberModel.Activated, Is.False);
+            Assert.That(householdMemberModel.IsActivated, Is.False);
             Assert.That(householdMemberModel.ActivatedTime, Is.Null);
             Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Null);
-            Assert.That(householdMemberModel.PrivacyPolicyAccepted, Is.False);
+            Assert.That(householdMemberModel.HasAcceptedPrivacyPolicy, Is.False);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
         }
@@ -93,14 +93,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         {
             var householdMemberModel = new HouseholdMemberModel();
             Assert.That(householdMemberModel, Is.Not.Null);
-            Assert.That(householdMemberModel.Activated, Is.False);
+            Assert.That(householdMemberModel.IsActivated, Is.False);
             Assert.That(householdMemberModel.ActivatedTime, Is.Null);
             Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
 
             var newValue = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120));
 
             householdMemberModel.ActivatedTime = newValue;
-            Assert.That(householdMemberModel.Activated, Is.True);
+            Assert.That(householdMemberModel.IsActivated, Is.True);
             Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
             Assert.That(householdMemberModel.ActivatedTime, Is.EqualTo(newValue));
             // ReSharper disable ConditionIsAlwaysTrueOrFalse
@@ -119,12 +119,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
                 ActivatedTime = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120))
             };
             Assert.That(householdMemberModel, Is.Not.Null);
-            Assert.That(householdMemberModel.Activated, Is.True);
+            Assert.That(householdMemberModel.IsActivated, Is.True);
             Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
             Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
 
             householdMemberModel.ActivatedTime = null;
-            Assert.That(householdMemberModel.Activated, Is.False);
+            Assert.That(householdMemberModel.IsActivated, Is.False);
             Assert.That(householdMemberModel.ActivatedTime, Is.Null);
             Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
         }
@@ -154,14 +154,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         {
             var householdMemberModel = new HouseholdMemberModel();
             Assert.That(householdMemberModel, Is.Not.Null);
-            Assert.That(householdMemberModel.PrivacyPolicyAccepted, Is.False);
+            Assert.That(householdMemberModel.HasAcceptedPrivacyPolicy, Is.False);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
 
             var newValue = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120));
 
             householdMemberModel.PrivacyPolicyAcceptedTime = newValue;
-            Assert.That(householdMemberModel.PrivacyPolicyAccepted, Is.True);
+            Assert.That(householdMemberModel.HasAcceptedPrivacyPolicy, Is.True);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.EqualTo(newValue));
             // ReSharper disable ConditionIsAlwaysTrueOrFalse
@@ -180,12 +180,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
                 PrivacyPolicyAcceptedTime = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120))
             };
             Assert.That(householdMemberModel, Is.Not.Null);
-            Assert.That(householdMemberModel.PrivacyPolicyAccepted, Is.True);
+            Assert.That(householdMemberModel.HasAcceptedPrivacyPolicy, Is.True);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
 
             householdMemberModel.PrivacyPolicyAcceptedTime = null;
-            Assert.That(householdMemberModel.PrivacyPolicyAccepted, Is.False);
+            Assert.That(householdMemberModel.HasAcceptedPrivacyPolicy, Is.False);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
         }

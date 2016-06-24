@@ -167,6 +167,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(model.PrivacyPolicy, Is.Not.Null);
             Assert.That(model.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
             Assert.That(model.PrivacyPolicy.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
+            if (isPrivacyPoliciesAccepted)
+            {
+                Assert.That(model.PrivacyPolicy.AcceptedTime, Is.Not.Null);
+                Assert.That(model.PrivacyPolicy.AcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
+                Assert.That(model.PrivacyPolicy.AcceptedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(model.PrivacyPolicy.AcceptedTime, Is.Null);
+                Assert.That(model.PrivacyPolicy.AcceptedTime.HasValue, Is.False);
+            }
         }
 
         /// <summary>
@@ -205,6 +216,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Header, null)
                 .With(m => m.Body, null)
                 .With(m => m.IsAccepted, true)
+                .With(m => m.AcceptedTime, null)
                 .Create();
 
             var householdModel = Fixture.Build<HouseholdModel>()
@@ -247,6 +259,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Header, null)
                 .With(m => m.Body, null)
                 .With(m => m.IsAccepted, isPrivacyPoliciesAccepted)
+                .With(m => m.AcceptedTime, isPrivacyPoliciesAccepted ? DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.Identifier, Is.Not.EqualTo(default(Guid)));
@@ -254,6 +267,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.Header, Is.Null);
             Assert.That(privacyPolicyModel.Body, Is.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
+            if (isPrivacyPoliciesAccepted)
+            {
+                Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
+                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
+                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
+            }
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
@@ -272,6 +295,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.Body, Is.Not.Empty);
             Assert.That(privacyPolicyModel.Body, Is.EqualTo(reloadedPrivacyPolicyModel.Body));
             Assert.That(privacyPolicyModel.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
+            if (isPrivacyPoliciesAccepted)
+            {
+                Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
+                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
+                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
+            }
         }
 
         /// <summary>
@@ -288,6 +321,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, isPrivacyPoliciesAccepted)
+                .With(m => m.AcceptedTime, isPrivacyPoliciesAccepted ? DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .Create();
                 
             var householdModel = Fixture.Build<HouseholdModel>()
@@ -315,6 +349,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(model.PrivacyPolicy, Is.Not.Null);
             Assert.That(model.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
             Assert.That(model.PrivacyPolicy.IsAccepted, Is.False);
+            Assert.That(model.PrivacyPolicy.AcceptedTime, Is.Null);
+            Assert.That(model.PrivacyPolicy.AcceptedTime.HasValue, Is.False);
         }
 
         /// <summary>
@@ -403,6 +439,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
+                .With(m => m.AcceptedTime, null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.False);
@@ -430,6 +467,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
+                .With(m => m.AcceptedTime, null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.False);
@@ -460,6 +498,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
+                .With(m => m.AcceptedTime, null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.False);
@@ -487,6 +526,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
+                .With(m => m.AcceptedTime, null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.False);
@@ -530,6 +570,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
+                .With(m => m.AcceptedTime, null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
@@ -557,6 +598,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
+                .With(m => m.AcceptedTime, null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
@@ -588,6 +630,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
+                .With(m => m.AcceptedTime, null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
@@ -618,6 +661,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
+                .With(m => m.AcceptedTime, null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
@@ -645,6 +689,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
+                .With(m => m.AcceptedTime, null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
@@ -737,6 +782,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, !isPrivacyPoliciesAccepted)
+                .With(m => m.AcceptedTime, null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel, Is.Not.EqualTo(isPrivacyPoliciesAccepted));
@@ -763,14 +809,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.ActivationCode, Is.Null);
             if (isActivatedHouseholdMember)
             {
-                Assert.That(householdMemberModel.Activated, Is.True);
+                Assert.That(householdMemberModel.IsActivated, Is.True);
                 Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
                 Assert.That(householdMemberModel.ActivatedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
                 Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
             }
             else
             {
-                Assert.That(householdMemberModel.Activated, Is.False);
+                Assert.That(householdMemberModel.IsActivated, Is.False);
                 Assert.That(householdMemberModel.ActivatedTime, Is.Null);
                 Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
             }
@@ -779,14 +825,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.PrivacyPolicy.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
             if (isPrivacyPoliciesAccepted)
             {
-                Assert.That(householdMemberModel.PrivacyPolicyAccepted, Is.True);
+                Assert.That(householdMemberModel.HasAcceptedPrivacyPolicy, Is.True);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
             }
             else
             {
-                Assert.That(householdMemberModel.PrivacyPolicyAccepted, Is.False);
+                Assert.That(householdMemberModel.HasAcceptedPrivacyPolicy, Is.False);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
             }
@@ -828,6 +874,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Header, null)
                 .With(m => m.Body, null)
                 .With(m => m.IsAccepted, true)
+                .With(m => m.AcceptedTime, null)
                 .Create();
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
@@ -871,6 +918,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Header, null)
                 .With(m => m.Body, null)
                 .With(m => m.IsAccepted, isPrivacyPoliciesAccepted)
+                .With(m => m.AcceptedTime, isPrivacyPoliciesAccepted ? DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.Identifier, Is.Not.EqualTo(default(Guid)));
@@ -878,6 +926,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.Header, Is.Null);
             Assert.That(privacyPolicyModel.Body, Is.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
+            if (isPrivacyPoliciesAccepted)
+            {
+                Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
+                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
+                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
+            }
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
@@ -900,6 +958,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.Body, Is.Not.Empty);
             Assert.That(privacyPolicyModel.Body, Is.EqualTo(reloadedPrivacyPolicyModel.Body));
             Assert.That(privacyPolicyModel.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
+            if (isPrivacyPoliciesAccepted)
+            {
+                Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
+                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
+                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
+            }
         }
 
         /// <summary>
@@ -919,6 +987,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .With(m => m.AcceptedTime, null)
                 .Create();
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
@@ -953,6 +1022,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, isPrivacyPoliciesAccepted)
+                .With(m => m.AcceptedTime, privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .Create();
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
@@ -965,12 +1035,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel, Is.Not.Null);
             if (privacyPoliciesHasAlreadyBeenAccepted)
             {
+                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime, Is.Not.Null);
+                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime, Is.Not.EqualTo(DateTime.Now).Within(3).Seconds);
+                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime.HasValue, Is.True);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.EqualTo(DateTime.Now).Within(3).Seconds);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
             }
             else
             {
+                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime, Is.Null);
+                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime.HasValue, Is.False);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
             }
@@ -998,19 +1073,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(model.PrivacyPolicy.IsAccepted, Is.EqualTo(privacyPoliciesHasAlreadyBeenAccepted));
             if (privacyPoliciesHasAlreadyBeenAccepted)
             {
+                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime, Is.Not.Null);
+                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
+                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime.HasValue, Is.True);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
             }
             else
             {
+                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime, Is.Null);
+                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime.HasValue, Is.False);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
             }
         }
 
         /// <summary>
-        /// Tests that Prepare with a valid model does not call ActivateHouseholdMemberAsync on the repository which can access household data when the household has been activated.
+        /// Tests that Prepare with a valid model does not call ActivateHouseholdMemberAsync on the repository which can access household data when the household member has been activated.
         /// </summary>
         [Test]
         public void TestThatPrepareWithValidModelDoesNotCallActivateHouseholdMemberAsyncOnHouseholdDataRepositoryWhenHouseholdMemberHasBeenActivated()
@@ -1020,6 +1100,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .With(m => m.AcceptedTime, null)
                 .Create();
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
@@ -1041,6 +1122,73 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Prepare with a valid model does not call GenerateActivatedHouseholdMemberClaim on the provider which can append local claims to a claims identity when the household member has been activated.
+        /// </summary>
+        [Test]
+        public void TestThatPrepareWithValidModelDoesNotCallGenerateActivatedHouseholdMemberClaimOnLocalClaimProviderWhenHouseholdMemberHasBeenActivated()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .With(m => m.AcceptedTime, null)
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, Fixture.Create<string>())
+                .With(m => m.ActivatedTime, DateTime.Now.AddDays(Random.Next(1, 7) * -1).AddMinutes(Random.Next(-120, 120)))
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Empty);
+            Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            _localClaimProviderMock.AssertWasNotCalled(m => m.GenerateActivatedHouseholdMemberClaim());
+        }
+
+        /// <summary>
+        /// Tests that Prepare with a valid model does not update ActivatedTime on the household member when the household member has been activated.
+        /// </summary>
+        [Test]
+        public void TestThatPrepareWithValidModelDoesNotUpdateActivatedTimeOnHouseholdMemberWhenHouseholdMemberHasBeenActivated()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .With(m => m.AcceptedTime, null)
+                .Create();
+
+            var activationTime = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120));
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, Fixture.Create<string>())
+                .With(m => m.ActivatedTime, activationTime)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Empty);
+            Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivatedTime, Is.EqualTo(activationTime));
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
+        }
+
+        /// <summary>
         /// Tests that Prepare with a valid model without an activation code does not call ActivateHouseholdMemberAsync on the repository which can access household data when the household member has been not activated.
         /// </summary>
         [Test]
@@ -1056,6 +1204,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .With(m => m.AcceptedTime, null)
                 .Create();
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
@@ -1076,6 +1225,81 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Prepare with a valid model without an activation code does not call GenerateActivatedHouseholdMemberClaim on the provider which can append local claims to a claims identity when the household member has been not activated.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatPrepareWithValidModelWithoutActivationCodeDoesNotCallGenerateActivatedHouseholdMemberClaimOnLocalClaimProviderWhenHouseholdMemberHasNotBeenActivated(string noActicationCode)
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .With(m => m.AcceptedTime, null)
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, noActicationCode)
+                .With(m => m.ActivatedTime, null)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActicationCode));
+            Assert.That(householdMemberModel.ActivatedTime, Is.Null);
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            _localClaimProviderMock.AssertWasNotCalled(m => m.GenerateActivatedHouseholdMemberClaim());
+        }
+
+        /// <summary>
+        /// Tests that Prepare with a valid model without an activation code does not update ActivatedTime on the household member when the household member has been not activated.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatPrepareWithValidModelWithoutActivationCodeDoesNotUpdateActivatedTimeOnHouseholdMemberWhenHouseholdMemberHasNotBeenActivated(string noActicationCode)
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .With(m => m.AcceptedTime, null)
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, noActicationCode)
+                .With(m => m.ActivatedTime, null)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActicationCode));
+            Assert.That(householdMemberModel.ActivatedTime, Is.Null);
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            _localClaimProviderMock.AssertWasNotCalled(m => m.GenerateActivatedHouseholdMemberClaim());
+
+            Assert.That(householdMemberModel.ActivatedTime, Is.Null);
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
+        }
+
+        /// <summary>
         /// Tests that Prepare with a valid model with an activation code calls ActivateHouseholdMemberAsync on the repository which can access household data when the household member has been not activated.
         /// </summary>
         [Test]
@@ -1088,6 +1312,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .With(m => m.AcceptedTime, null)
                 .Create();
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
@@ -1109,6 +1334,116 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Prepare with a valid model with an activation code calls GenerateActivatedHouseholdMemberClaim on the provider which can append local claims to a claims identity when the household member has been not activated.
+        /// </summary>
+        [Test]
+        public void TestThatPrepareWithValidModelWithActivationCodeCallsGenerateActivatedHouseholdMemberClaimOnLocalClaimProviderWhenHouseholdMemberHasNotBeenActivated()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .With(m => m.AcceptedTime, null)
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, Fixture.Create<string>())
+                .With(m => m.ActivatedTime, null)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Empty);
+            Assert.That(householdMemberModel.ActivatedTime, Is.Null);
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            _localClaimProviderMock.AssertWasCalled(m => m.GenerateActivatedHouseholdMemberClaim());
+        }
+
+        /// <summary>
+        /// Tests that Prepare with a valid model with an activation code calls AddLocalClaimAsync with the claim which indicates that the users household member account has been activated on the provider which can append local claims to a claims identity when the household member has been not activated.
+        /// </summary>
+        [Test]
+        public void TestThatPrepareWithValidModelWithActivationCodeCallsAddLocalClaimAsyncWithActivatedHouseholdMemberClaimOnLocalClaimProviderWhenHouseholdMemberHasNotBeenActivated()
+        {
+            var claimsIdentity = new ClaimsIdentity();
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            var activatedHouseholdMemberClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
+
+            var householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, activatedHouseholdMemberClaim: activatedHouseholdMemberClaim);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .With(m => m.AcceptedTime, null)
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, Fixture.Create<string>())
+                .With(m => m.ActivatedTime, null)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Empty);
+            Assert.That(householdMemberModel.ActivatedTime, Is.Null);
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            _localClaimProviderMock.AssertWasCalled(m => m.AddLocalClaimAsync(Arg<ClaimsIdentity>.Is.Equal(claimsIdentity), Arg<Claim>.Is.Equal(activatedHouseholdMemberClaim), Arg<HttpContext>.Is.Equal(HttpContext.Current)));
+        }
+
+        /// <summary>
+        /// Tests that Prepare with a valid model with an activation code updates ActivatedTime on the household member when the household member has been not activated.
+        /// </summary>
+        [Test]
+        public void TestThatPrepareWithValidModelWithActivationCodeUpdatesActivatedTimeOnHouseholdMemberWhenHouseholdMemberHasNotBeenActivated()
+        {
+            var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.ActivatedTime, DateTime.Now)
+                .Create();
+            Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
+            Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
+            Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
+            Assert.That(activatedHouseholdMemberModel.ActivatedTime.HasValue, Is.True);
+                
+            var householdMemberController = CreateHouseholdMemberController(activatedHouseholdMemberModel: activatedHouseholdMemberModel);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .With(m => m.AcceptedTime, null)
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, Fixture.Create<string>())
+                .With(m => m.ActivatedTime, null)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Empty);
+            Assert.That(householdMemberModel.ActivatedTime, Is.Null);
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivatedTime, Is.EqualTo(activatedHouseholdMemberModel.ActivatedTime));
+            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
+        }
+
+        /// <summary>
         /// Creates a controller for a household member for unit testing.
         /// </summary>
         /// <param name="privacyPolicyModel">Sets the privacy policy model which should be used by the controller.</param>
@@ -1116,15 +1451,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <param name="isPrivacyPoliciesAccepted">Sets whether the privacy policies has been accepted.</param>
         /// <param name="principal">Sets the user principal for the controller.</param>
         /// <param name="createdHouseholdMemberClaim">Sets the claim which indicates that the user has been created as a household member.</param>
+        /// <param name="activatedHouseholdMemberClaim">Sets the claim which indicates that the users household member account has been activated.</param>
         /// <param name="privacyPoliciesAcceptedClaim">Sets the claim which indicates that the user has accepted the privacy policies.</param>
+        /// <param name="activatedHouseholdMemberModel">Sets the model for an activated household member.</param>
         /// <returns>Controller for a household member for unit testing.</returns>
-        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null)
+        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null)
         {
             _householdDataRepositoryMock.Stub(m => m.GetPrivacyPoliciesAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => privacyPolicyModel ?? Fixture.Create<PrivacyPolicyModel>()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.CreateHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => Fixture.Create<HouseholdModel>()))
+                .Repeat.Any();
+            _householdDataRepositoryMock.Stub(m => m.ActivateHouseholdMemberAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdMemberModel>.Is.Anything))
+                .Return(Task.Run(() => activatedHouseholdMemberModel ?? Fixture.Create<HouseholdMemberModel>()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.AcceptPrivacyPolicyAsync(Arg<IIdentity>.Is.Anything, Arg<PrivacyPolicyModel>.Is.Anything))
                 .Return(Task.Run(() => Fixture.Create<PrivacyPolicyModel>()))
@@ -1139,6 +1479,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             _localClaimProviderMock.Stub(m => m.GenerateCreatedHouseholdMemberClaim())
                 .Return(createdHouseholdMemberClaim ?? new Claim(Fixture.Create<string>(), Fixture.Create<string>()))
+                .Repeat.Any();
+            _localClaimProviderMock.Stub(m => m.GenerateActivatedHouseholdMemberClaim())
+                .Return(activatedHouseholdMemberClaim ?? new Claim(Fixture.Create<string>(), Fixture.Create<string>()))
                 .Repeat.Any();
             _localClaimProviderMock.Stub(m => m.GeneratePrivacyPoliciesAcceptedClaim())
                 .Return(privacyPoliciesAcceptedClaim ?? new Claim(Fixture.Create<string>(), Fixture.Create<string>()))

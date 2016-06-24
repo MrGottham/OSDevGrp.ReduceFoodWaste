@@ -22,7 +22,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// <summary>
         /// Gets whether the household member has been activated.
         /// </summary>
-        public bool Activated
+        public bool IsActivated
         {
             get { return ActivatedTime.HasValue; }
         }
@@ -40,7 +40,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// <summary>
         /// Gets whether the household member has accepted the privacy policies.
         /// </summary>
-        public bool PrivacyPolicyAccepted
+        public bool HasAcceptedPrivacyPolicy
         {
             get { return PrivacyPolicyAcceptedTime.HasValue; }
         }
