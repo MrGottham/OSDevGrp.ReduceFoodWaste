@@ -74,7 +74,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
-        /// Tests that Convert converts a PrivacyPolicyModel where IsAccepted is equal to true to a HouseholdAddCommand.
+        /// Tests that Convert converts a PrivacyPolicyModel where IsAccepted is equal to true to a HouseholdMemberAcceptPrivacyPolicyCommand.
         /// </summary>
         [Test]
         public void TestThatConvertConvertsPrivacyPolicyModelWhereIsAcceptedEqualToTrueToHouseholdMemberAcceptPrivacyPolicyCommand()
@@ -82,18 +82,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var householdDataConverter = CreateHouseholdDataConverter();
             Assert.That(householdDataConverter, Is.Not.Null);
 
-            var householdModel = Fixture.Build<PrivacyPolicyModel>()
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .Create();
-            Assert.That(householdModel, Is.Not.Null);
-            Assert.That(householdModel.IsAccepted, Is.True);
+            Assert.That(privacyPolicyModel, Is.Not.Null);
+            Assert.That(privacyPolicyModel.IsAccepted, Is.True);
 
-            var result = householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(householdModel);
+            var result = householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(privacyPolicyModel);
             Assert.That(result, Is.Not.Null);
         }
 
         /// <summary>
-        /// Tests that Convert throws an ReduceFoodWasteSystemException when converting a PrivacyPolicyModel where IsAccepted is equal to false to a HouseholdAddCommand.
+        /// Tests that Convert throws an ReduceFoodWasteSystemException when converting a PrivacyPolicyModel where IsAccepted is equal to false to a HouseholdMemberAcceptPrivacyPolicyCommand.
         /// </summary>
         [Test]
         public void TestThatConvertThrowsReduceFoodWasteSystemExceptionWhenConvertingPrivacyPolicyModelWhereIsAcceptedEqualToFalseToHouseholdMemberAcceptPrivacyPolicyCommand()
@@ -101,17 +101,73 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var householdDataConverter = CreateHouseholdDataConverter();
             Assert.That(householdDataConverter, Is.Not.Null);
 
-            var householdModel = Fixture.Build<PrivacyPolicyModel>()
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .Create();
-            Assert.That(householdModel, Is.Not.Null);
-            Assert.That(householdModel.IsAccepted, Is.False);
+            Assert.That(privacyPolicyModel, Is.Not.Null);
+            Assert.That(privacyPolicyModel.IsAccepted, Is.False);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(householdModel));
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(privacyPolicyModel));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
             Assert.That(exception.Message, Is.EqualTo(Texts.PrivacyPoliciesHasNotBeenAccepted));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that Convert converts a HouseholdMemberModel with an activation code to a HouseholdMemberActivateCommand.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsHouseholdMemberModelWithActivationCodeToHouseholdMemberActivateCommand()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var activationCode = Fixture.Create<string>();
+            Assert.That(activationCode, Is.Not.Null);
+            Assert.That(activationCode, Is.Not.Empty);
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.ActivationCode, activationCode)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.Not.Empty);
+            Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(activationCode));
+
+            var result = householdDataConverter.Convert<HouseholdMemberModel, HouseholdMemberActivateCommand>(householdMemberModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.ActivationCode, Is.Not.Null);
+            Assert.That(result.ActivationCode, Is.Not.Empty);
+            Assert.That(result.ActivationCode, Is.EqualTo(activationCode));
+        }
+
+        /// <summary>
+        /// Tests that Convert throws an ReduceFoodWasteSystemException when converting a HouseholdMemberModel without an activation code to a HouseholdMemberActivateCommand.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatConvertThrowsReduceFoodWasteSystemExceptionWhenConvertinHouseholdMemberModelWithoutActivationCodeToHouseholdMemberActivateCommand(string illegalActivationCode)
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.ActivationCode, illegalActivationCode)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(illegalActivationCode));
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdDataConverter.Convert<HouseholdMemberModel, HouseholdMemberActivateCommand>(householdMemberModel));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.ActivationCodeMustBeGiven));
             Assert.That(exception.InnerException, Is.Null);
         }
 

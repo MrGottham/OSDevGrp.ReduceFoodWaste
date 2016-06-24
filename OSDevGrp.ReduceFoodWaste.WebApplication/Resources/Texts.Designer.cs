@@ -97,6 +97,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The activation code must be given..
+        /// </summary>
+        public static string ActivationCodeMustBeGiven {
+            get {
+                return ResourceManager.GetString("ActivationCodeMustBeGiven", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Business related error..
         /// </summary>
         public static string BusinessException {

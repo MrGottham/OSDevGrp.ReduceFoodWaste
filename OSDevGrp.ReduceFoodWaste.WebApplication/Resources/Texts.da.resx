@@ -252,4 +252,7 @@
   <data name="ActivationCode" xml:space="preserve">
     <value>Aktiveringskode</value>
   </data>
+  <data name="ActivationCodeMustBeGiven" xml:space="preserve">
+    <value>Aktiveringskoden skal angives.</value>
+  </data>
 </root>
