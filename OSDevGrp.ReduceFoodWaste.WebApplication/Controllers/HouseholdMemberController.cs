@@ -226,9 +226,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 var reloadedPrivacyPolicyModel = privacyPolicyGetTask.Result;
                 if (householdMemberModel.PrivacyPolicy == null)
                 {
+                    var privacyPoliciesHasAlreadyBeenAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
                     householdMemberModel.PrivacyPolicy = reloadedPrivacyPolicyModel;
-                    householdMemberModel.PrivacyPolicy.IsAccepted = false;
-                    householdMemberModel.PrivacyPolicyAcceptedTime = null;
+                    householdMemberModel.PrivacyPolicy.IsAccepted = privacyPoliciesHasAlreadyBeenAccepted;
+                    householdMemberModel.PrivacyPolicy.AcceptedTime = privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now : (DateTime?) null;
+                    householdMemberModel.PrivacyPolicyAcceptedTime = privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now : (DateTime?) null;
                 }
                 else
                 {
@@ -258,7 +260,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     householdMemberModel.ActivatedTime = activatedHouseholdMemberModel.ActivatedTime;
                 }
 
-                return null;
+                if (householdMemberModel.HasAcceptedPrivacyPolicy == false && householdMemberModel.PrivacyPolicy != null && householdMemberModel.PrivacyPolicy.IsAccepted)
+                {
+                    var acceptPrivacyPolicyTask = _householdDataRepository.AcceptPrivacyPolicyAsync(User.Identity, householdMemberModel.PrivacyPolicy);
+                    acceptPrivacyPolicyTask.Wait();
+
+                    var acceptedPrivacyPolicy = acceptPrivacyPolicyTask.Result;
+
+                    AddClaim(_localClaimProvider.GeneratePrivacyPoliciesAcceptedClaim());
+
+                    householdMemberModel.PrivacyPolicyAcceptedTime = acceptedPrivacyPolicy.AcceptedTime;
+                }
+
+                if (householdMemberModel.IsActivated == false || householdMemberModel.HasAcceptedPrivacyPolicy == false)
+                {
+                    return View("Prepare", householdMemberModel);
+                }
+
+                AddClaim(_localClaimProvider.GenerateValidatedHouseholdMemberClaim());
+
+                return RedirectToAction("Dashboard", "Dashboard");
             }
             catch (AggregateException ex)
             {
