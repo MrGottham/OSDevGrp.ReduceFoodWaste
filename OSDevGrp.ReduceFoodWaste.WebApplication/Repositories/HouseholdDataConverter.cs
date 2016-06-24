@@ -33,6 +33,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.TranslationInfoIdentifier, opt => opt.Ignore())
                     .ForMember(dest => dest.ExtensionData, opt => opt.Ignore());
 
+                configuration.CreateMap<HouseholdMemberModel, HouseholdMemberActivateCommand>()
+                    .ConvertUsing(src =>
+                    {
+                        if (string.IsNullOrWhiteSpace(src.ActivationCode))
+                        {
+                            throw new ReduceFoodWasteSystemException(Texts.ActivationCodeMustBeGiven);
+                        }
+                        return new HouseholdMemberActivateCommand
+                        {
+                            ActivationCode = src.ActivationCode
+                        };
+                    });
+
                 configuration.CreateMap<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>()
                     .ConvertUsing(src =>
                     {

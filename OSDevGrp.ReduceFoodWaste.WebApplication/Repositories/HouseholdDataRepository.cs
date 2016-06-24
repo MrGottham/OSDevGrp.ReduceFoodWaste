@@ -165,6 +165,35 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         }
 
         /// <summary>
+        /// Activates the household member account for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity whos household member account should be activated.</param>
+        /// <param name="householdMemberModel">Household member account which should be activated.</param>
+        /// <returns>Model for the activated household member.</returns>
+        public Task<HouseholdMemberModel> ActivateHouseholdMemberAsync(IIdentity identity, HouseholdMemberModel householdMemberModel)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (householdMemberModel == null)
+            {
+                throw new ArgumentNullException("householdMemberModel");
+            }
+
+            Func<HouseholdDataServiceChannel, HouseholdMemberModel> callbackFunc = channel =>
+            {
+                var command = _householdDataConverter.Convert<HouseholdMemberModel, HouseholdMemberActivateCommand>(householdMemberModel);
+                var result = channel.HouseholdMemberActivate(command);
+
+                householdMemberModel.Identifier = result.Identifier ?? default(Guid);
+                householdMemberModel.ActivatedTime = result.EventDate;
+                return householdMemberModel;
+            };
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+        }
+
+        /// <summary>
         /// Accepts the privacy policies on the household member which has been created for the given identity.
         /// </summary>
         /// <param name="identity">Identity on which to accept the privacy policies.</param>

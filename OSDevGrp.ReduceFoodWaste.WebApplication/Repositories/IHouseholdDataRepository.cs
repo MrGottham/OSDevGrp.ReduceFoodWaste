@@ -41,6 +41,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         Task<HouseholdModel> CreateHouseholdAsync(IIdentity identity, HouseholdModel householdModel, CultureInfo cultureInfo);
 
         /// <summary>
+        /// Activates the household member account for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity whos household member account should be activated.</param>
+        /// <param name="householdMemberModel">Household member account which should be activated.</param>
+        /// <returns>Model for the activated household member.</returns>
+        Task<HouseholdMemberModel> ActivateHouseholdMemberAsync(IIdentity identity, HouseholdMemberModel householdMemberModel);
+
+        /// <summary>
         /// Accepts the privacy policies on the household member which has been created for the given identity.
         /// </summary>
         /// <param name="identity">Identity on which to accept the privacy policies.</param>

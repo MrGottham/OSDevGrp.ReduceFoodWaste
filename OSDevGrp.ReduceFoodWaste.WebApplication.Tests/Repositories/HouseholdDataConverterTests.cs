@@ -74,48 +74,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
-        /// Tests that Convert converts a PrivacyPolicyModel where IsAccepted is equal to true to a HouseholdMemberAcceptPrivacyPolicyCommand.
-        /// </summary>
-        [Test]
-        public void TestThatConvertConvertsPrivacyPolicyModelWhereIsAcceptedEqualToTrueToHouseholdMemberAcceptPrivacyPolicyCommand()
-        {
-            var householdDataConverter = CreateHouseholdDataConverter();
-            Assert.That(householdDataConverter, Is.Not.Null);
-
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
-                .With(m => m.IsAccepted, true)
-                .Create();
-            Assert.That(privacyPolicyModel, Is.Not.Null);
-            Assert.That(privacyPolicyModel.IsAccepted, Is.True);
-
-            var result = householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(privacyPolicyModel);
-            Assert.That(result, Is.Not.Null);
-        }
-
-        /// <summary>
-        /// Tests that Convert throws an ReduceFoodWasteSystemException when converting a PrivacyPolicyModel where IsAccepted is equal to false to a HouseholdMemberAcceptPrivacyPolicyCommand.
-        /// </summary>
-        [Test]
-        public void TestThatConvertThrowsReduceFoodWasteSystemExceptionWhenConvertingPrivacyPolicyModelWhereIsAcceptedEqualToFalseToHouseholdMemberAcceptPrivacyPolicyCommand()
-        {
-            var householdDataConverter = CreateHouseholdDataConverter();
-            Assert.That(householdDataConverter, Is.Not.Null);
-
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
-                .With(m => m.IsAccepted, false)
-                .Create();
-            Assert.That(privacyPolicyModel, Is.Not.Null);
-            Assert.That(privacyPolicyModel.IsAccepted, Is.False);
-
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(privacyPolicyModel));
-            Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.Message, Is.Not.Null);
-            Assert.That(exception.Message, Is.Not.Empty);
-            Assert.That(exception.Message, Is.EqualTo(Texts.PrivacyPoliciesHasNotBeenAccepted));
-            Assert.That(exception.InnerException, Is.Null);
-        }
-
-        /// <summary>
         /// Tests that Convert converts a HouseholdMemberModel with an activation code to a HouseholdMemberActivateCommand.
         /// </summary>
         [Test]
@@ -168,6 +126,48 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
             Assert.That(exception.Message, Is.EqualTo(Texts.ActivationCodeMustBeGiven));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that Convert converts a PrivacyPolicyModel where IsAccepted is equal to true to a HouseholdMemberAcceptPrivacyPolicyCommand.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsPrivacyPolicyModelWhereIsAcceptedEqualToTrueToHouseholdMemberAcceptPrivacyPolicyCommand()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, true)
+                .Create();
+            Assert.That(privacyPolicyModel, Is.Not.Null);
+            Assert.That(privacyPolicyModel.IsAccepted, Is.True);
+
+            var result = householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(privacyPolicyModel);
+            Assert.That(result, Is.Not.Null);
+        }
+
+        /// <summary>
+        /// Tests that Convert throws an ReduceFoodWasteSystemException when converting a PrivacyPolicyModel where IsAccepted is equal to false to a HouseholdMemberAcceptPrivacyPolicyCommand.
+        /// </summary>
+        [Test]
+        public void TestThatConvertThrowsReduceFoodWasteSystemExceptionWhenConvertingPrivacyPolicyModelWhereIsAcceptedEqualToFalseToHouseholdMemberAcceptPrivacyPolicyCommand()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, false)
+                .Create();
+            Assert.That(privacyPolicyModel, Is.Not.Null);
+            Assert.That(privacyPolicyModel.IsAccepted, Is.False);
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdDataConverter.Convert<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>(privacyPolicyModel));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.PrivacyPoliciesHasNotBeenAccepted));
             Assert.That(exception.InnerException, Is.Null);
         }
 

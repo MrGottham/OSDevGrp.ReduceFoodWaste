@@ -174,6 +174,40 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that ActivateHouseholdMemberAsync throws an ArgumentNullException when the identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatActivateHouseholdMemberAsyncThrowsArgumentNullExceptionWhenIdentityIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.ActivateHouseholdMemberAsync(null, Fixture.Create<HouseholdMemberModel>()));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that ActivateHouseholdMemberAsync throws an ArgumentNullException when the model for the household member which should be activated is null.
+        /// </summary>
+        [Test]
+        public void TestThatActivateHouseholdMemberAsyncThrowsArgumentNullExceptionWhenHouseholdMemberModelIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.ActivateHouseholdMemberAsync(MockRepository.GenerateMock<IIdentity>(), null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("householdMemberModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
         /// Tests that AcceptPrivacyPolicyAsync throws an ArgumentNullException when the identity is null.
         /// </summary>
         [Test]
