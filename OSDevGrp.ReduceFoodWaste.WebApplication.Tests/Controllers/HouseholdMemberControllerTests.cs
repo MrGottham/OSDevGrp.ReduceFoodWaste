@@ -810,6 +810,206 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Prepare with a model calls GetPrivacyPoliciesAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatPrepareWithModelCallsGetPrivacyPoliciesAsyncOnHouseholdDataRepository()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.Identifier, Guid.NewGuid())
+                .With(m => m.Header, null)
+                .With(m => m.Body, null)
+                .With(m => m.IsAccepted, true)
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, null)
+                .With(m => m.ActivatedTime, null)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetPrivacyPoliciesAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that Prepare with a model updates Identifier, Header and Body in the privacy policy model with values from the reloaded privacy policy model.
+        /// </summary>
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestThatPrepareWithModelUpdatesValuesInPrivacyPolicyModelWithValuesFromReloadedPrivacyPolicyModel(bool isPrivacyPoliciesAccepted)
+        {
+            var reloadedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.Identifier, Guid.NewGuid())
+                .With(m => m.Header, Fixture.Create<string>())
+                .With(m => m.Body, Fixture.Create<string>())
+                .Create();
+            Assert.That(reloadedPrivacyPolicyModel, Is.Not.Null);
+            Assert.That(reloadedPrivacyPolicyModel.Identifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(reloadedPrivacyPolicyModel.Header, Is.Not.Null);
+            Assert.That(reloadedPrivacyPolicyModel.Header, Is.Not.Empty);
+            Assert.That(reloadedPrivacyPolicyModel.Body, Is.Not.Null);
+            Assert.That(reloadedPrivacyPolicyModel.Body, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController(privacyPolicyModel: reloadedPrivacyPolicyModel);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.Identifier, Guid.NewGuid())
+                .With(m => m.Header, null)
+                .With(m => m.Body, null)
+                .With(m => m.IsAccepted, isPrivacyPoliciesAccepted)
+                .Create();
+            Assert.That(privacyPolicyModel, Is.Not.Null);
+            Assert.That(privacyPolicyModel.Identifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(privacyPolicyModel.Identifier, Is.Not.EqualTo(reloadedPrivacyPolicyModel.Identifier));
+            Assert.That(privacyPolicyModel.Header, Is.Null);
+            Assert.That(privacyPolicyModel.Body, Is.Null);
+            Assert.That(privacyPolicyModel.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, null)
+                .With(m => m.ActivatedTime, null)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
+            Assert.That(householdMemberModel.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            Assert.That(privacyPolicyModel.Identifier, Is.EqualTo(reloadedPrivacyPolicyModel.Identifier));
+            Assert.That(privacyPolicyModel.Header, Is.Not.Null);
+            Assert.That(privacyPolicyModel.Header, Is.Not.Empty);
+            Assert.That(privacyPolicyModel.Header, Is.EqualTo(reloadedPrivacyPolicyModel.Header));
+            Assert.That(privacyPolicyModel.Body, Is.Not.Null);
+            Assert.That(privacyPolicyModel.Body, Is.Not.Empty);
+            Assert.That(privacyPolicyModel.Body, Is.EqualTo(reloadedPrivacyPolicyModel.Body));
+            Assert.That(privacyPolicyModel.IsAccepted, Is.EqualTo(isPrivacyPoliciesAccepted));
+        }
+
+        /// <summary>
+        /// Tests that Prepare with an invalid model calls IsPrivacyPoliciesAccepted on the provider which can get values from claims.
+        /// </summary>
+        [Test]
+        public void TestThatPrepareWithInvalidModelCallsIsPrivacyPoliciesAcceptedOnClaimValueProvider()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+            Assert.That(householdMemberController.ModelState, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, Fixture.Create<bool>())
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, null)
+                .With(m => m.ActivatedTime, null)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .Create();
+
+            householdMemberController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
+            Assert.That(householdMemberController.ModelState.IsValid, Is.False);
+
+            householdMemberController.Prepare(householdMemberModel);
+
+            _claimValueProviderMock.AssertWasCalled(m => m.IsPrivacyPoliciesAccepted(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity)));
+        }
+
+        /// <summary>
+        /// Tests that Prepare with an invalid model returns a ViewResult with a model for preparing a household members account.
+        /// </summary>
+        [Test]
+        [TestCase(true, true)]
+        [TestCase(true, false)]
+        [TestCase(false, true)]
+        [TestCase(false, false)]
+        public void TestThatPrepareWithInvalidModelReturnsViewResultWithModelForPreparingHouseholdMember(bool isPrivacyPoliciesAccepted, bool privacyPoliciesHasAlreadyBeenAccepted)
+        {
+            var householdMemberController = CreateHouseholdMemberController(isPrivacyPoliciesAccepted: privacyPoliciesHasAlreadyBeenAccepted);
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.ModelState, Is.Not.Null);
+
+            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+                .With(m => m.IsAccepted, isPrivacyPoliciesAccepted)
+                .Create();
+
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Identifier, default(Guid))
+                .With(m => m.ActivationCode, null)
+                .With(m => m.ActivatedTime, null)
+                .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.PrivacyPolicyAcceptedTime, privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            if (privacyPoliciesHasAlreadyBeenAccepted)
+            {
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.EqualTo(DateTime.Now).Within(3).Seconds);
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
+            }
+
+            householdMemberController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
+            Assert.That(householdMemberController.ModelState.IsValid, Is.False);
+
+            var result = householdMemberController.Prepare(householdMemberModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("Prepare"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(householdMemberModel));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Empty);
+
+            var model = (HouseholdMemberModel) viewResult.Model;
+            Assert.That(model.PrivacyPolicy, Is.Not.Null);
+            Assert.That(model.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
+            Assert.That(model.PrivacyPolicy.IsAccepted, Is.EqualTo(privacyPoliciesHasAlreadyBeenAccepted));
+            if (privacyPoliciesHasAlreadyBeenAccepted)
+            {
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
+                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
+            }
+        }
+
+        /// <summary>
         /// Creates a controller for a household member for unit testing.
         /// </summary>
         /// <param name="privacyPolicyModel">Sets the privacy policy model which should be used by the controller.</param>

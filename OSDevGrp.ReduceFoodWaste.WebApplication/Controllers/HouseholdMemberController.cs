@@ -212,8 +212,44 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 throw new ArgumentNullException("householdMemberModel");
             }
+            try
+            {
+                var privacyPolicyGetTask = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
+                privacyPolicyGetTask.Wait();
 
-            throw new NotImplementedException();
+                var reloadedPrivacyPolicyModel = privacyPolicyGetTask.Result;
+                if (householdMemberModel.PrivacyPolicy == null)
+                {
+                    householdMemberModel.PrivacyPolicy = reloadedPrivacyPolicyModel;
+                    householdMemberModel.PrivacyPolicy.IsAccepted = false;
+                }
+                else
+                {
+                    householdMemberModel.PrivacyPolicy.Identifier = reloadedPrivacyPolicyModel.Identifier;
+                    householdMemberModel.PrivacyPolicy.Header = reloadedPrivacyPolicyModel.Header;
+                    householdMemberModel.PrivacyPolicy.Body = reloadedPrivacyPolicyModel.Body;
+                }
+
+                if (ModelState.IsValid == false)
+                {
+                    var privacyPoliciesHasAlreadyBeenAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
+                    householdMemberModel.PrivacyPolicyAcceptedTime = privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now : (DateTime?) null;
+                    householdMemberModel.PrivacyPolicy.IsAccepted = privacyPoliciesHasAlreadyBeenAccepted;
+                    return View("Prepare", householdMemberModel);
+                }
+
+                return null;
+            }
+            catch (AggregateException ex)
+            {
+                ViewBag.ErrorMessage = ex.ToReduceFoodWasteException().Message;
+                return View("Prepare", householdMemberModel);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Prepare", householdMemberModel);
+            }
         }
 
         /// <summary>
