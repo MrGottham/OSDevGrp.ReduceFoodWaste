@@ -10,6 +10,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
         {
             filters.Add(new HandleErrorAttribute());
             filters.Add(new CultureAttribute());
+            filters.Add(new CookieConsentAttribute());
         }
     }
 }

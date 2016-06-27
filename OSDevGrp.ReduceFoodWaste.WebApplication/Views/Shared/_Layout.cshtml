@@ -1,4 +1,5 @@
-﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Filters
+@using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication
 @using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 <!DOCTYPE html>
 <html lang="en">
@@ -40,6 +41,10 @@
             </section>
         </div>
         <footer>
+            @if (CookieConsentAttribute.AskCookieConsent(ViewContext))
+            {
+                @Html.Partial("_CookieConsentMessagePartial")
+            }
             <div class="content-wrapper">
                 <div class="float-left">
                     <p>Copyright &copy; OS Development Group @DateTime.Now.Year - @Texts.ReduceFoodWasteProject</p>

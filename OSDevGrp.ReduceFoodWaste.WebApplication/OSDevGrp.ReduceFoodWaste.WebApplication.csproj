@@ -241,6 +241,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HouseholdMemberController.cs" />
     <Compile Include="Controllers\LanguageController.cs" />
+    <Compile Include="Filters\CookieConsentAttribute.cs" />
     <Compile Include="Filters\CultureAttribute.cs" />
     <Compile Include="Filters\HandleErrorAttribute.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
@@ -435,6 +436,7 @@
     <Content Include="Views\HouseholdMember\Create.cshtml" />
     <Content Include="Views\HouseholdMember\_PrivacyPolicies.cshtml" />
     <Content Include="Views\HouseholdMember\Prepare.cshtml" />
+    <Content Include="Views\Shared\_CookieConsentMessagePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
