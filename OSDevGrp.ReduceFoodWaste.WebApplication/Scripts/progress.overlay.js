@@ -27,7 +27,7 @@
             message = "Vent venligst, mens data hentes...";
         }
 
-        var overlayElement = $("<div id='loadProgressOuterContainer'><div class='loadProgressOverlay'></div><div class='progressVerticalCentering'><div class='progressHorizontalCentering'><h2>" + message + "</h2><br/><br/><img id='progressSpinner' src='../Images/ajax-loader_bigspinner_green.gif'/></div></div></div>");
+        var overlayElement = $("<div id='loadProgressOuterContainer'><div class='loadProgressOverlay'></div><div class='progressVerticalCentering'><div class='progressHorizontalCentering'><h3><strong>" + message + "</strong></h3><br><img id='progressSpinner' src='../Images/ajax-loader_bigspinner_green.gif'/></div></div></div>");
         $("body").append(overlayElement);
     }
 

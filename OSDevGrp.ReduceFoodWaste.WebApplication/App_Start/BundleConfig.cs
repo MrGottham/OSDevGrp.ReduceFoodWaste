@@ -39,6 +39,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
                 "~/Content/themes/base/jquery.ui.progressbar.css",
                 "~/Content/themes/base/jquery.ui.theme.css"));
 
+            bundles.Add(new StyleBundle("~/Content/bootstrap/css").Include(
+                "~/Content/bootstrap.css",
+                "~/Content/bootstrap.min.css",
+                "~/Content/bootstrap-theme.css",
+                "~/Content/bootstrap-theme.min.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                "~/Scripts/bootstrap.js",
+                "~/Scripts/bootstrap.min.js"));
+
             bundles.Add(new StyleBundle("~/Content/progress.overlay/css").Include(
                 "~/Content/progress.overlay.css"));
 
