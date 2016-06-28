@@ -3,78 +3,77 @@
 @using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewBag.Title - @Texts.ReduceFoodWasteProject</title>
-        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - @Texts.ReduceFoodWasteProject</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
-        @Styles.Render("~/Content/css")
-        @Styles.Render("~/Content/progress.overlay/css")
-        @Styles.Render("~/Content/bootstrap/css")
-
-        @Scripts.Render("~/bundles/modernizr")
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-    </head>
-    <body>
-        <header>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p class="site-title">@Html.ActionLink(Texts.ReduceFoodWasteProject, "Index", "Home")</p>
-                </div>
-                <div class="float-right">
-                    <section id="login">
-                        @Html.Partial("_LoginPartial")
-                    </section>
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink(Texts.Home, "Index", "Home")</li>
-                            @if (User != null && User.Identity != null && User.Identity.IsAuthenticated && User.Identity.IsValidatedHouseholdMember())
-                            {
-                                <li>@Html.ActionLink(Texts.Dashboard, "Dashboard", "Dashboard")</li>
-                            }
-                        </ul>
-                    </nav>
-                </div>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/bootstrap/css")
+    @Styles.Render("~/Content/progress.overlay/css")
+</head>
+<body>
+    <header>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p class="site-title">@Html.ActionLink(Texts.ReduceFoodWasteProject, "Index", "Home")</p>
             </div>
-        </header>
-        <div id="body">
-            @RenderSection("featured", required: false)
-            <section class="content-wrapper main-content clear-fix">
-                @RenderBody()
-            </section>
-        </div>
-        <footer>
-            @if (CookieConsentAttribute.AskCookieConsent(ViewContext))
-            {
-                @Html.Partial("_CookieConsentMessagePartial")
-            }
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p>Copyright &copy; OS Development Group @DateTime.Now.Year - @Texts.ReduceFoodWasteProject</p>
-                </div>
-                <div id="culture" class="float-right">
-                    <section>
-                        @Html.Partial("_CulturePartial")
-                    </section>
-                </div>
-            </div>
-        </footer>
-
-        @Scripts.Render("~/bundles/progress.overlay")
-        @RenderSection("scripts", required: false)
-        
-        <script>
-            $().ready(function() {
-                $("a").click(function () {
-                    if ($(this).attr("href") != null && $(this).attr("href") !== '') {
-                        if ($(this).attr("progressOverlay") !== 'false') {
-                            $().progressOverlay("show");
+            <div class="float-right">
+                <section id="login">
+                    @Html.Partial("_LoginPartial")
+                </section>
+                <nav>
+                    <ul id="menu">
+                        <li>@Html.ActionLink(Texts.Home, "Index", "Home")</li>
+                        @if (User != null && User.Identity != null && User.Identity.IsAuthenticated && User.Identity.IsValidatedHouseholdMember())
+                        {
+                            <li>@Html.ActionLink(Texts.Dashboard, "Dashboard", "Dashboard")</li>
                         }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div id="body">
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+    <footer>
+        @if (CookieConsentAttribute.AskCookieConsent(ViewContext))
+        {
+            @Html.Partial("_CookieConsentMessagePartial")
+        }
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p>Copyright &copy; OS Development Group @DateTime.Now.Year - @Texts.ReduceFoodWasteProject</p>
+            </div>
+            <div id="culture" class="float-right">
+                <section>
+                    @Html.Partial("_CulturePartial")
+                </section>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/progress.overlay")
+    @RenderSection("scripts", required: false)
+
+    <script>
+        $().ready(function () {
+            $("a").click(function () {
+                if ($(this).attr("href") != null && $(this).attr("href") !== '') {
+                    if ($(this).attr("progressOverlay") !== 'false') {
+                        $().progressOverlay("show");
                     }
-                });
+                }
             });
-        </script>
-    </body>
+        });
+    </script>
+</body>
 </html>
