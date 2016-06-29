@@ -41,9 +41,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
 
             bundles.Add(new StyleBundle("~/Content/bootstrap/css").Include(
                 "~/Content/bootstrap.css",
-                "~/Content/bootstrap.min.css",
-                "~/Content/bootstrap-theme.css",
-                "~/Content/bootstrap-theme.min.css"));
+                "~/Content/bootstrap.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js",
