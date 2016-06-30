@@ -61,6 +61,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accept.
+        /// </summary>
+        public static string Accept {
+            get {
+                return ResourceManager.GetString("Accept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to I accept the terms and privacy policy..
         /// </summary>
         public static string AcceptTermsAndPrivacyPolicy {
@@ -129,6 +138,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         public static string CannotResolveUserNameIdentifierFromIdentity {
             get {
                 return ResourceManager.GetString("CannotResolveUserNameIdentifierFromIdentity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We use cookies on this site to enhance your user experience. As you move forward, you agree to our use of cookies..
+        /// </summary>
+        public static string CookieConsent {
+            get {
+                return ResourceManager.GetString("CookieConsent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cookies.
+        /// </summary>
+        public static string Cookies {
+            get {
+                return ResourceManager.GetString("Cookies", resourceCulture);
             }
         }
         

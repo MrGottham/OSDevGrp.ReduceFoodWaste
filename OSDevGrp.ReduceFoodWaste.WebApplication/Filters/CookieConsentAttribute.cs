@@ -9,17 +9,58 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
     /// <summary>
     /// ASP.NET MVC FilterAttribute for implementing the European cookie-law.
     /// https://www.macaw.nl/artikelen/implementing-european-cookie-law-compliance-in-asp-net-mvc
+    /// https://gist.github.com/Maarten88/5778402
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class CookieConsentAttribute : ActionFilterAttribute
     {
         #region Private constants
 
-        private const string ConsentCookieName = "CookieConsent";
+        public const string ConsentCookieName = "CookieConsent";
+        private const string ConsentContextName = "CookieConsentInfo";
+
+        #endregion
+
+        #region Helper class
+
+        private class CookieConsentInfo
+        {
+            #region Constructor
+
+            public CookieConsentInfo()
+            {
+                NeedToAskConsent = true;
+                HasConsent = false;
+            }
+
+            #endregion
+
+            #region Properties
+
+            public bool NeedToAskConsent { get; set; }
+            public bool HasConsent { get; set; }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Constructor
+
+        public CookieConsentAttribute()
+        {
+            ImplicitlyAllowCookies = true;
+        }
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Some government relax their interpretation of the law somewhat:
+        /// After the first page with the message, clicking anything other than the cookie refusal link may be interpreted as implicitly allowing cookies.
+        /// </summary>
+        public bool ImplicitlyAllowCookies { get; private set; }
 
         private static IEnumerable<string> Crawlers
         {
@@ -54,9 +95,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                 throw new ArgumentNullException("filterContext");
             }
 
-            var viewBag = filterContext.Controller.ViewBag;
-            viewBag.AskCookieConsent = true;
-            viewBag.HasCookieConsent = false;
+            var cookieConsentInfo = new CookieConsentInfo();
 
             var request = filterContext.HttpContext.Request;
 
@@ -71,10 +110,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                 // If we receive a DNT header, we accept its value and do not ask the user anymore.
                 if (string.IsNullOrEmpty(dnt) == false)
                 {
-                    viewBag.AskCookieConsent = false;
+                    cookieConsentInfo.NeedToAskConsent = false;
                     if (string.Compare(dnt, "0", StringComparison.Ordinal) == 0)
                     {
-                        viewBag.HasCookieConsent = true;
+                        cookieConsentInfo.HasConsent = true;
                     }
                 }
                 else
@@ -82,15 +121,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                     if (IsSearchCrawler(request.Headers.Get("User-Agent")))
                     {
                         // Don't ask consent from search engines, also don't set cookies.
-                        viewBag.AskCookieConsent = false;
+                        cookieConsentInfo.NeedToAskConsent = false;
                     }
                     else
                     {
                         // First request on the site and no DNT header.
                         consentCookie = new HttpCookie(ConsentCookieName)
                         {
-                            Value = "asked",
-                            Expires = DateTime.Now.AddDays(1)
+                            Value = "asked"
                         };
                         filterContext.HttpContext.Response.Cookies.Add(consentCookie);
                     }
@@ -99,43 +137,41 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
             else
             {
                 // We received a consent cookie.
-                viewBag.AskCookieConsent = false;
-                if (string.Compare(consentCookie.Value, "asked", StringComparison.Ordinal) == 0)
+                cookieConsentInfo.NeedToAskConsent = false;
+                if (ImplicitlyAllowCookies && string.Compare(consentCookie.Value, "asked", StringComparison.Ordinal) == 0)
                 {
                     // Consent is implicitly given.
                     consentCookie.Value = "true";
                     consentCookie.Expires = DateTime.Now.AddDays(1);
                     filterContext.HttpContext.Response.Cookies.Set(consentCookie);
-                    viewBag.HasCookieConsent = true;
+                    
+                    cookieConsentInfo.HasConsent = true;
                 }
                 else if (string.Compare(consentCookie.Value, "true", StringComparison.Ordinal) == 0)
                 {
-                    viewBag.HasCookieConsent = true;
+                    cookieConsentInfo.HasConsent = true;
                 }
                 else
                 {
                     // Assume consent denied.
-                    viewBag.HasCookieConsent = false;
+                    cookieConsentInfo.HasConsent = true;
                 }
             }
+
+            HttpContext.Current.Items[ConsentContextName] = cookieConsentInfo;
             
             base.OnActionExecuting(filterContext);
         }
 
         public static bool AskCookieConsent(ViewContext viewContext)
         {
-            return true;
+            if (viewContext == null)
+            {
+                throw new ArgumentNullException("viewContext");
+            }
 
-            //if (viewContext == null)
-            //{
-            //    throw new ArgumentNullException("viewContext");
-            //}
-            
-            //if (viewContext.ViewBag == null)
-            //{
-            //    return false;
-            //}
-            //return viewContext.ViewBag.AskCookieConsent ?? false;
+            var cookieConsentInfo = viewContext.HttpContext.Items[ConsentContextName] as CookieConsentInfo ?? new CookieConsentInfo();
+            return cookieConsentInfo.NeedToAskConsent;
         }
 
         public static bool HasCookieConsent(ViewContext viewContext)
@@ -145,11 +181,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                 throw new ArgumentNullException("viewContext");
             }
 
-            if (viewContext.ViewBag == null)
-            {
-                return false;
-            }
-            return viewContext.ViewBag.HasCookieConsent ?? false;
+            var cookieConsentInfo = viewContext.HttpContext.Items[ConsentContextName] as CookieConsentInfo ?? new CookieConsentInfo();
+            return cookieConsentInfo.HasConsent;
         }
 
         public static void SetCookieConsent(HttpResponseBase httpResponse, bool consent)

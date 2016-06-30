@@ -45,9 +45,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(hasIdentity ? identityMock : null)
                 .Repeat.Any();
 
+            var httpRequestMock = MockRepository.GenerateMock<HttpRequestBase>();
+
+            var httpResponseMock = MockRepository.GenerateMock<HttpResponseBase>();
+
             var httpContextMock = MockRepository.GenerateMock<HttpContextBase>();
             httpContextMock.Stub(m => m.User)
                 .Return(hasUser ? (principal ?? userMock) : null)
+                .Repeat.Any();
+            httpContextMock.Stub(m => m.Request)
+                .Return(httpRequestMock)
+                .Repeat.Any();
+            httpContextMock.Stub(m => m.Response)
+                .Return(httpResponseMock)
                 .Repeat.Any();
 
             return new ControllerContext(httpContextMock, new RouteData(), controller);

@@ -251,6 +251,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Cookies\CookieHelper.cs" />
+    <Compile Include="Infrastructure\Cookies\ICookieHelper.cs" />
     <Compile Include="Infrastructure\Exceptions\ExceptionHelper.cs" />
     <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteBusinessException.cs" />
     <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteExceptionBase.cs" />
@@ -441,7 +443,6 @@
     <Content Include="Views\HouseholdMember\Create.cshtml" />
     <Content Include="Views\HouseholdMember\_PrivacyPolicies.cshtml" />
     <Content Include="Views\HouseholdMember\Prepare.cshtml" />
-    <Content Include="Views\Shared\_CookieConsentMessagePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

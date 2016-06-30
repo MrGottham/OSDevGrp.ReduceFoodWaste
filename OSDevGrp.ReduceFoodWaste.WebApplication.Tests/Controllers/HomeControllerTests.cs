@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Security.Principal;
+using System.Web;
 using System.Web.Mvc;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Cookies;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
+using Ploeh.AutoFixture;
 using Rhino.Mocks;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
@@ -19,6 +22,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         #region Private variables
 
         private IClaimValueProvider _claimValueProviderMock;
+        private ICookieHelper _cookieHelperMock;
 
         #endregion
 
@@ -29,6 +33,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         public void TestInitialize()
         {
             _claimValueProviderMock = MockRepository.GenerateMock<IClaimValueProvider>();
+            _cookieHelperMock = MockRepository.GenerateMock<ICookieHelper>();
         }
 
         /// <summary>
@@ -37,7 +42,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorInitializeHomeController()
         {
-            var homeController = new HomeController(_claimValueProviderMock);
+            var homeController = new HomeController(_claimValueProviderMock, _cookieHelperMock);
             Assert.That(homeController, Is.Not.Null);
         }
 
@@ -47,11 +52,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenClaimValueProviderIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new HomeController(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => new HomeController(null, _cookieHelperMock));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("claimValueProvider"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that the constructor throws an ArgumentNullException when the helper functionality for cookies is null.
+        /// </summary>
+        [Test]
+        public void TestThatConstructorThrowsArgumentNullExceptionWhenCookieHelperIsNull()
+        {
+            var exception = Assert.Throws<ArgumentNullException>(() => new HomeController(_claimValueProviderMock, null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("cookieHelper"));
             Assert.That(exception.InnerException, Is.Null);
         }
 
@@ -580,6 +599,68 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that AllowCookies throws an ArgumentNullException when the return url is null, empty or whitespaces.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatAllowCookiesThrowsArgumentNullExceptionWhenReturnUrlIsNullEmptyOrWhitespaces(string invalidValue)
+        {
+            var homeController = CreateHomeController();
+            Assert.That(homeController, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => homeController.AllowCookies(invalidValue));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("returnUrl"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that AllowCookies calls SetCookieConsent on the helper functionality for cookies.
+        /// </summary>
+        [Test]
+        public void TestThatAllowCookiesCallsSetCookieConsentOnCookieHelper()
+        {
+            var homeController = CreateHomeController();
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.HttpContext, Is.Not.Null);
+            Assert.That(homeController.HttpContext.Response, Is.Not.Null);
+
+            homeController.AllowCookies(Fixture.Create<string>());
+
+            _cookieHelperMock.SetCookieConsent(Arg<HttpResponseBase>.Is.Equal(homeController.HttpContext.Response), Arg<bool>.Is.Equal(true));
+        }
+
+        /// <summary>
+        /// Tests that AllowCookies returns an redirect result to the return url.
+        /// </summary>
+        [Test]
+        public void TestThatAllowCookiesReturnsRedirectResultToReturnUrl()
+        {
+            var homeController = CreateHomeController();
+            Assert.That(homeController, Is.Not.Null);
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var result = homeController.AllowCookies(returnUrl);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectResult>());
+
+            var redirectResult = (RedirectResult)result;
+            Assert.That(redirectResult, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Empty);
+            Assert.That(redirectResult.Url, Is.EqualTo(returnUrl));
+        }
+
+        /// <summary>
         /// Creates a home controller for unit testing.
         /// </summary>
         /// <param name="hasUser">Sets whether the controller should have an user.</param>
@@ -608,7 +689,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(hasAcceptedPrivacyPolicies)
                 .Repeat.Any();
 
-            var homeController = new HomeController(_claimValueProviderMock);
+            var homeController = new HomeController(_claimValueProviderMock, _cookieHelperMock);
             homeController.ControllerContext = ControllerTestHelper.CreateControllerContext(homeController, hasUser, hasIdentity, isAuthenticated);
             return homeController;
         }

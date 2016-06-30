@@ -252,4 +252,13 @@
   <data name="ActivationCodeMustBeGiven" xml:space="preserve">
     <value>Aktiveringskoden skal angives.</value>
   </data>
+  <data name="CookieConsent" xml:space="preserve">
+    <value>Vi bruger cookies på dette websted til at forbedre din brugeroplevelse. Når du bevæger dig videre, accepterer du vores brug af cookies.</value>
+  </data>
+  <data name="Cookies" xml:space="preserve">
+    <value>Cookies</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Acceptér</value>
+  </data>
 </root>

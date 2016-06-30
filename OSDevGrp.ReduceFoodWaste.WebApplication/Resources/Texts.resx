@@ -252,4 +252,13 @@
   <data name="ActivationCodeMustBeGiven" xml:space="preserve">
     <value>The activation code must be given.</value>
   </data>
+  <data name="CookieConsent" xml:space="preserve">
+    <value>We use cookies on this site to enhance your user experience. As you move forward, you agree to our use of cookies.</value>
+  </data>
+  <data name="Cookies" xml:space="preserve">
+    <value>Cookies</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
 </root>

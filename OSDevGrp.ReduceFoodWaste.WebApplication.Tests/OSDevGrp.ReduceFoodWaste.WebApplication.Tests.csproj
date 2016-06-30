@@ -104,6 +104,7 @@
     <Compile Include="Filters\IsAuthenticatedAttributeTests.cs" />
     <Compile Include="Filters\IsCreatedHouseholdMemberAttributeTests.cs" />
     <Compile Include="Filters\IsValidatedHouseholdMemberAttributeTests.cs" />
+    <Compile Include="Infrastructure\Security\Cookies\CookieHelperTests.cs" />
     <Compile Include="Infrastructure\Security\Exceptions\ReduceFoodWasteBusinessExceptionTests.cs" />
     <Compile Include="Infrastructure\Security\Exceptions\ReduceFoodWasteRepositoryExceptionTests.cs" />
     <Compile Include="Infrastructure\Security\Exceptions\ReduceFoodWasteSystemExceptionTests.cs" />
