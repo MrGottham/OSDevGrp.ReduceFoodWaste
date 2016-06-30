@@ -408,9 +408,7 @@
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Images\accent.png" />
     <Content Include="Images\bullet.png" />
-    <Content Include="Images\heroAccent.png" />
     <Content Include="Images\orderedList0.png" />
     <Content Include="Images\orderedList1.png" />
     <Content Include="Images\orderedList2.png" />
@@ -431,7 +429,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Shared\_CulturePartial.cshtml" />
     <None Include="Service References\HouseholdDataService\foodwastehouseholddataservice.wsdl" />
     <None Include="Service References\HouseholdDataService\foodwastehouseholddataservice.xsd">
       <SubType>Designer</SubType>

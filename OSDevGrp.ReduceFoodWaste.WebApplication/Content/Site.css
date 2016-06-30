@@ -91,7 +91,6 @@ h5, h6 {
 ----------------------------------------------------------*/
 .content-wrapper {
     margin: 0 auto;
-    max-width: 960px;
 }
 
 #body {
@@ -102,27 +101,14 @@ h5, h6 {
 
     .row {
         padding-left: 10px;
+        padding-right: 10px;
         padding-top: 10px;
     }
-
-    .main-content {
-        background: url("../Images/accent.png") no-repeat;
-        padding-left: 10px;
-        padding-top: 30px;
-    }
-
-    .featured + .main-content {
-        background: url("../Images/heroAccent.png") no-repeat;
-    }
-
-header .content-wrapper {
-    padding-top: 20px; 
-}
 
 footer {
     clear: both;
     background-color: #e2e2e2;
-    font-size: .8em;
+    font-size: .6em;
     height: 100px;
 }
 
@@ -557,14 +543,10 @@ tr.pager td {
 
     /* main layout
     ----------------------------------------------------------*/
-    .main-content,
-    .featured + .main-content {
-        background-position: 10px 0;
-    }
-
-    .content-wrapper {
-        padding-right: 10px;
+    .row {
         padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 10px;
     }
 
     .featured .content-wrapper {
@@ -649,7 +631,6 @@ tr.pager td {
     footer {
         text-align: center;
         height: auto;
-        padding: 10px 0;
     }
 
         footer p {
