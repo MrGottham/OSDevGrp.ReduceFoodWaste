@@ -41,7 +41,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             get
             {
-                throw new NotImplementedException();
+                return new List<string>
+                {
+                    "~/Images/FoodWaste01.png",
+                    "~/Images/FoodWaste02.png",
+                    "~/Images/FoodWaste03.png",
+                    "~/Images/FoodWaste04.png",
+                    "~/Images/FoodWaste05.png"
+                };
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
@@ -72,6 +73,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("cookieHelper"));
             Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that the getter for X returns top images.
+        /// </summary>
+        [Test]
+        public void TestThatTopImagesGetterReturnsTopImages()
+        {
+            var homeController = CreateHomeController();
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.TopImages, Is.Not.Null);
+            Assert.That(homeController.TopImages, Is.Not.Empty);
+
+            var topImageCollection = homeController.TopImages.ToList();
+            Assert.That(topImageCollection, Is.Not.Null);
+            Assert.That(topImageCollection, Is.Not.Empty);
+            Assert.That(topImageCollection.Count, Is.EqualTo(5));
+            for (var i = 0; i < topImageCollection.Count; i++)
+            {
+                Assert.That(topImageCollection.ElementAt(i), Is.Not.Null);
+                Assert.That(topImageCollection.ElementAt(i), Is.Not.Empty);
+                Assert.That(topImageCollection.ElementAt(i), Is.EqualTo(string.Format("~/Images/FoodWaste0{0}.png", i + 1)));
+            }
         }
 
         /// <summary>
