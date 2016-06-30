@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Cookies;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
@@ -30,6 +31,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
             _claimValueProvider = claimValueProvider;
             _cookieHelper = cookieHelper;
+        }
+
+        #endregion
+
+        #region Properties
+
+        public IEnumerable<string> TopImages
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #endregion
