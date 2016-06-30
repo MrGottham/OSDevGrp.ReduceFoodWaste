@@ -2,17 +2,29 @@
 @{
     ViewBag.Title = Texts.HomePage;
 }
+
 @section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>@ViewBag.Title.</h1>
-                <h2>@ViewBag.Message</h2>
-            </hgroup>
-            @if (Request.IsAuthenticated == false)
-            {
+    @if (Request.IsAuthenticated == false)
+    {
+        <section class="featured">
+            <div class="content-wrapper">
+                <hgroup class="title">
+                    <h1>@ViewBag.Message</h1>
+                </hgroup>
                 <p>@string.Format(@Texts.PleaseLogIn, Texts.ReduceFoodWasteProject)</p>
-            }
+            </div>
+        </section>
+    }
+}
+
+@if (Request.IsAuthenticated == false)
+{
+    <div class="row">
+        <div id="box-rounded">
+            <h3>@Texts.LogInUsingAnotherService</h3>
+            <section id="externalLogins">
+                @Html.Action("ExternalLoginsList", "Account", new { ViewBag.ReturnUrl })
+            </section>
         </div>
-    </section>
+    </div>
 }

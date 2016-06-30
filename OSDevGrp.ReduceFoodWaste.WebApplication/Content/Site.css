@@ -61,26 +61,6 @@ h4, h5, h6 {
     padding-bottom: 0;
 }
 
-h1 {
-    font-size: 2em;
-}
-
-h2 {
-    font-size: 1.75em;
-}
-
-h3 {
-    font-size: 1.2em;
-}
-
-h4 {
-    font-size: 1.1em;
-}
-
-h5, h6 {
-    font-size: 1em;
-}
-
     h5 a:link, h5 a:visited, h5 a:active {
         padding: 0;
         text-decoration: none;
@@ -108,7 +88,7 @@ h5, h6 {
 footer {
     clear: both;
     background-color: #e2e2e2;
-    font-size: .6em;
+    font-size: .8em;
     height: 100px;
 }
 
@@ -120,7 +100,7 @@ footer {
 }
 
     #cookie-alert p {
-        margin-bottom: 10px
+        padding-bottom: 10px
     }
 
     #cookie-alert input[type="submit"], input[type="button"], button {
@@ -139,6 +119,19 @@ footer {
     #culture li {
         display: inline;
         list-style: none;
+    }
+
+
+/* box-rounded
+----------------------------------------------------------*/
+#box-rounded {
+    border-radius: 10px;
+    border: 1px solid #3e5667;
+    padding: 20px
+}
+
+    #box-rounded h3 {
+        padding-bottom: 20px
     }
 
 
