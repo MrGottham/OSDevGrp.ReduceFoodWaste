@@ -69,21 +69,11 @@ h4, h5, h6 {
 
 /* main layout
 ----------------------------------------------------------*/
-.content-wrapper {
-    margin: 0 auto;
-}
-
 #body {
     background-color: #efeeef;
     clear: both;
     padding-bottom: 35px;
 }
-
-    .row {
-        padding-left: 10px;
-        padding-right: 10px;
-        padding-top: 10px;
-    }
 
 footer {
     clear: both;
@@ -91,6 +81,13 @@ footer {
     font-size: .8em;
     height: 100px;
 }
+
+    footer li {
+        display: inline;
+        list-style: none;
+        font-size: .8em;
+        height: 100px
+    }
 
 
 /* cookie-alert
@@ -110,33 +107,20 @@ footer {
     }
 
 
-/* culture
-----------------------------------------------------------*/
-#culture {
-    font-size: .8em;
-}
-
-    #culture li {
-        display: inline;
-        list-style: none;
-    }
-
-
-/* box-rounded
-----------------------------------------------------------*/
-#box-rounded {
-    border-radius: 10px;
-    border: 1px solid #3e5667;
-    padding: 20px
-}
-
-    #box-rounded h3 {
-        padding-bottom: 20px
-    }
-
-
 /* page elements
 ----------------------------------------------------------*/
+/* row */
+.row {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+/* content-wrapper */
+.content-wrapper {
+    margin: 0 auto;
+}
+
 /* featured */
 .featured {
     background-color: #fff;
@@ -257,6 +241,28 @@ aside {
 .label {
     font-weight: 700;
 }
+
+.top-image {
+    max-height: 300px;
+    overflow: hidden;
+}
+
+    .top-image > img {
+        width: 100%;
+        position: relative;
+        top: -30%;
+    }
+
+/* box-rounded */
+.box-rounded {
+    border-radius: 10px;
+    border: 1px solid #3e5667;
+    padding: 20px;
+}
+
+    .box-rounded h3 {
+        padding-bottom: 20px;
+    }
 
 /* login page */
 #loginForm {
@@ -525,15 +531,6 @@ tr.pager td {
         float: none;
     }
 
-    /* culture */
-    #culture {
-        text-align: center;
-    }
-        #culture li {
-            display: inline;
-            list-style: none;
-        }
-
     /* main layout
     ----------------------------------------------------------*/
     .row {
@@ -628,5 +625,11 @@ tr.pager td {
 
         footer p {
             margin: 0;
+        }
+
+        footer li {
+            display: inline;
+            list-style: none;
+            height: auto;
         }
 }

@@ -17,10 +17,16 @@
     }
 }
 
+<div class="row">
+    <div class="top-image">
+        <img src="@Url.Content("~/Images/FoodWaste01.png")"/>
+    </div>
+</div>
+
 @if (Request.IsAuthenticated == false)
 {
     <div class="row">
-        <div id="box-rounded">
+        <div class="box-rounded">
             <h3>@Texts.LogInUsingAnotherService</h3>
             <section id="externalLogins">
                 @Html.Action("ExternalLoginsList", "Account", new { ViewBag.ReturnUrl })

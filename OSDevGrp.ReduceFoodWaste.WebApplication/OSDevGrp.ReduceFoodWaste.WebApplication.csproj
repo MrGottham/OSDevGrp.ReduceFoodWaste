@@ -339,6 +339,7 @@
     <Content Include="Global.asax" />
     <Content Include="Images\ajax-loader_bigspinner_green.gif" />
     <Content Include="Images\facebook.png" />
+    <Content Include="Images\FoodWaste01.png" />
     <Content Include="Images\google.png" />
     <Content Include="Images\microsoft.png" />
     <Content Include="Content\bootstrap.min.css.map" />
