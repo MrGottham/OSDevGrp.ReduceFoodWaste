@@ -142,7 +142,7 @@
     <value>Login Failure</value>
   </data>
   <data name="LogInUsingAnotherService" xml:space="preserve">
-    <value>Log in using another service.</value>
+    <value>Log in using another service</value>
   </data>
   <data name="LogInUsingYourAccount" xml:space="preserve">
     <value>Log in using your {0} account.</value>
@@ -151,7 +151,7 @@
     <value>Log off</value>
   </data>
   <data name="PleaseLogIn" xml:space="preserve">
-    <value>Please log in to start using {0}.</value>
+    <value>Please log in to start using {0}</value>
   </data>
   <data name="Reason" xml:space="preserve">
     <value>Reason</value>
@@ -166,7 +166,7 @@
     <value>Unsuccessful login with service.</value>
   </data>
   <data name="WelcomeTo" xml:space="preserve">
-    <value>Welcome to {0}.</value>
+    <value>Welcome to {0}</value>
   </data>
   <data name="Account" xml:space="preserve">
     <value>Account</value>

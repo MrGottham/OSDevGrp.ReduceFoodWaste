@@ -76,17 +76,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that the getter for X returns top images.
+        /// Tests that the getter for TopImages returns top images.
         /// </summary>
         [Test]
         public void TestThatTopImagesGetterReturnsTopImages()
         {
-            var homeController = CreateHomeController();
-            Assert.That(homeController, Is.Not.Null);
-            Assert.That(homeController.TopImages, Is.Not.Null);
-            Assert.That(homeController.TopImages, Is.Not.Empty);
+            Assert.That(HomeController.TopImages, Is.Not.Null);
+            Assert.That(HomeController.TopImages, Is.Not.Empty);
 
-            var topImageCollection = homeController.TopImages.ToList();
+            var topImageCollection = HomeController.TopImages.ToList();
             Assert.That(topImageCollection, Is.Not.Null);
             Assert.That(topImageCollection, Is.Not.Empty);
             Assert.That(topImageCollection.Count, Is.EqualTo(5));
@@ -96,6 +94,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 Assert.That(topImageCollection.ElementAt(i), Is.Not.Empty);
                 Assert.That(topImageCollection.ElementAt(i), Is.EqualTo(string.Format("~/Images/FoodWaste0{0}.png", i + 1)));
             }
+        }
+
+        /// <summary>
+        /// Tests that the getter for TopImage returns a top image.
+        /// </summary>
+        [Test]
+        public void TestThatTopImageGetterReturnsTopImage()
+        {
+            Assert.That(HomeController.TopImage, Is.Not.Null);
+            Assert.That(HomeController.TopImage, Is.Not.Empty);
         }
 
         /// <summary>

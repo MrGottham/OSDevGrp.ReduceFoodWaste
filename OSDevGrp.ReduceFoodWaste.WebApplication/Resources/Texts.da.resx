@@ -142,7 +142,7 @@
     <value>Fejl ved log ind</value>
   </data>
   <data name="LogInUsingAnotherService" xml:space="preserve">
-    <value>Log ind med en anden tjeneste.</value>
+    <value>Log ind med en anden tjeneste</value>
   </data>
   <data name="LogInUsingYourAccount" xml:space="preserve">
     <value>Log ind med din {0} konto.</value>
@@ -151,7 +151,7 @@
     <value>Log ud</value>
   </data>
   <data name="PleaseLogIn" xml:space="preserve">
-    <value>Log ind for at starte brugen af {0}.</value>
+    <value>Log ind for at starte brugen af {0}</value>
   </data>
   <data name="Reason" xml:space="preserve">
     <value>Årsag</value>
@@ -166,7 +166,7 @@
     <value>Log ind med anden tjeneste mislykkedes.</value>
   </data>
   <data name="WelcomeTo" xml:space="preserve">
-    <value>Velkommen til {0}.</value>
+    <value>Velkommen til {0}</value>
   </data>
   <data name="Account" xml:space="preserve">
     <value>Konto</value>

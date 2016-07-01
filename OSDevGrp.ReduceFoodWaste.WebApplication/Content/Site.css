@@ -260,10 +260,6 @@ aside {
     padding: 20px;
 }
 
-    .box-rounded h3 {
-        padding-bottom: 20px;
-    }
-
 /* login page */
 #loginForm {
     border-right: solid 2px #c8c8c8;

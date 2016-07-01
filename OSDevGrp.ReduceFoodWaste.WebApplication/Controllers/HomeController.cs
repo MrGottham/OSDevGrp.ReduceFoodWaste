@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Cookies;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
@@ -37,7 +38,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
         #region Properties
 
-        public IEnumerable<string> TopImages
+        public static IEnumerable<string> TopImages
         {
             get
             {
@@ -49,6 +50,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     "~/Images/FoodWaste04.png",
                     "~/Images/FoodWaste05.png"
                 };
+            }
+        }
+
+        public static string TopImage
+        {
+            get
+            {
+                var random = new Random(DateTime.Now.Millisecond);
+                var topImageNo = random.Next(1, 1000) % TopImages.Count();
+                return TopImages.ElementAt(topImageNo);
             }
         }
 

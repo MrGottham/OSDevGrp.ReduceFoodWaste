@@ -268,7 +268,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log in using another service..
+        ///   Looks up a localized string similar to Log in using another service.
         /// </summary>
         public static string LogInUsingAnotherService {
             get {
@@ -322,7 +322,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please log in to start using {0}..
+        ///   Looks up a localized string similar to Please log in to start using {0}.
         /// </summary>
         public static string PleaseLogIn {
             get {
@@ -475,7 +475,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome to {0}..
+        ///   Looks up a localized string similar to Welcome to {0}.
         /// </summary>
         public static string WelcomeTo {
             get {

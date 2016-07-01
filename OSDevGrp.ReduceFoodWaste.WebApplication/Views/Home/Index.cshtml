@@ -1,4 +1,5 @@
-﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
+@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @{
     ViewBag.Title = Texts.HomePage;
 }
@@ -19,7 +20,7 @@
 
 <div class="row">
     <div class="top-image">
-        <img src="@Url.Content("~/Images/FoodWaste05.png")"/>
+        <img src="@Url.Content(HomeController.TopImage)"/>
     </div>
 </div>
 
@@ -27,9 +28,11 @@
 {
     <div class="row">
         <div class="box-rounded">
-            <h3>@Texts.LogInUsingAnotherService</h3>
+            <hgroup class="title">
+                <h3>@Texts.LogInUsingAnotherService</h3>
+            </hgroup>
             <section id="externalLogins">
-                @Html.Action("ExternalLoginsList", "Account", new { ViewBag.ReturnUrl })
+                @Html.Action("ExternalLoginsList", "Account", new {ViewBag.ReturnUrl})
             </section>
         </div>
     </div>
