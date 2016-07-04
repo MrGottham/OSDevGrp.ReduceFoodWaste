@@ -147,6 +147,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                     filterContext.HttpContext.Response.Cookies.Set(consentCookie);
                     
                     cookieConsentInfo.HasConsent = true;
+                    cookieConsentInfo.NeedToAskConsent = true;
                 }
                 else if (string.Compare(consentCookie.Value, "true", StringComparison.Ordinal) == 0)
                 {
