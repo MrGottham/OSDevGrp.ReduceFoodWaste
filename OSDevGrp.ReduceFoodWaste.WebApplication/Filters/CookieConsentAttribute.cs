@@ -128,7 +128,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                         // First request on the site and no DNT header.
                         consentCookie = new HttpCookie(ConsentCookieName)
                         {
-                            Value = "asked"
+                            Value = "asked",
+                            Expires = DateTime.Now
                         };
                         filterContext.HttpContext.Response.Cookies.Add(consentCookie);
                     }
@@ -154,7 +155,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                 else
                 {
                     // Assume consent denied.
-                    cookieConsentInfo.HasConsent = true;
+                    cookieConsentInfo.HasConsent = false;
                 }
             }
 
