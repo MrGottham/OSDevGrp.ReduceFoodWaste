@@ -129,39 +129,36 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                         consentCookie = new HttpCookie(ConsentCookieName)
                         {
                             Value = "asked",
-                            Expires = DateTime.Now
+                            Expires = DateTime.Now.AddDays(1)
                         };
                         filterContext.HttpContext.Response.Cookies.Add(consentCookie);
                     }
                 }
             }
+            else if (ImplicitlyAllowCookies && string.Compare(consentCookie.Value, "asked", StringComparison.Ordinal) == 0)
+            {
+                // Consent is implicitly given.
+                consentCookie.Value = "true";
+                consentCookie.Expires = DateTime.Now.AddDays(1);
+                filterContext.HttpContext.Response.Cookies.Set(consentCookie);
+
+                cookieConsentInfo.NeedToAskConsent = false;
+                cookieConsentInfo.HasConsent = true;
+            }
+            else if (string.Compare(consentCookie.Value, "true", StringComparison.Ordinal) == 0)
+            {
+                cookieConsentInfo.NeedToAskConsent = false;
+                cookieConsentInfo.HasConsent = true;
+            }
             else
             {
-                // We received a consent cookie.
+                // Assume consent denied.
                 cookieConsentInfo.NeedToAskConsent = false;
-                if (ImplicitlyAllowCookies && string.Compare(consentCookie.Value, "asked", StringComparison.Ordinal) == 0)
-                {
-                    // Consent is implicitly given.
-                    consentCookie.Value = "true";
-                    consentCookie.Expires = DateTime.Now.AddDays(1);
-                    filterContext.HttpContext.Response.Cookies.Set(consentCookie);
-                    
-                    cookieConsentInfo.HasConsent = true;
-                    cookieConsentInfo.NeedToAskConsent = true;
-                }
-                else if (string.Compare(consentCookie.Value, "true", StringComparison.Ordinal) == 0)
-                {
-                    cookieConsentInfo.HasConsent = true;
-                }
-                else
-                {
-                    // Assume consent denied.
-                    cookieConsentInfo.HasConsent = false;
-                }
+                cookieConsentInfo.HasConsent = false;
             }
 
             HttpContext.Current.Items[ConsentContextName] = cookieConsentInfo;
-            
+
             base.OnActionExecuting(filterContext);
         }
 
