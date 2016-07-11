@@ -68,7 +68,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         #region Methods
 
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(bool redirectToDashboard = false)
         {
             if (User == null || User.Identity == null)
             {
@@ -90,7 +90,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             if (isValidatedHouseholdMember)
             {
-                return RedirectToAction("Dashboard", "Dashboard");
+                if (redirectToDashboard)
+                {
+                    return RedirectToAction("Dashboard", "Dashboard");
+                }
+                ViewBag.Message = string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject);
+                return View();
             }
 
             if (isCreatedHouseholdMember == false)

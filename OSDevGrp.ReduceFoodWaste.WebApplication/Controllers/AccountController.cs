@@ -264,7 +264,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new {redirectToDashboard = true});
         }
 
         public enum ManageMessageId

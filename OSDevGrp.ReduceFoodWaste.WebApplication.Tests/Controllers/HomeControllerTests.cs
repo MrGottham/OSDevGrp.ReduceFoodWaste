@@ -492,10 +492,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Index returns a redirect to the dashboard when the controller does have a user with an authenticated identity who are a validated household member.
+        /// Tests that Index returns a redirect to the dashboard when the controller does have a user with an authenticated identity who are a validated household member and the redirect to dashboard is true.
         /// </summary>
         [Test]
-        public void TestThatIndexReturnsRedirectToDashboardWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreValidatedHouseholdMember()
+        public void TestThatIndexReturnsRedirectToDashboardWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreValidatedHouseholdMemberAndRedirectToDashboardIsTrue()
         {
             var homeController = CreateHomeController(isValidatedHouseholdMember: true);
             Assert.That(homeController, Is.Not.Null);
@@ -503,7 +503,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(homeController.User.Identity, Is.Not.Null);
             Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
 
-            var result = homeController.Index();
+            const bool redirectToDashboard = true;
+            var result = homeController.Index(redirectToDashboard);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
@@ -520,6 +521,37 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Empty);
             Assert.That(redirectToRouteResult.RouteValues["controller"], Is.EqualTo("Dashboard"));
+        }
+
+        /// <summary>
+        /// Tests that Index returns a ViewResult with the welcome message when the controller does have a user with an authenticated identity who are a validated household member and the redirect to dashboard is false.
+        /// </summary>
+        [Test]
+        public void TestThatIndexReturnsViewResultWithWelcomeMessageWhenControllerDoesHaveUserWithAuthenticatedIdentityWhoAreValidatedHouseholdMemberAndRedirectToDashboardIsFalse()
+        {
+            var homeController = CreateHomeController(isValidatedHouseholdMember: true);
+            Assert.That(homeController, Is.Not.Null);
+            Assert.That(homeController.User, Is.Not.Null);
+            Assert.That(homeController.User.Identity, Is.Not.Null);
+            Assert.That(homeController.User.Identity.IsAuthenticated, Is.True);
+
+
+            const bool redirectToDashboard = false;
+            // ReSharper disable RedundantArgumentDefaultValue
+            var result = homeController.Index(redirectToDashboard);
+            // ReSharper restore RedundantArgumentDefaultValue
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Empty);
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["Message"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["Message"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["Message"], Is.EqualTo(string.Format(Texts.WelcomeTo, Texts.ReduceFoodWasteProject)));
         }
 
         /// <summary>

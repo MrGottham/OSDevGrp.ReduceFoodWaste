@@ -5,22 +5,22 @@
 }
 
 @section featured {
-    @if (Request.IsAuthenticated == false)
-    {
-        <section class="featured">
-            <div class="content-wrapper">
-                <hgroup class="title">
-                    <h1>@ViewBag.Message</h1>
-                </hgroup>
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Message</h1>
+            </hgroup>
+            @if (Request.IsAuthenticated == false)
+            {
                 <p>@string.Format(Texts.PleaseLogIn, Texts.ReduceFoodWasteProject)</p>
-            </div>
-        </section>
-    }
+            }
+        </div>
+    </section>
 }
 
 <div class="row">
     <div class="top-image">
-        <img src="@Url.Content(HomeController.TopImage)"/>
+        <img src="@Url.Content(HomeController.TopImage)" />
     </div>
 </div>
 
@@ -32,7 +32,7 @@
                 <h3>@Texts.LogInUsingAnotherService</h3>
             </hgroup>
             <section id="externalLogins">
-                @Html.Action("ExternalLoginsList", "Account", new {ViewBag.ReturnUrl})
+                @Html.Action("ExternalLoginsList", "Account", new { ViewBag.ReturnUrl })
             </section>
         </div>
     </div>
