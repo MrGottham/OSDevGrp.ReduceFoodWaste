@@ -110,6 +110,7 @@
     <Compile Include="Infrastructure\Security\Exceptions\ReduceFoodWasteSystemExceptionTests.cs" />
     <Compile Include="Infrastructure\Security\Providers\ClaimValueProviderTests.cs" />
     <Compile Include="Infrastructure\Security\Providers\LocalClaimProviderTests.cs" />
+    <Compile Include="Models\DashboardModelTest.cs" />
     <Compile Include="Models\HouseholdMemberModelTests.cs" />
     <Compile Include="Models\HouseholdModelTests.cs" />
     <Compile Include="Models\PrivacyPolicyModelTests.cs" />

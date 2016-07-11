@@ -33,6 +33,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.TranslationInfoIdentifier, opt => opt.Ignore())
                     .ForMember(dest => dest.ExtensionData, opt => opt.Ignore());
 
+                configuration.CreateMap<HouseholdMemberView, HouseholdMemberModel>()
+                    .ForMember(m => m.Identifier, opt => opt.MapFrom(src => src.HouseholdMemberIdentifier))
+                    .ForMember(m => m.Name, opt => opt.Ignore())
+                    .ForMember(m => m.MailAddress, opt => opt.MapFrom(src => src.MailAddress))
+                    .ForMember(m => m.ActivationCode, opt => opt.Ignore())
+                    .ForMember(m => m.IsActivated, opt => opt.Ignore())
+                    .ForMember(m => m.ActivatedTime, opt => opt.MapFrom(src => src.ActivationTime))
+                    .ForMember(m => m.Membership, opt => opt.MapFrom(src => src.Membership))
+                    .ForMember(m => m.MembershipExpireTime, opt => opt.MapFrom(src => src.MembershipExpireTime))
+                    .ForMember(m => m.PrivacyPolicy, opt => opt.Ignore())
+                    .ForMember(m => m.HasAcceptedPrivacyPolicy, opt => opt.Ignore())
+                    .ForMember(m => m.PrivacyPolicyAcceptedTime, opt => opt.MapFrom(src => src.PrivacyPolicyAcceptedTime))
+                    .ForMember(m => m.CreationTime, opt => opt.MapFrom(src => src.CreationTime))
+                    .ForMember(m => m.Households, opt => opt.MapFrom(src => src.Households));
+
                 configuration.CreateMap<HouseholdMemberModel, HouseholdMemberActivateCommand>()
                     .ConvertUsing(src =>
                     {

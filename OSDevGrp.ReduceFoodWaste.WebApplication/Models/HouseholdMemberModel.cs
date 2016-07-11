@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
 {
@@ -13,6 +14,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// Gets or sets the identifier for the household member.
         /// </summary>
         public Guid Identifier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the household members name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the household members mail address.
+        /// </summary>
+        public string MailAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the household members activation code.
@@ -33,6 +44,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         public DateTime? ActivatedTime { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the household members membership.
+        /// </summary>
+        public string Membership { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date and time for when the household members membership will expire.
+        /// </summary>
+        public DateTime? MembershipExpireTime { get; set; }
+
+        /// <summary>
         /// Gets or sets the privacy policies for the household member.
         /// </summary>
         public PrivacyPolicyModel PrivacyPolicy { get; set; }
@@ -49,6 +70,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// Gets or sets the date and time for when the household member has accepted the privacy policies.
         /// </summary>
         public DateTime? PrivacyPolicyAcceptedTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date and time for when the household member was created.
+        /// </summary>
+        public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the collection of household where the household member has a membership.
+        /// </summary>
+        public IEnumerable<HouseholdModel> Households { get; set; }
 
         #endregion
     }

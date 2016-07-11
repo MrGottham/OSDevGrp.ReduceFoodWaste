@@ -1,6 +1,6 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 {
@@ -19,7 +19,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <returns>Dashboard view for the current household member.</returns>
         public ActionResult Dashboard()
         {
-            throw new NotImplementedException();
+            var dashboardModel = new DashboardModel();
+            return View(dashboardModel);
         }
 
         #endregion

@@ -269,6 +269,7 @@
     <Compile Include="Infrastructure\Security\Providers\ClaimValueProvider.cs" />
     <Compile Include="Infrastructure\Security\Providers\IClaimValueProvider.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\DashboardModel.cs" />
     <Compile Include="Models\HouseholdMemberModel.cs" />
     <Compile Include="Models\HouseholdModel.cs" />
     <Compile Include="Models\PrivacyPolicyModel.cs" />
@@ -445,6 +446,7 @@
     <Content Include="Views\HouseholdMember\Create.cshtml" />
     <Content Include="Views\HouseholdMember\_PrivacyPolicies.cshtml" />
     <Content Include="Views\HouseholdMember\Prepare.cshtml" />
+    <Content Include="Views\Dashboard\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
