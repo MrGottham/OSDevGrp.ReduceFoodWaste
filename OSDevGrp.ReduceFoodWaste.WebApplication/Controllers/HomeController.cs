@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Cookies;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
@@ -10,7 +9,6 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 {
     [AllowAnonymous]
-    [CookieConsent]
     public class HomeController : Controller
     {
         #region Private variables

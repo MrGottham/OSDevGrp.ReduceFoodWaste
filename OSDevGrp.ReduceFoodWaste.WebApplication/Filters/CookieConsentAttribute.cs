@@ -95,6 +95,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
                 throw new ArgumentNullException("filterContext");
             }
 
+            if (filterContext.IsChildAction)
+            {
+                base.OnActionExecuting(filterContext);
+                return;
+            }
+
             var cookieConsentInfo = new CookieConsentInfo();
 
             var request = filterContext.HttpContext.Request;
