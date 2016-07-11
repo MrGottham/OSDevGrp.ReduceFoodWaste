@@ -75,6 +75,98 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that Convert converts a HouseholdMemberView to a HouseholdMemberModel.
+        /// </summary>
+        [Test]
+        [TestCase(true, true, true, true)]
+        [TestCase(true, true, true, false)]
+        [TestCase(true, true, false, true)]
+        [TestCase(true, true, false, false)]
+        [TestCase(true, false, true, true)]
+        [TestCase(true, false, true, false)]
+        [TestCase(true, false, false, true)]
+        [TestCase(true, false, false, false)]
+        [TestCase(false, true, true, true)]
+        [TestCase(false, true, true, false)]
+        [TestCase(false, true, false, true)]
+        [TestCase(false, true, false, false)]
+        [TestCase(false, false, true, true)]
+        [TestCase(false, false, true, false)]
+        [TestCase(false, false, false, true)]
+        [TestCase(false, false, false, false)]
+        public void TestThatConvertConvertsHouseholdMemberViewToHouseholdMemberModel(bool isActivated, bool hasMembershipExpireTime, bool hasAcceptedPrivacyPolicy, bool hasHouseholds)
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var householdMemberView = Fixture.Build<HouseholdMemberView>()
+                .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
+                .With(m => m.IsActivated, isActivated)
+                .With(m => m.ActivationTime, isActivated ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
+                .With(m => m.MembershipExpireTime, hasMembershipExpireTime ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
+                .With(m => m.IsPrivacyPolictyAccepted, hasAcceptedPrivacyPolicy)
+                .With(m => m.PrivacyPolicyAcceptedTime, hasAcceptedPrivacyPolicy ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
+                .With(m => m.CreationTime, DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)))
+                .With(m => m.Households, hasHouseholds ? Fixture.CreateMany<HouseholdIdentificationView>(Random.Next(1, 5)).ToArray() : null)
+                .Create();
+
+            var result = householdDataConverter.Convert<HouseholdMemberView, HouseholdMemberModel>(householdMemberView);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Identifier, Is.EqualTo(householdMemberView.HouseholdMemberIdentifier));
+            Assert.That(result.Name, Is.Null);
+            Assert.That(result.MailAddress, Is.EqualTo(householdMemberView.MailAddress));
+            Assert.That(result.ActivationCode, Is.Null);
+            Assert.That(result.IsActivated, Is.EqualTo(isActivated));
+            if (isActivated)
+            {
+                Assert.That(result.ActivatedTime, Is.Not.Null);
+                Assert.That(result.ActivatedTime, Is.EqualTo(householdMemberView.ActivationTime));
+                Assert.That(result.ActivatedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(result.ActivatedTime, Is.Null);
+                Assert.That(result.ActivatedTime.HasValue, Is.False);
+            }
+            Assert.That(result.Membership, Is.EqualTo(householdMemberView.Membership));
+            if (hasMembershipExpireTime)
+            {
+                Assert.That(result.MembershipExpireTime, Is.Not.Null);
+                Assert.That(result.MembershipExpireTime, Is.EqualTo(householdMemberView.MembershipExpireTime));
+                Assert.That(result.MembershipExpireTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(result.MembershipExpireTime, Is.Null);
+                Assert.That(result.MembershipExpireTime.HasValue, Is.False);
+            }
+            Assert.That(result.PrivacyPolicy, Is.Null);
+            Assert.That(result.HasAcceptedPrivacyPolicy, Is.EqualTo(hasAcceptedPrivacyPolicy));
+            if (hasAcceptedPrivacyPolicy)
+            {
+                Assert.That(result.PrivacyPolicyAcceptedTime, Is.Not.Null);
+                Assert.That(result.PrivacyPolicyAcceptedTime, Is.EqualTo(householdMemberView.ActivationTime));
+                Assert.That(result.PrivacyPolicyAcceptedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(result.PrivacyPolicyAcceptedTime, Is.Null);
+                Assert.That(result.PrivacyPolicyAcceptedTime.HasValue, Is.False);
+            }
+            if (hasHouseholds)
+            {
+                Assert.That(result.Households, Is.Not.Null);
+                Assert.That(result.Households, Is.Not.Empty);
+                Assert.That(result.Households.Count(), Is.EqualTo(householdMemberView.Households.Length));
+            }
+            else
+            {
+                Assert.That(result.Households, Is.Not.Null);
+                Assert.That(result.Households, Is.Empty);
+            }
+        }
+
+        /// <summary>
         /// Tests that Convert converts a HouseholdMemberModel with an activation code to a HouseholdMemberActivateCommand.
         /// </summary>
         [Test]
@@ -170,98 +262,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.That(exception.Message, Is.Not.Empty);
             Assert.That(exception.Message, Is.EqualTo(Texts.PrivacyPoliciesHasNotBeenAccepted));
             Assert.That(exception.InnerException, Is.Null);
-        }
-
-        /// <summary>
-        /// Tests that Convert converts a HouseholdMemberView to a HouseholdMemberModel.
-        /// </summary>
-        [Test]
-        [TestCase(true, true, true, true)]
-        [TestCase(true, true, true, false)]
-        [TestCase(true, true, false, true)]
-        [TestCase(true, true, false, false)]
-        [TestCase(true, false, true, true)]
-        [TestCase(true, false, true, false)]
-        [TestCase(true, false, false, true)]
-        [TestCase(true, false, false, false)]
-        [TestCase(false, true, true, true)]
-        [TestCase(false, true, true, false)]
-        [TestCase(false, true, false, true)]
-        [TestCase(false, true, false, false)]
-        [TestCase(false, false, true, true)]
-        [TestCase(false, false, true, false)]
-        [TestCase(false, false, false, true)]
-        [TestCase(false, false, false, false)]
-        public void TestThatConvertConvertsHouseholdMemberViewToHouseholdMemberModel(bool isActivated, bool hasMembershipExpireTime, bool hasAcceptedPrivacyPolicy, bool hasHouseholds)
-        {
-            var householdDataConverter = CreateHouseholdDataConverter();
-            Assert.That(householdDataConverter, Is.Not.Null);
-
-            var householdMemberView = Fixture.Build<HouseholdMemberView>()
-                .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
-                .With(m => m.IsActivated, isActivated)
-                .With(m => m.ActivationTime, isActivated ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
-                .With(m => m.MembershipExpireTime, hasMembershipExpireTime ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
-                .With(m => m.IsPrivacyPolictyAccepted, hasAcceptedPrivacyPolicy)
-                .With(m => m.PrivacyPolicyAcceptedTime, hasAcceptedPrivacyPolicy ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
-                .With(m => m.CreationTime, DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)))
-                .With(m => m.Households, hasHouseholds ? Fixture.CreateMany<HouseholdIdentificationView>(Random.Next(1, 5)).ToArray() : null)
-                .Create();
-
-            var result = householdDataConverter.Convert<HouseholdMemberView, HouseholdMemberModel>(householdMemberView);
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Identifier, Is.EqualTo(householdMemberView.HouseholdMemberIdentifier));
-            Assert.That(result.Name, Is.Null);
-            Assert.That(result.MailAddress, Is.EqualTo(householdMemberView.MailAddress));
-            Assert.That(result.ActivationCode, Is.Null);
-            Assert.That(result.IsActivated, Is.EqualTo(isActivated));
-            if (isActivated)
-            {
-                Assert.That(result.ActivatedTime, Is.Not.Null);
-                Assert.That(result.ActivatedTime, Is.EqualTo(householdMemberView.ActivationTime));
-                Assert.That(result.ActivatedTime.HasValue, Is.True);
-            }
-            else
-            {
-                Assert.That(result.ActivatedTime, Is.Null);
-                Assert.That(result.ActivatedTime.HasValue, Is.False);
-            }
-            Assert.That(result.Membership, Is.EqualTo(householdMemberView.Membership));
-            if (hasMembershipExpireTime)
-            {
-                Assert.That(result.MembershipExpireTime, Is.Not.Null);
-                Assert.That(result.MembershipExpireTime, Is.EqualTo(householdMemberView.MembershipExpireTime));
-                Assert.That(result.MembershipExpireTime.HasValue, Is.True);
-            }
-            else
-            {
-                Assert.That(result.MembershipExpireTime, Is.Null);
-                Assert.That(result.MembershipExpireTime.HasValue, Is.False);
-            }
-            Assert.That(result.PrivacyPolicy, Is.Null);
-            Assert.That(result.HasAcceptedPrivacyPolicy, Is.EqualTo(hasAcceptedPrivacyPolicy));
-            if (hasAcceptedPrivacyPolicy)
-            {
-                Assert.That(result.PrivacyPolicyAcceptedTime, Is.Not.Null);
-                Assert.That(result.PrivacyPolicyAcceptedTime, Is.EqualTo(householdMemberView.ActivationTime));
-                Assert.That(result.PrivacyPolicyAcceptedTime.HasValue, Is.True);
-            }
-            else
-            {
-                Assert.That(result.PrivacyPolicyAcceptedTime, Is.Null);
-                Assert.That(result.PrivacyPolicyAcceptedTime.HasValue, Is.False);
-            }
-            if (hasHouseholds)
-            {
-                Assert.That(result.Households, Is.Not.Null);
-                Assert.That(result.Households, Is.Not.Empty);
-                Assert.That(result.Households.Count(), Is.EqualTo(householdMemberView.Households.Length));
-            }
-            else
-            {
-                Assert.That(result.Households, Is.Not.Null);
-                Assert.That(result.Households, Is.Empty);
-            }
         }
 
         /// <summary>
