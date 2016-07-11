@@ -160,7 +160,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new household..
+        ///   Looks up a localized string similar to Create a new household.
         /// </summary>
         public static string CreateHousehold {
             get {
@@ -331,7 +331,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prepare your household member account..
+        ///   Looks up a localized string similar to Prepare your household member account.
         /// </summary>
         public static string PrepareHouseholdMemberAccount {
             get {
@@ -394,15 +394,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Startup.
-        /// </summary>
-        public static string Startup {
-            get {
-                return ResourceManager.GetString("Startup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to System critical error..
         /// </summary>
         public static string SystemException {
@@ -421,7 +412,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time to create your first household..
+        ///   Looks up a localized string similar to Time to create your first household.
         /// </summary>
         public static string TimeToCreateYourFirstHousehold {
             get {
@@ -430,7 +421,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time to prepare your household member account..
+        ///   Looks up a localized string similar to Time to prepare your household member account.
         /// </summary>
         public static string TimeToPrepareYourHouseholdMemberAccount {
             get {

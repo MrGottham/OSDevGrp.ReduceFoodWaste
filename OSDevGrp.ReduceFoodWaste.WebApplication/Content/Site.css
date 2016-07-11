@@ -248,10 +248,6 @@ aside {
             padding: 2px 0 2px 20px;
         }
 
-.label {
-    font-weight: 700;
-}
-
 .top-image {
     max-height: 300px;
     overflow: hidden;
@@ -358,8 +354,6 @@ fieldset {
 
 label {
     display: block;
-    font-size: 1.2em;
-    font-weight: 600;
 }
 
 label.checkbox {

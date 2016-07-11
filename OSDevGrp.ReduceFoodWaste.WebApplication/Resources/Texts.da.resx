@@ -207,14 +207,11 @@
   <data name="Dashboard" xml:space="preserve">
     <value>Skrivebord</value>
   </data>
-  <data name="Startup" xml:space="preserve">
-    <value>Start</value>
-  </data>
   <data name="TimeToCreateYourFirstHousehold" xml:space="preserve">
-    <value>Det er tid til at oprette din første husholdning.</value>
+    <value>Det er tid til at oprette din første husholdning</value>
   </data>
   <data name="CreateHousehold" xml:space="preserve">
-    <value>Opret en ny husholdning.</value>
+    <value>Opret en ny husholdning</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Beskrivelse</value>
@@ -238,10 +235,10 @@
     <value>Fortrolighedspolitikkerne er ikke blevet accepteret.</value>
   </data>
   <data name="TimeToPrepareYourHouseholdMemberAccount" xml:space="preserve">
-    <value>Det er tid til at forberede kontoen til dit husstandsmedlemsskab.</value>
+    <value>Det er tid til at forberede kontoen til dit husstandsmedlemsskab</value>
   </data>
   <data name="PrepareHouseholdMemberAccount" xml:space="preserve">
-    <value>Forbered kontoen til dit husstandsmedlemsskab.</value>
+    <value>Forbered kontoen til dit husstandsmedlemsskab</value>
   </data>
   <data name="Activation" xml:space="preserve">
     <value>Aktivering</value>

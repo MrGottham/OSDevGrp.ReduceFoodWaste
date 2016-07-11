@@ -1,15 +1,4 @@
 ﻿@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.PrivacyPolicyModel
 
-<table>
-    <tbody>
-        @if (Model.IsAccepted == false)
-        {
-            <tr>
-                <td><h3>@Html.Raw(Model.Header)</h3></td>
-            </tr>
-            <tr>
-                <td>@Html.Raw(Model.Body)</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<h3>@Html.Raw(Model.Header)</h3>
+<p>@Html.Raw(Model.Body)</p>
