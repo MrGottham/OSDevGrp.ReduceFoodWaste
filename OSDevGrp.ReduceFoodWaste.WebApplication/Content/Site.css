@@ -116,6 +116,16 @@ footer {
     padding-top: 10px;
 }
 
+/* sidebar */
+.sidebar {
+    position: fixed;
+    top: 250px;
+    left: 250px;
+    margin-top: -250px;
+    margin-left: -250px;
+    display: block
+}
+
 /* content-wrapper */
 .content-wrapper {
     margin: 0 auto;
@@ -533,6 +543,10 @@ tr.pager td {
         padding-left: 10px;
         padding-right: 10px;
         padding-top: 10px;
+    }
+
+    .sidebar {
+        display: none;
     }
 
     .featured .content-wrapper {
