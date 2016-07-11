@@ -45,6 +45,35 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that Convert converts HouseholdIdentificationView to HouseholdModel.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsHouseholdIdentificationViewToHouseholdModel()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var householdIdentificationView = Fixture.Build<HouseholdIdentificationView>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.Name, Fixture.Create<string>())
+                .With(m => m.ExtensionData, null)
+                .Create();
+            Assert.That(householdIdentificationView, Is.Not.Null);
+            Assert.That(householdIdentificationView.HouseholdIdentifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(householdIdentificationView.Name, Is.Not.Null);
+            Assert.That(householdIdentificationView.Name, Is.Not.Empty);
+
+            var result = householdDataConverter.Convert<HouseholdIdentificationView, HouseholdModel>(householdIdentificationView);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Identifier, Is.EqualTo(householdIdentificationView.HouseholdIdentifier));
+            Assert.That(result.Name, Is.Not.Null);
+            Assert.That(result.Name, Is.Not.Empty);
+            Assert.That(result.Name, Is.EqualTo(householdIdentificationView.Name));
+            Assert.That(result.Description, Is.Null);
+            Assert.That(result.PrivacyPolicy, Is.Null);
+        }
+
+        /// <summary>
         /// Tests that Convert converts a HouseholdModel to a HouseholdAddCommand.
         /// </summary>
         [Test]
@@ -96,24 +125,100 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         [TestCase(false, false, false, false)]
         public void TestThatConvertConvertsHouseholdMemberViewToHouseholdMemberModel(bool isActivated, bool hasMembershipExpireTime, bool hasAcceptedPrivacyPolicy, bool hasHouseholds)
         {
+            HouseholdIdentificationView[] householdIdentificationViewCollection = null;
+            if (hasHouseholds)
+            {
+                var numberOfHouseholds = Random.Next(5, 10);
+                householdIdentificationViewCollection = new HouseholdIdentificationView[numberOfHouseholds];
+                for (var i = 0; i < numberOfHouseholds; i++)
+                {
+                    var householdIdentificationView = Fixture.Build<HouseholdIdentificationView>()
+                        .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                        .With(m => m.Name, Fixture.Create<string>())
+                        .With(m => m.ExtensionData, null)
+                        .Create();
+                    Assert.That(householdIdentificationView, Is.Not.Null);
+                    Assert.That(householdIdentificationView.HouseholdIdentifier, Is.Not.EqualTo(default(Guid)));
+                    Assert.That(householdIdentificationView.Name, Is.Not.Null);
+                    Assert.That(householdIdentificationView.Name, Is.Not.Empty);
+
+                    householdIdentificationViewCollection[i] = householdIdentificationView;
+                }
+            }
+
             var householdDataConverter = CreateHouseholdDataConverter();
             Assert.That(householdDataConverter, Is.Not.Null);
 
             var householdMemberView = Fixture.Build<HouseholdMemberView>()
                 .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, Fixture.Create<string>())
                 .With(m => m.IsActivated, isActivated)
                 .With(m => m.ActivationTime, isActivated ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
+                .With(m => m.Membership, Fixture.Create<string>())
                 .With(m => m.MembershipExpireTime, hasMembershipExpireTime ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .With(m => m.IsPrivacyPolictyAccepted, hasAcceptedPrivacyPolicy)
                 .With(m => m.PrivacyPolicyAcceptedTime, hasAcceptedPrivacyPolicy ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .With(m => m.CreationTime, DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)))
-                .With(m => m.Households, hasHouseholds ? Fixture.CreateMany<HouseholdIdentificationView>(Random.Next(1, 5)).ToArray() : null)
+                .With(m => m.Households, householdIdentificationViewCollection)
+                .With(m => m.Payments, null)
+                .With(m => m.ExtensionData, null)
                 .Create();
+            Assert.That(householdMemberView, Is.Not.Null);
+            Assert.That(householdMemberView.HouseholdMemberIdentifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(householdMemberView.MailAddress, Is.Not.Null);
+            Assert.That(householdMemberView.MailAddress, Is.Not.Empty);
+            Assert.That(householdMemberView.IsActivated, Is.EqualTo(isActivated));
+            if (isActivated)
+            {
+                Assert.That(householdMemberView.ActivationTime, Is.Not.Null);
+                Assert.That(householdMemberView.ActivationTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(householdMemberView.ActivationTime, Is.Null);
+                Assert.That(householdMemberView.ActivationTime.HasValue, Is.False);
+            }
+            Assert.That(householdMemberView.Membership, Is.Not.Null);
+            Assert.That(householdMemberView.Membership, Is.Not.Empty);
+            if (hasMembershipExpireTime)
+            {
+                Assert.That(householdMemberView.MembershipExpireTime, Is.Not.Null);
+                Assert.That(householdMemberView.MembershipExpireTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(householdMemberView.MembershipExpireTime, Is.Null);
+                Assert.That(householdMemberView.MembershipExpireTime.HasValue, Is.False);
+            }
+            Assert.That(householdMemberView.IsPrivacyPolictyAccepted, Is.EqualTo(hasAcceptedPrivacyPolicy));
+            if (hasAcceptedPrivacyPolicy)
+            {
+                Assert.That(householdMemberView.PrivacyPolicyAcceptedTime, Is.Not.Null);
+                Assert.That(householdMemberView.PrivacyPolicyAcceptedTime.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(householdMemberView.PrivacyPolicyAcceptedTime, Is.Null);
+                Assert.That(householdMemberView.PrivacyPolicyAcceptedTime.HasValue, Is.False);
+            }
+            Assert.That(householdMemberView.CreationTime, Is.Not.EqualTo(default(DateTime)));
+            if (hasHouseholds)
+            {
+                Assert.That(householdMemberView.Households, Is.Not.Null);
+                Assert.That(householdMemberView.Households, Is.Not.Empty);
+            }
+            else
+            {
+                Assert.That(householdMemberView.Households, Is.Null);
+            }
+            Assert.That(householdMemberView.Payments, Is.Null);
 
             var result = householdDataConverter.Convert<HouseholdMemberView, HouseholdMemberModel>(householdMemberView);
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Identifier, Is.EqualTo(householdMemberView.HouseholdMemberIdentifier));
             Assert.That(result.Name, Is.Null);
+            Assert.That(result.MailAddress, Is.Not.Null);
+            Assert.That(result.MailAddress, Is.Not.Empty);
             Assert.That(result.MailAddress, Is.EqualTo(householdMemberView.MailAddress));
             Assert.That(result.ActivationCode, Is.Null);
             Assert.That(result.IsActivated, Is.EqualTo(isActivated));
@@ -128,6 +233,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                 Assert.That(result.ActivatedTime, Is.Null);
                 Assert.That(result.ActivatedTime.HasValue, Is.False);
             }
+            Assert.That(result.Membership, Is.Not.Null);
+            Assert.That(result.Membership, Is.Not.Empty);
             Assert.That(result.Membership, Is.EqualTo(householdMemberView.Membership));
             if (hasMembershipExpireTime)
             {
@@ -145,7 +252,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             if (hasAcceptedPrivacyPolicy)
             {
                 Assert.That(result.PrivacyPolicyAcceptedTime, Is.Not.Null);
-                Assert.That(result.PrivacyPolicyAcceptedTime, Is.EqualTo(householdMemberView.ActivationTime));
+                Assert.That(result.PrivacyPolicyAcceptedTime, Is.EqualTo(householdMemberView.PrivacyPolicyAcceptedTime));
                 Assert.That(result.PrivacyPolicyAcceptedTime.HasValue, Is.True);
             }
             else
@@ -153,6 +260,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                 Assert.That(result.PrivacyPolicyAcceptedTime, Is.Null);
                 Assert.That(result.PrivacyPolicyAcceptedTime.HasValue, Is.False);
             }
+            Assert.That(result.CreationTime, Is.EqualTo(householdMemberView.CreationTime));
             if (hasHouseholds)
             {
                 Assert.That(result.Households, Is.Not.Null);
@@ -161,8 +269,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             }
             else
             {
-                Assert.That(result.Households, Is.Not.Null);
-                Assert.That(result.Households, Is.Empty);
+                Assert.That(result.Households, Is.Null);
             }
         }
 

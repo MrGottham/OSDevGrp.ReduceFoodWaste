@@ -27,6 +27,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             var mapperConfiguration = new MapperConfiguration(configuration =>
             {
+                configuration.CreateMap<HouseholdIdentificationView, HouseholdModel>()
+                    .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.HouseholdIdentifier))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.Description, opt => opt.Ignore())
+                    .ForMember(dest => dest.PrivacyPolicy, opt => opt.Ignore());
+
                 configuration.CreateMap<HouseholdModel, HouseholdAddCommand>()
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => string.IsNullOrWhiteSpace(src.Description) ? null : src.Description))
@@ -34,19 +40,23 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.ExtensionData, opt => opt.Ignore());
 
                 configuration.CreateMap<HouseholdMemberView, HouseholdMemberModel>()
-                    .ForMember(m => m.Identifier, opt => opt.MapFrom(src => src.HouseholdMemberIdentifier))
-                    .ForMember(m => m.Name, opt => opt.Ignore())
-                    .ForMember(m => m.MailAddress, opt => opt.MapFrom(src => src.MailAddress))
-                    .ForMember(m => m.ActivationCode, opt => opt.Ignore())
-                    .ForMember(m => m.IsActivated, opt => opt.Ignore())
-                    .ForMember(m => m.ActivatedTime, opt => opt.MapFrom(src => src.ActivationTime))
-                    .ForMember(m => m.Membership, opt => opt.MapFrom(src => src.Membership))
-                    .ForMember(m => m.MembershipExpireTime, opt => opt.MapFrom(src => src.MembershipExpireTime))
-                    .ForMember(m => m.PrivacyPolicy, opt => opt.Ignore())
-                    .ForMember(m => m.HasAcceptedPrivacyPolicy, opt => opt.Ignore())
-                    .ForMember(m => m.PrivacyPolicyAcceptedTime, opt => opt.MapFrom(src => src.PrivacyPolicyAcceptedTime))
-                    .ForMember(m => m.CreationTime, opt => opt.MapFrom(src => src.CreationTime))
-                    .ForMember(m => m.Households, opt => opt.MapFrom(src => src.Households));
+                    .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.HouseholdMemberIdentifier))
+                    .ForMember(dest => dest.Name, opt => opt.Ignore())
+                    .ForMember(dest => dest.MailAddress, opt => opt.MapFrom(src => src.MailAddress))
+                    .ForMember(dest => dest.ActivationCode, opt => opt.Ignore())
+                    .ForMember(dest => dest.IsActivated, opt => opt.Ignore())
+                    .ForMember(dest => dest.ActivatedTime, opt => opt.MapFrom(src => src.ActivationTime))
+                    .ForMember(dest => dest.Membership, opt => opt.MapFrom(src => src.Membership))
+                    .ForMember(dest => dest.MembershipExpireTime, opt => opt.MapFrom(src => src.MembershipExpireTime))
+                    .ForMember(dest => dest.PrivacyPolicy, opt => opt.Ignore())
+                    .ForMember(dest => dest.HasAcceptedPrivacyPolicy, opt => opt.Ignore())
+                    .ForMember(dest => dest.PrivacyPolicyAcceptedTime, opt => opt.MapFrom(src => src.PrivacyPolicyAcceptedTime))
+                    .ForMember(dest => dest.CreationTime, opt => opt.MapFrom(src => src.CreationTime))
+                    .ForMember(dest => dest.Households, opt =>
+                    {
+                        opt.Condition(src => src.Households != null);
+                        opt.MapFrom(src => src.Households);
+                    });
 
                 configuration.CreateMap<HouseholdMemberModel, HouseholdMemberActivateCommand>()
                     .ConvertUsing(src =>
