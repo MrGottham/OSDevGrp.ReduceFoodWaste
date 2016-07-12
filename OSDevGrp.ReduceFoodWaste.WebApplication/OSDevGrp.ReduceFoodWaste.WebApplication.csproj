@@ -447,6 +447,7 @@
     <Content Include="Views\HouseholdMember\_PrivacyPolicies.cshtml" />
     <Content Include="Views\HouseholdMember\Prepare.cshtml" />
     <Content Include="Views\Dashboard\Dashboard.cshtml" />
+    <Content Include="Views\Shared\_Sidebar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

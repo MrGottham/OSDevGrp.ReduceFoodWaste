@@ -1,0 +1,13 @@
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication
+@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+
+<ul class="nav nav-sidebar">
+    @if (User != null && User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <li class="nav-item active">@Html.ActionLink(User.Identity.Name, "Manage", "Account", null, new { @class = "nav-link" })</li>
+    }
+    @if (User != null && User.Identity != null && User.Identity.IsAuthenticated && User.Identity.IsValidatedHouseholdMember())
+    {
+        <li class="nav-item active">@Html.ActionLink(Texts.Dashboard, "Dashboard", "Dashboard", null, new { @class = "nav-link" })</li>
+    }
+</ul>

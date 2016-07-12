@@ -5,5 +5,8 @@
     ViewBag.Title = Texts.Dashboard;
 }
 
-<h2>@Texts.Dashboard</h2>
+@section sidebar {
+    @Html.Partial("_Sidebar")
+}
 
+<h2>@Texts.Dashboard</h2>

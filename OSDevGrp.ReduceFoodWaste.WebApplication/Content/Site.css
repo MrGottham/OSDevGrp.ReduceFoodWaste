@@ -119,12 +119,37 @@ footer {
 /* sidebar */
 .sidebar {
     position: fixed;
-    top: 250px;
-    left: 250px;
-    margin-top: -250px;
-    margin-left: -250px;
-    display: block
+    top: 150px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #7ac0da;
+    border-right: 1px solid #3e5667;
+    margin-top: -160px;
 }
+
+/* nav-sidebar */
+.nav-sidebar {
+    margin-bottom: 20px;
+    margin-left: -20px;
+    margin-right: -21px; /* 20px padding + 1px border */
+}
+
+    .nav-sidebar > li > a {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .nav-sidebar > .active > a,
+    .nav-sidebar > .active > a:hover,
+    .nav-sidebar > .active > a:focus {
+        color: #fff;
+        background-color: #7ac0da;
+    }
 
 /* content-wrapper */
 .content-wrapper {
