@@ -32,6 +32,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         Task<bool> HasHouseholdMemberAcceptedPrivacyPolicyAsync(IIdentity identity);
 
         /// <summary>
+        /// Get the household member account for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for which to the household member account.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Model for the household member account for the given identity.</returns>
+        Task<HouseholdMemberModel> GetHouseholdMemberAsync(IIdentity identity, CultureInfo cultureInfo);
+
+            /// <summary>
         /// Creates a new household to a given identity.
         /// </summary>
         /// <param name="identity">Identity which should own the household.</param>

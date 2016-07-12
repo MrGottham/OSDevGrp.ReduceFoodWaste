@@ -129,6 +129,45 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         }
 
         /// <summary>
+        /// Get the household member account for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for which to the household member account.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Model for the household member account for the given identity.</returns>
+        public Task<HouseholdMemberModel> GetHouseholdMemberAsync(IIdentity identity, CultureInfo cultureInfo)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException("cultureInfo");
+            }
+
+            Func<HouseholdDataServiceChannel, HouseholdMemberModel> callbackFunc = channel =>
+            {
+                var query = new HouseholdMemberDataGetQuery
+                {
+                    TranslationInfoIdentifier = GetTranslationInfoIdentifier(channel, cultureInfo)
+                };
+                var result = channel.HouseholdMemberDataGet(query);
+
+                var householdMember = _householdDataConverter.Convert<HouseholdMemberView, HouseholdMemberModel>(result);
+                householdMember.Name = identity.Name;
+
+                var privacyPolicy = GetPrivacyPolicies(channel, cultureInfo);
+                privacyPolicy.IsAccepted = householdMember.HasAcceptedPrivacyPolicy;
+                privacyPolicy.AcceptedTime = householdMember.PrivacyPolicyAcceptedTime;
+                householdMember.PrivacyPolicy = privacyPolicy;
+
+                return householdMember;
+            };
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+        }
+
+        /// <summary>
         /// Creates a new household to a given identity.
         /// </summary>
         /// <param name="identity">Identity which should own the household.</param>
@@ -190,6 +229,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 householdMemberModel.ActivatedTime = result.EventDate;
                 return householdMemberModel;
             };
+
             return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
         }
 
@@ -285,11 +325,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     }
                     finally
                     {
-                        var dispoableChannel = channel as IDisposable;
-                        if (dispoableChannel != null)
-                        {
-                            dispoableChannel.Dispose();
-                        }
+                        var dispoableChannel = (IDisposable) channel;
+                        dispoableChannel.Dispose();
                     }
                 }
                 catch (FaultException<Fault> ex)
@@ -419,11 +456,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         private ChannelFactory<HouseholdDataServiceChannel> CreateChannelFactory(IIdentity identity)
         {
             var channelFactory = new ChannelFactory<HouseholdDataServiceChannel>(HouseholdDataServiceEndpointConfigurationName);
-
+            if (channelFactory.Credentials == null)
+            {
+                return channelFactory;
+            }
             var userNamePasswordCredential = _credentialsProvider.CreateUserNamePasswordCredential(identity);
             channelFactory.Credentials.UserName.UserName = userNamePasswordCredential.UserName;
             channelFactory.Credentials.UserName.Password = userNamePasswordCredential.Password;
-            
             return channelFactory;
         }
 
