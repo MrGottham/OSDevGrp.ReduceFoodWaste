@@ -115,7 +115,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            if (_claimValueProvider.IsValidatedHouseholdMember(User.Identity))
+            if (_claimValueProvider.IsValidatedHouseholdMember(User.Identity) == false)
             {
                 return RedirectToAction("Index", "Home");
             }
