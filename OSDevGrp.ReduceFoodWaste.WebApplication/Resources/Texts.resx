@@ -183,9 +183,6 @@
   <data name="RemoveCredentialFromYourAccount" xml:space="preserve">
     <value>Remove this {0} credential from your account.</value>
   </data>
-  <data name="TheExternalLoginWasRemoved" xml:space="preserve">
-    <value>The external login was removed.</value>
-  </data>
   <data name="BusinessException" xml:space="preserve">
     <value>Business related error.</value>
   </data>

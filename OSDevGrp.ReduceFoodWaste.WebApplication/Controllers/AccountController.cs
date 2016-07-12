@@ -71,56 +71,70 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Disassociate(string provider, string providerUserId)
         {
-            var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
-            if (string.IsNullOrWhiteSpace(mailAddress))
-            {
-                return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
-            }
+            throw new NotImplementedException();
 
-            var accountOwner = OAuthWebSecurity.GetUserName(provider, providerUserId);
-            if (string.Compare(accountOwner, mailAddress, StringComparison.Ordinal) != 0)
-            {
-                return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
-            }
+            //var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
+            //if (string.IsNullOrWhiteSpace(mailAddress))
+            //{
+            //    return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
+            //}
 
-            var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
-            if (string.IsNullOrWhiteSpace(userNameIdentifier) || string.Compare(providerUserId, userNameIdentifier, StringComparison.Ordinal) == 0)
-            {
-                return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
-            }
+            //var accountOwner = OAuthWebSecurity.GetUserName(provider, providerUserId);
+            //if (string.Compare(accountOwner, mailAddress, StringComparison.Ordinal) != 0)
+            //{
+            //    return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
+            //}
 
-            ManageMessageId? manageMessageId = null;
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.Serializable}))
-            {
-                var hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(mailAddress));
-                if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(mailAddress).Count > 1)
-                {
-                    OAuthWebSecurity.DeleteAccount(provider, providerUserId);
-                    scope.Complete();
-                    manageMessageId = ManageMessageId.RemoveLoginSuccess;
-                }
-            }
+            //var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
+            //if (string.IsNullOrWhiteSpace(userNameIdentifier) || string.Compare(providerUserId, userNameIdentifier, StringComparison.Ordinal) == 0)
+            //{
+            //    return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
+            //}
 
-            return RedirectToAction("Manage", new {Message = manageMessageId});
+            //ManageMessageId? manageMessageId = null;
+            //using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.Serializable}))
+            //{
+            //    var hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(mailAddress));
+            //    if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(mailAddress).Count > 1)
+            //    {
+            //        OAuthWebSecurity.DeleteAccount(provider, providerUserId);
+            //        scope.Complete();
+            //        manageMessageId = ManageMessageId.RemoveLoginSuccess;
+            //    }
+            //}
+
+            //return RedirectToAction("Manage", new {Message = manageMessageId});
         }
 
         //
         // GET: /Account/Manage
-        public ActionResult Manage(ManageMessageId? message)
+        public ActionResult Manage()
         {
-            ViewBag.StatusMessage = string.Empty;
-            if (message.HasValue)
+            if (User == null || User.Identity == null || User.Identity.IsAuthenticated == false)
             {
-                switch (message.Value)
-                {
-                    case ManageMessageId.RemoveLoginSuccess:
-                        ViewBag.StatusMessage = Texts.TheExternalLoginWasRemoved;
-                        break;
-                }
+                return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.ReturnUrl = Url.Action("Manage");
-            return View();
+            if (_claimValueProvider.IsValidatedHouseholdMember(User.Identity))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            throw new NotImplementedException();
+
+            //ViewBag.StatusMessage = string.Empty;
+            //if (message.HasValue)
+            //{
+            //    switch (message.Value)
+            //    {
+            //        case ManageMessageId.RemoveLoginSuccess:
+            //            ViewBag.StatusMessage = Texts.TheExternalLoginWasRemoved;
+            //            break;
+            //    }
+            //}
+
+            //ViewBag.ReturnUrl = Url.Action("Manage");
+            //return View();
         }
 
         //
@@ -130,7 +144,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new {ReturnUrl = returnUrl}));
+            return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
         }
 
         //
@@ -140,10 +154,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             GooglePlusScopedClient.RewriteRequest(HttpContext);
 
-            AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new {ReturnUrl = returnUrl}));
+            AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
             if (!result.IsSuccessful)
             {
-                return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnsuccessfulLoginWithService});
+                return RedirectToAction("ExternalLoginFailure", new { reason = Texts.UnsuccessfulLoginWithService });
             }
 
             var claimsIdentity = result.ToClaimsIdentity();
@@ -151,7 +165,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             string mailAddress = _claimValueProvider.GetMailAddress(claimsIdentity);
             if (string.IsNullOrWhiteSpace(mailAddress))
             {
-                return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnableToObtainEmailAddressFromService});
+                return RedirectToAction("ExternalLoginFailure", new { reason = Texts.UnableToObtainEmailAddressFromService });
             }
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
@@ -175,7 +189,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 var userProfile = context.UserProfiles.FirstOrDefault(up => string.Compare(mailAddress, up.UserName, StringComparison.OrdinalIgnoreCase) == 0);
                 if (userProfile == null)
                 {
-                    context.UserProfiles.Add(new UserProfile {UserName = mailAddress});
+                    context.UserProfiles.Add(new UserProfile { UserName = mailAddress });
                     context.SaveChanges();
                 }
 
@@ -209,34 +223,35 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ChildActionOnly]
         public ActionResult RemoveExternalLogins()
         {
-            var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
-            if (string.IsNullOrWhiteSpace(mailAddress))
-            {
-                return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
-            }
+            throw new NotImplementedException();
+            //var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
+            //if (string.IsNullOrWhiteSpace(mailAddress))
+            //{
+            //    return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
+            //}
 
-            var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
-            if (string.IsNullOrWhiteSpace(userNameIdentifier))
-            {
-                return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
-            }
+            //var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
+            //if (string.IsNullOrWhiteSpace(userNameIdentifier))
+            //{
+            //    return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
+            //}
 
-            var externalLogins = OAuthWebSecurity.GetAccountsFromUserName(mailAddress)
-                .Select(account =>
-                {
-                    var clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
+            //var externalLogins = OAuthWebSecurity.GetAccountsFromUserName(mailAddress)
+            //    .Select(account =>
+            //    {
+            //        var clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
 
-                    return new ExternalLogin
-                    {
-                        Provider = account.Provider,
-                        ProviderDisplayName = clientData.DisplayName,
-                        ProviderUserId = account.ProviderUserId,
-                        Removable = string.Compare(account.ProviderUserId, userNameIdentifier, StringComparison.Ordinal) != 0
-                    };
-                })
-                .ToArray();
+            //        return new ExternalLogin
+            //        {
+            //            Provider = account.Provider,
+            //            ProviderDisplayName = clientData.DisplayName,
+            //            ProviderUserId = account.ProviderUserId,
+            //            Removable = string.Compare(account.ProviderUserId, userNameIdentifier, StringComparison.Ordinal) != 0
+            //        };
+            //    })
+            //    .ToArray();
 
-            return PartialView("_RemoveExternalLoginsPartial", externalLogins);
+            //return PartialView("_RemoveExternalLoginsPartial", externalLogins);
         }
 
         #region Helpers
@@ -264,12 +279,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home", new {redirectToDashboard = true});
-        }
-
-        public enum ManageMessageId
-        {
-            RemoveLoginSuccess
+            return RedirectToAction("Index", "Home", new { redirectToDashboard = true });
         }
 
         private class ExternalLoginResult : ActionResult

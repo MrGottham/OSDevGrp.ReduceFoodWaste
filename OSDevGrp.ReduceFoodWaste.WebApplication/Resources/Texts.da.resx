@@ -183,9 +183,6 @@
   <data name="RemoveCredentialFromYourAccount" xml:space="preserve">
     <value>Fjern {0} log ind oplysninger fra din konto.</value>
   </data>
-  <data name="TheExternalLoginWasRemoved" xml:space="preserve">
-    <value>Den eksterne tjeneste til log ind er fjernet fra din konto.</value>
-  </data>
   <data name="BusinessException" xml:space="preserve">
     <value>Forretningsmæssig fejl.</value>
   </data>

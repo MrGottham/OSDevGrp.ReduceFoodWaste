@@ -403,15 +403,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The external login was removed..
-        /// </summary>
-        public static string TheExternalLoginWasRemoved {
-            get {
-                return ResourceManager.GetString("TheExternalLoginWasRemoved", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Time to create your first household.
         /// </summary>
         public static string TimeToCreateYourFirstHousehold {
