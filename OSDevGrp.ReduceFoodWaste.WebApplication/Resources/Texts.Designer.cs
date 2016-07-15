@@ -79,15 +79,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account.
-        /// </summary>
-        public static string Account {
-            get {
-                return ResourceManager.GetString("Account", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Activation.
         /// </summary>
         public static string Activation {
@@ -246,6 +237,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         public static string HomePage {
             get {
                 return ResourceManager.GetString("HomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Household member account.
+        /// </summary>
+        public static string HouseholdMemberAccount {
+            get {
+                return ResourceManager.GetString("HouseholdMemberAccount", resourceCulture);
             }
         }
         

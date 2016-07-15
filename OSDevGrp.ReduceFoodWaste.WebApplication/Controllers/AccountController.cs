@@ -120,21 +120,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            throw new NotImplementedException();
-
-            //ViewBag.StatusMessage = string.Empty;
-            //if (message.HasValue)
-            //{
-            //    switch (message.Value)
-            //    {
-            //        case ManageMessageId.RemoveLoginSuccess:
-            //            ViewBag.StatusMessage = Texts.TheExternalLoginWasRemoved;
-            //            break;
-            //    }
-            //}
-
-            //ViewBag.ReturnUrl = Url.Action("Manage");
-            //return View();
+            return RedirectToAction("Manage", "HouseholdMember");
         }
 
         //

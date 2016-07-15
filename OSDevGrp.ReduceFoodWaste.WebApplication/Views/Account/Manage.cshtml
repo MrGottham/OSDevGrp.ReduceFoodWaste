@@ -1,13 +1,4 @@
 ﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
-@{
-    ViewBag.Title = string.Format("{0} {1}", Texts.Manage, Texts.Account.ToLower());
-}
-
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
-
-<p class="message-success">@ViewBag.StatusMessage</p>
 
 <p>@Html.Raw(string.Format(Texts.YouAreLoggedInAs, User.Identity.Name))</p>
 

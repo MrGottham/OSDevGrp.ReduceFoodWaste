@@ -168,8 +168,8 @@
   <data name="WelcomeTo" xml:space="preserve">
     <value>Velkommen til {0}</value>
   </data>
-  <data name="Account" xml:space="preserve">
-    <value>Konto</value>
+  <data name="HouseholdMemberAccount" xml:space="preserve">
+    <value>Husstandsmedlemsskab</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Administrér</value>

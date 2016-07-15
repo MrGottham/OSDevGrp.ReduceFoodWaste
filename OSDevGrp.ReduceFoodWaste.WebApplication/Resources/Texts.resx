@@ -168,8 +168,8 @@
   <data name="WelcomeTo" xml:space="preserve">
     <value>Welcome to {0}</value>
   </data>
-  <data name="Account" xml:space="preserve">
-    <value>Account</value>
+  <data name="HouseholdMemberAccount" xml:space="preserve">
+    <value>Household member account</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Manage</value>

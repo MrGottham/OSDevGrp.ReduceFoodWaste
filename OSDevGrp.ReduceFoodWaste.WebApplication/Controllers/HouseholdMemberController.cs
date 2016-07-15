@@ -212,6 +212,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <returns>View for the next step.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [IsCreatedHouseholdMember]
         public ActionResult Prepare(HouseholdMemberModel householdMemberModel)
         {
             if (householdMemberModel == null)
@@ -290,6 +291,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 ViewBag.ErrorMessage = ex.Message;
                 return View("Prepare", householdMemberModel);
+            }
+        }
+
+        /// <summary>
+        /// Manage a household member account.
+        /// </summary>
+        /// <returns>View for manage a household member account.</returns>
+        [IsValidatedHouseholdMember]
+        public ActionResult Manage()
+        {
+            try
+            {
+                var task = _householdDataRepository.GetHouseholdMemberAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
+                task.Wait();
+
+                return View("Manage", task.Result);
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.ToReduceFoodWasteException();
             }
         }
 

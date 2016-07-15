@@ -1,8 +1,8 @@
 ﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
-@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.DashboardModel
+@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdMemberModel
 
 @{
-    ViewBag.Title = Texts.Dashboard;
+    ViewBag.Title = string.Format("{0} {1}", Texts.Manage, Texts.HouseholdMemberAccount.ToLower());
 }
 
 @section sidebar {
