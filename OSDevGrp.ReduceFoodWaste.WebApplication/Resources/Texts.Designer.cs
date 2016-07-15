@@ -223,6 +223,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expires.
+        /// </summary>
+        public static string Expires {
+            get {
+                return ResourceManager.GetString("Expires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string Home {
@@ -295,11 +304,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mail address.
+        /// </summary>
+        public static string MailAddress {
+            get {
+                return ResourceManager.GetString("MailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage.
         /// </summary>
         public static string Manage {
             get {
                 return ResourceManager.GetString("Manage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Membership.
+        /// </summary>
+        public static string Membership {
+            get {
+                return ResourceManager.GetString("Membership", resourceCulture);
             }
         }
         

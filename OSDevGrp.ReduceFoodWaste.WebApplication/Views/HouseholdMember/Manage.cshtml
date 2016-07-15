@@ -13,4 +13,27 @@
     <hgroup class="title">
         <h2>@ViewBag.Title</h2>
     </hgroup>
+    <table class="table table-sm">
+        <tbody>
+            <tr>
+                <td style="width: 15%" nowrap>@Texts.Name</td>
+                <td><strong>@Html.Raw(Model.Name)</strong></td>
+            </tr>
+            <tr>
+                <td style="width: 15%" nowrap>@Texts.MailAddress</td>
+                <td><strong>@Html.Raw(Model.MailAddress)</strong></td>
+            </tr>
+            <tr>
+                <td style="width: 15%" nowrap>@Texts.Membership</td>
+                @if (Model.MembershipExpireTime.HasValue)
+                {
+                    <td><strong>@Html.Raw(string.Format("{0} ({1}: {2})", Model.Membership, Texts.Expires, Model.MembershipExpireTime.Value.ToLongDateString()))</strong></td>
+                }
+                else
+                {
+                    <td><strong>@Html.Raw(Model.Membership)</strong></td>
+                }
+            </tr>
+        </tbody>
+    </table>
 </div>

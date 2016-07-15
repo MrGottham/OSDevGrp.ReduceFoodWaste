@@ -255,4 +255,13 @@
   <data name="Accept" xml:space="preserve">
     <value>Acceptér</value>
   </data>
+  <data name="MailAddress" xml:space="preserve">
+    <value>Mailadresse</value>
+  </data>
+  <data name="Expires" xml:space="preserve">
+    <value>Udløber</value>
+  </data>
+  <data name="Membership" xml:space="preserve">
+    <value>Medlemsskab</value>
+  </data>
 </root>
