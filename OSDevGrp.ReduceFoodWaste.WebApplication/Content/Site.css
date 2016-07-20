@@ -118,23 +118,16 @@ footer {
 
 /* sidebar */
 .sidebar {
-    position: fixed;
-    top: 150px;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
     display: block;
     padding: 20px;
     overflow-x: hidden;
     overflow-y: auto;
-    background-color: #7ac0da;
+    background-color: #efeeef;
     border-right: 1px solid #e2e2e2;
-    margin-top: -160px;
 }
 
 /* nav-sidebar */
 .nav-sidebar {
-    margin-bottom: 20px;
     margin-left: -20px;
     margin-right: -21px; /* 20px padding + 1px border */
 }
@@ -147,8 +140,7 @@ footer {
     .nav-sidebar > .active > a,
     .nav-sidebar > .active > a:hover,
     .nav-sidebar > .active > a:focus {
-        color: #fff;
-        background-color: #7ac0da;
+        background-color: #efeeef;
     }
 
 /* content-wrapper */

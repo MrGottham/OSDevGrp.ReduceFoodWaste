@@ -1,5 +1,4 @@
-﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Filters
-@using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication
 @using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 <!DOCTYPE html>
 <html lang="en">
@@ -52,43 +51,32 @@
     </header>
     <div id="body">
         <div class="container">
-            @if (CookieConsentAttribute.AskCookieConsent(ViewContext))
+            @if (IsSectionDefined("sidebar"))
             {
-                <div class="row">
-                    <div id="cookie-alert">
-                        <div class="alert">
-                            <p><strong>@Texts.Cookies:</strong> @Texts.CookieConsent</p>
-                            @using (Html.BeginForm("AllowCookies", "Home", new { ReturnUrl = Request.RawUrl }, FormMethod.Post, new { @class = "btn-group-vertical" }))
-                            {
-                                @Html.AntiForgeryToken()
-                                <input type="submit" class="btn btn-success" value="@Texts.Accept" />
-                            }
-                        </div>
-                    </div>
+                <div class="col-sm-3 col-md-2 sidebar">
+                    @* TODO: View the source of http://v4-alpha.getbootstrap.com/examples/dashboard/ *@
+                    @RenderSection("sidebar", required: true)
                 </div>
-            }
-            <div class="row">
-                @if (IsSectionDefined("sidebar"))
-                {
-                    <div class="col-sm-3 col-md-2 sidebar">
-                        @* TODO: View the source of http://v4-alpha.getbootstrap.com/examples/dashboard/ *@
-                        @RenderSection("sidebar", required: true)
-                    </div>
-                    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+                <div class="col-sm-9 col-md-10">
+                    @Html.Partial("_CookieConsent")
+                    <div class="row">
                         @RenderSection("featured", required: false)
                         <section class="content-wrapper clear-fix">
                             @RenderBody()
                         </section>
                     </div>
-                }
-                else
-                {
+                </div>
+            }
+            else
+            {
+                @Html.Partial("_CookieConsent")
+                <div class="row">
                     @RenderSection("featured", required: false)
                     <section class="content-wrapper clear-fix">
                         @RenderBody()
                     </section>
-                }
-            </div>
+                </div>
+            }
         </div>
     </div>
     <footer>

@@ -449,6 +449,7 @@
     <Content Include="Views\Dashboard\Dashboard.cshtml" />
     <Content Include="Views\Shared\_Sidebar.cshtml" />
     <Content Include="Views\HouseholdMember\Manage.cshtml" />
+    <Content Include="Views\Shared\_CookieConsent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
