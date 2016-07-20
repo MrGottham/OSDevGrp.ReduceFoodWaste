@@ -174,12 +174,6 @@
   <data name="Manage" xml:space="preserve">
     <value>Administrér</value>
   </data>
-  <data name="YouAreLoggedInAs" xml:space="preserve">
-    <value>Du er logget ind som &lt;strong&gt;{0}&lt;/strong&gt;.</value>
-  </data>
-  <data name="RegisteredExternalLogins" xml:space="preserve">
-    <value>Registrerede eksterne tjenester til log ind:</value>
-  </data>
   <data name="RemoveCredentialFromYourAccount" xml:space="preserve">
     <value>Fjern {0} log ind oplysninger fra din konto.</value>
   </data>
@@ -263,5 +257,8 @@
   </data>
   <data name="Membership" xml:space="preserve">
     <value>Medlemsskab</value>
+  </data>
+  <data name="ExternalLoginProviders" xml:space="preserve">
+    <value>Eksterne tjenester til login</value>
   </data>
 </root>

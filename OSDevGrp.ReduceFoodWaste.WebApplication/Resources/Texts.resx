@@ -174,12 +174,6 @@
   <data name="Manage" xml:space="preserve">
     <value>Manage</value>
   </data>
-  <data name="YouAreLoggedInAs" xml:space="preserve">
-    <value>You're logged in as &lt;strong&gt;{0}&lt;/strong&gt;.</value>
-  </data>
-  <data name="RegisteredExternalLogins" xml:space="preserve">
-    <value>Registered external logins:</value>
-  </data>
   <data name="RemoveCredentialFromYourAccount" xml:space="preserve">
     <value>Remove this {0} credential from your account.</value>
   </data>
@@ -263,5 +257,8 @@
   </data>
   <data name="Membership" xml:space="preserve">
     <value>Membership</value>
+  </data>
+  <data name="ExternalLoginProviders" xml:space="preserve">
+    <value>External login providers</value>
   </data>
 </root>

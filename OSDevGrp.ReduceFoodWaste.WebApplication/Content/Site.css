@@ -148,6 +148,11 @@ footer {
     margin: 0 auto;
 }
 
+/* partialContents */
+.partialContents {
+    padding: 10px;
+}
+
 /* featured */
 .featured {
     background-color: #fff;

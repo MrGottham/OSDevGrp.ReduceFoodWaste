@@ -232,6 +232,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to External login providers.
+        /// </summary>
+        public static string ExternalLoginProviders {
+            get {
+                return ResourceManager.GetString("ExternalLoginProviders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string Home {
@@ -394,15 +403,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Registered external logins:.
-        /// </summary>
-        public static string RegisteredExternalLogins {
-            get {
-                return ResourceManager.GetString("RegisteredExternalLogins", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Remove this {0} credential from your account..
         /// </summary>
         public static string RemoveCredentialFromYourAccount {
@@ -489,15 +489,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         public static string WelcomeTo {
             get {
                 return ResourceManager.GetString("WelcomeTo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You&apos;re logged in as &lt;strong&gt;{0}&lt;/strong&gt;..
-        /// </summary>
-        public static string YouAreLoggedInAs {
-            get {
-                return ResourceManager.GetString("YouAreLoggedInAs", resourceCulture);
             }
         }
     }
