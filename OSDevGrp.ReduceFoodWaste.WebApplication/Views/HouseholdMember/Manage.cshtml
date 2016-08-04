@@ -15,31 +15,31 @@
     </hgroup>
     <table class="table table-sm">
         <tbody>
-        <tr>
-            <td style="width: 15%" nowrap>@Texts.Name</td>
-            <td><strong>@Html.Raw(Model.Name)</strong></td>
-        </tr>
-        <tr>
-            <td style="width: 15%" nowrap>@Texts.MailAddress</td>
-            <td><strong>@Html.Raw(Model.MailAddress)</strong></td>
-        </tr>
-        <tr>
-            <td style="width: 15%" nowrap>@Texts.Membership</td>
-            @if (Model.MembershipExpireTime.HasValue)
-            {
-                <td><strong>@Html.Raw(string.Format("{0} ({1}: {2})", Model.Membership, Texts.Expires, Model.MembershipExpireTime.Value.ToLongDateString()))</strong></td>
-            }
-            else
-            {
-                <td><strong>@Html.Raw(Model.Membership)</strong></td>
-            }
-        </tr>
+            <tr>
+                <td style="width: 15%" nowrap>@Texts.Name</td>
+                <td><strong>@Html.Raw(Model.Name)</strong></td>
+            </tr>
+            <tr>
+                <td style="width: 15%" nowrap>@Texts.MailAddress</td>
+                <td><strong>@Html.Raw(Model.MailAddress)</strong></td>
+            </tr>
+            <tr>
+                <td style="width: 15%" nowrap>@Texts.Membership</td>
+                @if (Model.MembershipExpireTime.HasValue)
+                {
+                    <td><strong>@Html.Raw(string.Format("{0} ({1}: {2})", Model.Membership, Texts.Expires, Model.MembershipExpireTime.Value.ToLongDateString()))</strong></td>
+                }
+                else
+                {
+                    <td><strong>@Html.Raw(Model.Membership)</strong></td>
+                }
+            </tr>
         </tbody>
     </table>
     <div class="row">
         <h4>@Texts.ExternalLoginProviders</h4>
-        <div class="partialContents" data-url="~/Account/Login">
-            <img src="~/Images/ajax-loader_bigspinner_green.gif">
+        <div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute("~/Account/RemoveExternalLogins")">
+            <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
         </div>
     </div>
 </div>
