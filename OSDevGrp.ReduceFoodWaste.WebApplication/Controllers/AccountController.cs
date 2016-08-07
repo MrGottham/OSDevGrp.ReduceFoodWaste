@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Security.Claims;
 using System.Transactions;
 using System.Web.Mvc;
@@ -206,38 +207,48 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             return PartialView("_ExternalLoginsListPartial", OAuthWebSecurity.RegisteredClientData);
         }
 
-        [ChildActionOnly]
         public ActionResult RemoveExternalLogins()
         {
-            throw new NotImplementedException();
-            //var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
-            //if (string.IsNullOrWhiteSpace(mailAddress))
-            //{
-            //    return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
-            //}
+            try
+            {
+                var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
+                if (string.IsNullOrWhiteSpace(mailAddress))
+                {
+                    return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
+                }
 
-            //var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
-            //if (string.IsNullOrWhiteSpace(userNameIdentifier))
-            //{
-            //    return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
-            //}
+                var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
+                if (string.IsNullOrWhiteSpace(userNameIdentifier))
+                {
+                    return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
+                }
 
-            //var externalLogins = OAuthWebSecurity.GetAccountsFromUserName(mailAddress)
-            //    .Select(account =>
-            //    {
-            //        var clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
+                var externalLogins = OAuthWebSecurity.GetAccountsFromUserName(mailAddress)
+                    .Select(account =>
+                    {
+                        var clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
+                        return new ExternalLogin
+                        {
+                            Provider = account.Provider,
+                            ProviderDisplayName = clientData.DisplayName,
+                            ProviderUserId = account.ProviderUserId,
+                            Removable = string.Compare(account.ProviderUserId, userNameIdentifier, StringComparison.Ordinal) != 0
+                        };
+                    })
+                    .ToArray();
 
-            //        return new ExternalLogin
-            //        {
-            //            Provider = account.Provider,
-            //            ProviderDisplayName = clientData.DisplayName,
-            //            ProviderUserId = account.ProviderUserId,
-            //            Removable = string.Compare(account.ProviderUserId, userNameIdentifier, StringComparison.Ordinal) != 0
-            //        };
-            //    })
-            //    .ToArray();
-
-            //return PartialView("_RemoveExternalLoginsPartial", externalLogins);
+                return PartialView("_RemoveExternalLoginsPartial", externalLogins);
+            }
+            catch (ReduceFoodWasteExceptionBase ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return PartialView("_Empty");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return PartialView("_Empty");
+            }
         }
 
         #region Helpers

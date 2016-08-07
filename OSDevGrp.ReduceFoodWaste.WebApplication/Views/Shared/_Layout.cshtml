@@ -117,9 +117,7 @@
                 .each(function (index, item) {
                     var url = $(item).data("url");
                     if (url && url.length > 0) {
-                        alert("OS Debug 1: " + url);
                         $(item).load(url);
-                        alert("OS Debug 2: " + url);
                     }
                 });
         });
