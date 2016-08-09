@@ -385,6 +385,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Provider.
+        /// </summary>
+        public static string Provider {
+            get {
+                return ResourceManager.GetString("Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reason.
         /// </summary>
         public static string Reason {
