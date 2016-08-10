@@ -261,7 +261,7 @@
   <data name="ExternalLoginProviders" xml:space="preserve">
     <value>External login providers</value>
   </data>
-  <data name="Provider" xml:space="preserve">
-    <value>Provider</value>
+  <data name="Providers" xml:space="preserve">
+    <value>Providers</value>
   </data>
 </root>

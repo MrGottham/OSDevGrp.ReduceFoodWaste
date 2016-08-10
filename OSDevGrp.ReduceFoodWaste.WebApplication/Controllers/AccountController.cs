@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Resources;
 using System.Security.Claims;
 using System.Transactions;
 using System.Web.Mvc;
@@ -99,21 +98,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 return RedirectToAction("Manage", "Account");
             }
 
-            throw new NotImplementedException();
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.Serializable}))
+            {
+                var hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(mailAddress));
+                if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(mailAddress).Count > 1)
+                {
+                    OAuthWebSecurity.DeleteAccount(provider, providerUserId);
+                    scope.Complete();
+                }
+            }
 
-            //ManageMessageId? manageMessageId = null;
-            //using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.Serializable}))
-            //{
-            //    var hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(mailAddress));
-            //    if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(mailAddress).Count > 1)
-            //    {
-            //        OAuthWebSecurity.DeleteAccount(provider, providerUserId);
-            //        scope.Complete();
-            //        manageMessageId = ManageMessageId.RemoveLoginSuccess;
-            //    }
-            //}
-
-            //return RedirectToAction("Manage", new {Message = manageMessageId});
+            return RedirectToAction("Manage", "Account");
         }
 
         //

@@ -261,7 +261,7 @@
   <data name="ExternalLoginProviders" xml:space="preserve">
     <value>Eksterne tjenester til login</value>
   </data>
-  <data name="Provider" xml:space="preserve">
-    <value>Tjeneste udbyder</value>
+  <data name="Providers" xml:space="preserve">
+    <value>Tjeneste udbydere</value>
   </data>
 </root>

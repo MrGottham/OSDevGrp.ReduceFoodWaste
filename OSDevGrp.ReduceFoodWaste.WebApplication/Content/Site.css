@@ -156,6 +156,11 @@ footer {
     padding-bottom: 0;
 }
 
+    .partialContents img {
+        display: block;
+        margin: auto;
+    }
+
 /* featured */
 .featured {
     background-color: #fff;
