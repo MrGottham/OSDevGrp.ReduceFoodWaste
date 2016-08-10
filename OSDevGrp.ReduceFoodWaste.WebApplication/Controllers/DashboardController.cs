@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 
@@ -21,6 +22,23 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             var dashboardModel = new DashboardModel();
             return View(dashboardModel);
+        }
+
+        /// <summary>
+        /// Returns the partial view for the household member information in the dashboard.
+        /// </summary>
+        /// <returns>Partial view for the household member information in the dashboard.</returns>
+        public ActionResult HouseholdMemberInformation()
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return PartialView("_Empty");
+            }
         }
 
         #endregion
