@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 {
@@ -12,6 +16,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
     [IsValidatedHouseholdMember]
     public class DashboardController : Controller
     {
+        #region Private variables
+
+        private readonly IHouseholdDataRepository _householdDataRepository;
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Creates a controller for a household members dashboard.
+        /// </summary>
+        /// <param name="householdDataRepository">Implementation of a repository which can access household data.</param>
+        public DashboardController(IHouseholdDataRepository householdDataRepository)
+        {
+            if (householdDataRepository == null)
+            {
+                throw new ArgumentNullException("householdDataRepository");
+            }
+            _householdDataRepository = householdDataRepository;
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -32,7 +59,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             try
             {
-                throw new NotImplementedException();
+                var task = _householdDataRepository.GetHouseholdMemberAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
+                task.Wait();
+
+                var dashboardModel = new DashboardModel
+                {
+                    HouseholdMember = task.Result
+                };
+
+                // TODO: http://v4-alpha.getbootstrap.com/components/card/
+                return null;
+            }
+            catch (AggregateException ex)
+            {
+                ViewBag.ErrorMessage = ex.ToReduceFoodWasteException().Message;
+                return PartialView("_Empty");
             }
             catch (Exception ex)
             {
