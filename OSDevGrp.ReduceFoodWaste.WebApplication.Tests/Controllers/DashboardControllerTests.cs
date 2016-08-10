@@ -47,6 +47,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var dashboardModel = (DashboardModel) viewResult.Model;
             Assert.That(dashboardModel, Is.Not.Null);
             Assert.That(dashboardModel.HouseholdMember, Is.Null);
+            Assert.That(dashboardModel.Households, Is.Null);
         }
 
         /// <summary>
