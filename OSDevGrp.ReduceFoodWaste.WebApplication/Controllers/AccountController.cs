@@ -72,25 +72,34 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Disassociate(string provider, string providerUserId)
         {
+            if (string.IsNullOrEmpty(provider))
+            {
+                throw new ArgumentNullException("provider");
+            }
+            if (string.IsNullOrEmpty(providerUserId))
+            {
+                throw new ArgumentNullException("providerUserId");
+            }
+
+            var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
+            if (string.IsNullOrWhiteSpace(mailAddress))
+            {
+                return RedirectToAction("Manage", "Account");
+            }
+
+            var accountOwner = OAuthWebSecurity.GetUserName(provider, providerUserId);
+            if (string.Compare(accountOwner, mailAddress, StringComparison.OrdinalIgnoreCase) != 0)
+            {
+                return RedirectToAction("Manage", "Account");
+            }
+
+            var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
+            if (string.IsNullOrWhiteSpace(userNameIdentifier) || string.Compare(providerUserId, userNameIdentifier, StringComparison.Ordinal) == 0)
+            {
+                return RedirectToAction("Manage", "Account");
+            }
+
             throw new NotImplementedException();
-
-            //var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
-            //if (string.IsNullOrWhiteSpace(mailAddress))
-            //{
-            //    return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
-            //}
-
-            //var accountOwner = OAuthWebSecurity.GetUserName(provider, providerUserId);
-            //if (string.Compare(accountOwner, mailAddress, StringComparison.Ordinal) != 0)
-            //{
-            //    return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
-            //}
-
-            //var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
-            //if (string.IsNullOrWhiteSpace(userNameIdentifier) || string.Compare(providerUserId, userNameIdentifier, StringComparison.Ordinal) == 0)
-            //{
-            //    return RedirectToAction("Manage", new {Message = (ManageMessageId?) null});
-            //}
 
             //ManageMessageId? manageMessageId = null;
             //using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.Serializable}))
