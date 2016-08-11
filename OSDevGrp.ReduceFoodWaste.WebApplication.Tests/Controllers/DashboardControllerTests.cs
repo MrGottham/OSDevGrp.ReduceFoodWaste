@@ -94,6 +94,45 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that HouseholdMemberInformation returns a PartialViewResult with a model for a dashboard.
+        /// </summary>
+        [Test]
+        public void TestThatHouseholdMemberInformationReturnsPartialViewResultWithDashboardModel()
+        {
+            var householdMember = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Households, Fixture.CreateMany<HouseholdModel>(Random.Next(1, 5)).ToList())
+                .Create();
+            Assert.That(householdMember, Is.Not.Null);
+            Assert.That(householdMember.Households, Is.Not.Null);
+            Assert.That(householdMember.Households, Is.Not.Empty);
+
+            var dashboardController = CreateDashboardController(householdMember: householdMember);
+            Assert.That(dashboardController, Is.Not.Null);
+
+            var result = dashboardController.HouseholdMemberInformation();
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<PartialViewResult>());
+
+            var partialViewResult = (PartialViewResult) result;
+            Assert.That(partialViewResult, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Empty);
+            Assert.That(partialViewResult.ViewName, Is.EqualTo("_HouseholdMemberInformation"));
+            Assert.That(partialViewResult.ViewData, Is.Not.Null);
+            Assert.That(partialViewResult.ViewData, Is.Empty);
+            Assert.That(partialViewResult.Model, Is.Not.Null);
+            Assert.That(partialViewResult.Model, Is.TypeOf<DashboardModel>());
+
+            var dashboardModel = (DashboardModel) partialViewResult.Model;
+            Assert.That(dashboardModel, Is.Not.Null);
+            Assert.That(dashboardModel.HouseholdMember, Is.Not.Null);
+            Assert.That(dashboardModel.HouseholdMember, Is.EqualTo(householdMember));
+            Assert.That(dashboardModel.Households, Is.Not.Null);
+            Assert.That(dashboardModel.Households, Is.Not.Empty);
+            Assert.That(dashboardModel.Households, Is.EqualTo(householdMember.Households));
+        }
+
+        /// <summary>
         /// Creates a controller for a household members dashboard for unit testing.
         /// </summary>
         /// <param name="householdMember">Sets the household member which should be used for the dashboard.</param>

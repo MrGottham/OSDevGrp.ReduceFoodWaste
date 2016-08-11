@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Threading;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
@@ -67,8 +66,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     HouseholdMember = task.Result
                 };
 
-                // TODO: http://v4-alpha.getbootstrap.com/components/card/
-                return null;
+                return PartialView("_HouseholdMemberInformation", dashboardModel);
             }
             catch (AggregateException ex)
             {
