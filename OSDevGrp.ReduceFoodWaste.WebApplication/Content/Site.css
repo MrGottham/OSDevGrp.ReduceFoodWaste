@@ -100,12 +100,6 @@ footer {
         padding-bottom: 10px
     }
 
-    #cookie-alert input[type="submit"], input[type="button"], button {
-        color: #fff;
-        background-color: #449d44;
-        border-color: #419641;
-    }
-
 
 /* page elements
 ----------------------------------------------------------*/
@@ -369,8 +363,6 @@ textarea {
     input[type="submit"],
     input[type="button"],
     button {
-        background-color: #d3dce0;
-        border: 1px solid #787878;
         cursor: pointer;
         padding: 7px;
         margin-right: 8px;
