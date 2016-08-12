@@ -44,11 +44,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 return new List<string>
                 {
-                    "~/Images/FoodWaste01.png",
-                    "~/Images/FoodWaste02.png",
-                    "~/Images/FoodWaste03.png",
-                    "~/Images/FoodWaste04.png",
-                    "~/Images/FoodWaste05.png"
+                    "~/Images/foodWaste01.png",
+                    "~/Images/foodWaste02.png",
+                    "~/Images/foodWaste03.png",
+                    "~/Images/foodWaste04.png",
+                    "~/Images/foodWaste05.png"
                 };
             }
         }

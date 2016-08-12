@@ -92,7 +92,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             {
                 Assert.That(topImageCollection.ElementAt(i), Is.Not.Null);
                 Assert.That(topImageCollection.ElementAt(i), Is.Not.Empty);
-                Assert.That(topImageCollection.ElementAt(i), Is.EqualTo(string.Format("~/Images/FoodWaste0{0}.png", i + 1)));
+                Assert.That(topImageCollection.ElementAt(i), Is.EqualTo(string.Format("~/Images/foodWaste0{0}.png", i + 1)));
             }
         }
 
