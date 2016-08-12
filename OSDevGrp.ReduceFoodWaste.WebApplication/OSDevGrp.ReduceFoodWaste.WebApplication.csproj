@@ -347,6 +347,9 @@
     <Content Include="Images\FoodWaste04.png" />
     <Content Include="Images\FoodWaste05.png" />
     <Content Include="Images\google.png" />
+    <Content Include="Images\Household.png" />
+    <Content Include="Images\HouseholdMember.png" />
+    <Content Include="Images\Membership.png" />
     <Content Include="Images\microsoft.png" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
