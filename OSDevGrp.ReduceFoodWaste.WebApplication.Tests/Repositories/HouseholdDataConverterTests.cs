@@ -71,6 +71,104 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.That(result.Name, Is.EqualTo(householdIdentificationView.Name));
             Assert.That(result.Description, Is.Null);
             Assert.That(result.PrivacyPolicy, Is.Null);
+            Assert.That(result.CreationTime, Is.EqualTo(default(DateTime)));
+            Assert.That(result.HouseholdMembers, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that Convert converts a HouseholdView to a HouseholdModel.
+        /// </summary>
+        [Test]
+        [TestCase(true, true)]
+        [TestCase(true, false)]
+        [TestCase(false, true)]
+        [TestCase(false, false)]
+        public void TestThatConvertConvertsHouseholdViewToHouseholdModel(bool hasDesciption, bool hasHouseholdMembers)
+        {
+            HouseholdMemberIdentificationView[] householdMemberIdentificationViewCollection = null;
+            if (hasHouseholdMembers)
+            {
+                var numberOfHouseholdMembers = Random.Next(5, 10);
+                householdMemberIdentificationViewCollection = new HouseholdMemberIdentificationView[numberOfHouseholdMembers];
+                for (var i = 0; i < numberOfHouseholdMembers; i++)
+                {
+                    var householdMemberIdentificationView = Fixture.Build<HouseholdMemberIdentificationView>()
+                        .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
+                        .With(m => m.MailAddress, Fixture.Create<string>())
+                        .With(m => m.ExtensionData, null)
+                        .Create();
+                    Assert.That(householdMemberIdentificationView, Is.Not.Null);
+                    Assert.That(householdMemberIdentificationView.HouseholdMemberIdentifier, Is.Not.EqualTo(default(Guid)));
+                    Assert.That(householdMemberIdentificationView.MailAddress, Is.Not.Null);
+                    Assert.That(householdMemberIdentificationView.MailAddress, Is.Not.Empty);
+
+                    householdMemberIdentificationViewCollection[i] = householdMemberIdentificationView;
+                }
+            }
+
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var householdView = Fixture.Build<HouseholdView>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.Name, Fixture.Create<string>())
+                .With(m => m.Description, hasDesciption ? Fixture.Create<string>() : null)
+                .With(m => m.CreationTime, DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)))
+                .With(m => m.HouseholdMembers, householdMemberIdentificationViewCollection)
+                .With(m => m.ExtensionData, null)
+                .Create();
+            Assert.That(householdView, Is.Not.Null);
+            Assert.That(householdView.HouseholdIdentifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(householdView.Name, Is.Not.Null);
+            Assert.That(householdView.Name, Is.Not.Empty);
+            if (hasDesciption)
+            {
+                Assert.That(householdView.Description, Is.Not.Null);
+                Assert.That(householdView.Description, Is.Not.Empty);
+            }
+            else
+            {
+                Assert.That(householdView.Description, Is.Null);
+            }
+            Assert.That(householdView.CreationTime, Is.Not.EqualTo(default(DateTime)));
+            if (hasHouseholdMembers)
+            {
+                Assert.That(householdView.HouseholdMembers, Is.Not.Null);
+                Assert.That(householdView.HouseholdMembers, Is.Not.Empty);
+            }
+            else
+            {
+                Assert.That(householdView.HouseholdMembers, Is.Null);
+            }
+
+            var result = householdDataConverter.Convert<HouseholdView, HouseholdModel>(householdView);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Identifier, Is.EqualTo(householdView.HouseholdIdentifier));
+            Assert.That(result.Name, Is.Not.Null);
+            Assert.That(result.Name, Is.Not.Empty);
+            Assert.That(result.Name, Is.EqualTo(householdView.Name));
+            if (hasDesciption)
+            {
+                Assert.That(result.Description, Is.Not.Null);
+                Assert.That(result.Description, Is.Not.Empty);
+                Assert.That(result.Description, Is.EqualTo(householdView.Description));
+            }
+            else
+            {
+                Assert.That(result.Description, Is.Null);
+            }
+            Assert.That(result.PrivacyPolicy, Is.Null);
+            Assert.That(result.CreationTime, Is.EqualTo(householdView.CreationTime));
+            if (hasHouseholdMembers)
+            {
+                Assert.That(result.HouseholdMembers, Is.Not.Null);
+                Assert.That(result.HouseholdMembers, Is.Not.Empty);
+                Assert.That(result.HouseholdMembers.Count(), Is.EqualTo(householdView.HouseholdMembers.Length));
+            }
+            else
+            {
+                Assert.That(result.HouseholdMembers, Is.Null);
+            }
         }
 
         /// <summary>
@@ -85,6 +183,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Description, Fixture.Create<string>())
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.Name, Is.Not.Null);
@@ -101,6 +200,47 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.That(result.Description, Is.Not.Empty);
             Assert.That(result.Description, Is.EqualTo(householdModel.Description));
             Assert.That(result.TranslationInfoIdentifier, Is.EqualTo(default(Guid)));
+        }
+
+        /// <summary>
+        /// Tests that Convert converts a HouseholdMemberIdentificationView to a HouseholdMemberModel.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsHouseholdMemberIdentificationViewToHouseholdMemberModel()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var householdMemberIdentificationView = Fixture.Build<HouseholdMemberIdentificationView>()
+                .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, Fixture.Create<string>())
+                .With(m => m.ExtensionData, null)
+                .Create();
+            Assert.That(householdMemberIdentificationView, Is.Not.Null);
+            Assert.That(householdMemberIdentificationView.HouseholdMemberIdentifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(householdMemberIdentificationView.MailAddress, Is.Not.Null);
+            Assert.That(householdMemberIdentificationView.MailAddress, Is.Not.Empty);
+
+            var result = householdDataConverter.Convert<HouseholdMemberIdentificationView, HouseholdMemberModel>(householdMemberIdentificationView);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Identifier, Is.EqualTo(householdMemberIdentificationView.HouseholdMemberIdentifier));
+            Assert.That(result.Name, Is.Null);
+            Assert.That(result.MailAddress, Is.Not.Null);
+            Assert.That(result.MailAddress, Is.Not.Empty);
+            Assert.That(result.MailAddress, Is.EqualTo(householdMemberIdentificationView.MailAddress));
+            Assert.That(result.ActivationCode, Is.Null);
+            Assert.That(result.IsActivated, Is.False);
+            Assert.That(result.ActivatedTime, Is.Null);
+            Assert.That(result.ActivatedTime.HasValue, Is.False);
+            Assert.That(result.Membership, Is.Null);
+            Assert.That(result.MembershipExpireTime, Is.Null);
+            Assert.That(result.MembershipExpireTime.HasValue, Is.False);
+            Assert.That(result.PrivacyPolicy, Is.Null);
+            Assert.That(result.HasAcceptedPrivacyPolicy, Is.False);
+            Assert.That(result.PrivacyPolicyAcceptedTime, Is.Null);
+            Assert.That(result.PrivacyPolicyAcceptedTime.HasValue, Is.False);
+            Assert.That(result.CreationTime, Is.EqualTo(default(DateTime)));
+            Assert.That(result.Households, Is.Null);
         }
 
         /// <summary>
@@ -288,6 +428,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivationCode, activationCode)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -317,6 +458,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivationCode, illegalActivationCode)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(illegalActivationCode));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -24,6 +25,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(householdModel.Name, Is.Null);
             Assert.That(householdModel.Description, Is.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.Null);
+            Assert.That(householdModel.CreationTime, Is.EqualTo(default(DateTime)));
+            Assert.That(householdModel.HouseholdMembers, Is.Null);
         }
 
         /// <summary>
@@ -92,6 +95,74 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
 
             householdModel.PrivacyPolicy = newValue;
             Assert.That(householdModel.PrivacyPolicy, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for CreationTime sets the value to a given date and time.
+        /// </summary>
+        [Test]
+        public void TestThatCreationTimeSetterSetsValueToDateTime()
+        {
+            var householdModel = new HouseholdModel();
+            Assert.That(householdModel, Is.Not.Null);
+            Assert.That(householdModel.CreationTime, Is.EqualTo(default(DateTime)));
+
+            var newValue = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120));
+            Assert.That(newValue, Is.Not.EqualTo(householdModel.CreationTime));
+
+            householdModel.CreationTime = newValue;
+            Assert.That(householdModel.CreationTime, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for HouseholdMembers sets the value to a collection of household models.
+        /// </summary>
+        [Test]
+        public void TestThatHouseholdMembersSetterSetsValueToHouseholdMembersModelCollection()
+        {
+            var householdModel = new HouseholdModel();
+            Assert.That(householdModel, Is.Not.Null);
+            Assert.That(householdModel.HouseholdMembers, Is.Null);
+
+            var householdMemberModelCollection = new List<HouseholdMemberModel>(Random.Next(5, 10));
+            while (householdMemberModelCollection.Count < householdMemberModelCollection.Capacity)
+            {
+                var householdMember = Fixture.Build<HouseholdMemberModel>()
+                    .With(m => m.Households, null)
+                    .Create();
+                householdMemberModelCollection.Add(householdMember);
+            }
+
+            householdModel.HouseholdMembers = householdMemberModelCollection;
+            Assert.That(householdModel.HouseholdMembers, Is.Not.Null);
+            Assert.That(householdModel.HouseholdMembers, Is.Not.Empty);
+            Assert.That(householdModel.HouseholdMembers, Is.EqualTo(householdMemberModelCollection));
+        }
+
+        /// <summary>
+        /// Tests that the setter for HouseholdMembers sets the value to NULL.
+        /// </summary>
+        [Test]
+        public void TestThatHouseholdMembersSetterSetsValueToNull()
+        {
+            var householdMemberModelCollection = new List<HouseholdMemberModel>(Random.Next(5, 10));
+            while (householdMemberModelCollection.Count < householdMemberModelCollection.Capacity)
+            {
+                var householdMember = Fixture.Build<HouseholdMemberModel>()
+                    .With(m => m.Households, null)
+                    .Create();
+                householdMemberModelCollection.Add(householdMember);
+            }
+            var householdModel = new HouseholdModel
+            {
+                HouseholdMembers = householdMemberModelCollection
+            };
+            Assert.That(householdModel, Is.Not.Null);
+            Assert.That(householdModel.HouseholdMembers, Is.Not.Null);
+            Assert.That(householdModel.HouseholdMembers, Is.Not.Empty);
+
+            householdModel.HouseholdMembers = null;
+            Assert.That(householdModel.HouseholdMembers, Is.Null);
         }
     }
 }

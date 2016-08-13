@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
@@ -113,8 +114,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatHouseholdMemberInformationReturnsPartialViewResultWithDashboardModel()
         {
+            var householdModelCollection = new List<HouseholdModel>(Random.Next(1, 5));
+            while (householdModelCollection.Count < householdModelCollection.Capacity)
+            {
+                var householdModel = Fixture.Build<HouseholdModel>()
+                    .With(m => m.HouseholdMembers, null)
+                    .Create();
+                householdModelCollection.Add(householdModel);
+            }
             var householdMember = Fixture.Build<HouseholdMemberModel>()
-                .With(m => m.Households, Fixture.CreateMany<HouseholdModel>(Random.Next(1, 5)).ToList())
+                .With(m => m.Households, householdModelCollection)
                 .Create();
             Assert.That(householdMember, Is.Not.Null);
             Assert.That(householdMember.Households, Is.Not.Null);

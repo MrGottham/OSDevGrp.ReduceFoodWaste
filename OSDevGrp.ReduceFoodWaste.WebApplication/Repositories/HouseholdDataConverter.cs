@@ -31,13 +31,42 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.HouseholdIdentifier))
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                     .ForMember(dest => dest.Description, opt => opt.Ignore())
-                    .ForMember(dest => dest.PrivacyPolicy, opt => opt.Ignore());
+                    .ForMember(dest => dest.PrivacyPolicy, opt => opt.Ignore())
+                    .ForMember(dest => dest.CreationTime, opt => opt.Ignore())
+                    .ForMember(dest => dest.HouseholdMembers, opt => opt.Ignore());
+
+                configuration.CreateMap<HouseholdView, HouseholdModel>()
+                    .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.HouseholdIdentifier))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                    .ForMember(dest => dest.PrivacyPolicy, opt => opt.Ignore())
+                    .ForMember(dest => dest.CreationTime, opt => opt.MapFrom(src => src.CreationTime))
+                    .ForMember(dest => dest.HouseholdMembers, opt =>
+                    {
+                        opt.Condition(src => src.HouseholdMembers != null);
+                        opt.MapFrom(src => src.HouseholdMembers);
+                    });
 
                 configuration.CreateMap<HouseholdModel, HouseholdAddCommand>()
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => string.IsNullOrWhiteSpace(src.Description) ? null : src.Description))
                     .ForMember(dest => dest.TranslationInfoIdentifier, opt => opt.Ignore())
                     .ForMember(dest => dest.ExtensionData, opt => opt.Ignore());
+
+                configuration.CreateMap<HouseholdMemberIdentificationView, HouseholdMemberModel>()
+                    .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.HouseholdMemberIdentifier))
+                    .ForMember(dest => dest.Name, opt => opt.Ignore())
+                    .ForMember(dest => dest.MailAddress, opt => opt.MapFrom(src => src.MailAddress))
+                    .ForMember(dest => dest.ActivationCode, opt => opt.Ignore())
+                    .ForMember(dest => dest.IsActivated, opt => opt.Ignore())
+                    .ForMember(dest => dest.ActivatedTime, opt => opt.Ignore())
+                    .ForMember(dest => dest.Membership, opt => opt.Ignore())
+                    .ForMember(dest => dest.MembershipExpireTime, opt => opt.Ignore())
+                    .ForMember(dest => dest.PrivacyPolicy, opt => opt.Ignore())
+                    .ForMember(dest => dest.HasAcceptedPrivacyPolicy, opt => opt.Ignore())
+                    .ForMember(dest => dest.PrivacyPolicyAcceptedTime, opt => opt.Ignore())
+                    .ForMember(dest => dest.CreationTime, opt => opt.Ignore())
+                    .ForMember(dest => dest.Households, opt => opt.Ignore());
 
                 configuration.CreateMap<HouseholdMemberView, HouseholdMemberModel>()
                     .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.HouseholdMemberIdentifier))

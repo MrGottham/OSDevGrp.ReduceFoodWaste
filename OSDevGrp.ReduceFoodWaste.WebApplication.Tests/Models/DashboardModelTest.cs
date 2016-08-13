@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -34,8 +34,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(dashboardModel, Is.Not.Null);
             Assert.That(dashboardModel.HouseholdMember, Is.Null);
 
+            var householdModelCollection = new List<HouseholdModel>(Random.Next(1, 5));
+            while (householdModelCollection.Count < householdModelCollection.Capacity)
+            {
+                var householdModel = Fixture.Build<HouseholdModel>()
+                    .With(m => m.HouseholdMembers, null)
+                    .Create();
+                householdModelCollection.Add(householdModel);
+            }
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
-                .With(m => m.Households, Fixture.CreateMany<HouseholdModel>(Random.Next(1, 5)).ToList())
+                .With(m => m.Households, householdModelCollection)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.Households, Is.Not.Null);
@@ -55,10 +63,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         [Test]
         public void TestThatHouseholdMemberSetterSetsValueToNull()
         {
+            var householdModelCollection = new List<HouseholdModel>(Random.Next(1, 5));
+            while (householdModelCollection.Count < householdModelCollection.Capacity)
+            {
+                var householdModel = Fixture.Build<HouseholdModel>()
+                    .With(m => m.HouseholdMembers, null)
+                    .Create();
+                householdModelCollection.Add(householdModel);
+            }
             var dashboardModel = new DashboardModel
             {
                 HouseholdMember = Fixture.Build<HouseholdMemberModel>()
-                    .With(m => m.Households, Fixture.CreateMany<HouseholdModel>(Random.Next(1, 5)).ToList())
+                    .With(m => m.Households, householdModelCollection)
                     .Create()
             };
             Assert.That(dashboardModel, Is.Not.Null);

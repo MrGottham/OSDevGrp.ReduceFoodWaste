@@ -165,7 +165,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var householdDataRepository = CreateHouseholdDataRepository();
             Assert.IsNotNull(householdDataRepository);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.CreateHouseholdAsync(null, Fixture.Create<HouseholdModel>(), Thread.CurrentThread.CurrentUICulture));
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.HouseholdMembers, null)
+                .Create();
+            Assert.That(householdModel, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.CreateHouseholdAsync(null, householdModel, Thread.CurrentThread.CurrentUICulture));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -199,7 +204,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var householdDataRepository = CreateHouseholdDataRepository();
             Assert.IsNotNull(householdDataRepository);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.CreateHouseholdAsync(MockRepository.GenerateMock<IIdentity>(), Fixture.Create<HouseholdModel>(), null));
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.HouseholdMembers, null)
+                .Create();
+            Assert.That(householdModel, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.CreateHouseholdAsync(MockRepository.GenerateMock<IIdentity>(), householdModel, null));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -216,7 +226,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var householdDataRepository = CreateHouseholdDataRepository();
             Assert.IsNotNull(householdDataRepository);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.ActivateHouseholdMemberAsync(null, Fixture.Create<HouseholdMemberModel>()));
+            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+                .With(m => m.Households, null)
+                .Create();
+            Assert.That(householdMemberModel, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.ActivateHouseholdMemberAsync(null, householdMemberModel));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);

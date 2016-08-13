@@ -224,6 +224,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Description, Fixture.Create<string>())
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
 
             householdMemberController.Create(householdModel);
@@ -280,6 +281,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
@@ -326,6 +328,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
 
             householdMemberController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
@@ -372,6 +375,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
@@ -393,6 +397,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
 
             householdMemberController.Create(householdModel);
@@ -421,6 +426,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
 
             householdMemberController.Create(householdModel);
@@ -446,6 +452,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
@@ -474,6 +481,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
@@ -505,6 +513,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
@@ -533,6 +542,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
@@ -577,6 +587,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
@@ -605,6 +616,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
@@ -637,6 +649,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
@@ -668,6 +681,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
@@ -696,6 +710,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
+                .With(m => m.HouseholdMembers, null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
@@ -883,6 +898,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
 
             householdMemberController.Prepare(householdMemberModel);
@@ -943,6 +959,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
@@ -996,6 +1013,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
 
             householdMemberController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
@@ -1031,6 +1049,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             if (privacyPoliciesHasAlreadyBeenAccepted)
@@ -1109,6 +1128,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)))
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -1141,6 +1161,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, DateTime.Now.AddDays(Random.Next(1, 7) * -1).AddMinutes(Random.Next(-120, 120)))
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -1174,6 +1195,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, activationTime)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -1213,6 +1235,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActicationCode));
@@ -1249,6 +1272,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActicationCode));
@@ -1285,6 +1309,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActicationCode));
@@ -1321,6 +1346,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -1353,6 +1379,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -1389,6 +1416,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -1409,6 +1437,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
@@ -1429,6 +1458,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -1467,6 +1497,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)))
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
@@ -1503,6 +1534,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)))
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
@@ -1540,6 +1572,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, privacyPolicyAcceptedTime)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
@@ -1578,6 +1611,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
@@ -1614,6 +1648,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
@@ -1650,6 +1685,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
@@ -1689,6 +1725,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
@@ -1725,6 +1762,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
@@ -1765,6 +1803,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
@@ -1809,6 +1848,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
@@ -1847,6 +1887,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Null);
@@ -1886,6 +1927,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Null);
@@ -1943,6 +1985,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Null);
@@ -1990,6 +2033,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Null);
@@ -2023,6 +2067,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
@@ -2047,6 +2092,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -2071,6 +2117,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
@@ -2095,6 +2142,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -2129,6 +2177,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
@@ -2161,6 +2210,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -2189,6 +2239,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
@@ -2221,6 +2272,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -2245,6 +2297,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
@@ -2277,6 +2330,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.ActivatedTime, null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, null)
+                .With(m => m.Households, null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -2376,20 +2430,46 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <returns>Controller for a household member for unit testing.</returns>
         private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null)
         {
+            Func<HouseholdModel> householdCreator = () =>
+            {
+                return Fixture.Build<HouseholdModel>()
+                    .With(m => m.HouseholdMembers, null)
+                    .Create();
+            };
+            Func<HouseholdMemberModel> householdMemberActivator = () =>
+            {
+                if (activatedHouseholdMemberModel != null)
+                {
+                    return activatedHouseholdMemberModel;
+                }
+                return Fixture.Build<HouseholdMemberModel>()
+                    .With(m => m.Households, null)
+                    .Create();
+            };
+            Func<HouseholdMemberModel> householdMemberGetter = () =>
+            {
+                if (householdMemberModel != null)
+                {
+                    return householdMemberModel;
+                }
+                return Fixture.Build<HouseholdMemberModel>()
+                    .With(m => m.Households, null)
+                    .Create();
+            };
             _householdDataRepositoryMock.Stub(m => m.GetPrivacyPoliciesAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => privacyPolicyModel ?? Fixture.Create<PrivacyPolicyModel>()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.CreateHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything))
-                .Return(Task.Run(() => Fixture.Create<HouseholdModel>()))
+                .Return(Task.Run(householdCreator))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.ActivateHouseholdMemberAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdMemberModel>.Is.Anything))
-                .Return(Task.Run(() => activatedHouseholdMemberModel ?? Fixture.Create<HouseholdMemberModel>()))
+                .Return(Task.Run(householdMemberActivator))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.AcceptPrivacyPolicyAsync(Arg<IIdentity>.Is.Anything, Arg<PrivacyPolicyModel>.Is.Anything))
                 .Return(Task.Run(() => acceptedPrivacyPolicyModel ?? Fixture.Create<PrivacyPolicyModel>()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.GetHouseholdMemberAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
-                .Return(Task.Run(() => householdMemberModel ?? Fixture.Create<HouseholdMemberModel>()))
+                .Return(Task.Run(householdMemberGetter))
                 .Repeat.Any();
 
             _claimValueProviderMock.Stub(m => m.IsActivatedHouseholdMember(Arg<IIdentity>.Is.Anything))

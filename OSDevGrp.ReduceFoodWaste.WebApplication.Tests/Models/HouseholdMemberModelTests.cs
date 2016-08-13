@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -376,12 +376,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.Households, Is.Null);
 
-            var newValue = Fixture.CreateMany<HouseholdModel>(Random.Next(5, 10)).ToList();
+            var householdModelCollection = new List<HouseholdModel>(Random.Next(5, 10));
+            while (householdModelCollection.Count < householdModelCollection.Capacity)
+            {
+                var householdModel = Fixture.Build<HouseholdModel>()
+                    .With(m => m.HouseholdMembers, null)
+                    .Create();
+                householdModelCollection.Add(householdModel);
+            }
 
-            householdMemberModel.Households = newValue;
+            householdMemberModel.Households = householdModelCollection;
             Assert.That(householdMemberModel.Households, Is.Not.Null);
             Assert.That(householdMemberModel.Households, Is.Not.Empty);
-            Assert.That(householdMemberModel.Households, Is.EqualTo(newValue));
+            Assert.That(householdMemberModel.Households, Is.EqualTo(householdModelCollection));
         }
 
         /// <summary>
@@ -390,9 +397,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         [Test]
         public void TestThatHouseholdsSetterSetsValueToNull()
         {
+            var householdModelCollection = new List<HouseholdModel>(Random.Next(5, 10));
+            while (householdModelCollection.Count < householdModelCollection.Capacity)
+            {
+                var householdModel = Fixture.Build<HouseholdModel>()
+                    .With(m => m.HouseholdMembers, null)
+                    .Create();
+                householdModelCollection.Add(householdModel);
+            }
             var householdMemberModel = new HouseholdMemberModel
             {
-                Households = Fixture.CreateMany<HouseholdModel>(Random.Next(5, 10)).ToList()
+                Households = householdModelCollection
             };
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.Households, Is.Not.Null);
