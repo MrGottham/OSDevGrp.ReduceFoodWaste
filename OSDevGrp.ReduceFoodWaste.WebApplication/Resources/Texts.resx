@@ -267,4 +267,7 @@
   <data name="Household" xml:space="preserve">
     <value>Household</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
 </root>

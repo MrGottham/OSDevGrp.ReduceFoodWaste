@@ -1,2 +1,21 @@
 ﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdModel
+
+<div id="basicInformation">
+    <table class="table table-sm">
+        <tbody>
+            <tr>
+                <td style="width: 15%" nowrap>@Texts.Name</td>
+                <td><strong>@Html.Raw(Model.Name)</strong></td>
+            </tr>
+            <tr>
+                <td style="width: 15%" nowrap>@Texts.Description</td>
+                <td><strong>@Html.Raw(Model.Description)</strong></td>
+            </tr>
+            <tr>
+                <td style="width: 15%" nowrap></td>
+                <td><a class="btn btn-primary" onclick="@string.Format("parent.editBasicInformaton('{0}')", Model.Identifier)">@Texts.Edit</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

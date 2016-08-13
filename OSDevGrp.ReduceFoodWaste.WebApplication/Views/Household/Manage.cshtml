@@ -17,3 +17,14 @@
         <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
     </div>
 </div>
+
+@section scripts {
+    <script>
+        function editBasicInformaton(householdIdentifier) {
+            if ($("#basicInformation") != null) {
+                alert('OS Debug: ' + householdIdentifier);
+                $("#basicInformation").load("test");
+            }
+        }
+    </script>
+}
