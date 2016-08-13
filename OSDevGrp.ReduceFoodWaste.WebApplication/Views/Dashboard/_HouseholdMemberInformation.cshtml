@@ -1,13 +1,12 @@
 ﻿@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.DashboardModel
 
 @* TODO: http://v4-alpha.getbootstrap.com/components/card/ *@
-<div class="card-deck-wrapper">
-    <div class="card-deck">
-        @foreach (var household in Model.Households)
-        {
-            <div class="card">
-                <img class="card-img-top" src="@VirtualPathUtility.ToAbsolute("~/Images/household.png")"/>
-            </div>
-        }
+@foreach (var household in Model.Households)
+{
+    <div class="col-sm-4">
+        <div class="card card-block">
+            <img class="card-img-top" src="@VirtualPathUtility.ToAbsolute("~/Images/household.png")" />
+            <h5 class="card-title text-xs-center">@household.Name</h5>
+        </div>
     </div>
-</div>
+}
