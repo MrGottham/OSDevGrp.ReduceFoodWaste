@@ -456,6 +456,7 @@
     <Content Include="Views\Shared\_CookieConsent.cshtml" />
     <Content Include="Views\Shared\_Empty.cshtml" />
     <Content Include="Views\Dashboard\_HouseholdMemberInformation.cshtml" />
+    <Content Include="Views\Household\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

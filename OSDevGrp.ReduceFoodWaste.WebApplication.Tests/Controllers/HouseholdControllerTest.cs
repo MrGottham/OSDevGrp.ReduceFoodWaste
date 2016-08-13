@@ -4,6 +4,8 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Rhino.Mocks;
+using System.Web.Mvc;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 {
@@ -53,15 +55,34 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Manage with identification for the household throws an NotImplementedException.
+        /// Tests that Manage with identification for a given household returns a ViewResult with a model for manage the given household.
         /// </summary>
         [Test]
-        public void TestThatManageWithHouseholdIdentifierThrowsNotImplementedException()
+        public void TestThatManageWithHouseholdIdentifierReturnsViewResultWithModelForManageHousehold()
         {
             var householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
-            Assert.Throws<NotImplementedException>(() => householdController.Manage(Guid.NewGuid()));
+            var householdIdentifier = Guid.NewGuid();
+            Assert.That(householdIdentifier, Is.Not.EqualTo(default(Guid)));
+
+            var result = householdController.Manage(householdIdentifier);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("Manage"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.TypeOf<HouseholdModel>());
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Empty);
+
+            var householdModel = (HouseholdModel) viewResult.Model;
+            Assert.That(householdModel, Is.Not.Null);
+            Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier));
         }
 
         /// <summary>

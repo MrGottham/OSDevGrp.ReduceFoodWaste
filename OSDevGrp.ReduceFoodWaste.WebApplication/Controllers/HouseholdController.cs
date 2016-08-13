@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
@@ -38,13 +39,36 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         #region Methods
 
         /// <summary>
-        /// Returns the view for manage a household.
+        /// Returns the view for manage a given household.
         /// </summary>
         /// <param name="householdIdentifier">Identification for the household to manage.</param>
-        /// <returns>View for manage a household.</returns>
+        /// <returns>View for manage the given household.</returns>
         public ActionResult Manage(Guid householdIdentifier)
         {
-            throw new NotImplementedException();
+            var householdModel = new HouseholdModel
+            {
+                Identifier = householdIdentifier
+            };
+
+            return View("Manage", householdModel);
+        }
+
+        /// <summary>
+        /// Returns the partial view for a given household's information.
+        /// </summary>
+        /// <param name="householdIdentifier">Identification for the household on which to view the household's information.</param>
+        /// <returns>Partial view for the given household's information.</returns>
+        public ActionResult HouseholdInformation(Guid householdIdentifier)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return PartialView("_Empty");
+            }
         }
 
         #endregion

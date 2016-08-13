@@ -264,4 +264,7 @@
   <data name="Providers" xml:space="preserve">
     <value>Tjeneste udbydere</value>
   </data>
+  <data name="Household" xml:space="preserve">
+    <value>Husholdning</value>
+  </data>
 </root>
