@@ -240,6 +240,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HouseholdController.cs" />
     <Compile Include="Controllers\HouseholdMemberController.cs" />
     <Compile Include="Controllers\LanguageController.cs" />
     <Compile Include="Filters\CookieConsentAttribute.cs" />
