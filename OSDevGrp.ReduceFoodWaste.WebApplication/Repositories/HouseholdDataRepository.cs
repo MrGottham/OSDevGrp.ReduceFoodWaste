@@ -145,23 +145,56 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 throw new ArgumentNullException("cultureInfo");
             }
 
-            Func<HouseholdDataServiceChannel, HouseholdMemberModel> callbackFunc = channel =>
+            Func<HouseholdDataServiceChannel, HouseholdMemberModel> callbackFunc = channel => GetHouseholdMember(channel, identity, cultureInfo);
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+        }
+
+        /// <summary>
+        /// Get a given household for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for which to get a given household.</param>
+        /// <param name="householdModel">Model for the household to get.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Model for the household.</returns>
+        public Task<HouseholdModel> GetHouseholdAsync(IIdentity identity, HouseholdModel householdModel, CultureInfo cultureInfo)
+        {
+            if (identity == null)
             {
-                var query = new HouseholdMemberDataGetQuery
+                throw new ArgumentNullException("identity");
+            }
+            if (householdModel == null)
+            {
+                throw new ArgumentNullException("householdModel");
+            }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException("cultureInfo");
+            }
+
+            Func<HouseholdDataServiceChannel, HouseholdModel> callbackFunc = channel =>
+            {
+                var currentHouseholdMember = GetHouseholdMember(channel, identity, cultureInfo);
+
+                var query = new HouseholdDataGetQuery
                 {
+                    HouseholdIdentifier = householdModel.Identifier,
                     TranslationInfoIdentifier = GetTranslationInfoIdentifier(channel, cultureInfo)
                 };
-                var result = channel.HouseholdMemberDataGet(query);
+                var result = channel.HouseholdDataGet(query);
 
-                var householdMember = _householdDataConverter.Convert<HouseholdMemberView, HouseholdMemberModel>(result);
-                householdMember.Name = identity.Name;
+                var household = _householdDataConverter.Convert<HouseholdView, HouseholdModel>(result);
+                household.PrivacyPolicy = currentHouseholdMember.PrivacyPolicy;
 
-                var privacyPolicy = GetPrivacyPolicies(channel, cultureInfo);
-                privacyPolicy.IsAccepted = householdMember.HasAcceptedPrivacyPolicy;
-                privacyPolicy.AcceptedTime = householdMember.PrivacyPolicyAcceptedTime;
-                householdMember.PrivacyPolicy = privacyPolicy;
+                foreach (var householdMember in household.HouseholdMembers)
+                {
+                    if (householdMember.Identifier == currentHouseholdMember.Identifier)
+                    {
+                        householdMember.Name = currentHouseholdMember.Name;
+                    }
+                }
 
-                return householdMember;
+                return household;
             };
 
             return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
@@ -360,6 +393,45 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         }
 
         /// <summary>
+        /// Get the household member account for a given identity.
+        /// </summary>
+        /// <param name="channel">Channel on which to get the household member account fot the given identity.</param>
+        /// <param name="identity">Identity for which to the household member account.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Model for the household member account for the given identity.</returns>
+        private HouseholdMemberModel GetHouseholdMember(HouseholdDataServiceChannel channel, IIdentity identity, CultureInfo cultureInfo)
+        {
+            if (channel == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException("cultureInfo");
+            }
+
+            var query = new HouseholdMemberDataGetQuery
+            {
+                TranslationInfoIdentifier = GetTranslationInfoIdentifier(channel, cultureInfo)
+            };
+            var result = channel.HouseholdMemberDataGet(query);
+
+            var householdMember = _householdDataConverter.Convert<HouseholdMemberView, HouseholdMemberModel>(result);
+            householdMember.Name = identity.Name;
+
+            var privacyPolicy = GetPrivacyPolicies(channel, cultureInfo);
+            privacyPolicy.IsAccepted = householdMember.HasAcceptedPrivacyPolicy;
+            privacyPolicy.AcceptedTime = householdMember.PrivacyPolicyAcceptedTime;
+            householdMember.PrivacyPolicy = privacyPolicy;
+
+            return householdMember;
+        }
+
+        /// <summary>
         /// Gets the privacy policies for a given culture.
         /// </summary>
         /// <param name="channel">Channel on which to get the privacy policies.</param>
@@ -455,6 +527,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// <returns>Channel factory.</returns>
         private ChannelFactory<HouseholdDataServiceChannel> CreateChannelFactory(IIdentity identity)
         {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+
             var channelFactory = new ChannelFactory<HouseholdDataServiceChannel>(HouseholdDataServiceEndpointConfigurationName);
             if (channelFactory.Credentials == null)
             {

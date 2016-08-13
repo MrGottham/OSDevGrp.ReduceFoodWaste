@@ -39,7 +39,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// <returns>Model for the household member account for the given identity.</returns>
         Task<HouseholdMemberModel> GetHouseholdMemberAsync(IIdentity identity, CultureInfo cultureInfo);
 
-            /// <summary>
+        /// <summary>
+        /// Get a given household for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for which to get a given household.</param>
+        /// <param name="householdModel">Model for the household to get.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Model for the household.</returns>
+        Task<HouseholdModel> GetHouseholdAsync(IIdentity identity, HouseholdModel householdModel, CultureInfo cultureInfo);
+
+        /// <summary>
         /// Creates a new household to a given identity.
         /// </summary>
         /// <param name="identity">Identity which should own the household.</param>

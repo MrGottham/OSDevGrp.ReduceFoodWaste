@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 
@@ -62,7 +64,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             try
             {
-                throw new NotImplementedException();
+                var householdModel = new HouseholdModel
+                {
+                    Identifier = householdIdentifier
+                };
+
+                var task = _householdDataRepository.GetHouseholdAsync(User.Identity, householdModel, Thread.CurrentThread.CurrentUICulture);
+                task.Wait();
+
+                return PartialView("_HouseholdInformation", task.Result);
+            }
+            catch (AggregateException ex)
+            {
+                ViewBag.ErrorMessage = ex.ToReduceFoodWasteException().Message;
+                return PartialView("_Empty");
             }
             catch (Exception ex)
             {

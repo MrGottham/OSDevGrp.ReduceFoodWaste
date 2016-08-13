@@ -457,6 +457,7 @@
     <Content Include="Views\Shared\_Empty.cshtml" />
     <Content Include="Views\Dashboard\_HouseholdMemberInformation.cshtml" />
     <Content Include="Views\Household\Manage.cshtml" />
+    <Content Include="Views\Household\_HouseholdInformation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

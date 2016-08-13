@@ -90,7 +90,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that HouseholdMemberInformation calls GetHouseholdMemberAsync on the repository which can access household data..
+        /// Tests that HouseholdMemberInformation calls GetHouseholdMemberAsync on the repository which can access household data.
         /// </summary>
         [Test]
         public void TestThatHouseholdMemberInformationCallsGetHouseholdMemberAsyncOnHouseholdDataRepository()
