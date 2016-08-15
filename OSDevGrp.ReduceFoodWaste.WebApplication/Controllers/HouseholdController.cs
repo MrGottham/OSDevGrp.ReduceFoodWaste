@@ -45,11 +45,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// </summary>
         /// <param name="householdIdentifier">Identification for the household to manage.</param>
         /// <returns>View for manage the given household.</returns>
-        public ActionResult Manage(Guid householdIdentifier)
+        public ActionResult Manage(Guid? householdIdentifier = null)
         {
+            if (householdIdentifier.HasValue == false)
+            {
+                return RedirectToAction("Dashboard", "Dashboard");
+            }
+
             var householdModel = new HouseholdModel
             {
-                Identifier = householdIdentifier
+                Identifier = householdIdentifier.Value
             };
 
             return View("Manage", householdModel);
@@ -60,13 +65,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// </summary>
         /// <param name="householdIdentifier">Identification for the household on which to view the household's information.</param>
         /// <returns>Partial view for the given household's information.</returns>
-        public ActionResult HouseholdInformation(Guid householdIdentifier)
+        public ActionResult HouseholdInformation(Guid? householdIdentifier = null)
         {
             try
             {
+                if (householdIdentifier.HasValue == false)
+                {
+                    return PartialView("_Empty");
+                }
+
                 var householdModel = new HouseholdModel
                 {
-                    Identifier = householdIdentifier
+                    Identifier = householdIdentifier.Value
                 };
 
                 var task = _householdDataRepository.GetHouseholdAsync(User.Identity, householdModel, Thread.CurrentThread.CurrentUICulture);

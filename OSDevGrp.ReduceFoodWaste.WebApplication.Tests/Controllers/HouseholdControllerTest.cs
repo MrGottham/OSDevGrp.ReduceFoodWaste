@@ -62,16 +62,63 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Manage with identification for a given household returns a ViewResult with a model for manage the given household.
+        /// Tests that Manage with an identification for a given household which are equal to null returns a RedirectToRouteResult for the dashboard.
         /// </summary>
         [Test]
-        public void TestThatManageWithHouseholdIdentifierReturnsViewResultWithModelForManageHousehold()
+        public void TestThatManageWithHouseholdIdentifierEqualToNullReturnsRedirectToRouteResultForDashboard()
         {
             var householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
-            var householdIdentifier = Guid.NewGuid();
-            Assert.That(householdIdentifier, Is.Not.EqualTo(default(Guid)));
+            Guid? householdIdentifier = null;
+            // ReSharper disable ExpressionIsAlwaysNull
+            Assert.That(householdIdentifier, Is.Null);
+            // ReSharper restore ExpressionIsAlwaysNull
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.False);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+
+            // ReSharper disable ExpressionIsAlwaysNull
+            var result = householdController.Manage(householdIdentifier);
+            // ReSharper restore ExpressionIsAlwaysNull
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
+
+            var redirectToRouteResult = (RedirectToRouteResult) result;
+            Assert.That(redirectToRouteResult, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.Count, Is.EqualTo(2));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0), Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Key, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Key, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Key, Is.EqualTo("action"));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Value, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Value, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Value, Is.EqualTo("Dashboard"));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1), Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Key, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Key, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Key, Is.EqualTo("controller"));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Value, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Value, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Value, Is.EqualTo("Dashboard"));
+        }
+
+        /// <summary>
+        /// Tests that Manage with an identification for a given household which are not equal to null returns a ViewResult with a model for manage the given household.
+        /// </summary>
+        [Test]
+        public void TestThatManageWithHouseholdIdentifierNotEqualToNullReturnsViewResultWithModelForManageHousehold()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            Guid? householdIdentifier = Guid.NewGuid();
+            Assert.That(householdIdentifier, Is.Not.Null);
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.True);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
             var result = householdController.Manage(householdIdentifier);
             Assert.That(result, Is.Not.Null);
@@ -89,17 +136,77 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdModel = (HouseholdModel) viewResult.Model;
             Assert.That(householdModel, Is.Not.Null);
-            Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier));
+            Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier.Value));
         }
 
         /// <summary>
-        /// Tests that HouseholdInformation with identification for a given household calls GetHouseholdAsync on the repository which can access household data.
+        /// Tests that HouseholdInformation with an identification for a given household which are equal to null does not call GetHouseholdAsync on the repository which can access household data.
         /// </summary>
         [Test]
-        public void TestThatHouseholdInformationWithHouseholdIdentifierCallsGetHouseholdAsyncOnHouseholdDataRepository()
+        public void TestThatHouseholdInformationWithHouseholdIdentifierEqualToNullDoesNotCallGetHouseholdAsyncOnHouseholdDataRepository()
         {
-            var householdIdentifier = Guid.NewGuid();
-            Assert.That(householdIdentifier, Is.Not.EqualTo(default(Guid)));
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            Guid? householdIdentifier = null;
+            // ReSharper disable ExpressionIsAlwaysNull
+            Assert.That(householdIdentifier, Is.Null);
+            // ReSharper restore ExpressionIsAlwaysNull
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.False);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+
+            // ReSharper disable ExpressionIsAlwaysNull
+            householdController.HouseholdInformation(householdIdentifier);
+            // ReSharper restore ExpressionIsAlwaysNull
+
+            _householdDataRepositoryMock.AssertWasNotCalled(m => m.GetHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that HouseholdInformation with an identification for a given household which are equal to null returns a PartialViewResult without a model.
+        /// </summary>
+        [Test]
+        public void TestThatHouseholdInformationWithHouseholdIdentifierEqualToNullReturnsPartialViewResultWithoutModel()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            Guid? householdIdentifier = null;
+            // ReSharper disable ExpressionIsAlwaysNull
+            Assert.That(householdIdentifier, Is.Null);
+            // ReSharper restore ExpressionIsAlwaysNull
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.False);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+
+            // ReSharper disable ExpressionIsAlwaysNull
+            var result = householdController.HouseholdInformation(householdIdentifier);
+            // ReSharper restore ExpressionIsAlwaysNull
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<PartialViewResult>());
+
+            var partialViewResult = (PartialViewResult) result;
+            Assert.That(partialViewResult, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Empty);
+            Assert.That(partialViewResult.ViewName, Is.EqualTo("_Empty"));
+            Assert.That(partialViewResult.ViewData, Is.Not.Null);
+            Assert.That(partialViewResult.ViewData, Is.Empty);
+            Assert.That(partialViewResult.Model, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that HouseholdInformation with an identification for a given household which are not equal to null calls GetHouseholdAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatHouseholdInformationWithHouseholdIdentifierNotEqualToNullCallsGetHouseholdAsyncOnHouseholdDataRepository()
+        {
+            Guid? householdIdentifier = Guid.NewGuid();
+            Assert.That(householdIdentifier, Is.Not.Null);
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.True);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
             Action<object[]> householdGetterCallback = arguments =>
             {
@@ -109,7 +216,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
                 var householdModel = (HouseholdModel) arguments.ElementAt(1);
                 Assert.That(householdModel, Is.Not.Null);
-                Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier));
+                Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier.Value));
             };
 
             var householdController = CreateHouseholdController(householdGetterCallback: householdGetterCallback);
@@ -126,10 +233,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that HouseholdInformation with identification for a given household returns a PartialViewResult with a model for the given household.
+        /// Tests that HouseholdInformation with an identification for a given household which are not equal to null returns a PartialViewResult with a model for the given household.
         /// </summary>
         [Test]
-        public void TestThatHouseholdInformationWithHouseholdIdentifierReturnsPartialViewResultWithHouseholdModel()
+        public void TestThatHouseholdInformationWithHouseholdIdentifierNotEqualToNullReturnsPartialViewResultWithHouseholdModel()
         {
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.HouseholdMembers, null)
@@ -139,7 +246,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdController = CreateHouseholdController(household: householdModel);
             Assert.That(householdController, Is.Not.Null);
 
-            var result = householdController.HouseholdInformation(Guid.NewGuid());
+            Guid? householdIdentifier = Guid.NewGuid();
+            Assert.That(householdIdentifier, Is.Not.Null);
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.True);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+
+            var result = householdController.HouseholdInformation(householdIdentifier);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<PartialViewResult>());
 
