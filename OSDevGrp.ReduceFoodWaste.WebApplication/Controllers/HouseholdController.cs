@@ -41,7 +41,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         #region Methods
 
         /// <summary>
-        /// Returns the view for manage a given household.
+        /// Returns a view for manage a given household.
         /// </summary>
         /// <param name="householdIdentifier">Identification for the household to manage.</param>
         /// <returns>View for manage the given household.</returns>
@@ -61,7 +61,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         }
 
         /// <summary>
-        /// Returns the partial view for a given household's information.
+        /// Returns a partial view for a given household's information.
         /// </summary>
         /// <param name="householdIdentifier">Identification for the household on which to view the household's information.</param>
         /// <returns>Partial view for the given household's information.</returns>
@@ -82,6 +82,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 var task = _householdDataRepository.GetHouseholdAsync(User.Identity, householdModel, Thread.CurrentThread.CurrentUICulture);
                 task.Wait();
 
+                ViewBag.EditMode = false;
+
                 return PartialView("_HouseholdInformation", task.Result);
             }
             catch (AggregateException ex)
@@ -94,6 +96,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 ViewBag.ErrorMessage = ex.Message;
                 return PartialView("_Empty");
             }
+        }
+
+        /// <summary>
+        /// Returns a partial view for editing a information on a given household.
+        /// </summary>
+        /// <param name="householdIdentifier">Identification for the household on which to edit information.</param>
+        /// <returns>Partial view for editing a information on the given household.</returns>
+        public ActionResult Edit(Guid? householdIdentifier = null)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

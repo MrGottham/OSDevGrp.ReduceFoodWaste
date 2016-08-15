@@ -262,7 +262,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(partialViewResult.ViewName, Is.Not.Empty);
             Assert.That(partialViewResult.ViewName, Is.EqualTo("_HouseholdInformation"));
             Assert.That(partialViewResult.ViewData, Is.Not.Null);
-            Assert.That(partialViewResult.ViewData, Is.Empty);
+            Assert.That(partialViewResult.ViewData, Is.Not.Empty);
+            Assert.That(partialViewResult.ViewData["EditMode"], Is.Not.Null);
+            Assert.That(partialViewResult.ViewData["EditMode"], Is.False);
             Assert.That(partialViewResult.Model, Is.Not.Null);
             Assert.That(partialViewResult.Model, Is.EqualTo(householdModel));
         }

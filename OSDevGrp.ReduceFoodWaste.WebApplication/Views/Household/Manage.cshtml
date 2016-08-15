@@ -22,8 +22,7 @@
     <script>
         function editBasicInformaton(householdIdentifier) {
             if ($("#basicInformation") != null) {
-                alert('OS Debug: ' + householdIdentifier);
-                $("#basicInformation").load("test");
+                $("#basicInformation").load("@VirtualPathUtility.ToAbsolute("~/Household/Edit")", { householdIdentifier: householdIdentifier });
             }
         }
     </script>

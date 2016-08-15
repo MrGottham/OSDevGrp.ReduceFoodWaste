@@ -1,0 +1,28 @@
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdModel
+
+<table class="table table-sm">
+    <tbody>
+        <tr>
+            <td style="width: 15%" nowrap>@Texts.Name</td>
+            @if (ViewBag.EditMode == false)
+            {
+                <td><strong>@Html.Raw(Model.Name)</strong></td>
+            }
+        </tr>
+        <tr>
+            <td style="width: 15%" nowrap>@Texts.Description</td>
+            @if (ViewBag.EditMode == false)
+            {
+                <td><strong>@Html.Raw(Model.Description)</strong></td>
+            }
+        </tr>
+        <tr>
+            <td style="width: 15%" nowrap></td>
+            @if (ViewBag.EditMode == false)
+            {
+                <td><a class="btn btn-primary" onclick="@string.Format("parent.editBasicInformaton('{0}')", Model.Identifier)">@Texts.Edit</a></td>
+            }
+        </tr>
+    </tbody>
+</table>
