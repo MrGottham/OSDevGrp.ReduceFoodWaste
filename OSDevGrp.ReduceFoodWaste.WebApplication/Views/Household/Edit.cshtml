@@ -1,0 +1,8 @@
+﻿@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdModel
+
+@using (Html.BeginForm("Update", "Household", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Identifier)
+    @Html.Partial("_HouseholdBasicInformation", Model)
+}

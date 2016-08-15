@@ -74,22 +74,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return PartialView("_Empty");
                 }
 
-                var householdModel = new HouseholdModel
-                {
-                    Identifier = householdIdentifier.Value
-                };
-
-                var task = _householdDataRepository.GetHouseholdAsync(User.Identity, householdModel, Thread.CurrentThread.CurrentUICulture);
-                task.Wait();
+                var householdModel = GetHouseholdModel(householdIdentifier.Value);
 
                 ViewBag.EditMode = false;
 
-                return PartialView("_HouseholdInformation", task.Result);
-            }
-            catch (AggregateException ex)
-            {
-                ViewBag.ErrorMessage = ex.ToReduceFoodWasteException().Message;
-                return PartialView("_Empty");
+                return PartialView("_HouseholdInformation", householdModel);
             }
             catch (Exception ex)
             {
@@ -105,7 +94,61 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <returns>Partial view for editing a information on the given household.</returns>
         public ActionResult Edit(Guid? householdIdentifier = null)
         {
+            try
+            {
+                if (householdIdentifier.HasValue == false)
+                {
+                    return PartialView("_Empty");
+                }
+
+                var householdModel = GetHouseholdModel(householdIdentifier.Value);
+
+                ViewBag.EditMode = true;
+
+                return PartialView("Edit", householdModel);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return PartialView("_Empty");
+            }
+        }
+
+        /// <summary>
+        /// Updates a given household with values in the household model and redirect to the management of the updated household.
+        /// </summary>
+        /// <param name="householdModel">Household model containing the values to update.</param>
+        /// <returns>Redirect to the management of the updated household.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update(HouseholdModel householdModel)
+        {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the household model for a given household.
+        /// </summary>
+        /// <param name="householdIdentifier">Identification for the household to get.</param>
+        /// <returns>Household model for the given household.</returns>
+        private HouseholdModel GetHouseholdModel(Guid householdIdentifier)
+        {
+            try
+            {
+                var householdModel = new HouseholdModel
+                {
+                    Identifier = householdIdentifier
+                };
+
+                var task = _householdDataRepository.GetHouseholdAsync(User.Identity, householdModel, Thread.CurrentThread.CurrentUICulture);
+                task.Wait();
+
+                return task.Result;
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.ToReduceFoodWasteException();
+            }
         }
 
         #endregion

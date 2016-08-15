@@ -270,6 +270,136 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Edit with an identification for a given household which are equal to null does not call GetHouseholdAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatEditWithHouseholdIdentifierEqualToNullDoesNotCallGetHouseholdAsyncOnHouseholdDataRepository()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            Guid? householdIdentifier = null;
+            // ReSharper disable ExpressionIsAlwaysNull
+            Assert.That(householdIdentifier, Is.Null);
+            // ReSharper restore ExpressionIsAlwaysNull
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.False);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+
+            // ReSharper disable ExpressionIsAlwaysNull
+            householdController.Edit(householdIdentifier);
+            // ReSharper restore ExpressionIsAlwaysNull
+
+            _householdDataRepositoryMock.AssertWasNotCalled(m => m.GetHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that Edit with an identification for a given household which are equal to null returns a PartialViewResult without a model.
+        /// </summary>
+        [Test]
+        public void TestThatEditWithHouseholdIdentifierEqualToNullReturnsPartialViewResultWithoutModel()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            Guid? householdIdentifier = null;
+            // ReSharper disable ExpressionIsAlwaysNull
+            Assert.That(householdIdentifier, Is.Null);
+            // ReSharper restore ExpressionIsAlwaysNull
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.False);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+
+            // ReSharper disable ExpressionIsAlwaysNull
+            var result = householdController.Edit(householdIdentifier);
+            // ReSharper restore ExpressionIsAlwaysNull
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<PartialViewResult>());
+
+            var partialViewResult = (PartialViewResult) result;
+            Assert.That(partialViewResult, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Empty);
+            Assert.That(partialViewResult.ViewName, Is.EqualTo("_Empty"));
+            Assert.That(partialViewResult.ViewData, Is.Not.Null);
+            Assert.That(partialViewResult.ViewData, Is.Empty);
+            Assert.That(partialViewResult.Model, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that Edit with an identification for a given household which are not equal to null calls GetHouseholdAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatEditWithHouseholdIdentifierNotEqualToNullCallsGetHouseholdAsyncOnHouseholdDataRepository()
+        {
+            Guid? householdIdentifier = Guid.NewGuid();
+            Assert.That(householdIdentifier, Is.Not.Null);
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.True);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+
+            Action<object[]> householdGetterCallback = arguments =>
+            {
+                Assert.That(arguments, Is.Not.Null);
+                Assert.That(arguments.ElementAt(1), Is.Not.Null);
+                Assert.That(arguments.ElementAt(1), Is.TypeOf<HouseholdModel>());
+
+                var householdModel = (HouseholdModel) arguments.ElementAt(1);
+                Assert.That(householdModel, Is.Not.Null);
+                Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier.Value));
+            };
+
+            var householdController = CreateHouseholdController(householdGetterCallback: householdGetterCallback);
+            Assert.That(householdController, Is.Not.Null);
+            Assert.That(householdController.User, Is.Not.Null);
+            Assert.That(householdController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            householdController.Edit(householdIdentifier);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetHouseholdAsync(Arg<IIdentity>.Is.Equal(householdController.User.Identity), Arg<HouseholdModel>.Is.NotNull, Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that Edit with an identification for a given household which are not equal to null returns a PartialViewResult with a model for the given household.
+        /// </summary>
+        [Test]
+        public void TestThatEditWithHouseholdIdentifierNotEqualToNullReturnsPartialViewResultWithHouseholdModel()
+        {
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.HouseholdMembers, null)
+                .Create();
+            Assert.That(householdModel, Is.Not.Null);
+
+            var householdController = CreateHouseholdController(household: householdModel);
+            Assert.That(householdController, Is.Not.Null);
+
+            Guid? householdIdentifier = Guid.NewGuid();
+            Assert.That(householdIdentifier, Is.Not.Null);
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.True);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+
+            var result = householdController.Edit(householdIdentifier);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<PartialViewResult>());
+
+            var partialViewResult = (PartialViewResult) result;
+            Assert.That(partialViewResult, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Empty);
+            Assert.That(partialViewResult.ViewName, Is.EqualTo("Edit"));
+            Assert.That(partialViewResult.ViewData, Is.Not.Null);
+            Assert.That(partialViewResult.ViewData, Is.Not.Empty);
+            Assert.That(partialViewResult.ViewData["EditMode"], Is.Not.Null);
+            Assert.That(partialViewResult.ViewData["EditMode"], Is.True);
+            Assert.That(partialViewResult.Model, Is.Not.Null);
+            Assert.That(partialViewResult.Model, Is.EqualTo(householdModel));
+        }
+
+        /// <summary>
         /// Creates a controller for a household for unit testing.
         /// </summary>
         /// <param name="household">Sets the model for the household which should be used.</param>

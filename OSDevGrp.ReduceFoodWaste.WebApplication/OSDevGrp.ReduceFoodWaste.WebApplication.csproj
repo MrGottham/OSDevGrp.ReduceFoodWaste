@@ -459,6 +459,7 @@
     <Content Include="Views\Household\Manage.cshtml" />
     <Content Include="Views\Household\_HouseholdInformation.cshtml" />
     <Content Include="Views\Household\_HouseholdBasicInformation.cshtml" />
+    <Content Include="Views\Household\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
