@@ -121,7 +121,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <returns>Redirect to the management of the updated household.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(HouseholdModel householdModel)
+        public ActionResult Edit(HouseholdModel householdModel)
         {
             throw new NotImplementedException();
         }

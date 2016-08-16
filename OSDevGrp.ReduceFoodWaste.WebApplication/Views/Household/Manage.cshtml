@@ -22,7 +22,7 @@
     <script>
         function editBasicInformaton(householdIdentifier) {
             if ($("#basicInformation") != null) {
-                $("#basicInformation").load("@VirtualPathUtility.ToAbsolute("~/Household/Edit")", { householdIdentifier: householdIdentifier });
+                $("#basicInformation").load("@VirtualPathUtility.ToAbsolute("~/Household/Edit?householdIdentifier=")" + householdIdentifier);
             }
         }
     </script>
