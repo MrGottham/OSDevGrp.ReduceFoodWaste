@@ -9,6 +9,10 @@
             {
                 <td><strong>@Html.Raw(Model.Name)</strong></td>
             }
+            else
+            {
+                <td>@Html.TextBoxFor(m => m.Name)&nbsp;@Html.ValidationMessageFor(m => m.Name)</td>
+            }
         </tr>
         <tr>
             <td style="width: 15%" nowrap>@Texts.Description</td>
@@ -16,12 +20,24 @@
             {
                 <td><strong>@Html.Raw(Model.Description)</strong></td>
             }
+            else
+            {
+                <td>@Html.TextAreaFor(m => m.Description)&nbsp;@Html.ValidationMessageFor(m => m.Description)</td>
+            }
         </tr>
         <tr>
             <td style="width: 15%" nowrap></td>
             @if (ViewBag.EditMode == false)
             {
                 <td><a class="btn btn-primary" onclick="@string.Format("parent.editBasicInformaton('{0}')", Model.Identifier)">@Texts.Edit</a></td>
+            }
+            else
+            {
+                <td>
+                    <div class="btn-group">
+                        <input class="bnt btn-primary" type="submit" value="@Texts.Update" title="@Texts.Update" />
+                    </div>
+                </td>
             }
         </tr>
     </tbody>
