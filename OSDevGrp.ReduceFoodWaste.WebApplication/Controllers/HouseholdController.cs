@@ -44,8 +44,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// Returns a view for manage a given household.
         /// </summary>
         /// <param name="householdIdentifier">Identification for the household to manage.</param>
+        /// <param name="statusMessage">Status message to show in the view.</param>
+        /// <param name="errorMessage">Error message to show in the view.</param>
         /// <returns>View for manage the given household.</returns>
-        public ActionResult Manage(Guid? householdIdentifier = null)
+        public ActionResult Manage(Guid? householdIdentifier = null, string statusMessage = null, string errorMessage = null)
         {
             if (householdIdentifier.HasValue == false)
             {
@@ -56,6 +58,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 Identifier = householdIdentifier.Value
             };
+
+            if (string.IsNullOrWhiteSpace(statusMessage) == false)
+            {
+                ViewBag.StatusMessage = statusMessage;
+            }
+            if (string.IsNullOrWhiteSpace(errorMessage) == false)
+            {
+                ViewBag.ErrorMessage = errorMessage;
+            }
 
             return View("Manage", householdModel);
         }

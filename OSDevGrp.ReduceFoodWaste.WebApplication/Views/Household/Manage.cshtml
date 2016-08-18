@@ -13,6 +13,14 @@
     <hgroup class="title">
         <h2>@ViewBag.Title</h2>
     </hgroup>
+    @if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
+    {
+        <p class="message-success">@ViewBag.StatusMessage</p>
+    }
+    @if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
+    {
+        <p class="message-error">@ViewBag.ErrorMessage</p>
+    }
     <div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute(string.Format("~/Household/HouseholdInformation?householdIdentifier={0}", Model.Identifier))">
         <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
     </div>
