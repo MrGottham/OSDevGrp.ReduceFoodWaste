@@ -139,7 +139,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 throw new ArgumentNullException("householdModel");
             }
 
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Manage", "Household", new {householdIdentifier = householdModel.Identifier, errorMessage = ex.Message});
+            }
         }
 
         /// <summary>
