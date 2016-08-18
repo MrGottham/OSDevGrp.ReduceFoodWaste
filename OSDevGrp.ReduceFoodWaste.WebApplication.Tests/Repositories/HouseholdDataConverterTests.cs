@@ -203,6 +203,39 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that Convert converts a HouseholdModel to a HouseholdUpdateCommand.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsHouseholdModelToHouseholdUpdateCommand()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.Identifier, Guid.NewGuid())
+                .With(m => m.Name, Fixture.Create<string>())
+                .With(m => m.Description, Fixture.Create<string>())
+                .With(m => m.HouseholdMembers, null)
+                .Create();
+            Assert.That(householdModel, Is.Not.Null);
+            Assert.That(householdModel.Identifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(householdModel.Name, Is.Not.Null);
+            Assert.That(householdModel.Name, Is.Not.Empty);
+            Assert.That(householdModel.Description, Is.Not.Null);
+            Assert.That(householdModel.Description, Is.Not.Empty);
+
+            var result = householdDataConverter.Convert<HouseholdModel, HouseholdUpdateCommand>(householdModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.HouseholdIdentifier, Is.EqualTo(householdModel.Identifier));
+            Assert.That(result.Name, Is.Not.Null);
+            Assert.That(result.Name, Is.Not.Empty);
+            Assert.That(result.Name, Is.EqualTo(householdModel.Name));
+            Assert.That(result.Description, Is.Not.Null);
+            Assert.That(result.Description, Is.Not.Empty);
+            Assert.That(result.Description, Is.EqualTo(householdModel.Description));
+        }
+
+        /// <summary>
         /// Tests that Convert converts a HouseholdMemberIdentificationView to a HouseholdMemberModel.
         /// </summary>
         [Test]

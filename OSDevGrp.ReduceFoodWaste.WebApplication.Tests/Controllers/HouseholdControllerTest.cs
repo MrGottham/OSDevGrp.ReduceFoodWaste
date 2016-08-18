@@ -400,6 +400,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Edit with a household model for updating throws an ArgumentNullException when the household model for updating is null.
+        /// </summary>
+        [Test]
+        public void TestThatEditWithHouseholdModelThrowsArgumentNullExceptionWhenHouseholdModelIsNull()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            const HouseholdModel householdModel = null;
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdController.Edit(householdModel));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("householdModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
         /// Creates a controller for a household for unit testing.
         /// </summary>
         /// <param name="household">Sets the model for the household which should be used.</param>

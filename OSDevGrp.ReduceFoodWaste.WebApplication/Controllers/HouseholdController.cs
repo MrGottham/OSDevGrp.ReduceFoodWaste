@@ -123,6 +123,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(HouseholdModel householdModel)
         {
+            if (householdModel == null)
+            {
+                throw new ArgumentNullException("householdModel");
+            }
+
             throw new NotImplementedException();
         }
 

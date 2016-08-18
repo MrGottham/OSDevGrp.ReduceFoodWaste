@@ -53,6 +53,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.TranslationInfoIdentifier, opt => opt.Ignore())
                     .ForMember(dest => dest.ExtensionData, opt => opt.Ignore());
 
+                configuration.CreateMap<HouseholdModel, HouseholdUpdateCommand>()
+                    .ForMember(dest => dest.HouseholdIdentifier, opt => opt.MapFrom(src => src.Identifier))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => string.IsNullOrWhiteSpace(src.Description) ? null : src.Description))
+                    .ForMember(dest => dest.ExtensionData, opt => opt.Ignore());
+
                 configuration.CreateMap<HouseholdMemberIdentificationView, HouseholdMemberModel>()
                     .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.HouseholdMemberIdentifier))
                     .ForMember(dest => dest.Name, opt => opt.Ignore())
