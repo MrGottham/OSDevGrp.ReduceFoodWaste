@@ -2368,10 +2368,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Manage without a model calls GetHouseholdMemberAsync on the repository which can access household data.
+        /// Tests that Manage without a status message calls GetHouseholdMemberAsync on the repository which can access household data.
         /// </summary>
         [Test]
-        public void TestThatManageWithoutModelCallsGetHouseholdMemberAsyncOnHouseholdDataRepository()
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatManageWithoutStatusMessageCallsGetHouseholdMemberAsyncOnHouseholdDataRepository(string statusMessage)
         {
             var householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
@@ -2381,16 +2386,93 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            householdMemberController.Manage();
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
+
+            householdMemberController.Manage(statusMessage: statusMessage);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.GetHouseholdMemberAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
         }
 
         /// <summary>
-        /// Tests that Manage without a model returns a ViewResult with a model for manage the household member account.
+        /// Tests that Manage with a status message calls GetHouseholdMemberAsync on the repository which can access household data.
         /// </summary>
         [Test]
-        public void TestThatManageWithoutModelReturnsViewResultWithModelForManageHouseholdMember()
+        public void TestThatManageWithStatusMessageCallsGetHouseholdMemberAsyncOnHouseholdDataRepository()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            var statusMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
+
+            householdMemberController.Manage(statusMessage: statusMessage);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetHouseholdMemberAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that Manage without an error message calls GetHouseholdMemberAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatManageWithoutErrorMessageCallsGetHouseholdMemberAsyncOnHouseholdDataRepository(string errorMessage)
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
+
+            householdMemberController.Manage(errorMessage: errorMessage);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetHouseholdMemberAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that Manage with an error message calls GetHouseholdMemberAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatManageWithErrorMessageCallsGetHouseholdMemberAsyncOnHouseholdDataRepository()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            var errorMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
+
+            householdMemberController.Manage(errorMessage: errorMessage);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetHouseholdMemberAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that Manage without a status message returns a ViewResult with a model for manage the household member account.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatManageWithoutStatusMessageReturnsViewResultWithModelForManageHouseholdMember(string statusMessage)
         {
             var householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
             Assert.That(householdMemberModel, Is.Not.Null);
@@ -2398,7 +2480,76 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var result = householdMemberController.Manage();
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
+
+            var result = householdMemberController.Manage(statusMessage: statusMessage);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult)result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("Manage"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(householdMemberModel));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Empty);
+        }
+
+        /// <summary>
+        /// Tests that Manage without a status message returns a ViewResult with a model for manage the household member account.
+        /// </summary>
+        [Test]
+        public void TestThatManageWithStatusMessageReturnsViewResultWithModelForManageHouseholdMember()
+        {
+            var householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
+            Assert.That(householdMemberModel, Is.Not.Null);
+
+            var householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var statusMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
+
+            var result = householdMemberController.Manage(statusMessage: statusMessage);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult)result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("Manage"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(householdMemberModel));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["StatusMessage"], Is.EqualTo(statusMessage));
+        }
+
+        /// <summary>
+        /// Tests that Manage without an error message returns a ViewResult with a model for manage the household member account.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatManageWithoutErrorMessageReturnsViewResultWithModelForManageHouseholdMember(string errorMessage)
+        {
+            var householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
+            Assert.That(householdMemberModel, Is.Not.Null);
+
+            var householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
+
+            var result = householdMemberController.Manage(errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
@@ -2411,6 +2562,39 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.Model, Is.EqualTo(householdMemberModel));
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Empty);
+        }
+
+        /// <summary>
+        /// Tests that Manage without an error message returns a ViewResult with a model for manage the household member account.
+        /// </summary>
+        [Test]
+        public void TestThatManageWithErrorMessageReturnsViewResultWithModelForManageHouseholdMember()
+        {
+            var householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
+            Assert.That(householdMemberModel, Is.Not.Null);
+
+            var householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var errorMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
+
+            var result = householdMemberController.Manage(errorMessage: errorMessage);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult)result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("Manage"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(householdMemberModel));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ErrorMessage"], Is.EqualTo(errorMessage));
         }
 
         /// <summary>

@@ -257,6 +257,45 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that UpdateHouseholdAsync throws an ArgumentNullException when the identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatUpdateHouseholdAsyncThrowsArgumentNullExceptionWhenIdentityIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.HouseholdMembers, null)
+                .Create();
+            Assert.That(householdModel, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.UpdateHouseholdAsync(null, householdModel));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that UpdateHouseholdAsync throws an ArgumentNullException when the model for the household to crate is null.
+        /// </summary>
+        [Test]
+        public void TestThatUpdateHouseholdAsyncThrowsArgumentNullExceptionWhenHouseholdModelIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.UpdateHouseholdAsync(MockRepository.GenerateMock<IIdentity>(), null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("householdModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
         /// Tests that CreateHouseholdAsync throws an ArgumentNullException when the culture informations which should be used for translation is null.
         /// </summary>
         [Test]

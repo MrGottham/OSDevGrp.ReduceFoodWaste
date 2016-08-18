@@ -98,17 +98,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 return RedirectToAction("Manage", "Account");
             }
 
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.Serializable}))
+            try
             {
-                var hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(mailAddress));
-                if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(mailAddress).Count > 1)
+                using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
                 {
-                    OAuthWebSecurity.DeleteAccount(provider, providerUserId);
-                    scope.Complete();
+                    var hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(mailAddress));
+                    if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(mailAddress).Count > 1)
+                    {
+                        OAuthWebSecurity.DeleteAccount(provider, providerUserId);
+                        scope.Complete();
+                    }
                 }
-            }
 
-            return RedirectToAction("Manage", "Account");
+                return RedirectToAction("Manage", "Account");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Manage", "Account", new {errorMessage = ex.Message});
+            }
         }
 
         //

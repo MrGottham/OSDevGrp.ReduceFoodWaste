@@ -237,6 +237,36 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         }
 
         /// <summary>
+        /// Updates a given houshold for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for which to update the given household.</param>
+        /// <param name="householdModel">Model for the household to update.</param>
+        /// <returns>Model for the updated household.</returns>
+        public Task<HouseholdModel> UpdateHouseholdAsync(IIdentity identity, HouseholdModel householdModel)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (householdModel == null)
+            {
+                throw new ArgumentNullException("householdModel");
+            }
+
+            Func<HouseholdDataServiceChannel, HouseholdModel> callbackFunc = channel =>
+            {
+                var command = _householdDataConverter.Convert<HouseholdModel, HouseholdUpdateCommand>(householdModel);
+
+                var result = channel.HouseholdUpdate(command);
+
+                householdModel.Identifier = result.Identifier ?? default(Guid);
+                return householdModel;
+            };
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+        }
+
+        /// <summary>
         /// Activates the household member account for a given identity.
         /// </summary>
         /// <param name="identity">Identity whos household member account should be activated.</param>

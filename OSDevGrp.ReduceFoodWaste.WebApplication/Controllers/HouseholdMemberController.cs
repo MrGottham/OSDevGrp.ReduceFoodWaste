@@ -297,14 +297,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <summary>
         /// Manage a household member account.
         /// </summary>
+        /// <param name="statusMessage">Status message to show in the view.</param>
+        /// <param name="errorMessage">Error message to show in the view.</param>
         /// <returns>View for manage a household member account.</returns>
         [IsValidatedHouseholdMember]
-        public ActionResult Manage()
+        public ActionResult Manage(string statusMessage = null, string errorMessage = null)
         {
             try
             {
                 var task = _householdDataRepository.GetHouseholdMemberAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
                 task.Wait();
+
+                if (string.IsNullOrWhiteSpace(statusMessage) == false)
+                {
+                    ViewBag.StatusMessage = statusMessage;
+                }
+                if (string.IsNullOrWhiteSpace(errorMessage) == false)
+                {
+                    ViewBag.ErrorMessage = errorMessage;
+                }
 
                 return View("Manage", task.Result);
             }
