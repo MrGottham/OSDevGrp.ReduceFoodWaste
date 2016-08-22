@@ -273,4 +273,7 @@
   <data name="Update" xml:space="preserve">
     <value>Opdatér</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annullér</value>
+  </data>
 </root>

@@ -28,10 +28,15 @@
 
 @section scripts {
     <script>
-        function editBasicInformaton(householdIdentifier) {
+        function editBasicInformation(householdIdentifier) {
             if ($("#basicInformation") != null) {
                 $("#basicInformation").load("@VirtualPathUtility.ToAbsolute("~/Household/Edit?householdIdentifier=")" + householdIdentifier);
             }
+        }
+
+        function cancel(householdIdentifier) {
+            alert("OS Debug: " + householdIdentifier);
+            $().load("@VirtualPathUtility.ToAbsolute("~/Household/Manage?householdIdentifier=")" + householdIdentifier);
         }
     </script>
 }

@@ -29,13 +29,18 @@
             <td style="width: 15%" nowrap></td>
             @if (ViewBag.EditMode == false)
             {
-                <td><a class="btn btn-primary" onclick="@string.Format("parent.editBasicInformaton('{0}')", Model.Identifier)">@Texts.Edit</a></td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-primary" onclick="@string.Format("parent.editBasicInformation('{0}')", Model.Identifier)">@Texts.Edit</a>
+                    </div>
+                </td>
             }
             else
             {
                 <td>
                     <div class="btn-group">
-                        <input class="bnt btn-primary" type="submit" value="@Texts.Update" title="@Texts.Update" />
+                        <input class="btn btn-primary" type="submit" value="@Texts.Update" title="@Texts.Update" />
+                        <input class="btn btn-primary" type="button" onclick="@string.Format("parent.cancel('{0}')", Model.Identifier)" value="@Texts.Cancel" title="@Texts.Cancel" />
                     </div>
                 </td>
             }
