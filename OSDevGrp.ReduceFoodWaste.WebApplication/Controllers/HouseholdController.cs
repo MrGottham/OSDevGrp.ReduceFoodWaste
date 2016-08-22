@@ -141,7 +141,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             try
             {
-                throw new NotImplementedException();
+                var task = _householdDataRepository.UpdateHouseholdAsync(User.Identity, householdModel);
+                task.Wait();
+
+                return RedirectToAction("Manage", "Household", new {householdIdentifier = task.Result.Identifier});
+            }
+            catch (AggregateException ex)
+            {
+                return RedirectToAction("Manage", "Household", new {householdIdentifier = householdModel.Identifier, errorMessage = ex.ToReduceFoodWasteException().Message});
             }
             catch (Exception ex)
             {
