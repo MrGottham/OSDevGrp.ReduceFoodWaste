@@ -35,8 +35,7 @@
         }
 
         function cancel(householdIdentifier) {
-            alert("OS Debug: " + householdIdentifier);
-            $().load("@VirtualPathUtility.ToAbsolute("~/Household/Manage?householdIdentifier=")" + householdIdentifier);
+            window.location.href = "@VirtualPathUtility.ToAbsolute("~/Household/Manage?householdIdentifier=")" + householdIdentifier;
         }
     </script>
 }
