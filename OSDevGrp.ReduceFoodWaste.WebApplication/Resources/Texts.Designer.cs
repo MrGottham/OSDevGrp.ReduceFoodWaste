@@ -295,6 +295,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Household members.
+        /// </summary>
+        public static string HouseholdMembers {
+            get {
+                return ResourceManager.GetString("HouseholdMembers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log in.
         /// </summary>
         public static string LogIn {

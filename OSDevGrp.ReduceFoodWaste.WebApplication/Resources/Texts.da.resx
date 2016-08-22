@@ -276,4 +276,7 @@
   <data name="Cancel" xml:space="preserve">
     <value>Annullér</value>
   </data>
+  <data name="HouseholdMembers" xml:space="preserve">
+    <value>Husstandsmedlemmer</value>
+  </data>
 </root>

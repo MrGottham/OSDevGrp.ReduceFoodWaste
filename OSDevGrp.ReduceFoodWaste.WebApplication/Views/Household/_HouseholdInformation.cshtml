@@ -1,5 +1,23 @@
-﻿@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdModel
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdModel
 
 <div id="basicInformation">
     @Html.Partial("_HouseholdBasicInformation", Model)
+</div>
+<div class="row">
+    <h4>@Texts.HouseholdMembers</h4>
+    <div class="card-columns">
+        @if (Model.HouseholdMembers != null)
+        {
+            foreach (var householdMember in Model.HouseholdMembers)
+            {
+                <div class="card">
+                    <img class="card-img-top" src="@VirtualPathUtility.ToAbsolute("~/Images/householdMember.png")"/>
+                    <div class="card-block text-xs-center">
+                        <h5 class="card-title">@householdMember.MailAddress</h5>
+                    </div>
+                </div>
+            }
+        }
+    </div>
 </div>
