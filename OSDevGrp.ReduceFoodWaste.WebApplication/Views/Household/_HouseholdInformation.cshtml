@@ -6,13 +6,15 @@
 </div>
 <div class="row">
     <h4>@Texts.HouseholdMembers</h4>
+    <div id="addHouseholdMember">
+    </div>
     <div class="card-columns">
         @if (Model.HouseholdMembers != null)
         {
             foreach (var householdMember in Model.HouseholdMembers)
             {
                 <div class="card">
-                    <img class="card-img-top" src="@VirtualPathUtility.ToAbsolute("~/Images/householdMember.png")"/>
+                    <img class="card-img-top" src="@VirtualPathUtility.ToAbsolute("~/Images/householdMember.png")" />
                     <div class="card-block text-xs-center">
                         @if (string.IsNullOrWhiteSpace(Model.Name) == false)
                         {
@@ -26,5 +28,11 @@
                 </div>
             }
         }
+        <div class="card">
+            <img class="card-img-top" src="@VirtualPathUtility.ToAbsolute("~/Images/householdMember.png")" />
+            <div class="card-block text-xs-center">
+                <h5 class="card-title">@Texts.AddHouseholdMemberToHousehold</h5>
+            </div>
+        </div>
     </div>
 </div>

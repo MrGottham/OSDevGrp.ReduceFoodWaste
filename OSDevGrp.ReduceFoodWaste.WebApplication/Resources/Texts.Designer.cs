@@ -106,6 +106,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add another household member to the household.
+        /// </summary>
+        public static string AddHouseholdMemberToHousehold {
+            get {
+                return ResourceManager.GetString("AddHouseholdMemberToHousehold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Business related error..
         /// </summary>
         public static string BusinessException {

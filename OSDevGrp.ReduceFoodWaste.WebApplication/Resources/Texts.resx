@@ -279,4 +279,10 @@
   <data name="HouseholdMembers" xml:space="preserve">
     <value>Household members</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddHouseholdMemberToHousehold" xml:space="preserve">
+    <value>Add another household member to the household</value>
+  </data>
 </root>

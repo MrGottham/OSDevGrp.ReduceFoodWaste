@@ -157,6 +157,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         }
 
         /// <summary>
+        /// Returns a partial view for adding another household member to a given household.
+        /// </summary>
+        /// <param name="householdIdentifier">Identification for the household on which to add another household member.</param>
+        /// <returns>Partial view for adding another household member to the given household.</returns>
+        public ActionResult AddHouseholdMember(Guid? householdIdentifier)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Gets the household model for a given household.
         /// </summary>
         /// <param name="householdIdentifier">Identification for the household to get.</param>
