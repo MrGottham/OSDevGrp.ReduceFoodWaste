@@ -114,6 +114,7 @@
     <Compile Include="Models\DashboardModelTest.cs" />
     <Compile Include="Models\HouseholdMemberModelTests.cs" />
     <Compile Include="Models\HouseholdModelTests.cs" />
+    <Compile Include="Models\MemberOfHouseholdModelTests.cs" />
     <Compile Include="Models\PrivacyPolicyModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CredentialsProviderTests.cs" />

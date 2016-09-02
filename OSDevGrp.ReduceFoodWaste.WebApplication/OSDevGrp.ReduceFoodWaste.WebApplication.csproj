@@ -274,6 +274,7 @@
     <Compile Include="Models\DashboardModel.cs" />
     <Compile Include="Models\HouseholdMemberModel.cs" />
     <Compile Include="Models\HouseholdModel.cs" />
+    <Compile Include="Models\MemberOfHouseholdModel.cs" />
     <Compile Include="Models\PrivacyPolicyModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CredentialsProvider.cs" />
