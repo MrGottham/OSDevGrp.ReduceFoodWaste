@@ -556,6 +556,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value is not a valid mail address..
+        /// </summary>
+        public static string ValueNotValidMailAddress {
+            get {
+                return ResourceManager.GetString("ValueNotValidMailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Welcome to {0}.
         /// </summary>
         public static string WelcomeTo {

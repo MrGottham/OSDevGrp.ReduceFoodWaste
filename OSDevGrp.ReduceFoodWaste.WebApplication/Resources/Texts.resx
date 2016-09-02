@@ -285,4 +285,7 @@
   <data name="AddHouseholdMemberToHousehold" xml:space="preserve">
     <value>Add another household member to the household</value>
   </data>
+  <data name="ValueNotValidMailAddress" xml:space="preserve">
+    <value>The value is not a valid mail address.</value>
+  </data>
 </root>

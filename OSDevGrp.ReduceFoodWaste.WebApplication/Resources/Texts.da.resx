@@ -285,4 +285,7 @@
   <data name="AddHouseholdMemberToHousehold" xml:space="preserve">
     <value>Tilføj et andet husstandsmedlem til husholdningen</value>
   </data>
+  <data name="ValueNotValidMailAddress" xml:space="preserve">
+    <value>Den angivne værdi er ikke en valid mailadresse.</value>
+  </data>
 </root>

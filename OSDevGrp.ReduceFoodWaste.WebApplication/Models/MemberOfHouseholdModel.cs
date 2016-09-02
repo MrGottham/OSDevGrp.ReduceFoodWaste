@@ -25,6 +25,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// </summary>
         [RequiredLocalized]
         [MaxLengthLocalized(128)]
+        [MailAddressLocalized]
         public string MailAddress { get; set; }
 
         /// <summary>
