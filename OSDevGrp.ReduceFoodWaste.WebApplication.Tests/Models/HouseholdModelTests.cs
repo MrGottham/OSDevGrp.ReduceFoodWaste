@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -124,14 +124,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.HouseholdMembers, Is.Null);
 
-            var householdMemberModelCollection = new List<HouseholdMemberModel>(Random.Next(5, 10));
-            while (householdMemberModelCollection.Count < householdMemberModelCollection.Capacity)
-            {
-                var householdMember = Fixture.Build<HouseholdMemberModel>()
-                    .With(m => m.Households, null)
-                    .Create();
-                householdMemberModelCollection.Add(householdMember);
-            }
+            var householdMemberModelCollection = Fixture.CreateMany<MemberOfHouseholdModel>(Random.Next(5, 10)).ToList();
 
             householdModel.HouseholdMembers = householdMemberModelCollection;
             Assert.That(householdModel.HouseholdMembers, Is.Not.Null);
@@ -145,17 +138,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         [Test]
         public void TestThatHouseholdMembersSetterSetsValueToNull()
         {
-            var householdMemberModelCollection = new List<HouseholdMemberModel>(Random.Next(5, 10));
-            while (householdMemberModelCollection.Count < householdMemberModelCollection.Capacity)
-            {
-                var householdMember = Fixture.Build<HouseholdMemberModel>()
-                    .With(m => m.Households, null)
-                    .Create();
-                householdMemberModelCollection.Add(householdMember);
-            }
             var householdModel = new HouseholdModel
             {
-                HouseholdMembers = householdMemberModelCollection
+                HouseholdMembers = Fixture.CreateMany<MemberOfHouseholdModel>(Random.Next(5, 10)).ToList()
             };
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.HouseholdMembers, Is.Not.Null);

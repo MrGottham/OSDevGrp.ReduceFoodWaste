@@ -188,10 +188,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 
                 foreach (var householdMember in household.HouseholdMembers)
                 {
-                    if (householdMember.Identifier == currentHouseholdMember.Identifier)
-                    {
-                        householdMember.Name = currentHouseholdMember.Name;
-                    }
+                    householdMember.HouseholdIdentifier = household.Identifier;
+                    householdMember.Removable = householdMember.HouseholdMemberIdentifier != currentHouseholdMember.Identifier;
                 }
 
                 return household;

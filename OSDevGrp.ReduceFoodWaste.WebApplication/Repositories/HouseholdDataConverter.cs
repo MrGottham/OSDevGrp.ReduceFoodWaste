@@ -74,6 +74,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.CreationTime, opt => opt.Ignore())
                     .ForMember(dest => dest.Households, opt => opt.Ignore());
 
+                configuration.CreateMap<HouseholdMemberIdentificationView, MemberOfHouseholdModel>()
+                    .ForMember(dest => dest.HouseholdMemberIdentifier, opt => opt.MapFrom(src => src.HouseholdMemberIdentifier))
+                    .ForMember(dest => dest.HouseholdIdentifier, opt => opt.Ignore())
+                    .ForMember(dest => dest.MailAddress, opt => opt.MapFrom(src => src.MailAddress))
+                    .ForMember(dest => dest.Removable, opt => opt.Ignore());
+
                 configuration.CreateMap<HouseholdMemberView, HouseholdMemberModel>()
                     .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.HouseholdMemberIdentifier))
                     .ForMember(dest => dest.Name, opt => opt.Ignore())

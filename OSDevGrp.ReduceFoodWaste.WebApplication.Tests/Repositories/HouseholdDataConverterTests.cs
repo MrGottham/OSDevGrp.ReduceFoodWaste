@@ -277,6 +277,35 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that Convert converts a HouseholdMemberIdentificationView to a MemberOfHouseholdModel.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsHouseholdMemberIdentificationViewToMemberOfHouseholdModel()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var householdMemberIdentificationView = Fixture.Build<HouseholdMemberIdentificationView>()
+                .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, Fixture.Create<string>())
+                .With(m => m.ExtensionData, null)
+                .Create();
+            Assert.That(householdMemberIdentificationView, Is.Not.Null);
+            Assert.That(householdMemberIdentificationView.HouseholdMemberIdentifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(householdMemberIdentificationView.MailAddress, Is.Not.Null);
+            Assert.That(householdMemberIdentificationView.MailAddress, Is.Not.Empty);
+
+            var result = householdDataConverter.Convert<HouseholdMemberIdentificationView, MemberOfHouseholdModel>(householdMemberIdentificationView);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.HouseholdMemberIdentifier, Is.EqualTo(householdMemberIdentificationView.HouseholdMemberIdentifier));
+            Assert.That(result.HouseholdIdentifier, Is.EqualTo(default(Guid)));
+            Assert.That(result.MailAddress, Is.Not.Null);
+            Assert.That(result.MailAddress, Is.Not.Empty);
+            Assert.That(result.MailAddress, Is.EqualTo(householdMemberIdentificationView.MailAddress));
+            Assert.That(result.Removable, Is.False);
+        }
+
+        /// <summary>
         /// Tests that Convert converts a HouseholdMemberView to a HouseholdMemberModel.
         /// </summary>
         [Test]

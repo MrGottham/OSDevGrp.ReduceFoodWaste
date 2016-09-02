@@ -16,14 +16,7 @@
                 <div class="card">
                     <img class="card-img-top" src="@VirtualPathUtility.ToAbsolute("~/Images/householdMember.png")" />
                     <div class="card-block text-xs-center">
-                        @if (string.IsNullOrWhiteSpace(Model.Name) == false)
-                        {
-                            <h5 class="card-title">@householdMember.Name</h5>
-                        }
-                        else
-                        {
-                            <h5 class="card-title">@householdMember.MailAddress</h5>
-                        }
+                        <h5 class="card-title">@householdMember.MailAddress</h5>
                     </div>
                 </div>
             }

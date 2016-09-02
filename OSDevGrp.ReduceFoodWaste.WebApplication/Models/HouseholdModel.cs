@@ -42,7 +42,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// <summary>
         /// Gets or sets the collection of household member who has a membership of this household.
         /// </summary>
-        public IEnumerable<HouseholdMemberModel> HouseholdMembers { get; set; }
+        public IEnumerable<MemberOfHouseholdModel> HouseholdMembers { get; set; }
 
         #endregion
     }
