@@ -34,6 +34,12 @@
             }
         }
 
+        function addHouseholdMember(householdIdentifier) {
+            if ($("#addHouseholdMember") != null) {
+                $("#addHouseholdMember").load("@VirtualPathUtility.ToAbsolute("~/Household/AddHouseholdMember?householdIdentifier=")" + householdIdentifier);
+            }
+        }
+
         function cancel(householdIdentifier) {
             window.location.href = "@VirtualPathUtility.ToAbsolute("~/Household/Manage?householdIdentifier=")" + householdIdentifier;
         }

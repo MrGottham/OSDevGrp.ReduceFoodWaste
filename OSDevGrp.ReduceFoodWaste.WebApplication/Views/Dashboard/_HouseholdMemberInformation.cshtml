@@ -8,7 +8,7 @@
             <img class="card-img-top" src="@VirtualPathUtility.ToAbsolute("~/Images/household.png")" />
             <div class="card-block text-xs-center">
                 <h5 class="card-title">@household.Name</h5>
-                @Html.ActionLink(Texts.Manage, "Manage", "Household", new { householdIdentifier = @household.Identifier }, new { @class = "btn btn-primary" })
+                @Html.ActionLink(Texts.Manage, "Manage", "Household", new { householdIdentifier = household.Identifier }, new { @class = "btn btn-primary" })
             </div>
         </div>
     }

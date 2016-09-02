@@ -25,6 +25,7 @@
             <img class="card-img-top" src="@VirtualPathUtility.ToAbsolute("~/Images/householdMember.png")" />
             <div class="card-block text-xs-center">
                 <h5 class="card-title">@Texts.AddHouseholdMemberToHousehold</h5>
+                <a class="btn btn-primary" onclick="@string.Format("parent.addHouseholdMember('{0}')", Model.Identifier)">@Texts.Add</a>
             </div>
         </div>
     </div>
