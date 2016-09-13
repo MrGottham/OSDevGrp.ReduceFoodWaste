@@ -47,8 +47,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <param name="statusMessage">Status message to show in the view.</param>
         /// <param name="errorMessage">Error message to show in the view.</param>
         /// <returns>View for manage the given household.</returns>
-        public ActionResult Manage(Guid? householdIdentifier = null, string statusMessage = null,
-            string errorMessage = null)
+        public ActionResult Manage(Guid? householdIdentifier = null, string statusMessage = null, string errorMessage = null)
         {
             if (householdIdentifier.HasValue == false)
             {
@@ -149,17 +148,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
             catch (AggregateException ex)
             {
-                return RedirectToAction("Manage", "Household",
-                    new
-                    {
-                        householdIdentifier = householdModel.Identifier,
-                        errorMessage = ex.ToReduceFoodWasteException().Message
-                    });
+                return RedirectToAction("Manage", "Household", new {householdIdentifier = householdModel.Identifier, errorMessage = ex.ToReduceFoodWasteException().Message});
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Manage", "Household",
-                    new {householdIdentifier = householdModel.Identifier, errorMessage = ex.Message});
+                return RedirectToAction("Manage", "Household", new {householdIdentifier = householdModel.Identifier, errorMessage = ex.Message});
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -124,8 +124,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.HouseholdMembers, Is.Null);
 
-            var householdMemberModelCollection = Fixture.CreateMany<MemberOfHouseholdModel>(Random.Next(5, 10)).ToList();
-
+            var householdMemberModelCollection = new List<MemberOfHouseholdModel>(Random.Next(5, 10));
+            while (householdMemberModelCollection.Count < householdMemberModelCollection.Capacity)
+            {
+                var memberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                    .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
+                    .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                    .With(m => m.MailAddress, Fixture.Create<string>())
+                    .With(m => m.Removable, Fixture.Create<bool>())
+                    .Create();
+                householdMemberModelCollection.Add(memberOfHouseholdModel);
+            }
+            
             householdModel.HouseholdMembers = householdMemberModelCollection;
             Assert.That(householdModel.HouseholdMembers, Is.Not.Null);
             Assert.That(householdModel.HouseholdMembers, Is.Not.Empty);
@@ -138,9 +148,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         [Test]
         public void TestThatHouseholdMembersSetterSetsValueToNull()
         {
+            var householdMemberModelCollection = new List<MemberOfHouseholdModel>(Random.Next(5, 10));
+            while (householdMemberModelCollection.Count < householdMemberModelCollection.Capacity)
+            {
+                var memberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                    .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
+                    .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                    .With(m => m.MailAddress, Fixture.Create<string>())
+                    .With(m => m.Removable, Fixture.Create<bool>())
+                    .Create();
+                householdMemberModelCollection.Add(memberOfHouseholdModel);
+            }
+
             var householdModel = new HouseholdModel
             {
-                HouseholdMembers = Fixture.CreateMany<MemberOfHouseholdModel>(Random.Next(5, 10)).ToList()
+                HouseholdMembers = householdMemberModelCollection
             };
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.HouseholdMembers, Is.Not.Null);

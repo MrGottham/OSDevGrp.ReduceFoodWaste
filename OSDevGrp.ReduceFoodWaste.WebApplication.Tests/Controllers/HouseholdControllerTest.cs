@@ -773,6 +773,76 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that AddHouseholdMember with an identification for a given household which are equal to null returns a PartialViewResult without a model.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberWithHouseholdIdentifierEqualToNullReturnsPartialViewResultWithoutModel()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            Guid? householdIdentifier = null;
+            // ReSharper disable ExpressionIsAlwaysNull
+            Assert.That(householdIdentifier, Is.Null);
+            // ReSharper restore ExpressionIsAlwaysNull
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.False);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+
+            // ReSharper disable ExpressionIsAlwaysNull
+            var result = householdController.AddHouseholdMember(householdIdentifier);
+            // ReSharper restore ExpressionIsAlwaysNull
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<PartialViewResult>());
+
+            var partialViewResult = (PartialViewResult) result;
+            Assert.That(partialViewResult, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Empty);
+            Assert.That(partialViewResult.ViewName, Is.EqualTo("_Empty"));
+            Assert.That(partialViewResult.ViewData, Is.Not.Null);
+            Assert.That(partialViewResult.ViewData, Is.Empty);
+            Assert.That(partialViewResult.Model, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that AddHouseholdMember with an identification for a given household which are not equal to null returns a PartialViewResult with a model for adding a household member.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberWithHouseholdIdentifierNotEqualToNullReturnsPartialViewResultWithMemberOfHouseholdModel()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            Guid? householdIdentifier = Guid.NewGuid();
+            Assert.That(householdIdentifier, Is.Not.Null);
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(householdIdentifier.HasValue, Is.True);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+
+            var result = householdController.AddHouseholdMember(householdIdentifier);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<PartialViewResult>());
+
+            var partialViewResult = (PartialViewResult) result;
+            Assert.That(partialViewResult, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Empty);
+            Assert.That(partialViewResult.ViewName, Is.EqualTo("_AddHouseholdMember"));
+            Assert.That(partialViewResult.ViewData, Is.Not.Null);
+            Assert.That(partialViewResult.ViewData, Is.Empty);
+            Assert.That(partialViewResult.Model, Is.Not.Null);
+            Assert.That(partialViewResult.Model, Is.TypeOf<MemberOfHouseholdModel>());
+
+            var memberOfHouseholdModel = (MemberOfHouseholdModel) partialViewResult.Model;
+            Assert.That(memberOfHouseholdModel, Is.Not.Null);
+            Assert.That(memberOfHouseholdModel.HouseholdMemberIdentifier, Is.EqualTo(default(Guid)));
+            Assert.That(memberOfHouseholdModel.HouseholdIdentifier, Is.EqualTo(householdIdentifier));
+            Assert.That(memberOfHouseholdModel.MailAddress, Is.Null);
+            Assert.That(memberOfHouseholdModel.Removable, Is.False);
+        }
+
+        /// <summary>
         /// Creates a controller for a household for unit testing.
         /// </summary>
         /// <param name="household">Sets the model for the household which should be used.</param>

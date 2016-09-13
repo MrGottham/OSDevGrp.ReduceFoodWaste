@@ -6,27 +6,29 @@
 </div>
 <div class="row">
     <h4>@Texts.HouseholdMembers</h4>
-    <div id="addHouseholdMember">
-    </div>
-    <div class="card-columns">
-        @if (Model.HouseholdMembers != null)
-        {
-            foreach (var householdMember in Model.HouseholdMembers)
+    <div id="addHouseholdMember"></div>
+    <table class="table table-sm">
+        <thead class="table-inverse">
+            <tr>
+                <th>@Texts.MailAddress</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="vertical-align: middle">@Texts.AddHouseholdMemberToHousehold</td>
+                <td><a class="btn btn-primary" onclick="@string.Format("parent.addHouseholdMember('{0}')", Model.Identifier)">@Texts.Add</a></td>
+            </tr>
+            @if (Model.HouseholdMembers != null)
             {
-                <div class="card">
-                    <img class="card-img-top" src="@VirtualPathUtility.ToAbsolute("~/Images/householdMember.png")" />
-                    <div class="card-block text-xs-center">
-                        <h5 class="card-title">@householdMember.MailAddress</h5>
-                    </div>
-                </div>
+                foreach (var householdMember in Model.HouseholdMembers)
+                {
+                    <tr>
+                        <td style="vertical-align: middle">@householdMember.MailAddress</td>
+                        <td></td>
+                    </tr>
+                }
             }
-        }
-        <div class="card">
-            <img class="card-img-top" src="@VirtualPathUtility.ToAbsolute("~/Images/householdMember.png")" />
-            <div class="card-block text-xs-center">
-                <h5 class="card-title">@Texts.AddHouseholdMemberToHousehold</h5>
-                <a class="btn btn-primary" onclick="@string.Format("parent.addHouseholdMember('{0}')", Model.Identifier)">@Texts.Add</a>
-            </div>
-        </div>
-    </div>
+        </tbody>
+    </table>
 </div>
