@@ -141,6 +141,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             try
             {
+                if (ModelState.IsValid == false)
+                {
+                    // TODO: Find a way to send the invalid model back!!!
+                    return PartialView("_HouseholdBasicInformation", householdModel);
+                }
+                
                 var task = _householdDataRepository.UpdateHouseholdAsync(User.Identity, householdModel);
                 task.Wait();
 
@@ -165,13 +171,35 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             try
             {
-                throw new NotImplementedException();
+                if (householdIdentifier.HasValue == false)
+                {
+                    return PartialView("_Empty");
+                }
+
+                var memberOfHouseholdModel = new MemberOfHouseholdModel
+                {
+                    HouseholdIdentifier = householdIdentifier.Value
+                };
+
+                return PartialView("_AddHouseholdMember", memberOfHouseholdModel);
             }
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = ex.Message;
                 return PartialView("_Empty");
             }
+        }
+
+        /// <summary>
+        /// Adds a household member to a given household.
+        /// </summary>
+        /// <param name="memberOfHouseholdModel">Model for the household member who should be added to the household.</param>
+        /// <returns>Redirect to the management of the household on which the household member was added</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddHouseholdMember(MemberOfHouseholdModel memberOfHouseholdModel)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

@@ -699,10 +699,41 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Edit with a household model for updating calls UpdateHouseholdAsync on the repository which can access household data.
+        /// Tests that Edit with an invalid household model for updating returns a XXXXX.
         /// </summary>
         [Test]
-        public void TestThatEditWithHouseholdModelCallsUpdateHouseholdAsyncOnHouseholdDataRepository()
+        public void TestThatEditWithInvalidHouseholdModelReturnsXXX()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
+            Assert.That(householdController.ModelState.IsValid, Is.False);
+
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.HouseholdMembers, null)
+                .Create();
+
+            var result = householdController.Edit(householdModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<PartialViewResult>());
+
+            var partialViewResult = (PartialViewResult) result;
+            Assert.That(partialViewResult, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Null);
+            Assert.That(partialViewResult.ViewName, Is.Not.Empty);
+            Assert.That(partialViewResult.ViewName, Is.EqualTo("_HouseholdBasicInformation"));
+            Assert.That(partialViewResult.Model, Is.Not.Null);
+            Assert.That(partialViewResult.Model, Is.EqualTo(householdModel));
+            Assert.That(partialViewResult.ViewData, Is.Not.Null);
+            Assert.That(partialViewResult.ViewData, Is.Empty);
+        }
+
+        /// <summary>
+        /// Tests that Edit with a valid household model for updating calls UpdateHouseholdAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatEditWithValidHouseholdModelCallsUpdateHouseholdAsyncOnHouseholdDataRepository()
         {
             var householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
@@ -719,10 +750,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Edit with a household model for updating returns a RedirectToRouteResult to manage the updated household.
+        /// Tests that Edit with a valid household model for updating returns a RedirectToRouteResult to manage the updated household.
         /// </summary>
         [Test]
-        public void TestThatEditWithHouseholdModelReturnsRedirectToRouteResultToManage()
+        public void TestThatEditWithValidHouseholdModelReturnsRedirectToRouteResultToManage()
         {
             var updatedHouseholdIdentifier = Guid.NewGuid();
             var updatedHouseholdModel = Fixture.Build<HouseholdModel>()

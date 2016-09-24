@@ -40,10 +40,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
                 "~/Content/themes/base/jquery.ui.theme.css"));
 
             bundles.Add(new StyleBundle("~/Content/bootstrap/css").Include(
+                "~/Content/tether/tether.css",
+                "~/Content/tether/tether.min.css",
                 "~/Content/bootstrap.css",
                 "~/Content/bootstrap.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                "~/Scripts/tether/tether.js",
+                "~/Scripts/tether/tether.min.js",
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/bootstrap.min.js"));
 

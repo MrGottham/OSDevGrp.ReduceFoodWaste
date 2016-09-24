@@ -29,20 +29,26 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Identifier)
-    <div class="row input-group">
-        @Html.LabelFor(m => m.Name, Texts.Name)<br />@Html.TextBoxFor(m => m.Name)&nbsp;@Html.ValidationMessageFor(m => m.Name)
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, Texts.Name)
+        @Html.TextBoxFor(m => m.Name, null, new { @class = "form-control" })
+        <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.Name)</div>
     </div>
-    <div class="row input-group">
-        @Html.LabelFor(m => m.Description, Texts.Description)<br />@Html.TextAreaFor(m => m.Description)&nbsp;@Html.ValidationMessageFor(m => m.Description)
+    <div class="form-group">
+        @Html.LabelFor(m => m.Description, Texts.Description)
+        @Html.TextAreaFor(m => m.Description, 5, 1, new { @class = "form-control" })
+        <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.Description)</div>
     </div>
     if (Model.PrivacyPolicy != null)
     {
-        <div class="row input-group">
-            @Html.Partial("_PrivacyPolicies", Model.PrivacyPolicy)
-            @Html.CheckBoxFor(m => m.PrivacyPolicy.IsAccepted)&nbsp;@Html.LabelFor(m => m.PrivacyPolicy.IsAccepted, Texts.AcceptTermsAndPrivacyPolicy)&nbsp;@Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)
+        @Html.Partial("_PrivacyPolicies", Model.PrivacyPolicy)
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.CheckBoxFor(m => m.PrivacyPolicy.IsAccepted, new { @class = "form-check-input" })
+                @Html.LabelFor(m => m.PrivacyPolicy.IsAccepted, Texts.AcceptTermsAndPrivacyPolicy)
+            </label>
+            <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)</div>
         </div>
     }
-    <div class="row">
-        <input class="bnt btn-primary float-right" type="submit" value="@Texts.Next" title="@Texts.Next" />
-    </div>
+    <input class="bnt btn-primary float-right" type="submit" value="@Texts.Next" title="@Texts.Next" />
 }

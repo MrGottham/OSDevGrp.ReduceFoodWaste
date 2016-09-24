@@ -39,18 +39,22 @@
     }
     if (Model.IsActivated == false)
     {
-        <div class="row input-group">
-            <h3>@Texts.Activation</h3>@Html.LabelFor(m => m.ActivationCode, Texts.ActivationCode)<br />@Html.TextBoxFor(m => m.ActivationCode)
+        <h3>@Texts.Activation</h3>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ActivationCode, Texts.ActivationCode)
+            @Html.TextBoxFor(m => m.ActivationCode, null, new { @class = "form-control" })
         </div>
     }
     if (Model.HasAcceptedPrivacyPolicy == false && Model.PrivacyPolicy != null)
     {
-        <div class="row input-group">
-            @Html.Partial("_PrivacyPolicies", Model.PrivacyPolicy)
-            @Html.CheckBoxFor(m => m.PrivacyPolicy.IsAccepted)&nbsp;@Html.LabelFor(m => m.PrivacyPolicy.IsAccepted, Texts.AcceptTermsAndPrivacyPolicy)&nbsp;@Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)
+        @Html.Partial("_PrivacyPolicies", Model.PrivacyPolicy)
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.CheckBoxFor(m => m.PrivacyPolicy.IsAccepted, new { @class = "form-check-input" })
+                @Html.LabelFor(m => m.PrivacyPolicy.IsAccepted, Texts.AcceptTermsAndPrivacyPolicy)
+            </label>
+            <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)</div>
         </div>
     }
-    <div class="row">
-        <input class="bnt btn-primary float-right" type="submit" value="@Texts.Next" title="@Texts.Next" />
-    </div>
+    <input class="bnt btn-primary float-right" type="submit" value="@Texts.Next" title="@Texts.Next" />
 }

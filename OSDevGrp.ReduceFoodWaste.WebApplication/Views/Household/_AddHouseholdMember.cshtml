@@ -1,0 +1,17 @@
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.MemberOfHouseholdModel
+
+@using (Html.BeginForm("AddHouseholdMember", "Household", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.HouseholdIdentifier)
+    <p>@Texts.AddHouseholdMemberToHousehold</p>
+    <div class="input-group">
+        @Texts.MailAddress<br />
+        @Html.TextBoxFor(m => m.MailAddress)&nbsp;@Html.ValidationMessageFor(m => m.MailAddress)
+    </div>
+    <div class="input-group-btn btn-group">
+        <input class="btn btn-primary" type="submit" value="@Texts.Add" title="@Texts.Add" />
+        <input class="btn btn-primary" type="button" onclick="@string.Format("parent.cancel('{0}')", Model.HouseholdIdentifier)" value="@Texts.Cancel" title="@Texts.Cancel" />
+    </div>
+}
