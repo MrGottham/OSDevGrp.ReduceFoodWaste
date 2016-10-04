@@ -21,9 +21,15 @@
     {
         <p class="message-error">@ViewBag.ErrorMessage</p>
     }
-    <div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute(string.Format("~/Household/HouseholdInformation?householdIdentifier={0}", Model.Identifier))">
-        <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
-    </div>
+    @if (ViewBag.EditMode == null || ViewBag.EditMode == false)
+    {
+        <div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute(string.Format("~/Household/HouseholdInformation?householdIdentifier={0}", Model.Identifier))">
+            <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
+        </div>
+    }
+    else
+    {
+    }
 </div>
 
 @section scripts {

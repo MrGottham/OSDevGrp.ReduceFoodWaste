@@ -143,8 +143,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 if (ModelState.IsValid == false)
                 {
-                    // TODO: Find a way to send the invalid model back!!!
-                    return PartialView("_HouseholdBasicInformation", householdModel);
+                    ViewBag.EditMode = true;
+
+                    return View("Manage", householdModel);
                 }
                 
                 var task = _householdDataRepository.UpdateHouseholdAsync(User.Identity, householdModel);

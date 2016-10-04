@@ -332,6 +332,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Null);
             Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Empty);
             Assert.That(viewResult.ViewData["StatusMessage"], Is.EqualTo(statusMessage));
+            Assert.That(viewResult.ViewData["EditMode"], Is.Null);
 
             var householdModel = (HouseholdModel) viewResult.Model;
             Assert.That(householdModel, Is.Not.Null);
@@ -413,6 +414,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Null);
             Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Empty);
             Assert.That(viewResult.ViewData["ErrorMessage"], Is.EqualTo(errorMessage));
+            Assert.That(viewResult.ViewData["EditMode"], Is.Null);
 
             var householdModel = (HouseholdModel) viewResult.Model;
             Assert.That(householdModel, Is.Not.Null);
@@ -699,10 +701,31 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Edit with an invalid household model for updating returns a XXXXX.
+        /// Tests that Edit with an invalid household model for updating does not call UpdateHouseholdAsync on the repository which can access household data.
         /// </summary>
         [Test]
-        public void TestThatEditWithInvalidHouseholdModelReturnsXXX()
+        public void TestThatEditWithInvalidHouseholdModelDoesNotCallUpdateHouseholdAsyncOnHouseholdDataRepository()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
+            Assert.That(householdController.ModelState.IsValid, Is.False);
+
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.HouseholdMembers, null)
+                .Create();
+
+            householdController.Edit(householdModel);
+
+            _householdDataRepositoryMock.AssertWasNotCalled(m => m.UpdateHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that Edit with an invalid household model for updating returns a ViewResult with a model for the given household.
+        /// </summary>
+        [Test]
+        public void TestThatEditWithInvalidHouseholdModelReturnsViewResultWithHouseholdModel()
         {
             var householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
@@ -716,17 +739,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var result = householdController.Edit(householdModel);
             Assert.That(result, Is.Not.Null);
-            Assert.That(result, Is.TypeOf<PartialViewResult>());
+            Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var partialViewResult = (PartialViewResult) result;
-            Assert.That(partialViewResult, Is.Not.Null);
-            Assert.That(partialViewResult.ViewName, Is.Not.Null);
-            Assert.That(partialViewResult.ViewName, Is.Not.Empty);
-            Assert.That(partialViewResult.ViewName, Is.EqualTo("_HouseholdBasicInformation"));
-            Assert.That(partialViewResult.Model, Is.Not.Null);
-            Assert.That(partialViewResult.Model, Is.EqualTo(householdModel));
-            Assert.That(partialViewResult.ViewData, Is.Not.Null);
-            Assert.That(partialViewResult.ViewData, Is.Empty);
+            var viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("Manage"));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["EditMode"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["EditMode"], Is.True);
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(householdModel));
         }
 
         /// <summary>
