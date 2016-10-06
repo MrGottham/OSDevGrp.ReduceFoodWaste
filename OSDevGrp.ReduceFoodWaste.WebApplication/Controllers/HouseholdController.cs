@@ -143,6 +143,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 if (ModelState.IsValid == false)
                 {
+                    var reloadedHouseholdModel = GetHouseholdModel(householdModel.Identifier);
+                    householdModel.HouseholdMembers = reloadedHouseholdModel.HouseholdMembers;
+
                     ViewBag.EditMode = true;
 
                     return View("Manage", householdModel);

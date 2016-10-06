@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -701,6 +702,44 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Edit with an invalid household model for updating calls GetHouseholdAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatEditWithInvalidHouseholdModelCallsGetHouseholdAsyncOnHouseholdDataRepository()
+        {
+            var invalidHouseholdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.Identifier, Guid.NewGuid())
+                .With(m => m.HouseholdMembers, null)
+                .Create();
+
+            Action<object[]> householdGetterCallback = arguments =>
+            {
+                Assert.That(arguments, Is.Not.Null);
+                Assert.That(arguments.ElementAt(1), Is.Not.Null);
+                Assert.That(arguments.ElementAt(1), Is.TypeOf<HouseholdModel>());
+
+                var householdModel = (HouseholdModel) arguments.ElementAt(1);
+                Assert.That(householdModel, Is.Not.Null);
+                Assert.That(householdModel.Identifier, Is.EqualTo(invalidHouseholdModel.Identifier));
+            };
+
+            var householdController = CreateHouseholdController(householdGetterCallback: householdGetterCallback);
+            Assert.That(householdController, Is.Not.Null);
+            Assert.That(householdController.User, Is.Not.Null);
+            Assert.That(householdController.User.Identity, Is.Not.Null);
+
+            householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
+            Assert.That(householdController.ModelState.IsValid, Is.False);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            householdController.Edit(invalidHouseholdModel);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetHouseholdAsync(Arg<IIdentity>.Is.Equal(householdController.User.Identity), Arg<HouseholdModel>.Is.NotNull, Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
         /// Tests that Edit with an invalid household model for updating does not call UpdateHouseholdAsync on the repository which can access household data.
         /// </summary>
         [Test]
@@ -727,17 +766,37 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatEditWithInvalidHouseholdModelReturnsViewResultWithHouseholdModel()
         {
-            var householdController = CreateHouseholdController();
+            var householdMemberModelCollection = new List<MemberOfHouseholdModel>(Random.Next(5, 10));
+            while (householdMemberModelCollection.Count < householdMemberModelCollection.Capacity)
+            {
+                var memberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                    .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
+                    .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                    .With(m => m.MailAddress, Fixture.Create<string>())
+                    .With(m => m.Removable, Fixture.Create<bool>())
+                    .Create();
+                householdMemberModelCollection.Add(memberOfHouseholdModel);
+            }
+            var reloadedHouseholdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.HouseholdMembers, householdMemberModelCollection)
+                .Create();
+            Assert.That(reloadedHouseholdModel, Is.Not.Null);
+            Assert.That(reloadedHouseholdModel.HouseholdMembers, Is.Not.Null);
+            Assert.That(reloadedHouseholdModel.HouseholdMembers, Is.Not.Empty);
+
+            var householdController = CreateHouseholdController(household: reloadedHouseholdModel);
             Assert.That(householdController, Is.Not.Null);
 
             householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
             Assert.That(householdController.ModelState.IsValid, Is.False);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            var inhouseholdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.HouseholdMembers, null)
                 .Create();
+            Assert.That(inhouseholdModel, Is.Not.Null);
+            Assert.That(inhouseholdModel.HouseholdMembers, Is.Null);
 
-            var result = householdController.Edit(householdModel);
+            var result = householdController.Edit(inhouseholdModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
@@ -751,7 +810,31 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData["EditMode"], Is.Not.Null);
             Assert.That(viewResult.ViewData["EditMode"], Is.True);
             Assert.That(viewResult.Model, Is.Not.Null);
-            Assert.That(viewResult.Model, Is.EqualTo(householdModel));
+            Assert.That(viewResult.Model, Is.EqualTo(inhouseholdModel));
+
+            var updatedInvalidHouseholdModel = (HouseholdModel) viewResult.Model;
+            Assert.That(updatedInvalidHouseholdModel, Is.Not.Null);
+            Assert.That(updatedInvalidHouseholdModel.HouseholdMembers, Is.Not.Null);
+            Assert.That(updatedInvalidHouseholdModel.HouseholdMembers, Is.Not.Empty);
+            Assert.That(updatedInvalidHouseholdModel.HouseholdMembers, Is.EqualTo(householdMemberModelCollection));
+        }
+
+        /// <summary>
+        /// Tests that Edit with a valid household model for updating does not call GetHouseholdAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatEditWithValidHouseholdModelDoesNotCallGetHouseholdAsyncOnHouseholdDataRepository()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            var householdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.HouseholdMembers, null)
+                .Create();
+
+            householdController.Edit(householdModel);
+
+            _householdDataRepositoryMock.AssertWasNotCalled(m => m.GetHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything));
         }
 
         /// <summary>
