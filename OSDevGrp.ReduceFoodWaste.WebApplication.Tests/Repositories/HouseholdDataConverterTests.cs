@@ -236,6 +236,89 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that Convert converts a MemberOfHouseholdModel to a HouseholdAddHouseholdMemberCommand.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsMemberOfHouseholdModelToHouseholdAddHouseholdMemberCommand()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var memberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, Fixture.Create<string>())
+                .Create();
+            Assert.That(memberOfHouseholdModel, Is.Not.Null);
+            Assert.That(memberOfHouseholdModel.HouseholdIdentifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(memberOfHouseholdModel.MailAddress, Is.Not.Null);
+            Assert.That(memberOfHouseholdModel.MailAddress, Is.Not.Empty);
+
+            var result = householdDataConverter.Convert<MemberOfHouseholdModel, HouseholdAddHouseholdMemberCommand>(memberOfHouseholdModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.HouseholdIdentifier, Is.EqualTo(memberOfHouseholdModel.HouseholdIdentifier));
+            Assert.That(result.MailAddress, Is.Not.Null);
+            Assert.That(result.MailAddress, Is.Not.Empty);
+            Assert.That(result.MailAddress, Is.EqualTo(memberOfHouseholdModel.MailAddress));
+            Assert.That(result.TranslationInfoIdentifier, Is.EqualTo(default(Guid)));
+        }
+
+        /// <summary>
+        /// Tests that Convert converts a MemberOfHouseholdModel where Removable is equal to true to a HouseholdRemoveHouseholdMemberCommand.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsMemberOfHouseholdModelWhereRemovableEqualTrueToHouseholdRemoveHouseholdMemberCommand()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var memberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, Fixture.Create<string>())
+                .With(m => m.Removable, true)
+                .Create();
+            Assert.That(memberOfHouseholdModel, Is.Not.Null);
+            Assert.That(memberOfHouseholdModel.HouseholdIdentifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(memberOfHouseholdModel.MailAddress, Is.Not.Null);
+            Assert.That(memberOfHouseholdModel.MailAddress, Is.Not.Empty);
+            Assert.That(memberOfHouseholdModel.Removable, Is.True);
+
+            var result = householdDataConverter.Convert<MemberOfHouseholdModel, HouseholdRemoveHouseholdMemberCommand>(memberOfHouseholdModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.HouseholdIdentifier, Is.EqualTo(memberOfHouseholdModel.HouseholdIdentifier));
+            Assert.That(result.MailAddress, Is.Not.Null);
+            Assert.That(result.MailAddress, Is.Not.Empty);
+            Assert.That(result.MailAddress, Is.EqualTo(memberOfHouseholdModel.MailAddress));
+        }
+
+        /// <summary>
+        /// Tests that Convert throws an ReduceFoodWasteSystemException when converting a MemberOfHouseholdModel where Removable is equal to false to a HouseholdRemoveHouseholdMemberCommand.
+        /// </summary>
+        [Test]
+        public void TestThatConvertThrowsReduceFoodWasteSystemExceptionWhenConvertingMemberOfHouseholdModelWhereRemovableEqualTrueToHouseholdRemoveHouseholdMemberCommand()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var memberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, Fixture.Create<string>())
+                .With(m => m.Removable, false)
+                .Create();
+            Assert.That(memberOfHouseholdModel, Is.Not.Null);
+            Assert.That(memberOfHouseholdModel.HouseholdIdentifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(memberOfHouseholdModel.MailAddress, Is.Not.Null);
+            Assert.That(memberOfHouseholdModel.MailAddress, Is.Not.Empty);
+            Assert.That(memberOfHouseholdModel.Removable, Is.False);
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdDataConverter.Convert<MemberOfHouseholdModel, HouseholdRemoveHouseholdMemberCommand>(memberOfHouseholdModel));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.CannotRemoveYourselfAsHouseholdMember));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
         /// Tests that Convert converts a HouseholdMemberIdentificationView to a HouseholdMemberModel.
         /// </summary>
         [Test]

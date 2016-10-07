@@ -142,6 +142,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot remove yourself as a household member..
+        /// </summary>
+        public static string CannotRemoveYourselfAsHouseholdMember {
+            get {
+                return ResourceManager.GetString("CannotRemoveYourselfAsHouseholdMember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannet resolve a mail address from your identity..
         /// </summary>
         public static string CannotResolveMailAddressFromIdentity {
@@ -462,6 +471,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         public static string ReduceFoodWasteProject {
             get {
                 return ResourceManager.GetString("ReduceFoodWasteProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
             }
         }
         

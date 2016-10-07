@@ -1,7 +1,7 @@
 ﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdModel
 
-@if (ViewBag.EditMode == false)
+@if (ViewBag.EditMode == null || ViewBag.EditMode == false)
 {
     <table class="table table-sm">
         <tbody>

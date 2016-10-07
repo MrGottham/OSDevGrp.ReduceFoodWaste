@@ -288,4 +288,10 @@
   <data name="ValueNotValidMailAddress" xml:space="preserve">
     <value>Den angivne værdi er ikke en valid mailadresse.</value>
   </data>
+  <data name="CannotRemoveYourselfAsHouseholdMember" xml:space="preserve">
+    <value>Du kan ikke fjerne dig selv som husstandsmedlem.</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Fjern</value>
+  </data>
 </root>

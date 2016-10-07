@@ -334,6 +334,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Empty);
             Assert.That(viewResult.ViewData["StatusMessage"], Is.EqualTo(statusMessage));
             Assert.That(viewResult.ViewData["EditMode"], Is.Null);
+            Assert.That(viewResult.ViewData["AddingHouseholdMemberMode"], Is.Null);
 
             var householdModel = (HouseholdModel) viewResult.Model;
             Assert.That(householdModel, Is.Not.Null);
@@ -416,6 +417,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Empty);
             Assert.That(viewResult.ViewData["ErrorMessage"], Is.EqualTo(errorMessage));
             Assert.That(viewResult.ViewData["EditMode"], Is.Null);
+            Assert.That(viewResult.ViewData["AddingHouseholdMemberMode"], Is.Null);
 
             var householdModel = (HouseholdModel) viewResult.Model;
             Assert.That(householdModel, Is.Not.Null);
@@ -728,11 +730,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdController.User, Is.Not.Null);
             Assert.That(householdController.User.Identity, Is.Not.Null);
 
-            householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
-            Assert.That(householdController.ModelState.IsValid, Is.False);
-
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
+            Assert.That(householdController.ModelState.IsValid, Is.False);
 
             householdController.Edit(invalidHouseholdModel);
 
@@ -982,13 +984,311 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that AddHouseholdMember with a household member model for adding a household member throws an ArgumentNullException when the household member model for adding a household member is null.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberWithMemberOfHouseholdModelThrowsArgumentNullExceptionWhenMemberOfHouseholdModelIsNull()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            const MemberOfHouseholdModel memberOfHouseholdModel = null;
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdController.AddHouseholdMember(memberOfHouseholdModel));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("memberOfHouseholdModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that AddHouseholdMember with an invalid household member model for adding a household member calls GetHouseholdAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberWithInvalidMemberOfHouseholdModelCallsGetHouseholdAsyncOnHouseholdDataRepository()
+        {
+            var invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, null)
+                .Create();
+
+            Action<object[]> householdGetterCallback = arguments =>
+            {
+                Assert.That(arguments, Is.Not.Null);
+                Assert.That(arguments.ElementAt(1), Is.Not.Null);
+                Assert.That(arguments.ElementAt(1), Is.TypeOf<HouseholdModel>());
+
+                var householdModel = (HouseholdModel) arguments.ElementAt(1);
+                Assert.That(householdModel, Is.Not.Null);
+                Assert.That(householdModel.Identifier, Is.EqualTo(invalidMemberOfHouseholdModel.HouseholdIdentifier));
+            };
+
+            var householdController = CreateHouseholdController(householdGetterCallback: householdGetterCallback);
+            Assert.That(householdController, Is.Not.Null);
+            Assert.That(householdController.User, Is.Not.Null);
+            Assert.That(householdController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
+            Assert.That(householdController.ModelState.IsValid, Is.False);
+
+            householdController.AddHouseholdMember(invalidMemberOfHouseholdModel);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetHouseholdAsync(Arg<IIdentity>.Is.Equal(householdController.User.Identity), Arg<HouseholdModel>.Is.NotNull, Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that AddHouseholdMember with an invalid household member model for adding a household member does not call AddHouseholdMemberToHouseholdAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberWithInvalidMemberOfHouseholdModelDoesNotCallAddHouseholdMemberToHouseholdAsyncOnHouseholdDataRepository()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            var invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, null)
+                .Create();
+
+            householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
+            Assert.That(householdController.ModelState.IsValid, Is.False);
+
+            householdController.AddHouseholdMember(invalidMemberOfHouseholdModel);
+
+            _householdDataRepositoryMock.AssertWasNotCalled(m => m.AddHouseholdMemberToHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<MemberOfHouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that AddHouseholdMember with an invalid household member model for adding a household member returns a ViewResult with a model for the given household.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberWithInvalidMemberOfHouseholdModelViewResultWithHouseholdModel()
+        {
+            var reloadedHouseholdModel = Fixture.Build<HouseholdModel>()
+                .With(m => m.HouseholdMembers, null)
+                .Create();
+
+            var householdController = CreateHouseholdController(household: reloadedHouseholdModel);
+            Assert.That(householdController, Is.Not.Null);
+
+            householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
+            Assert.That(householdController.ModelState.IsValid, Is.False);
+
+            var invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, null)
+                .Create();
+
+            var result = householdController.AddHouseholdMember(invalidMemberOfHouseholdModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("Manage"));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["AddingHouseholdMemberMode"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["AddingHouseholdMemberMode"], Is.True);
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(reloadedHouseholdModel));
+
+            var householdModel = (HouseholdModel) viewResult.Model;
+            Assert.That(householdModel, Is.Not.Null);
+            Assert.That(householdModel.HouseholdMembers, Is.Not.Null);
+            Assert.That(householdModel.HouseholdMembers, Is.Not.Empty);
+            Assert.That(householdModel.HouseholdMembers.Last(), Is.EqualTo(invalidMemberOfHouseholdModel));
+        }
+
+        /// <summary>
+        /// Tests that AddHouseholdMember with a valid household member model for adding a household member does not call GetHouseholdAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberWithValidMemberOfHouseholdModelDoesNotCallGetHouseholdAsyncOnHouseholdDataRepository()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, null)
+                .Create();
+
+            householdController.AddHouseholdMember(validMemberOfHouseholdModel);
+
+            _householdDataRepositoryMock.AssertWasNotCalled(m => m.GetHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that AddHouseholdMember with a valid household member model for adding a household member calls AddHouseholdMemberToHouseholdAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberWithValidMemberOfHouseholdModelCallsAddHouseholdMemberToHouseholdAsyncOnHouseholdDataRepository()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+            Assert.That(householdController.User, Is.Not.Null);
+            Assert.That(householdController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, null)
+                .Create();
+
+            householdController.AddHouseholdMember(validMemberOfHouseholdModel);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.AddHouseholdMemberToHouseholdAsync(Arg<IIdentity>.Is.Equal(householdController.User.Identity), Arg<MemberOfHouseholdModel>.Is.Equal(validMemberOfHouseholdModel), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that AddHouseholdMember with a valid household member model for adding a household member returns a RedirectToRouteResult to manage the household.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberWithValidMemberOfHouseholdModelReturnsRedirectToRouteResultToManage()
+        {
+            var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, null)
+                .Create();
+
+            var householdController = CreateHouseholdController(addedMemberOfHousehold: validMemberOfHouseholdModel);
+            Assert.That(householdController, Is.Not.Null);
+
+            var result = householdController.AddHouseholdMember(validMemberOfHouseholdModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
+
+            var redirectToRouteResult = (RedirectToRouteResult) result;
+            Assert.That(redirectToRouteResult, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.Count, Is.EqualTo(3));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0), Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Key, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Key, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Key, Is.EqualTo("householdIdentifier"));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Value, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Value, Is.EqualTo(validMemberOfHouseholdModel.HouseholdIdentifier));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1), Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Key, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Key, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Key, Is.EqualTo("action"));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Value, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Value, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Value, Is.EqualTo("Manage"));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2), Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Key, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Key, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Key, Is.EqualTo("controller"));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Value, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Value, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Value, Is.EqualTo("Household"));
+        }
+
+        /// <summary>
+        /// Tests that RemoveHouseholdMember with a household member model for removing a household member throws an ArgumentNullException when the household member model for removing a household member is null.
+        /// </summary>
+        [Test]
+        public void TestThatRemoveHouseholdMemberWithMemberOfHouseholdModelThrowsArgumentNullExceptionWhenMemberOfHouseholdModelIsNull()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+
+            const MemberOfHouseholdModel memberOfHouseholdModel = null;
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdController.RemoveHouseholdMember(memberOfHouseholdModel));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("memberOfHouseholdModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that RemoveHouseholdMember with a valid household member model for removing a household member calls RemoveHouseholdMemberFromHouseholdAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatRemoveHouseholdMemberWithValidMemberOfHouseholdModelCallsRemoveHouseholdMemberFromHouseholdAsyncOnHouseholdDataRepository()
+        {
+            var householdController = CreateHouseholdController();
+            Assert.That(householdController, Is.Not.Null);
+            Assert.That(householdController.User, Is.Not.Null);
+            Assert.That(householdController.User.Identity, Is.Not.Null);
+
+            var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, null)
+                .Create();
+
+            householdController.RemoveHouseholdMember(validMemberOfHouseholdModel);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.RemoveHouseholdMemberFromHouseholdAsync(Arg<IIdentity>.Is.Equal(householdController.User.Identity), Arg<MemberOfHouseholdModel>.Is.Equal(validMemberOfHouseholdModel)));
+        }
+
+        /// <summary>
+        /// Tests that RemoveHouseholdMember with a valid household member model for removing a household member returns a RedirectToRouteResult to manage the household.
+        /// </summary>
+        [Test]
+        public void TestThatRemoveHouseholdMemberWithValidMemberOfHouseholdModelReturnsRedirectToRouteResultToManage()
+        {
+            var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.HouseholdIdentifier, Guid.NewGuid())
+                .With(m => m.MailAddress, null)
+                .Create();
+
+            var householdController = CreateHouseholdController(removedMemberOfHousehold: validMemberOfHouseholdModel);
+            Assert.That(householdController, Is.Not.Null);
+
+            var result = householdController.RemoveHouseholdMember(validMemberOfHouseholdModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
+
+            var redirectToRouteResult = (RedirectToRouteResult) result;
+            Assert.That(redirectToRouteResult, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.Count, Is.EqualTo(3));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0), Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Key, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Key, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Key, Is.EqualTo("householdIdentifier"));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Value, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(0).Value, Is.EqualTo(validMemberOfHouseholdModel.HouseholdIdentifier));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1), Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Key, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Key, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Key, Is.EqualTo("action"));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Value, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Value, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(1).Value, Is.EqualTo("Manage"));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2), Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Key, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Key, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Key, Is.EqualTo("controller"));
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Value, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Value, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ElementAt(2).Value, Is.EqualTo("Household"));
+        }
+
+        /// <summary>
         /// Creates a controller for a household for unit testing.
         /// </summary>
         /// <param name="household">Sets the model for the household which should be used.</param>
         /// <param name="householdGetterCallback">Sets a callback action which are executed when we get the household to use.</param>
         /// <param name="updatedHousehold">Sets the model for the updated household.</param>
+        /// <param name="addedMemberOfHousehold">Sets the model for the added household member.</param>
+        /// <param name="removedMemberOfHousehold">Sets the model for the removed household member.</param>
         /// <returns>Controller for a household for unit testing.</returns>
-        private HouseholdController CreateHouseholdController(HouseholdModel household = null, Action<object[]> householdGetterCallback = null, HouseholdModel updatedHousehold = null)
+        private HouseholdController CreateHouseholdController(HouseholdModel household = null, Action<object[]> householdGetterCallback = null, HouseholdModel updatedHousehold = null, MemberOfHouseholdModel addedMemberOfHousehold = null, MemberOfHouseholdModel removedMemberOfHousehold = null)
         {
             Func<HouseholdModel> householdGetter = () =>
             {
@@ -1035,6 +1335,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.UpdateHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything))
                 .Return(Task.Run(householdUpdater))
+                .Repeat.Any();
+            _householdDataRepositoryMock.Stub(m => m.AddHouseholdMemberToHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<MemberOfHouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything))
+                .Return(Task.Run(() => addedMemberOfHousehold ?? Fixture.Build<MemberOfHouseholdModel>().With(m => m.HouseholdIdentifier, Guid.NewGuid()).With(m => m.MailAddress, Fixture.Create<string>()).Create()))
+                .Repeat.Any();
+            _householdDataRepositoryMock.Stub(m => m.RemoveHouseholdMemberFromHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<MemberOfHouseholdModel>.Is.Anything))
+                .Return(Task.Run(() => removedMemberOfHousehold ?? Fixture.Build<MemberOfHouseholdModel>().With(m => m.HouseholdIdentifier, Guid.NewGuid()).With(m => m.MailAddress, Fixture.Create<string>()).Create()))
                 .Repeat.Any();
 
             var householdController = new HouseholdController(_householdDataRepositoryMock);

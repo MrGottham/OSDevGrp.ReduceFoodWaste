@@ -235,7 +235,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         }
 
         /// <summary>
-        /// Updates a given houshold for a given identity.
+        /// Updates a given household for a given identity.
         /// </summary>
         /// <param name="identity">Identity for which to update the given household.</param>
         /// <param name="householdModel">Model for the household to update.</param>
@@ -259,6 +259,72 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 
                 householdModel.Identifier = result.Identifier ?? default(Guid);
                 return householdModel;
+            };
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+        }
+
+        /// <summary>
+        /// Adds a given household member to a given household for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for which to add a given household member on a given household.</param>
+        /// <param name="memberOfHouseholdModel">Model for the household member to add.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Model for the added household member on the given household.</returns>
+        public Task<MemberOfHouseholdModel> AddHouseholdMemberToHouseholdAsync(IIdentity identity, MemberOfHouseholdModel memberOfHouseholdModel, CultureInfo cultureInfo)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (memberOfHouseholdModel == null)
+            {
+                throw new ArgumentNullException("memberOfHouseholdModel");
+            }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException("cultureInfo");
+            }
+
+            Func<HouseholdDataServiceChannel, MemberOfHouseholdModel> callbackFunc = channel =>
+            {
+                var command = _householdDataConverter.Convert<MemberOfHouseholdModel, HouseholdAddHouseholdMemberCommand>(memberOfHouseholdModel);
+                command.TranslationInfoIdentifier = GetTranslationInfoIdentifier(channel, cultureInfo);
+
+                var result = channel.HouseholdAddHouseholdMember(command);
+
+                memberOfHouseholdModel.HouseholdMemberIdentifier = result.Identifier ?? default(Guid);
+                return memberOfHouseholdModel;
+            };
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+        }
+
+        /// <summary>
+        /// Removes a given household member from a given household for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for which to remove a given household member from a given household.</param>
+        /// <param name="memberOfHouseholdModel">Model for the household member to remove.</param>
+        /// <returns>Model for the removed household member on the given household.</returns>
+        public Task<MemberOfHouseholdModel> RemoveHouseholdMemberFromHouseholdAsync(IIdentity identity, MemberOfHouseholdModel memberOfHouseholdModel)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (memberOfHouseholdModel == null)
+            {
+                throw new ArgumentNullException("memberOfHouseholdModel");
+            }
+
+            Func<HouseholdDataServiceChannel, MemberOfHouseholdModel> callbackFunc = channel =>
+            {
+                var command = _householdDataConverter.Convert<MemberOfHouseholdModel, HouseholdRemoveHouseholdMemberCommand>(memberOfHouseholdModel);
+
+                var result = channel.HouseholdRemoveHouseholdMember(command);
+
+                memberOfHouseholdModel.HouseholdMemberIdentifier = result.Identifier ?? default(Guid);
+                return memberOfHouseholdModel;
             };
 
             return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));

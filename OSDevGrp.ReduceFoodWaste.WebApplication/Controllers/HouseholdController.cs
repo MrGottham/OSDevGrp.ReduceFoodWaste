@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
@@ -198,12 +200,75 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// Adds a household member to a given household.
         /// </summary>
         /// <param name="memberOfHouseholdModel">Model for the household member who should be added to the household.</param>
-        /// <returns>Redirect to the management of the household on which the household member was added</returns>
+        /// <returns>Redirect to the management of the household on which the household member was added.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddHouseholdMember(MemberOfHouseholdModel memberOfHouseholdModel)
         {
-            throw new NotImplementedException();
+            if (memberOfHouseholdModel == null)
+            {
+                throw new ArgumentNullException("memberOfHouseholdModel");
+            }
+
+            try
+            {
+                if (ModelState.IsValid == false)
+                {
+                    var householdModel = GetHouseholdModel(memberOfHouseholdModel.HouseholdIdentifier);
+
+                    IList<MemberOfHouseholdModel> householdMembers = householdModel.HouseholdMembers == null ? new List<MemberOfHouseholdModel>() : householdModel.HouseholdMembers.ToList();
+                    householdMembers.Add(memberOfHouseholdModel);
+                    householdModel.HouseholdMembers = householdMembers;
+
+                    ViewBag.AddingHouseholdMemberMode = true;
+
+                    return View("Manage", householdModel);
+                }
+
+                var task = _householdDataRepository.AddHouseholdMemberToHouseholdAsync(User.Identity, memberOfHouseholdModel, Thread.CurrentThread.CurrentUICulture);
+                task.Wait();
+
+                return RedirectToAction("Manage", "Household", new {householdIdentifier = task.Result.HouseholdIdentifier});
+            }
+            catch (AggregateException ex)
+            {
+                return RedirectToAction("Manage", "Household", new {householdIdentifier = memberOfHouseholdModel.HouseholdIdentifier, errorMessage = ex.ToReduceFoodWasteException().Message});
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Manage", "Household", new {householdIdentifier = memberOfHouseholdModel.HouseholdIdentifier, errorMessage = ex.Message});
+            }
+        }
+
+        /// <summary>
+        /// Removes a household member from a given household.
+        /// </summary>
+        /// <param name="memberOfHouseholdModel">Model for the household member who should be removed to the household.</param>
+        /// <returns>Redirect to the management of the household on which the household member was removed.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveHouseholdMember(MemberOfHouseholdModel memberOfHouseholdModel)
+        {
+            if (memberOfHouseholdModel == null)
+            {
+                throw new ArgumentNullException("memberOfHouseholdModel");
+            }
+
+            try
+            {
+                var task = _householdDataRepository.RemoveHouseholdMemberFromHouseholdAsync(User.Identity, memberOfHouseholdModel);
+                task.Wait();
+
+                return RedirectToAction("Manage", "Household", new { householdIdentifier = task.Result.HouseholdIdentifier });
+            }
+            catch (AggregateException ex)
+            {
+                return RedirectToAction("Manage", "Household", new { householdIdentifier = memberOfHouseholdModel.HouseholdIdentifier, errorMessage = ex.ToReduceFoodWasteException().Message });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Manage", "Household", new { householdIdentifier = memberOfHouseholdModel.HouseholdIdentifier, errorMessage = ex.Message });
+            }
         }
 
         /// <summary>

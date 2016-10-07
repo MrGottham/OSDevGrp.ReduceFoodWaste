@@ -58,14 +58,31 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         Task<HouseholdModel> CreateHouseholdAsync(IIdentity identity, HouseholdModel householdModel, CultureInfo cultureInfo);
 
         /// <summary>
-        /// Updates a given houshold for a given identity.
+        /// Updates a given household for a given identity.
         /// </summary>
         /// <param name="identity">Identity for which to update the given household.</param>
         /// <param name="householdModel">Model for the household to update.</param>
         /// <returns>Model for the updated household.</returns>
         Task<HouseholdModel> UpdateHouseholdAsync(IIdentity identity, HouseholdModel householdModel);
 
-            /// <summary>
+        /// <summary>
+        /// Adds a given household member to a given household for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for which to add a given household member on a given household.</param>
+        /// <param name="memberOfHouseholdModel">Model for the household member to add.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Model for the added household member on the given household.</returns>
+        Task<MemberOfHouseholdModel> AddHouseholdMemberToHouseholdAsync(IIdentity identity, MemberOfHouseholdModel memberOfHouseholdModel, CultureInfo cultureInfo);
+
+        /// <summary>
+        /// Removes a given household member from a given household for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for which to remove a given household member from a given household.</param>
+        /// <param name="memberOfHouseholdModel">Model for the household member to remove.</param>
+        /// <returns>Model for the removed household member on the given household.</returns>
+        Task<MemberOfHouseholdModel> RemoveHouseholdMemberFromHouseholdAsync(IIdentity identity, MemberOfHouseholdModel memberOfHouseholdModel);
+
+        /// <summary>
         /// Activates the household member account for a given identity.
         /// </summary>
         /// <param name="identity">Identity whos household member account should be activated.</param>

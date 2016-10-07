@@ -24,7 +24,7 @@
                                 @Html.AntiForgeryToken()
                                 @Html.Hidden("provider", externalLogin.Provider)
                                 @Html.Hidden("providerUserId", externalLogin.ProviderUserId)
-                                <input class="btn btn-danger" type="submit" value="Remove" @(!externalLogin.Removable ? "disabled" : "") title="@string.Format(Texts.RemoveCredentialFromYourAccount, externalLogin.ProviderDisplayName)" />
+                                <input class="btn btn-danger" type="submit" value="@Texts.Remove" @(!externalLogin.Removable ? "disabled" : "") title="@string.Format(Texts.RemoveCredentialFromYourAccount, externalLogin.ProviderDisplayName)" />
                             }
                         }
                     </td>

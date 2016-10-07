@@ -296,6 +296,106 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that AddHouseholdMemberToHouseholdAsync throws an ArgumentNullException when the identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberToHouseholdAsyncThrowsArgumentNullExceptionWhenIdentityIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var memberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.MailAddress, Fixture.Create<string>())
+                .Create();
+            Assert.That(memberOfHouseholdModel, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.AddHouseholdMemberToHouseholdAsync(null, memberOfHouseholdModel, Thread.CurrentThread.CurrentUICulture));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that AddHouseholdMemberToHouseholdAsync throws an ArgumentNullException when the model for the household member to add is null.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberToHouseholdAsyncThrowsArgumentNullExceptionWhenMemberOfHouseholdModelIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.AddHouseholdMemberToHouseholdAsync(MockRepository.GenerateMock<IIdentity>(), null, Thread.CurrentThread.CurrentUICulture));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("memberOfHouseholdModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that AddHouseholdMemberToHouseholdAsync throws an ArgumentNullException when the culture informations which should be used for translation is null.
+        /// </summary>
+        [Test]
+        public void TestThatAddHouseholdMemberToHouseholdAsyncThrowsArgumentNullExceptionWhenCultureInfoIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var memberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.MailAddress, Fixture.Create<string>())
+                .Create();
+            Assert.That(memberOfHouseholdModel, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.AddHouseholdMemberToHouseholdAsync(MockRepository.GenerateMock<IIdentity>(), memberOfHouseholdModel, null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("cultureInfo"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that RemoveHouseholdMemberFromHouseholdAsync throws an ArgumentNullException when the identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatRemoveHouseholdMemberFromHouseholdAsyncThrowsArgumentNullExceptionWhenIdentityIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var memberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                .With(m => m.MailAddress, Fixture.Create<string>())
+                .Create();
+            Assert.That(memberOfHouseholdModel, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.RemoveHouseholdMemberFromHouseholdAsync(null, memberOfHouseholdModel));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that RemoveHouseholdMemberFromHouseholdAsync throws an ArgumentNullException when the model for the household member to add is null.
+        /// </summary>
+        [Test]
+        public void TestThatRemoveHouseholdMemberFromHouseholdAsyncThrowsArgumentNullExceptionWhenMemberOfHouseholdModelIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.RemoveHouseholdMemberFromHouseholdAsync(MockRepository.GenerateMock<IIdentity>(), null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("memberOfHouseholdModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
         /// Tests that CreateHouseholdAsync throws an ArgumentNullException when the culture informations which should be used for translation is null.
         /// </summary>
         [Test]

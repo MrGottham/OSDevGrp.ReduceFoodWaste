@@ -21,7 +21,7 @@
     {
         <p class="message-error">@ViewBag.ErrorMessage</p>
     }
-    @if (ViewBag.EditMode == null || ViewBag.EditMode == false)
+    @if ((ViewBag.EditMode == null || ViewBag.EditMode == false) && (ViewBag.AddingHouseholdMemberMode == null || ViewBag.AddingHouseholdMemberMode == false))
     {
         <div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute(string.Format("~/Household/HouseholdInformation?householdIdentifier={0}", Model.Identifier))">
             <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
