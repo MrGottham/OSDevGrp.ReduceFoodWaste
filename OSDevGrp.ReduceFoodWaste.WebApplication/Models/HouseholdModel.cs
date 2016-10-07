@@ -7,21 +7,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
     /// <summary>
     /// Model for a household.
     /// </summary>
-    public class HouseholdModel
+    public class HouseholdModel : HouseholdIdentificationModel
     {
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the identifier for the household.
-        /// </summary>
-        public Guid Identifier { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name for the household.
-        /// </summary>
-        [RequiredLocalized]
-        [MaxLengthLocalized(64)]
-        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description for the household.

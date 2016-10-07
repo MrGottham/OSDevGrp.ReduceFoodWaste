@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
@@ -38,6 +39,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
         /// <returns>Model for the household member account for the given identity.</returns>
         Task<HouseholdMemberModel> GetHouseholdMemberAsync(IIdentity identity, CultureInfo cultureInfo);
+
+        /// <summary>
+        /// Gets the collection of household identifications for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for which to get the collection of household identifications.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Collection of household identifications for the given identity.</returns>
+        Task<IEnumerable<HouseholdIdentificationModel>> GetHouseholdIdentificationCollectionAsync(IIdentity identity, CultureInfo cultureInfo);
 
         /// <summary>
         /// Get a given household for a given identity.

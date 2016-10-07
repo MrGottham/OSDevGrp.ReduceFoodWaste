@@ -243,6 +243,7 @@
     <Compile Include="Controllers\HouseholdController.cs" />
     <Compile Include="Controllers\HouseholdMemberController.cs" />
     <Compile Include="Controllers\LanguageController.cs" />
+    <Compile Include="Controllers\SidebarController.cs" />
     <Compile Include="Filters\CookieConsentAttribute.cs" />
     <Compile Include="Filters\CultureAttribute.cs" />
     <Compile Include="Filters\HandleErrorAttribute.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="Infrastructure\Security\Providers\IClaimValueProvider.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\DashboardModel.cs" />
+    <Compile Include="Models\HouseholdIdentificationModel.cs" />
     <Compile Include="Models\HouseholdMemberModel.cs" />
     <Compile Include="Models\HouseholdModel.cs" />
     <Compile Include="Models\MemberOfHouseholdModel.cs" />
@@ -481,6 +483,7 @@
     <Content Include="Views\Household\_HouseholdBasicInformation.cshtml" />
     <Content Include="Views\Household\Edit.cshtml" />
     <Content Include="Views\Household\_AddHouseholdMember.cshtml" />
+    <Content Include="Views\Shared\_HouseholdIdentificationCollection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

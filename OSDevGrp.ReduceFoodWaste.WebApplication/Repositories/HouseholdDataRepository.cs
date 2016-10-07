@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Caching;
+using System.Security.Policy;
 using System.Security.Principal;
 using System.ServiceModel;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         #region Private constants
 
         private const string HouseholdDataServiceEndpointConfigurationName = "HouseholdDataService";
+        private const string HouseholdIdentificationCollectionCacheName = "OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdIdentificationCollectionCache";
         private const string TranslationInfoIdentifierCacheName = "OSDevGrp.ReduceFoodWaste.WebApplication.TranslationInfoIdentifierCache";
         private const string PrivacyPolicyModelCacheName = "OSDevGrp.ReduceFoodWaste.WebApplication.PrivacyPolicyModelCache";
 
@@ -146,6 +148,46 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             }
 
             Func<HouseholdDataServiceChannel, HouseholdMemberModel> callbackFunc = channel => GetHouseholdMember(channel, identity, cultureInfo);
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+        }
+
+        /// <summary>
+        /// Gets the collection of household identifications for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for which to get the collection of household identifications.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Collection of household identifications for the given identity.</returns>
+        public Task<IEnumerable<HouseholdIdentificationModel>> GetHouseholdIdentificationCollectionAsync(IIdentity identity, CultureInfo cultureInfo)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException("cultureInfo");
+            }
+
+            Func<HouseholdDataServiceChannel, IEnumerable<HouseholdIdentificationModel>> callbackFunc = channel =>
+            {
+                var householdIdentificationCollection = GetHouseholdIdentificationCollection(identity);
+                if (householdIdentificationCollection != null)
+                {
+                    return householdIdentificationCollection;
+                }
+
+                var householdMember = GetHouseholdMember(channel, identity, cultureInfo);
+                if (householdMember.Households == null || householdMember.Households.Any() == false)
+                {
+                    return new List<HouseholdIdentificationModel>();
+                }
+
+                householdIdentificationCollection = householdMember.Households.Cast<HouseholdIdentificationModel>().ToList();
+                StoreHouseholdIdentificationCollection(identity, householdIdentificationCollection);
+
+                return householdIdentificationCollection;
+            };
 
             return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
         }
@@ -635,6 +677,58 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             channelFactory.Credentials.UserName.UserName = userNamePasswordCredential.UserName;
             channelFactory.Credentials.UserName.Password = userNamePasswordCredential.Password;
             return channelFactory;
+        }
+
+        /// <summary>
+        /// Gets the household identification collection for a given identity from the cache.
+        /// </summary>
+        /// <param name="identity">Identity which for which to get the household identification collection from the cache..</param>
+        /// <returns>Household identification collection for a given identity from the cache.</returns>
+        private IList<HouseholdIdentificationModel> GetHouseholdIdentificationCollection(IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+
+            var householdIdentificationCollectionCacheName = GetHouseholdIdentificationCollectionCacheName(identity);
+            return _objectCache.Get(householdIdentificationCollectionCacheName) as IList<HouseholdIdentificationModel>;
+        }
+
+        /// <summary>
+        /// Store the household identification collection for a given identity in the cache.
+        /// </summary>
+        /// <param name="identity">Identity which for which to store the household identification collection in the cache.</param>
+        /// <param name="householdIdentificationCollection">The household identification collection to store in the cache.</param>
+        private void StoreHouseholdIdentificationCollection(IIdentity identity, IList<HouseholdIdentificationModel> householdIdentificationCollection)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+            if (householdIdentificationCollection == null)
+            {
+                throw new ArgumentNullException("householdIdentificationCollection");
+            }
+
+            var householdIdentificationCollectionCacheName = GetHouseholdIdentificationCollectionCacheName(identity);
+            _objectCache.Set(householdIdentificationCollectionCacheName, householdIdentificationCollection, DateTimeOffset.Now.AddMinutes(15));
+        }
+
+        /// <summary>
+        /// Gets the cache name for the household identification collection for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity which should be used in the cache name.</param>
+        /// <returns>Cache name for the household identification collection for a given identity.</returns>
+        private string GetHouseholdIdentificationCollectionCacheName(IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+
+            var userNamePasswordCredential = _credentialsProvider.CreateUserNamePasswordCredential(identity);
+            return string.Format("{0}:{1}", HouseholdIdentificationCollectionCacheName, userNamePasswordCredential.UserName.GetHashCode());
         }
 
         #endregion
