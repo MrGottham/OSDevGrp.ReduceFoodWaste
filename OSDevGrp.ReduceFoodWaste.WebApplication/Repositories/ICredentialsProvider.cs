@@ -13,5 +13,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// <param name="identity">Identity for which to create a user name and password credential.</param>
         /// <returns>User name and password credential for the given identity.</returns>
         UserNamePasswordCredential CreateUserNamePasswordCredential(IIdentity identity);
+
+        /// <summary>
+        /// Calculates and returns a hash code for a given user name and password credential.
+        /// </summary>
+        /// <param name="userNamePasswordCredential">User name and password credential on which to calculate the hase code.</param>
+        /// <returns>Hash code for a given user name and password credential.</returns>
+        string CalculateHashForCredential(UserNamePasswordCredential userNamePasswordCredential);
     }
 }

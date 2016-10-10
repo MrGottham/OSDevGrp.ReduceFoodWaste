@@ -164,6 +164,44 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that CalculateHashForCredential throws an ArgumentNullException when the user name and password credential on which to calculate the hase code is null.
+        /// </summary>
+        [Test]
+        public void TestThatCalculateHashForCredentialThrowsArgumentNullExceptionWhenUserNamePasswordCredentialIsNull()
+        {
+            var credentialsProvider = CreateCredentialsProvider();
+            Assert.That(credentialsProvider, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => credentialsProvider.CalculateHashForCredential(null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("userNamePasswordCredential"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that CalculateHashForCredential return hash code for the user name and password credential.
+        /// </summary>
+        [Test]
+        public void TestThatCalculateHashForCredentialReturnsHashCodeForUserNamePasswordCredential()
+        {
+            var userName = Fixture.Create<string>();
+            var password = Fixture.Create<string>();
+
+            var credentialsProvider = CreateCredentialsProvider();
+            Assert.That(credentialsProvider, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => credentialsProvider.CalculateHashForCredential(null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("userNamePasswordCredential"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+
+        /// <summary>
         /// Creates a provider which can creates credentials for unit testing.
         /// </summary>
         /// <param name="hasMailAddress">Sets whether a mail address can be resolved from the identity.</param>

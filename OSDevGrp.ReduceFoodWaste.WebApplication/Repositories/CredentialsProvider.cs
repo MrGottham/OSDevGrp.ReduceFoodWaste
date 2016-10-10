@@ -64,6 +64,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             return new UserNamePasswordCredential(mailAddress, userNameIdentifier);
         }
 
+        /// <summary>
+        /// Calculates and returns a hash code for a given user name and password credential.
+        /// </summary>
+        /// <param name="userNamePasswordCredential">User name and password credential on which to calculate the hase code.</param>
+        /// <returns>Hash code for a given user name and password credential.</returns>
+        public string CalculateHashForCredential(UserNamePasswordCredential userNamePasswordCredential)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }
