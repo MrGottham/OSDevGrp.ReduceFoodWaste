@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Security.Principal;
+using System.Text;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
@@ -71,7 +73,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// <returns>Hash code for a given user name and password credential.</returns>
         public string CalculateHashForCredential(UserNamePasswordCredential userNamePasswordCredential)
         {
-            throw new NotImplementedException();
+            if (userNamePasswordCredential == null)
+            {
+                throw new ArgumentNullException("userNamePasswordCredential");
+            }
+
+            using (var md5 = MD5.Create())
+            {
+                return Convert.ToBase64String(md5.ComputeHash(Encoding.Default.GetBytes(string.Format("{0}:{1}", userNamePasswordCredential.UserName, userNamePasswordCredential.Password))));
+            }
         }
 
         #endregion

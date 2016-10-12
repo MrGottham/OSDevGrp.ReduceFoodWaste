@@ -184,22 +184,28 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         /// Tests that CalculateHashForCredential return hash code for the user name and password credential.
         /// </summary>
         [Test]
-        public void TestThatCalculateHashForCredentialReturnsHashCodeForUserNamePasswordCredential()
+        [TestCase("mrgottham@gmail.com", "P@ssw0rd", "35nQZ7p3OFIpz9UTrdXskw==")]
+        [TestCase("ole.sorensen@osdevgrp.dk", "qwerty123", "QQo1zpOm/4yauBwHgJyUmw==")]
+        [TestCase("info@osdevgrp.dk", "321qwerty", "ufKzuxdThDU4yaX/1bmtIA==")]
+        public void TestThatCalculateHashForCredentialReturnsHashCodeForUserNamePasswordCredential(string userName, string password, string expectedHashCode)
         {
-            var userName = Fixture.Create<string>();
-            var password = Fixture.Create<string>();
-
             var credentialsProvider = CreateCredentialsProvider();
             Assert.That(credentialsProvider, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => credentialsProvider.CalculateHashForCredential(null));
-            Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.Not.Empty);
-            Assert.That(exception.ParamName, Is.EqualTo("userNamePasswordCredential"));
-            Assert.That(exception.InnerException, Is.Null);
-        }
+            var userNamePasswordCredential = new UserNamePasswordCredential(userName, password);
+            Assert.That(userNamePasswordCredential, Is.Not.Null);
+            Assert.That(userNamePasswordCredential.UserName, Is.Not.Null);
+            Assert.That(userNamePasswordCredential.UserName, Is.Not.Empty);
+            Assert.That(userNamePasswordCredential.UserName, Is.EqualTo(userName));
+            Assert.That(userNamePasswordCredential.Password, Is.Not.Null);
+            Assert.That(userNamePasswordCredential.Password, Is.Not.Empty);
+            Assert.That(userNamePasswordCredential.Password, Is.EqualTo(password));
 
+            var result = credentialsProvider.CalculateHashForCredential(userNamePasswordCredential);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.Not.Empty);
+            Assert.That(result, Is.EqualTo(expectedHashCode));
+        }
 
         /// <summary>
         /// Creates a provider which can creates credentials for unit testing.

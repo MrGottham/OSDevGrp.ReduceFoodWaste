@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Caching;
-using System.Security.Policy;
 using System.Security.Principal;
 using System.ServiceModel;
 using System.Threading.Tasks;
@@ -269,6 +268,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 
                 var result = channel.HouseholdAdd(command);
 
+                ClearHouseholdIdentificationCollection(identity);
+
                 householdModel.Identifier = result.Identifier ?? default(Guid);
                 return householdModel;
             };
@@ -298,6 +299,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 var command = _householdDataConverter.Convert<HouseholdModel, HouseholdUpdateCommand>(householdModel);
 
                 var result = channel.HouseholdUpdate(command);
+
+                ClearHouseholdIdentificationCollection(identity);
 
                 householdModel.Identifier = result.Identifier ?? default(Guid);
                 return householdModel;
@@ -716,6 +719,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         }
 
         /// <summary>
+        /// Clears the household identification collection for a given identity in the cache.
+        /// </summary>
+        /// <param name="identity">Identity which for which to clear the household identification collection in the cache.</param>
+        private void ClearHouseholdIdentificationCollection(IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+
+            var householdIdentificationCollectionCacheName = GetHouseholdIdentificationCollectionCacheName(identity);
+            if (_objectCache.Contains(householdIdentificationCollectionCacheName) == false)
+            {
+                return;
+            }
+            _objectCache.Remove(householdIdentificationCollectionCacheName);
+        }
+
+        /// <summary>
         /// Gets the cache name for the household identification collection for a given identity.
         /// </summary>
         /// <param name="identity">Identity which should be used in the cache name.</param>
@@ -728,7 +750,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             }
 
             var userNamePasswordCredential = _credentialsProvider.CreateUserNamePasswordCredential(identity);
-            return string.Format("{0}:{1}", HouseholdIdentificationCollectionCacheName, userNamePasswordCredential.UserName.GetHashCode());
+            return string.Format("{0}:{1}", HouseholdIdentificationCollectionCacheName, _credentialsProvider.CalculateHashForCredential(userNamePasswordCredential));
         }
 
         #endregion
