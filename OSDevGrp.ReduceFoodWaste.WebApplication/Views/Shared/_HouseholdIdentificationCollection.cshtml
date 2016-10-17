@@ -1,1 +1,12 @@
 ﻿@model IEnumerable<OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdIdentificationModel>
+
+@if (Model.Any())
+{
+    <hr/>
+    <ul class="nav nav-sidebar">
+        @foreach (var householdIdentificationModel in Model)
+        {
+            <li class="nav-item active">@Html.ActionLink(householdIdentificationModel.Name, "Manage", "Household", new {householdIdentifier = householdIdentificationModel.Identifier}, new {@class = "nav-link"})</li>
+        }
+    </ul>
+}
