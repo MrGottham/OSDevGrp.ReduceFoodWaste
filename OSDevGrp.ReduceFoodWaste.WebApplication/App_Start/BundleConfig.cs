@@ -42,6 +42,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             bundles.Add(new StyleBundle("~/Content/bootstrap/css").Include(
                 "~/Content/tether/tether.css",
                 "~/Content/tether/tether.min.css",
+                "~/Content/bootstrap-grid.css",
+                "~/Content/bootstrap-grid.min.css",
                 "~/Content/bootstrap.css",
                 "~/Content/bootstrap.min.css"));
 
