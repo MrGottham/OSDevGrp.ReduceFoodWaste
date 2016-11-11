@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" targetNamespace="urn:osdevgrp:foodwaste:1.0.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://mother.osdevgrp.dk/osintranet/foodwastehouseholddataservice.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://mother.osdevgrp.dk/osintranet/foodwastehouseholddataservice.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:element name="HouseholdDataGet">
     <xs:complexType>
       <xs:sequence>
@@ -306,7 +307,10 @@
       <xs:extension xmlns:q53="urn:osdevgrp:foodwaste:1.0.0" base="q53:HouseholdMemberIdentificationView">
         <xs:sequence>
           <xs:element minOccurs="0" name="ActivationTime" nillable="true" type="xs:dateTime" />
+          <xs:element name="CanRenewMembership" type="xs:boolean" />
+          <xs:element name="CanUpgradeMembership" type="xs:boolean" />
           <xs:element name="CreationTime" type="xs:dateTime" />
+          <xs:element name="HasReachedHouseholdLimit" type="xs:boolean" />
           <xs:element name="Households" nillable="true" type="q53:ArrayOfHouseholdIdentificationView" />
           <xs:element name="IsActivated" type="xs:boolean" />
           <xs:element name="IsPrivacyPolictyAccepted" type="xs:boolean" />
@@ -314,35 +318,36 @@
           <xs:element minOccurs="0" name="MembershipExpireTime" nillable="true" type="xs:dateTime" />
           <xs:element name="Payments" nillable="true" type="q53:ArrayOfPaymentView" />
           <xs:element minOccurs="0" name="PrivacyPolicyAcceptedTime" nillable="true" type="xs:dateTime" />
+          <xs:element xmlns:q54="http://schemas.microsoft.com/2003/10/Serialization/Arrays" name="UpgradeableMemberships" nillable="true" type="q54:ArrayOfstring" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q54="urn:osdevgrp:foodwaste:1.0.0" name="HouseholdMemberView" nillable="true" type="q54:HouseholdMemberView" />
+  <xs:element xmlns:q55="urn:osdevgrp:foodwaste:1.0.0" name="HouseholdMemberView" nillable="true" type="q55:HouseholdMemberView" />
   <xs:complexType name="ArrayOfHouseholdIdentificationView">
     <xs:sequence>
-      <xs:element xmlns:q55="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="HouseholdIdentificationView" nillable="true" type="q55:HouseholdIdentificationView" />
+      <xs:element xmlns:q56="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="HouseholdIdentificationView" nillable="true" type="q56:HouseholdIdentificationView" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q56="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfHouseholdIdentificationView" nillable="true" type="q56:ArrayOfHouseholdIdentificationView" />
+  <xs:element xmlns:q57="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfHouseholdIdentificationView" nillable="true" type="q57:ArrayOfHouseholdIdentificationView" />
   <xs:complexType name="ArrayOfPaymentView">
     <xs:sequence>
-      <xs:element xmlns:q57="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="PaymentView" nillable="true" type="q57:PaymentView" />
+      <xs:element xmlns:q58="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="PaymentView" nillable="true" type="q58:PaymentView" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q58="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfPaymentView" nillable="true" type="q58:ArrayOfPaymentView" />
+  <xs:element xmlns:q59="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfPaymentView" nillable="true" type="q59:ArrayOfPaymentView" />
   <xs:complexType name="PaymentView">
     <xs:sequence>
       <xs:element name="CreationTime" type="xs:dateTime" />
-      <xs:element xmlns:q59="urn:osdevgrp:foodwaste:1.0.0" name="DataProvider" nillable="true" type="q59:DataProviderView" />
+      <xs:element xmlns:q60="urn:osdevgrp:foodwaste:1.0.0" name="DataProvider" nillable="true" type="q60:DataProviderView" />
       <xs:element name="PaymentIdentifier" type="ser:guid" />
       <xs:element minOccurs="0" name="PaymentReceipt" nillable="true" type="xs:string" />
       <xs:element name="PaymentReference" nillable="true" type="xs:string" />
       <xs:element name="PaymentTime" type="xs:dateTime" />
-      <xs:element xmlns:q60="urn:osdevgrp:foodwaste:1.0.0" name="Stakeholder" nillable="true" type="q60:StakeholderView" />
+      <xs:element xmlns:q61="urn:osdevgrp:foodwaste:1.0.0" name="Stakeholder" nillable="true" type="q61:StakeholderView" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q61="urn:osdevgrp:foodwaste:1.0.0" name="PaymentView" nillable="true" type="q61:PaymentView" />
+  <xs:element xmlns:q62="urn:osdevgrp:foodwaste:1.0.0" name="PaymentView" nillable="true" type="q62:PaymentView" />
   <xs:complexType name="DataProviderView">
     <xs:sequence>
       <xs:element name="DataProviderIdentifier" type="ser:guid" />
@@ -350,7 +355,7 @@
       <xs:element name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q62="urn:osdevgrp:foodwaste:1.0.0" name="DataProviderView" nillable="true" type="q62:DataProviderView" />
+  <xs:element xmlns:q63="urn:osdevgrp:foodwaste:1.0.0" name="DataProviderView" nillable="true" type="q63:DataProviderView" />
   <xs:complexType name="StakeholderView">
     <xs:sequence>
       <xs:element name="MailAddress" nillable="true" type="xs:string" />
@@ -358,63 +363,63 @@
       <xs:element name="StakeholderType" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q63="urn:osdevgrp:foodwaste:1.0.0" name="StakeholderView" nillable="true" type="q63:StakeholderView" />
+  <xs:element xmlns:q64="urn:osdevgrp:foodwaste:1.0.0" name="StakeholderView" nillable="true" type="q64:StakeholderView" />
   <xs:element name="HouseholdMemberActivate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q64="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="command" nillable="true" type="q64:HouseholdMemberActivateCommand" />
+        <xs:element xmlns:q65="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="command" nillable="true" type="q65:HouseholdMemberActivateCommand" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="HouseholdMemberActivateCommand">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q65="urn:osdevgrp:foodwaste:1.0.0" base="q65:HouseholdMemberDataModificationCommandBase">
+      <xs:extension xmlns:q66="urn:osdevgrp:foodwaste:1.0.0" base="q66:HouseholdMemberDataModificationCommandBase">
         <xs:sequence>
           <xs:element name="ActivationCode" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q66="urn:osdevgrp:foodwaste:1.0.0" name="HouseholdMemberActivateCommand" nillable="true" type="q66:HouseholdMemberActivateCommand" />
+  <xs:element xmlns:q67="urn:osdevgrp:foodwaste:1.0.0" name="HouseholdMemberActivateCommand" nillable="true" type="q67:HouseholdMemberActivateCommand" />
   <xs:element name="HouseholdMemberActivateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q67="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="HouseholdMemberActivateResult" nillable="true" type="q67:ServiceReceipt" />
+        <xs:element xmlns:q68="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="HouseholdMemberActivateResult" nillable="true" type="q68:ServiceReceipt" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="HouseholdMemberAcceptPrivacyPolicy">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q68="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="command" nillable="true" type="q68:HouseholdMemberAcceptPrivacyPolicyCommand" />
+        <xs:element xmlns:q69="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="command" nillable="true" type="q69:HouseholdMemberAcceptPrivacyPolicyCommand" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="HouseholdMemberAcceptPrivacyPolicyCommand">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q69="urn:osdevgrp:foodwaste:1.0.0" base="q69:HouseholdMemberDataModificationCommandBase">
+      <xs:extension xmlns:q70="urn:osdevgrp:foodwaste:1.0.0" base="q70:HouseholdMemberDataModificationCommandBase">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q70="urn:osdevgrp:foodwaste:1.0.0" name="HouseholdMemberAcceptPrivacyPolicyCommand" nillable="true" type="q70:HouseholdMemberAcceptPrivacyPolicyCommand" />
+  <xs:element xmlns:q71="urn:osdevgrp:foodwaste:1.0.0" name="HouseholdMemberAcceptPrivacyPolicyCommand" nillable="true" type="q71:HouseholdMemberAcceptPrivacyPolicyCommand" />
   <xs:element name="HouseholdMemberAcceptPrivacyPolicyResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q71="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="HouseholdMemberAcceptPrivacyPolicyResult" nillable="true" type="q71:ServiceReceipt" />
+        <xs:element xmlns:q72="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="HouseholdMemberAcceptPrivacyPolicyResult" nillable="true" type="q72:ServiceReceipt" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="HouseholdMemberUpgradeMembership">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q72="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="command" nillable="true" type="q72:HouseholdMemberUpgradeMembershipCommand" />
+        <xs:element xmlns:q73="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="command" nillable="true" type="q73:HouseholdMemberUpgradeMembershipCommand" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="HouseholdMemberUpgradeMembershipCommand">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q73="urn:osdevgrp:foodwaste:1.0.0" base="q73:HouseholdMemberDataModificationCommandBase">
+      <xs:extension xmlns:q74="urn:osdevgrp:foodwaste:1.0.0" base="q74:HouseholdMemberDataModificationCommandBase">
         <xs:sequence>
           <xs:element name="DataProviderIdentifier" type="ser:guid" />
           <xs:element name="Membership" nillable="true" type="xs:string" />
@@ -425,18 +430,18 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q74="urn:osdevgrp:foodwaste:1.0.0" name="HouseholdMemberUpgradeMembershipCommand" nillable="true" type="q74:HouseholdMemberUpgradeMembershipCommand" />
+  <xs:element xmlns:q75="urn:osdevgrp:foodwaste:1.0.0" name="HouseholdMemberUpgradeMembershipCommand" nillable="true" type="q75:HouseholdMemberUpgradeMembershipCommand" />
   <xs:element name="HouseholdMemberUpgradeMembershipResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q75="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="HouseholdMemberUpgradeMembershipResult" nillable="true" type="q75:ServiceReceipt" />
+        <xs:element xmlns:q76="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="HouseholdMemberUpgradeMembershipResult" nillable="true" type="q76:ServiceReceipt" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="FoodItemCollectionGet">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q76="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="query" nillable="true" type="q76:FoodItemCollectionGetQuery" />
+        <xs:element xmlns:q77="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="query" nillable="true" type="q77:FoodItemCollectionGetQuery" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -446,63 +451,63 @@
       <xs:element name="TranslationInfoIdentifier" type="ser:guid" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q77="urn:osdevgrp:foodwaste:1.0.0" name="FoodItemCollectionGetQuery" nillable="true" type="q77:FoodItemCollectionGetQuery" />
+  <xs:element xmlns:q78="urn:osdevgrp:foodwaste:1.0.0" name="FoodItemCollectionGetQuery" nillable="true" type="q78:FoodItemCollectionGetQuery" />
   <xs:element name="FoodItemCollectionGetResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q78="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="FoodItemCollectionGetResult" nillable="true" type="q78:FoodItemCollectionView" />
+        <xs:element xmlns:q79="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="FoodItemCollectionGetResult" nillable="true" type="q79:FoodItemCollectionView" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="FoodItemCollectionView">
     <xs:sequence>
-      <xs:element xmlns:q79="urn:osdevgrp:foodwaste:1.0.0" name="DataProvider" nillable="true" type="q79:DataProviderView" />
-      <xs:element xmlns:q80="urn:osdevgrp:foodwaste:1.0.0" name="FoodItems" nillable="true" type="q80:ArrayOfFoodItemView" />
+      <xs:element xmlns:q80="urn:osdevgrp:foodwaste:1.0.0" name="DataProvider" nillable="true" type="q80:DataProviderView" />
+      <xs:element xmlns:q81="urn:osdevgrp:foodwaste:1.0.0" name="FoodItems" nillable="true" type="q81:ArrayOfFoodItemView" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q81="urn:osdevgrp:foodwaste:1.0.0" name="FoodItemCollectionView" nillable="true" type="q81:FoodItemCollectionView" />
+  <xs:element xmlns:q82="urn:osdevgrp:foodwaste:1.0.0" name="FoodItemCollectionView" nillable="true" type="q82:FoodItemCollectionView" />
   <xs:complexType name="ArrayOfFoodItemView">
     <xs:sequence>
-      <xs:element xmlns:q82="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="FoodItemView" nillable="true" type="q82:FoodItemView" />
+      <xs:element xmlns:q83="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="FoodItemView" nillable="true" type="q83:FoodItemView" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q83="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfFoodItemView" nillable="true" type="q83:ArrayOfFoodItemView" />
+  <xs:element xmlns:q84="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfFoodItemView" nillable="true" type="q84:ArrayOfFoodItemView" />
   <xs:complexType name="FoodItemView">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q84="urn:osdevgrp:foodwaste:1.0.0" base="q84:FoodItemIdentificationView">
+      <xs:extension xmlns:q85="urn:osdevgrp:foodwaste:1.0.0" base="q85:FoodItemIdentificationView">
         <xs:sequence>
-          <xs:element name="FoodGroups" nillable="true" type="q84:ArrayOfFoodGroupIdentificationView" />
+          <xs:element name="FoodGroups" nillable="true" type="q85:ArrayOfFoodGroupIdentificationView" />
           <xs:element name="IsActive" type="xs:boolean" />
-          <xs:element name="PrimaryFoodGroup" nillable="true" type="q84:FoodGroupIdentificationView" />
+          <xs:element name="PrimaryFoodGroup" nillable="true" type="q85:FoodGroupIdentificationView" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q85="urn:osdevgrp:foodwaste:1.0.0" name="FoodItemView" nillable="true" type="q85:FoodItemView" />
+  <xs:element xmlns:q86="urn:osdevgrp:foodwaste:1.0.0" name="FoodItemView" nillable="true" type="q86:FoodItemView" />
   <xs:complexType name="FoodItemIdentificationView">
     <xs:sequence>
       <xs:element name="FoodItemIdentifier" type="ser:guid" />
       <xs:element name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q86="urn:osdevgrp:foodwaste:1.0.0" name="FoodItemIdentificationView" nillable="true" type="q86:FoodItemIdentificationView" />
+  <xs:element xmlns:q87="urn:osdevgrp:foodwaste:1.0.0" name="FoodItemIdentificationView" nillable="true" type="q87:FoodItemIdentificationView" />
   <xs:complexType name="ArrayOfFoodGroupIdentificationView">
     <xs:sequence>
-      <xs:element xmlns:q87="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="FoodGroupIdentificationView" nillable="true" type="q87:FoodGroupIdentificationView" />
+      <xs:element xmlns:q88="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="FoodGroupIdentificationView" nillable="true" type="q88:FoodGroupIdentificationView" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q88="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfFoodGroupIdentificationView" nillable="true" type="q88:ArrayOfFoodGroupIdentificationView" />
+  <xs:element xmlns:q89="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfFoodGroupIdentificationView" nillable="true" type="q89:ArrayOfFoodGroupIdentificationView" />
   <xs:complexType name="FoodGroupIdentificationView">
     <xs:sequence>
       <xs:element name="FoodGroupIdentifier" type="ser:guid" />
       <xs:element name="Name" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q89="urn:osdevgrp:foodwaste:1.0.0" name="FoodGroupIdentificationView" nillable="true" type="q89:FoodGroupIdentificationView" />
+  <xs:element xmlns:q90="urn:osdevgrp:foodwaste:1.0.0" name="FoodGroupIdentificationView" nillable="true" type="q90:FoodGroupIdentificationView" />
   <xs:element name="FoodGroupTreeGet">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q90="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="query" nillable="true" type="q90:FoodGroupTreeGetQuery" />
+        <xs:element xmlns:q91="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="query" nillable="true" type="q91:FoodGroupTreeGetQuery" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -511,64 +516,64 @@
       <xs:element name="TranslationInfoIdentifier" type="ser:guid" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q91="urn:osdevgrp:foodwaste:1.0.0" name="FoodGroupTreeGetQuery" nillable="true" type="q91:FoodGroupTreeGetQuery" />
+  <xs:element xmlns:q92="urn:osdevgrp:foodwaste:1.0.0" name="FoodGroupTreeGetQuery" nillable="true" type="q92:FoodGroupTreeGetQuery" />
   <xs:element name="FoodGroupTreeGetResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q92="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="FoodGroupTreeGetResult" nillable="true" type="q92:FoodGroupTreeView" />
+        <xs:element xmlns:q93="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="FoodGroupTreeGetResult" nillable="true" type="q93:FoodGroupTreeView" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="FoodGroupTreeView">
     <xs:sequence>
-      <xs:element xmlns:q93="urn:osdevgrp:foodwaste:1.0.0" name="DataProvider" nillable="true" type="q93:DataProviderView" />
-      <xs:element xmlns:q94="urn:osdevgrp:foodwaste:1.0.0" name="FoodGroups" nillable="true" type="q94:ArrayOfFoodGroupView" />
+      <xs:element xmlns:q94="urn:osdevgrp:foodwaste:1.0.0" name="DataProvider" nillable="true" type="q94:DataProviderView" />
+      <xs:element xmlns:q95="urn:osdevgrp:foodwaste:1.0.0" name="FoodGroups" nillable="true" type="q95:ArrayOfFoodGroupView" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q95="urn:osdevgrp:foodwaste:1.0.0" name="FoodGroupTreeView" nillable="true" type="q95:FoodGroupTreeView" />
+  <xs:element xmlns:q96="urn:osdevgrp:foodwaste:1.0.0" name="FoodGroupTreeView" nillable="true" type="q96:FoodGroupTreeView" />
   <xs:complexType name="ArrayOfFoodGroupView">
     <xs:sequence>
-      <xs:element xmlns:q96="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="FoodGroupView" nillable="true" type="q96:FoodGroupView" />
+      <xs:element xmlns:q97="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="FoodGroupView" nillable="true" type="q97:FoodGroupView" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q97="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfFoodGroupView" nillable="true" type="q97:ArrayOfFoodGroupView" />
+  <xs:element xmlns:q98="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfFoodGroupView" nillable="true" type="q98:ArrayOfFoodGroupView" />
   <xs:complexType name="FoodGroupView">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q98="urn:osdevgrp:foodwaste:1.0.0" base="q98:FoodGroupIdentificationView">
+      <xs:extension xmlns:q99="urn:osdevgrp:foodwaste:1.0.0" base="q99:FoodGroupIdentificationView">
         <xs:sequence>
-          <xs:element name="Children" nillable="true" type="q98:ArrayOfFoodGroupView" />
+          <xs:element name="Children" nillable="true" type="q99:ArrayOfFoodGroupView" />
           <xs:element name="IsActive" type="xs:boolean" />
-          <xs:element minOccurs="0" name="Parent" nillable="true" type="q98:FoodGroupIdentificationView" />
+          <xs:element minOccurs="0" name="Parent" nillable="true" type="q99:FoodGroupIdentificationView" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q99="urn:osdevgrp:foodwaste:1.0.0" name="FoodGroupView" nillable="true" type="q99:FoodGroupView" />
+  <xs:element xmlns:q100="urn:osdevgrp:foodwaste:1.0.0" name="FoodGroupView" nillable="true" type="q100:FoodGroupView" />
   <xs:element name="PrivacyPolicyGet">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q100="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="query" nillable="true" type="q100:PrivacyPolicyGetQuery" />
+        <xs:element xmlns:q101="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="query" nillable="true" type="q101:PrivacyPolicyGetQuery" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="PrivacyPolicyGetQuery">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q101="urn:osdevgrp:foodwaste:1.0.0" base="q101:StaticTextGetQueryBase">
+      <xs:extension xmlns:q102="urn:osdevgrp:foodwaste:1.0.0" base="q102:StaticTextGetQueryBase">
         <xs:sequence />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q102="urn:osdevgrp:foodwaste:1.0.0" name="PrivacyPolicyGetQuery" nillable="true" type="q102:PrivacyPolicyGetQuery" />
+  <xs:element xmlns:q103="urn:osdevgrp:foodwaste:1.0.0" name="PrivacyPolicyGetQuery" nillable="true" type="q103:PrivacyPolicyGetQuery" />
   <xs:complexType name="StaticTextGetQueryBase">
     <xs:sequence>
       <xs:element name="TranslationInfoIdentifier" type="ser:guid" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q103="urn:osdevgrp:foodwaste:1.0.0" name="StaticTextGetQueryBase" nillable="true" type="q103:StaticTextGetQueryBase" />
+  <xs:element xmlns:q104="urn:osdevgrp:foodwaste:1.0.0" name="StaticTextGetQueryBase" nillable="true" type="q104:StaticTextGetQueryBase" />
   <xs:element name="PrivacyPolicyGetResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q104="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="PrivacyPolicyGetResult" nillable="true" type="q104:StaticTextView" />
+        <xs:element xmlns:q105="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="PrivacyPolicyGetResult" nillable="true" type="q105:StaticTextView" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -580,70 +585,70 @@
       <xs:element name="SubjectTranslation" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q105="urn:osdevgrp:foodwaste:1.0.0" name="StaticTextView" nillable="true" type="q105:StaticTextView" />
+  <xs:element xmlns:q106="urn:osdevgrp:foodwaste:1.0.0" name="StaticTextView" nillable="true" type="q106:StaticTextView" />
   <xs:element name="DataProviderWhoHandlesPaymentsCollectionGet">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q106="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="query" nillable="true" type="q106:DataProviderWhoHandlesPaymentsCollectionGetQuery" />
+        <xs:element xmlns:q107="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="query" nillable="true" type="q107:DataProviderWhoHandlesPaymentsCollectionGetQuery" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="DataProviderWhoHandlesPaymentsCollectionGetQuery">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q107="urn:osdevgrp:foodwaste:1.0.0" base="q107:DataProviderCollectionGetQuery">
+      <xs:extension xmlns:q108="urn:osdevgrp:foodwaste:1.0.0" base="q108:DataProviderCollectionGetQuery">
         <xs:sequence>
           <xs:element name="TranslationInfoIdentifier" type="ser:guid" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q108="urn:osdevgrp:foodwaste:1.0.0" name="DataProviderWhoHandlesPaymentsCollectionGetQuery" nillable="true" type="q108:DataProviderWhoHandlesPaymentsCollectionGetQuery" />
+  <xs:element xmlns:q109="urn:osdevgrp:foodwaste:1.0.0" name="DataProviderWhoHandlesPaymentsCollectionGetQuery" nillable="true" type="q109:DataProviderWhoHandlesPaymentsCollectionGetQuery" />
   <xs:complexType name="DataProviderCollectionGetQuery">
     <xs:sequence />
   </xs:complexType>
-  <xs:element xmlns:q109="urn:osdevgrp:foodwaste:1.0.0" name="DataProviderCollectionGetQuery" nillable="true" type="q109:DataProviderCollectionGetQuery" />
+  <xs:element xmlns:q110="urn:osdevgrp:foodwaste:1.0.0" name="DataProviderCollectionGetQuery" nillable="true" type="q110:DataProviderCollectionGetQuery" />
   <xs:element name="DataProviderWhoHandlesPaymentsCollectionGetResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q110="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="DataProviderWhoHandlesPaymentsCollectionGetResult" nillable="true" type="q110:ArrayOfDataProviderView" />
+        <xs:element xmlns:q111="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="DataProviderWhoHandlesPaymentsCollectionGetResult" nillable="true" type="q111:ArrayOfDataProviderView" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfDataProviderView">
     <xs:sequence>
-      <xs:element xmlns:q111="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="DataProviderView" nillable="true" type="q111:DataProviderView" />
+      <xs:element xmlns:q112="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="DataProviderView" nillable="true" type="q112:DataProviderView" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q112="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfDataProviderView" nillable="true" type="q112:ArrayOfDataProviderView" />
+  <xs:element xmlns:q113="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfDataProviderView" nillable="true" type="q113:ArrayOfDataProviderView" />
   <xs:element name="TranslationInfoGetAll">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q113="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="query" nillable="true" type="q113:TranslationInfoCollectionGetQuery" />
+        <xs:element xmlns:q114="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="query" nillable="true" type="q114:TranslationInfoCollectionGetQuery" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="TranslationInfoCollectionGetQuery">
     <xs:sequence />
   </xs:complexType>
-  <xs:element xmlns:q114="urn:osdevgrp:foodwaste:1.0.0" name="TranslationInfoCollectionGetQuery" nillable="true" type="q114:TranslationInfoCollectionGetQuery" />
+  <xs:element xmlns:q115="urn:osdevgrp:foodwaste:1.0.0" name="TranslationInfoCollectionGetQuery" nillable="true" type="q115:TranslationInfoCollectionGetQuery" />
   <xs:element name="TranslationInfoGetAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q115="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="TranslationInfoGetAllResult" nillable="true" type="q115:ArrayOfTranslationInfoSystemView" />
+        <xs:element xmlns:q116="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" name="TranslationInfoGetAllResult" nillable="true" type="q116:ArrayOfTranslationInfoSystemView" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfTranslationInfoSystemView">
     <xs:sequence>
-      <xs:element xmlns:q116="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="TranslationInfoSystemView" nillable="true" type="q116:TranslationInfoSystemView" />
+      <xs:element xmlns:q117="urn:osdevgrp:foodwaste:1.0.0" minOccurs="0" maxOccurs="unbounded" name="TranslationInfoSystemView" nillable="true" type="q117:TranslationInfoSystemView" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q117="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfTranslationInfoSystemView" nillable="true" type="q117:ArrayOfTranslationInfoSystemView" />
+  <xs:element xmlns:q118="urn:osdevgrp:foodwaste:1.0.0" name="ArrayOfTranslationInfoSystemView" nillable="true" type="q118:ArrayOfTranslationInfoSystemView" />
   <xs:complexType name="TranslationInfoSystemView">
     <xs:sequence>
       <xs:element name="CultureName" nillable="true" type="xs:string" />
       <xs:element name="TranslationInfoIdentifier" type="ser:guid" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q118="urn:osdevgrp:foodwaste:1.0.0" name="TranslationInfoSystemView" nillable="true" type="q118:TranslationInfoSystemView" />
+  <xs:element xmlns:q119="urn:osdevgrp:foodwaste:1.0.0" name="TranslationInfoSystemView" nillable="true" type="q119:TranslationInfoSystemView" />
 </xs:schema>

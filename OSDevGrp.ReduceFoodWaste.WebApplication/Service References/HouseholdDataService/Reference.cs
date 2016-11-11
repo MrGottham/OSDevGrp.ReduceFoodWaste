@@ -304,7 +304,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<System.DateTime> ActivationTimeField;
         
+        private bool CanRenewMembershipField;
+        
+        private bool CanUpgradeMembershipField;
+        
         private System.DateTime CreationTimeField;
+        
+        private bool HasReachedHouseholdLimitField;
         
         private OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.HouseholdIdentificationView[] HouseholdsField;
         
@@ -322,6 +328,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<System.DateTime> PrivacyPolicyAcceptedTimeField;
         
+        private string[] UpgradeableMembershipsField;
+        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<System.DateTime> ActivationTime {
             get {
@@ -336,6 +344,32 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public bool CanRenewMembership {
+            get {
+                return this.CanRenewMembershipField;
+            }
+            set {
+                if ((this.CanRenewMembershipField.Equals(value) != true)) {
+                    this.CanRenewMembershipField = value;
+                    this.RaisePropertyChanged("CanRenewMembership");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public bool CanUpgradeMembership {
+            get {
+                return this.CanUpgradeMembershipField;
+            }
+            set {
+                if ((this.CanUpgradeMembershipField.Equals(value) != true)) {
+                    this.CanUpgradeMembershipField = value;
+                    this.RaisePropertyChanged("CanUpgradeMembership");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public System.DateTime CreationTime {
             get {
                 return this.CreationTimeField;
@@ -344,6 +378,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
                 if ((this.CreationTimeField.Equals(value) != true)) {
                     this.CreationTimeField = value;
                     this.RaisePropertyChanged("CreationTime");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public bool HasReachedHouseholdLimit {
+            get {
+                return this.HasReachedHouseholdLimitField;
+            }
+            set {
+                if ((this.HasReachedHouseholdLimitField.Equals(value) != true)) {
+                    this.HasReachedHouseholdLimitField = value;
+                    this.RaisePropertyChanged("HasReachedHouseholdLimit");
                 }
             }
         }
@@ -435,6 +482,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
                 if ((this.PrivacyPolicyAcceptedTimeField.Equals(value) != true)) {
                     this.PrivacyPolicyAcceptedTimeField = value;
                     this.RaisePropertyChanged("PrivacyPolicyAcceptedTime");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public string[] UpgradeableMemberships {
+            get {
+                return this.UpgradeableMembershipsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UpgradeableMembershipsField, value) != true)) {
+                    this.UpgradeableMembershipsField = value;
+                    this.RaisePropertyChanged("UpgradeableMemberships");
                 }
             }
         }

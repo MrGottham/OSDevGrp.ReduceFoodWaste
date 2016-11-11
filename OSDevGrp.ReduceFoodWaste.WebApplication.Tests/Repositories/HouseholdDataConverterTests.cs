@@ -351,11 +351,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.That(result.Membership, Is.Null);
             Assert.That(result.MembershipExpireTime, Is.Null);
             Assert.That(result.MembershipExpireTime.HasValue, Is.False);
+            Assert.That(result.CanRenewMembership, Is.False);
+            Assert.That(result.CanUpgradeMembership, Is.False);
             Assert.That(result.PrivacyPolicy, Is.Null);
             Assert.That(result.HasAcceptedPrivacyPolicy, Is.False);
             Assert.That(result.PrivacyPolicyAcceptedTime, Is.Null);
             Assert.That(result.PrivacyPolicyAcceptedTime.HasValue, Is.False);
+            Assert.That(result.HasReachedHouseholdLimit, Is.False);
             Assert.That(result.CreationTime, Is.EqualTo(default(DateTime)));
+            Assert.That(result.UpgradeableMemberships, Is.Null);
             Assert.That(result.Households, Is.Null);
         }
 
@@ -392,23 +396,71 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         /// Tests that Convert converts a HouseholdMemberView to a HouseholdMemberModel.
         /// </summary>
         [Test]
-        [TestCase(true, true, true, true)]
-        [TestCase(true, true, true, false)]
-        [TestCase(true, true, false, true)]
-        [TestCase(true, true, false, false)]
-        [TestCase(true, false, true, true)]
-        [TestCase(true, false, true, false)]
-        [TestCase(true, false, false, true)]
-        [TestCase(true, false, false, false)]
-        [TestCase(false, true, true, true)]
-        [TestCase(false, true, true, false)]
-        [TestCase(false, true, false, true)]
-        [TestCase(false, true, false, false)]
-        [TestCase(false, false, true, true)]
-        [TestCase(false, false, true, false)]
-        [TestCase(false, false, false, true)]
-        [TestCase(false, false, false, false)]
-        public void TestThatConvertConvertsHouseholdMemberViewToHouseholdMemberModel(bool isActivated, bool hasMembershipExpireTime, bool hasAcceptedPrivacyPolicy, bool hasHouseholds)
+        [TestCase(true, true, true, true, true, true)]
+        [TestCase(true, true, true, true, true, false)]
+        [TestCase(true, true, true, true, false, true)]
+        [TestCase(true, true, true, true, false, false)]
+        [TestCase(true, true, true, false, true, true)]
+        [TestCase(true, true, true, false, true, false)]
+        [TestCase(true, true, true, false, false, true)]
+        [TestCase(true, true, true, false, false, false)]
+        [TestCase(true, true, false, true, true, true)]
+        [TestCase(true, true, false, true, true, false)]
+        [TestCase(true, true, false, true, false, true)]
+        [TestCase(true, true, false, true, false, false)]
+        [TestCase(true, true, false, false, true, true)]
+        [TestCase(true, true, false, false, true, false)]
+        [TestCase(true, true, false, false, false, true)]
+        [TestCase(true, true, false, false, false, false)]
+        [TestCase(true, false, true, true, true, true)]
+        [TestCase(true, false, true, true, true, false)]
+        [TestCase(true, false, true, true, false, true)]
+        [TestCase(true, false, true, true, false, false)]
+        [TestCase(true, false, true, false, true, true)]
+        [TestCase(true, false, true, false, true, false)]
+        [TestCase(true, false, true, false, false, true)]
+        [TestCase(true, false, true, false, false, false)]
+        [TestCase(true, false, false, true, true, true)]
+        [TestCase(true, false, false, true, true, false)]
+        [TestCase(true, false, false, true, false, true)]
+        [TestCase(true, false, false, true, false, false)]
+        [TestCase(true, false, false, false, true, true)]
+        [TestCase(true, false, false, false, true, false)]
+        [TestCase(true, false, false, false, false, true)]
+        [TestCase(true, false, false, false, false, false)]
+        [TestCase(false, true, true, true, true, true)]
+        [TestCase(false, true, true, true, true, false)]
+        [TestCase(false, true, true, true, false, true)]
+        [TestCase(false, true, true, true, false, false)]
+        [TestCase(false, true, true, false, true, true)]
+        [TestCase(false, true, true, false, true, false)]
+        [TestCase(false, true, true, false, false, true)]
+        [TestCase(false, true, true, false, false, false)]
+        [TestCase(false, true, false, true, true, true)]
+        [TestCase(false, true, false, true, true, false)]
+        [TestCase(false, true, false, true, false, true)]
+        [TestCase(false, true, false, true, false, false)]
+        [TestCase(false, true, false, false, true, true)]
+        [TestCase(false, true, false, false, true, false)]
+        [TestCase(false, true, false, false, false, true)]
+        [TestCase(false, true, false, false, false, false)]
+        [TestCase(false, false, true, true, true, true)]
+        [TestCase(false, false, true, true, true, false)]
+        [TestCase(false, false, true, true, false, true)]
+        [TestCase(false, false, true, true, false, false)]
+        [TestCase(false, false, true, false, true, true)]
+        [TestCase(false, false, true, false, true, false)]
+        [TestCase(false, false, true, false, false, true)]
+        [TestCase(false, false, true, false, false, false)]
+        [TestCase(false, false, false, true, true, true)]
+        [TestCase(false, false, false, true, true, false)]
+        [TestCase(false, false, false, true, false, true)]
+        [TestCase(false, false, false, true, false, false)]
+        [TestCase(false, false, false, false, true, true)]
+        [TestCase(false, false, false, false, true, false)]
+        [TestCase(false, false, false, false, false, true)]
+        [TestCase(false, false, false, false, false, false)]
+        public void TestThatConvertConvertsHouseholdMemberViewToHouseholdMemberModel(bool isActivated, bool hasMembershipExpireTime, bool hasAcceptedPrivacyPolicy, bool hasHouseholds, bool canRenewMembership, bool canUpgradeMembership)
         {
             HouseholdIdentificationView[] householdIdentificationViewCollection = null;
             if (hasHouseholds)
@@ -441,6 +493,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                 .With(m => m.ActivationTime, isActivated ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .With(m => m.Membership, Fixture.Create<string>())
                 .With(m => m.MembershipExpireTime, hasMembershipExpireTime ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
+                .With(m => m.CanRenewMembership, canRenewMembership)
+                .With(m => m.CanUpgradeMembership, canUpgradeMembership)
                 .With(m => m.IsPrivacyPolictyAccepted, hasAcceptedPrivacyPolicy)
                 .With(m => m.PrivacyPolicyAcceptedTime, hasAcceptedPrivacyPolicy ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .With(m => m.CreationTime, DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)))
@@ -475,6 +529,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                 Assert.That(householdMemberView.MembershipExpireTime, Is.Null);
                 Assert.That(householdMemberView.MembershipExpireTime.HasValue, Is.False);
             }
+            Assert.That(householdMemberView.CanRenewMembership, Is.EqualTo(canRenewMembership));
+            Assert.That(householdMemberView.CanUpgradeMembership, Is.EqualTo(canUpgradeMembership));
             Assert.That(householdMemberView.IsPrivacyPolictyAccepted, Is.EqualTo(hasAcceptedPrivacyPolicy));
             if (hasAcceptedPrivacyPolicy)
             {
@@ -532,6 +588,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                 Assert.That(result.MembershipExpireTime, Is.Null);
                 Assert.That(result.MembershipExpireTime.HasValue, Is.False);
             }
+            Assert.That(result.CanRenewMembership, Is.EqualTo(canRenewMembership));
+            Assert.That(result.CanUpgradeMembership, Is.EqualTo(canUpgradeMembership));
             Assert.That(result.PrivacyPolicy, Is.Null);
             Assert.That(result.HasAcceptedPrivacyPolicy, Is.EqualTo(hasAcceptedPrivacyPolicy));
             if (hasAcceptedPrivacyPolicy)
@@ -545,7 +603,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                 Assert.That(result.PrivacyPolicyAcceptedTime, Is.Null);
                 Assert.That(result.PrivacyPolicyAcceptedTime.HasValue, Is.False);
             }
+            Assert.That(result.HasReachedHouseholdLimit, Is.False);
             Assert.That(result.CreationTime, Is.EqualTo(householdMemberView.CreationTime));
+            Assert.That(result.UpgradeableMemberships, Is.Null);
             if (hasHouseholds)
             {
                 Assert.That(result.Households, Is.Not.Null);

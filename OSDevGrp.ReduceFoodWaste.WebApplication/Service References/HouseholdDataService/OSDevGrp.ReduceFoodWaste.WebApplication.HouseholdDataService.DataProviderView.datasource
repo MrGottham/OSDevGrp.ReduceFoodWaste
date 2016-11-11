@@ -6,5 +6,5 @@
     cause the file to be unrecognizable by the program.
 -->
 <GenericObjectDataSource DisplayName="DataProviderView" Version="1.0" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
-   <TypeInfo>OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.DataProviderView, Service References.HouseholdDataService.Reference.cs, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</TypeInfo>
+   <TypeInfo>OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.DataProviderView, Service References.HouseholdDataService.Reference.cs.dll, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</TypeInfo>
 </GenericObjectDataSource>

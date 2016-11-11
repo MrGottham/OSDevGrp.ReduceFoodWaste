@@ -88,10 +88,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.ActivatedTime, opt => opt.Ignore())
                     .ForMember(dest => dest.Membership, opt => opt.Ignore())
                     .ForMember(dest => dest.MembershipExpireTime, opt => opt.Ignore())
+                    .ForMember(dest => dest.CanRenewMembership, opt => opt.Ignore())
+                    .ForMember(dest => dest.CanUpgradeMembership, opt => opt.Ignore())
                     .ForMember(dest => dest.PrivacyPolicy, opt => opt.Ignore())
                     .ForMember(dest => dest.HasAcceptedPrivacyPolicy, opt => opt.Ignore())
                     .ForMember(dest => dest.PrivacyPolicyAcceptedTime, opt => opt.Ignore())
+                    .ForMember(dest => dest.HasReachedHouseholdLimit, opt => opt.Ignore())
                     .ForMember(dest => dest.CreationTime, opt => opt.Ignore())
+                    .ForMember(dest => dest.UpgradeableMemberships, opt => opt.Ignore())
                     .ForMember(dest => dest.Households, opt => opt.Ignore());
 
                 configuration.CreateMap<HouseholdMemberIdentificationView, MemberOfHouseholdModel>()
@@ -109,10 +113,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.ActivatedTime, opt => opt.MapFrom(src => src.ActivationTime))
                     .ForMember(dest => dest.Membership, opt => opt.MapFrom(src => src.Membership))
                     .ForMember(dest => dest.MembershipExpireTime, opt => opt.MapFrom(src => src.MembershipExpireTime))
+                    .ForMember(dest => dest.CanRenewMembership, opt => opt.MapFrom(src => src.CanRenewMembership))
+                    .ForMember(dest => dest.CanUpgradeMembership, opt => opt.Ignore())
                     .ForMember(dest => dest.PrivacyPolicy, opt => opt.Ignore())
                     .ForMember(dest => dest.HasAcceptedPrivacyPolicy, opt => opt.Ignore())
                     .ForMember(dest => dest.PrivacyPolicyAcceptedTime, opt => opt.MapFrom(src => src.PrivacyPolicyAcceptedTime))
+                    .ForMember(dest => dest.HasReachedHouseholdLimit, opt => opt.Ignore())
                     .ForMember(dest => dest.CreationTime, opt => opt.MapFrom(src => src.CreationTime))
+                    .ForMember(dest => dest.UpgradeableMemberships, opt => opt.Ignore())
                     .ForMember(dest => dest.Households, opt =>
                     {
                         opt.Condition(src => src.Households != null);

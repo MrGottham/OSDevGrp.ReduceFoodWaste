@@ -440,6 +440,9 @@
     <Content Include="Service References\HouseholdDataService\OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.TranslationInfoSystemView.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <None Include="Service References\HouseholdDataService\foodwastehouseholddataservice2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\HouseholdDataService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

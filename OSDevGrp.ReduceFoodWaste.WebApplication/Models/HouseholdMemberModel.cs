@@ -54,6 +54,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         public DateTime? MembershipExpireTime { get; set; }
 
         /// <summary>
+        /// Gets or sets whether the current membership can be renewed.
+        /// </summary>
+        public bool CanRenewMembership { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the current membership can be upgraded.
+        /// </summary>
+        public bool CanUpgradeMembership { get; set; }
+
+        /// <summary>
         /// Gets or sets the privacy policies for the household member.
         /// </summary>
         public PrivacyPolicyModel PrivacyPolicy { get; set; }
@@ -72,9 +82,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         public DateTime? PrivacyPolicyAcceptedTime { get; set; }
 
         /// <summary>
+        /// Gets or sets whether the household member has reached the household limet (number of households).
+        /// </summary>
+        public bool HasReachedHouseholdLimit { get; set; }
+
+        /// <summary>
         /// Gets or sets the date and time for when the household member was created.
         /// </summary>
         public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the collection of memberships which the household member can upgrade to.
+        /// </summary>
+        public IEnumerable<string> UpgradeableMemberships { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of household where the household member has a membership.

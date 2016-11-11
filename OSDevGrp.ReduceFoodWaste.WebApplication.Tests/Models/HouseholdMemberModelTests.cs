@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -31,11 +32,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(householdMemberModel.Membership, Is.Null);
             Assert.That(householdMemberModel.MembershipExpireTime, Is.Null);
             Assert.That(householdMemberModel.MembershipExpireTime.HasValue, Is.False);
+            Assert.That(householdMemberModel.CanRenewMembership, Is.False);
+            Assert.That(householdMemberModel.CanUpgradeMembership, Is.False);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Null);
             Assert.That(householdMemberModel.HasAcceptedPrivacyPolicy, Is.False);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
+            Assert.That(householdMemberModel.HasReachedHouseholdLimit, Is.False);
             Assert.That(householdMemberModel.CreationTime, Is.EqualTo(default(DateTime)));
+            Assert.That(householdMemberModel.UpgradeableMemberships, Is.Null);
             Assert.That(householdMemberModel.Households, Is.Null);
         }
 
@@ -289,6 +294,44 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         }
 
         /// <summary>
+        /// Tests that the setter for CanRenewMembership sets the value.
+        /// </summary>
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestThatCanRenewMembershipSetterSetsValue(bool newValue)
+        {
+            var householdMemberModel = new HouseholdMemberModel
+            {
+                CanRenewMembership = !newValue
+            };
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.CanRenewMembership, Is.Not.EqualTo(newValue));
+
+            householdMemberModel.CanRenewMembership = newValue;
+            Assert.That(householdMemberModel.CanRenewMembership, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for CanUpgradeMembership sets the value.
+        /// </summary>
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestThatCanUpgradeMembershipSetterSetsValue(bool newValue)
+        {
+            var householdMemberModel = new HouseholdMemberModel
+            {
+                CanUpgradeMembership = !newValue
+            };
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.CanUpgradeMembership, Is.Not.EqualTo(newValue));
+
+            householdMemberModel.CanUpgradeMembership = newValue;
+            Assert.That(householdMemberModel.CanUpgradeMembership, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
         /// Tests that the setter for PrivacyPolicy sets a new value.
         /// </summary>
         [Test]
@@ -350,6 +393,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         }
 
         /// <summary>
+        /// Tests that the setter for HasReachedHouseholdLimit sets the value.
+        /// </summary>
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestThatHasReachedHouseholdLimitSetterSetsValue(bool newValue)
+        {
+            var householdMemberModel = new HouseholdMemberModel
+            {
+                HasReachedHouseholdLimit = !newValue
+            };
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.HasReachedHouseholdLimit, Is.Not.EqualTo(newValue));
+
+            householdMemberModel.HasReachedHouseholdLimit = newValue;
+            Assert.That(householdMemberModel.HasReachedHouseholdLimit, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
         /// Tests that the setter for CreationTime sets the value to a given date and time.
         /// </summary>
         [Test]
@@ -364,6 +426,44 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
 
             householdMemberModel.CreationTime = newValue;
             Assert.That(householdMemberModel.CreationTime, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for UpgradeableMemberships sets the value to a collection of memberships which the household member can upgrade to.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeableMembershipsSetterSetsValueToStringCollection()
+        {
+            var householdMemberModel = new HouseholdMemberModel();
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.UpgradeableMemberships, Is.Null);
+
+            var upgradeableMembershipsCollection = Fixture.CreateMany<string>(Random.Next(5, 10)).ToList();
+            Assert.That(upgradeableMembershipsCollection, Is.Not.Null);
+            Assert.That(upgradeableMembershipsCollection, Is.Not.Empty);
+
+            householdMemberModel.UpgradeableMemberships = upgradeableMembershipsCollection;
+            Assert.That(householdMemberModel.UpgradeableMemberships, Is.Not.Null);
+            Assert.That(householdMemberModel.UpgradeableMemberships, Is.Not.Empty);
+            Assert.That(householdMemberModel.UpgradeableMemberships, Is.EqualTo(upgradeableMembershipsCollection));
+        }
+
+        /// <summary>
+        /// Tests that the setter for UpgradeableMemberships sets the value to NULL.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeableMembershipsSetterSetsValueToNull()
+        {
+            var householdMemberModel = new HouseholdMemberModel
+            {
+                UpgradeableMemberships = Fixture.CreateMany<string>(Random.Next(5, 10))
+            };
+            Assert.That(householdMemberModel, Is.Not.Null);
+            Assert.That(householdMemberModel.UpgradeableMemberships, Is.Not.Null);
+            Assert.That(householdMemberModel.UpgradeableMemberships, Is.Not.Empty);
+
+            householdMemberModel.UpgradeableMemberships = null;
+            Assert.That(householdMemberModel.UpgradeableMemberships, Is.Null);
         }
 
         /// <summary>

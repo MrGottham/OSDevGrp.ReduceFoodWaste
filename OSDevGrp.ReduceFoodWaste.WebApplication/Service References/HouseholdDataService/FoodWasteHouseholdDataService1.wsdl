@@ -5,6 +5,7 @@
     <xsd:schema targetNamespace="urn:osdevgrp:foodwaste:1.0.0/Imports">
       <xsd:import schemaLocation="http://mother.osdevgrp.dk/osintranet/foodwastehouseholddataservice.svc?xsd=xsd0" namespace="urn:osdevgrp:foodwaste:1.0.0" />
       <xsd:import schemaLocation="http://mother.osdevgrp.dk/osintranet/foodwastehouseholddataservice.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://mother.osdevgrp.dk/osintranet/foodwastehouseholddataservice.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="HouseholdDataService_HouseholdDataGet_InputMessage">
