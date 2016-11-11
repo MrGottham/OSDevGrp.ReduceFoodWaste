@@ -19,7 +19,11 @@
         <div class="card">
             <img class="card-img card-img-top img-fluid" alt="Responsive image" src="@VirtualPathUtility.ToAbsolute("~/Images/membership.png")" />
             <div class="card-block text-xs-center">
-                <h5 class="card-title">Dette er en test</h5>
+                <h5 class="card-title">@Model.HouseholdMember.Membership</h5>
+                @if (Model.HouseholdMember.MembershipExpireTime.HasValue)
+                {
+                    <p class="card-text">@string.Format("{0}: {1}", Texts.Expires, Model.HouseholdMember.MembershipExpireTime.Value.ToLongDateString())</p>
+                }
                 @Html.ActionLink(Texts.Manage, "Manage", "Household", null, new { @class = "btn btn-primary" })
             </div>
         </div>
