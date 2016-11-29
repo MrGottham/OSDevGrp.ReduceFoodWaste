@@ -412,121 +412,123 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         [TestCase(true, true, true, false, false, true, false)]
         [TestCase(true, true, true, false, false, false, true)]
         [TestCase(true, true, true, false, false, false, false)]
-
-        [TestCase(true, true, false, true, true, true)]
-
-        [TestCase(true, true, false, true, true, false)]
-
-        [TestCase(true, true, false, true, false, true)]
-
-        [TestCase(true, true, false, true, false, false)]
-
-        [TestCase(true, true, false, false, true, true)]
-
-        [TestCase(true, true, false, false, true, false)]
-
-        [TestCase(true, true, false, false, false, true)]
-
-        [TestCase(true, true, false, false, false, false)]
-
-        [TestCase(true, false, true, true, true, true)]
-
-        [TestCase(true, false, true, true, true, false)]
-
-        [TestCase(true, false, true, true, false, true)]
-
-        [TestCase(true, false, true, true, false, false)]
-
-        [TestCase(true, false, true, false, true, true)]
-
-        [TestCase(true, false, true, false, true, false)]
-
-        [TestCase(true, false, true, false, false, true)]
-
-        [TestCase(true, false, true, false, false, false)]
-
-        [TestCase(true, false, false, true, true, true)]
-
-        [TestCase(true, false, false, true, true, false)]
-
-        [TestCase(true, false, false, true, false, true)]
-
-        [TestCase(true, false, false, true, false, false)]
-
-        [TestCase(true, false, false, false, true, true)]
-
-        [TestCase(true, false, false, false, true, false)]
-
-        [TestCase(true, false, false, false, false, true)]
-
-        [TestCase(true, false, false, false, false, false)]
-
-        [TestCase(false, true, true, true, true, true)]
-
-        [TestCase(false, true, true, true, true, false)]
-
-        [TestCase(false, true, true, true, false, true)]
-
-        [TestCase(false, true, true, true, false, false)]
-
-        [TestCase(false, true, true, false, true, true)]
-
-        [TestCase(false, true, true, false, true, false)]
-
-        [TestCase(false, true, true, false, false, true)]
-
-        [TestCase(false, true, true, false, false, false)]
-
-        [TestCase(false, true, false, true, true, true)]
-
-        [TestCase(false, true, false, true, true, false)]
-
-        [TestCase(false, true, false, true, false, true)]
-
-        [TestCase(false, true, false, true, false, false)]
-
-        [TestCase(false, true, false, false, true, true)]
-
-        [TestCase(false, true, false, false, true, false)]
-
-        [TestCase(false, true, false, false, false, true)]
-
-        [TestCase(false, true, false, false, false, false)]
-
-        [TestCase(false, false, true, true, true, true)]
-
-        [TestCase(false, false, true, true, true, false)]
-
-        [TestCase(false, false, true, true, false, true)]
-
-        [TestCase(false, false, true, true, false, false)]
-
-        [TestCase(false, false, true, false, true, true)]
-
-        [TestCase(false, false, true, false, true, false)]
-
-        [TestCase(false, false, true, false, false, true)]
-
-        [TestCase(false, false, true, false, false, false)]
-
-        [TestCase(false, false, false, true, true, true)]
-
-        [TestCase(false, false, false, true, true, false)]
-
-        [TestCase(false, false, false, true, false, true)]
-
-        [TestCase(false, false, false, true, false, false)]
-
-        [TestCase(false, false, false, false, true, true)]
-
-        [TestCase(false, false, false, false, true, false)]
-
-        [TestCase(false, false, false, false, false, true)]
-
-        [TestCase(false, false, false, false, false, false)]
+        [TestCase(true, true, false, true, true, true, true)]
+        [TestCase(true, true, false, true, true, true, false)]
+        [TestCase(true, true, false, true, true, false, true)]
+        [TestCase(true, true, false, true, true, false, false)]
+        [TestCase(true, true, false, true, false, true, true)]
+        [TestCase(true, true, false, true, false, true, false)]
+        [TestCase(true, true, false, true, false, false, true)]
+        [TestCase(true, true, false, true, false, false, false)]
+        [TestCase(true, true, false, false, true, true, true)]
+        [TestCase(true, true, false, false, true, true, false)]
+        [TestCase(true, true, false, false, true, false, true)]
+        [TestCase(true, true, false, false, true, false, false)]
+        [TestCase(true, true, false, false, false, true, true)]
+        [TestCase(true, true, false, false, false, true, false)]
+        [TestCase(true, true, false, false, false, false, true)]
+        [TestCase(true, true, false, false, false, false, false)]
+        [TestCase(true, false, true, true, true, true, true)]
+        [TestCase(true, false, true, true, true, true, false)]
+        [TestCase(true, false, true, true, true, false, true)]
+        [TestCase(true, false, true, true, true, false, false)]
+        [TestCase(true, false, true, true, false, true, true)]
+        [TestCase(true, false, true, true, false, true, false)]
+        [TestCase(true, false, true, true, false, false, true)]
+        [TestCase(true, false, true, true, false, false, false)]
+        [TestCase(true, false, true, false, true, true, true)]
+        [TestCase(true, false, true, false, true, true, false)]
+        [TestCase(true, false, true, false, true, false, true)]
+        [TestCase(true, false, true, false, true, false, false)]
+        [TestCase(true, false, true, false, false, true, true)]
+        [TestCase(true, false, true, false, false, true, false)]
+        [TestCase(true, false, true, false, false, false, true)]
+        [TestCase(true, false, true, false, false, false, false)]
+        [TestCase(true, false, false, true, true, true, true)]
+        [TestCase(true, false, false, true, true, true, false)]
+        [TestCase(true, false, false, true, true, false, true)]
+        [TestCase(true, false, false, true, true, false, false)]
+        [TestCase(true, false, false, true, false, true, true)]
+        [TestCase(true, false, false, true, false, true, false)]
+        [TestCase(true, false, false, true, false, false, true)]
+        [TestCase(true, false, false, true, false, false, false)]
+        [TestCase(true, false, false, false, true, true, true)]
+        [TestCase(true, false, false, false, true, true, false)]
+        [TestCase(true, false, false, false, true, false, true)]
+        [TestCase(true, false, false, false, true, false, false)]
+        [TestCase(true, false, false, false, false, true, true)]
+        [TestCase(true, false, false, false, false, true, false)]
+        [TestCase(true, false, false, false, false, false, true)]
+        [TestCase(true, false, false, false, false, false, false)]
+        [TestCase(false, true, true, true, true, true, true)]
+        [TestCase(false, true, true, true, true, true, false)]
+        [TestCase(false, true, true, true, true, false, true)]
+        [TestCase(false, true, true, true, true, false, false)]
+        [TestCase(false, true, true, true, false, true, true)]
+        [TestCase(false, true, true, true, false, true, false)]
+        [TestCase(false, true, true, true, false, false, true)]
+        [TestCase(false, true, true, true, false, false, false)]
+        [TestCase(false, true, true, false, true, true, true)]
+        [TestCase(false, true, true, false, true, true, false)]
+        [TestCase(false, true, true, false, true, false, true)]
+        [TestCase(false, true, true, false, true, false, false)]
+        [TestCase(false, true, true, false, false, true, true)]
+        [TestCase(false, true, true, false, false, true, false)]
+        [TestCase(false, true, true, false, false, false, true)]
+        [TestCase(false, true, true, false, false, false, false)]
+        [TestCase(false, true, false, true, true, true, true)]
+        [TestCase(false, true, false, true, true, true, false)]
+        [TestCase(false, true, false, true, true, false, true)]
+        [TestCase(false, true, false, true, true, false, false)]
+        [TestCase(false, true, false, true, false, true, true)]
+        [TestCase(false, true, false, true, false, true, false)]
+        [TestCase(false, true, false, true, false, false, true)]
+        [TestCase(false, true, false, true, false, false, false)]
+        [TestCase(false, true, false, false, true, true, true)]
+        [TestCase(false, true, false, false, true, true, false)]
+        [TestCase(false, true, false, false, true, false, true)]
+        [TestCase(false, true, false, false, true, false, false)]
+        [TestCase(false, true, false, false, false, true, true)]
+        [TestCase(false, true, false, false, false, true, false)]
+        [TestCase(false, true, false, false, false, false, true)]
+        [TestCase(false, true, false, false, false, false, false)]
+        [TestCase(false, false, true, true, true, true, true)]
+        [TestCase(false, false, true, true, true, true, false)]
+        [TestCase(false, false, true, true, true, false, true)]
+        [TestCase(false, false, true, true, true, false, false)]
+        [TestCase(false, false, true, true, false, true, true)]
+        [TestCase(false, false, true, true, false, true, false)]
+        [TestCase(false, false, true, true, false, false, true)]
+        [TestCase(false, false, true, true, false, false, false)]
+        [TestCase(false, false, true, false, true, true, true)]
+        [TestCase(false, false, true, false, true, true, false)]
+        [TestCase(false, false, true, false, true, false, true)]
+        [TestCase(false, false, true, false, true, false, false)]
+        [TestCase(false, false, true, false, false, true, true)]
+        [TestCase(false, false, true, false, false, true, false)]
+        [TestCase(false, false, true, false, false, false, true)]
+        [TestCase(false, false, true, false, false, false, false)]
+        [TestCase(false, false, false, true, true, true, true)]
+        [TestCase(false, false, false, true, true, true, false)]
+        [TestCase(false, false, false, true, true, false, true)]
+        [TestCase(false, false, false, true, true, false, false)]
+        [TestCase(false, false, false, true, false, true, true)]
+        [TestCase(false, false, false, true, false, true, false)]
+        [TestCase(false, false, false, true, false, false, true)]
+        [TestCase(false, false, false, true, false, false, false)]
+        [TestCase(false, false, false, false, true, true, true)]
+        [TestCase(false, false, false, false, true, true, false)]
+        [TestCase(false, false, false, false, true, false, true)]
+        [TestCase(false, false, false, false, true, false, false)]
+        [TestCase(false, false, false, false, false, true, true)]
+        [TestCase(false, false, false, false, false, true, false)]
+        [TestCase(false, false, false, false, false, false, true)]
+        [TestCase(false, false, false, false, false, false, false)]
 
         public void TestThatConvertConvertsHouseholdMemberViewToHouseholdMemberModel(bool isActivated, bool hasMembershipExpireTime, bool hasAcceptedPrivacyPolicy, bool hasHouseholds, bool canRenewMembership, bool canUpgradeMembership, bool hasReachedHouseholdLimit)
         {
+            string[] upgradeableMemberships = Fixture.CreateMany<string>(Random.Next(1, 10)).ToArray();
+
             HouseholdIdentificationView[] householdIdentificationViewCollection = null;
             if (hasHouseholds)
             {
@@ -564,6 +566,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                 .With(m => m.PrivacyPolicyAcceptedTime, hasAcceptedPrivacyPolicy ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .With(m => m.HasReachedHouseholdLimit, hasReachedHouseholdLimit)
                 .With(m => m.CreationTime, DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)))
+                .With(m => m.UpgradeableMemberships, upgradeableMemberships)
                 .With(m => m.Households, householdIdentificationViewCollection)
                 .With(m => m.Payments, null)
                 .With(m => m.ExtensionData, null)
@@ -610,6 +613,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             }
             Assert.That(householdMemberView.HasReachedHouseholdLimit, Is.EqualTo(hasReachedHouseholdLimit));
             Assert.That(householdMemberView.CreationTime, Is.Not.EqualTo(default(DateTime)));
+            Assert.That(householdMemberView.UpgradeableMemberships, Is.Not.Null);
+            Assert.That(householdMemberView.UpgradeableMemberships, Is.Not.Empty);
+            Assert.That(householdMemberView.UpgradeableMemberships, Is.EqualTo(upgradeableMemberships));
             if (hasHouseholds)
             {
                 Assert.That(householdMemberView.Households, Is.Not.Null);
@@ -672,7 +678,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             }
             Assert.That(result.HasReachedHouseholdLimit, Is.EqualTo(hasReachedHouseholdLimit));
             Assert.That(result.CreationTime, Is.EqualTo(householdMemberView.CreationTime));
-            Assert.That(result.UpgradeableMemberships, Is.Null);
+            Assert.That(result.UpgradeableMemberships, Is.Not.Null);
+            Assert.That(result.UpgradeableMemberships, Is.Not.Empty);
+            Assert.That(result.UpgradeableMemberships.Count(), Is.EqualTo(upgradeableMemberships.Length));
+            foreach (var upgradeableMembership in upgradeableMemberships)
+            {
+                Assert.That(result.UpgradeableMemberships.Contains(upgradeableMembership), Is.True);
+            }
             if (hasHouseholds)
             {
                 Assert.That(result.Households, Is.Not.Null);

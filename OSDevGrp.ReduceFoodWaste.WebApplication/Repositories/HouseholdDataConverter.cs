@@ -118,7 +118,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.PrivacyPolicy, opt => opt.Ignore())
                     .ForMember(dest => dest.HasAcceptedPrivacyPolicy, opt => opt.Ignore())
                     .ForMember(dest => dest.PrivacyPolicyAcceptedTime, opt => opt.MapFrom(src => src.PrivacyPolicyAcceptedTime))
-                    .ForMember(dest => dest.HasReachedHouseholdLimit, opt => opt.Ignore())
+                    .ForMember(dest => dest.HasReachedHouseholdLimit, opt => opt.MapFrom(src => src.HasReachedHouseholdLimit))
                     .ForMember(dest => dest.CreationTime, opt => opt.MapFrom(src => src.CreationTime))
                     .ForMember(dest => dest.UpgradeableMemberships, opt => opt.Ignore())
                     .ForMember(dest => dest.Households, opt =>
