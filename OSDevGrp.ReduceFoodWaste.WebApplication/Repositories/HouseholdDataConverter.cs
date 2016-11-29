@@ -114,7 +114,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.Membership, opt => opt.MapFrom(src => src.Membership))
                     .ForMember(dest => dest.MembershipExpireTime, opt => opt.MapFrom(src => src.MembershipExpireTime))
                     .ForMember(dest => dest.CanRenewMembership, opt => opt.MapFrom(src => src.CanRenewMembership))
-                    .ForMember(dest => dest.CanUpgradeMembership, opt => opt.Ignore())
+                    .ForMember(dest => dest.CanUpgradeMembership, opt => opt.MapFrom(src => src.CanUpgradeMembership))
                     .ForMember(dest => dest.PrivacyPolicy, opt => opt.Ignore())
                     .ForMember(dest => dest.HasAcceptedPrivacyPolicy, opt => opt.Ignore())
                     .ForMember(dest => dest.PrivacyPolicyAcceptedTime, opt => opt.MapFrom(src => src.PrivacyPolicyAcceptedTime))
