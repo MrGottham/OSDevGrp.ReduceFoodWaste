@@ -326,6 +326,30 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         }
 
         /// <summary>
+        /// Upgrades a household members membership.
+        /// </summary>
+        /// <param name="statusMessage">Status message to show in the view.</param>
+        /// <param name="errorMessage">Error message to show in the view.</param>
+        /// <returns>Viwe for upgrading a household members membership.</returns>
+        [IsValidatedHouseholdMember]
+        public ActionResult UpgradeMembership(string statusMessage = null, string errorMessage = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Renews a household members current membership.
+        /// </summary>
+        /// <param name="statusMessage">Status message to show in the view.</param>
+        /// <param name="errorMessage">Error message to show in the view.</param>
+        /// <returns>View for renewing a household members current membership.</returns>
+        [IsValidatedHouseholdMember]
+        public ActionResult RenewMembership(string statusMessage = null, string errorMessage = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Adds a local claim to the current user's identity.
         /// </summary>
         /// <param name="claim">Local claim which should be added to the current user's identity.</param>

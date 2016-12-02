@@ -33,6 +33,14 @@
                 {
                     <p class="card-text">@Html.Raw(Model.HouseholdMember.Membership)</p>
                 }
+                @if (true)
+                {
+                    @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                }
+                @if (true)
+                {
+                    @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                }
             </div>
         </div>
     </div>

@@ -493,6 +493,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Renew.
+        /// </summary>
+        public static string Renew {
+            get {
+                return ResourceManager.GetString("Renew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Repository error in {0}..
         /// </summary>
         public static string RepositoryException {
@@ -561,6 +570,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         public static string Update {
             get {
                 return ResourceManager.GetString("Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade.
+        /// </summary>
+        public static string Upgrade {
+            get {
+                return ResourceManager.GetString("Upgrade", resourceCulture);
             }
         }
         
