@@ -10,7 +10,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
     /// Tests the model for a dashboard.
     /// </summary>
     [TestFixture]
-    public class DashboardModelTest : TestBase
+    public class DashboardModelTests : TestBase
     {
         /// <summary>
         /// Test that the constructor initialize a model for a dashboard.
