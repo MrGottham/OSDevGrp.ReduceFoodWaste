@@ -33,11 +33,18 @@
                 {
                     <p class="card-text">@Html.Raw(Model.HouseholdMember.Membership)</p>
                 }
-                @if (true)
+                @if (Model.HouseholdMember.CanRenewMembership)
                 {
-                    @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                    if (Model.HouseholdMember.CanUpgradeMembership)
+                    {
+                        @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary", style = "margin-bottom: 10px" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                    }
                 }
-                @if (true)
+                @if (Model.HouseholdMember.CanUpgradeMembership)
                 {
                     @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
                 }

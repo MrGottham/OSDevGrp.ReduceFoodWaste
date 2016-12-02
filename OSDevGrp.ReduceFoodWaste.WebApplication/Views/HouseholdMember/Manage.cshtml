@@ -42,6 +42,31 @@
                     <td><strong>@Html.Raw(Model.Membership)</strong></td>
                 }
             </tr>
+            @if (Model.CanRenewMembership || Model.CanUpgradeMembership)
+            {
+                <tr>
+                    <td style="width: 15%" nowrap></td>
+                    <td>
+                        <div class="btn-group">
+                            @if (true)
+                            {
+                                if (true)
+                                {
+                                    @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary", style = "margin-right: 10px" })
+                                }
+                                else
+                                {
+                                    @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                                }
+                            }
+                            @if (true)
+                            {
+                                @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
