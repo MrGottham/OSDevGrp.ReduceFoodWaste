@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 {
@@ -438,15 +439,67 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// Gets all the possible memberships for a given identity.
         /// </summary>
         /// <param name="identity">Identity for who the possible memberships should be returned.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
         /// <returns>Possible memberships for the given identity.</returns>
-        public Task<MembershipModel> GetMembershipsAsync(IIdentity identity)
+        public Task<IEnumerable<MembershipModel>> GetMembershipsAsync(IIdentity identity, CultureInfo cultureInfo)
         {
             if (identity == null)
             {
                 throw new ArgumentNullException("identity");
             }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException("cultureInfo");
+            }
 
-            throw new NotImplementedException();
+            Func<HouseholdDataServiceChannel, IEnumerable<MembershipModel>> callbackFunc = channel =>
+            {
+                var householdMemberModel = GetHouseholdMember(channel, identity, cultureInfo);
+
+                return new List<MembershipModel>
+                {
+
+/*
+The [Name] membership includes:
+- As a household member you can only be member and manage one household.
+
+The [Name] membership includes:
+- As a household member you can only be member and manage two households.
+
+The [Name] membership includes:
+- As a household member you can be member and manage multiple households.
+ */
+                    new MembershipModel
+                    {
+                        Name = Texts.MembershipBasic,
+                        Description = null,
+                        Price = 0M,
+                        PriceCultureInfoName = null,
+                        CanRenew = false,
+                        CanUpgrade = false
+                    },
+                    new MembershipModel
+                    {
+                        Name = Texts.MembershipDeluxe,
+                        Description = null,
+                        Price = 0M,
+                        PriceCultureInfoName = null,
+                        CanRenew = false,
+                        CanUpgrade = false
+                    },
+                    new MembershipModel
+                    {
+                        Name = Texts.MembershipPremium,
+                        Description = null,
+                        Price = 0M,
+                        PriceCultureInfoName = null,
+                        CanRenew = false,
+                        CanUpgrade = false
+                    },
+                };
+            };
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
         }
 
         /// <summary>

@@ -403,6 +403,33 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Basic.
+        /// </summary>
+        public static string MembershipBasic {
+            get {
+                return ResourceManager.GetString("MembershipBasic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deluxe.
+        /// </summary>
+        public static string MembershipDeluxe {
+            get {
+                return ResourceManager.GetString("MembershipDeluxe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Premium.
+        /// </summary>
+        public static string MembershipPremium {
+            get {
+                return ResourceManager.GetString("MembershipPremium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {

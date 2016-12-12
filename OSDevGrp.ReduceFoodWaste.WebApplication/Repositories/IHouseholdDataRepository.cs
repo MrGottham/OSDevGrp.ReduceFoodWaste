@@ -111,8 +111,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// Gets all the possible memberships for a given identity.
         /// </summary>
         /// <param name="identity">Identity for who the possible memberships should be returned.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
         /// <returns>Possible memberships for the given identity.</returns>
-        Task<MembershipModel> GetMembershipsAsync(IIdentity identity);
+        Task<IEnumerable<MembershipModel>> GetMembershipsAsync(IIdentity identity, CultureInfo cultureInfo);
 
         /// <summary>
         /// Gets the privacy policies which should be accepted by a given identity.

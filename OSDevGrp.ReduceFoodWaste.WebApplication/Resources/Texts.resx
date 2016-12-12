@@ -300,4 +300,13 @@
   <data name="Upgrade" xml:space="preserve">
     <value>Upgrade</value>
   </data>
+  <data name="MembershipBasic" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+  <data name="MembershipDeluxe" xml:space="preserve">
+    <value>Deluxe</value>
+  </data>
+  <data name="MembershipPremium" xml:space="preserve">
+    <value>Premium</value>
+  </data>
 </root>

@@ -10,7 +10,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         #region Private variables
 
         private string _description;
-        private CultureInfo _priceCultureInfo;
 
         #endregion
 
@@ -44,12 +43,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         public decimal Price { get; set; }
 
         /// <summary>
-        /// Gets or sets the culture informations for the price of the membership.
+        /// Gets or sets the name of the culture informations for the price of the membership.
+        /// </summary>
+        public string PriceCultureInfoName { get; set; }
+
+        /// <summary>
+        /// Gets the culture informations for the price of the membership.
         /// </summary>
         public CultureInfo PriceCultureInfo
         {
-            get { return _priceCultureInfo ?? CultureInfo.CurrentUICulture; }
-            set { _priceCultureInfo = value; }
+            get
+            {
+                return string.IsNullOrWhiteSpace(PriceCultureInfoName) ? CultureInfo.CurrentUICulture : new CultureInfo(PriceCultureInfoName);
+            }
         }
 
         /// <summary>

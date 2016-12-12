@@ -23,6 +23,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(membershipModel.Name, Is.Null);
             Assert.That(membershipModel.Description, Is.Null);
             Assert.That(membershipModel.Price, Is.EqualTo(0M));
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Null);
             Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
             Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(CultureInfo.CurrentUICulture));
             Assert.That(membershipModel.CanRenew, Is.False);
@@ -83,10 +84,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
 
             var price = Fixture.Create<decimal>();
 
-            var priceCultureInfo = new CultureInfo(cultureName);
-            Assert.That(priceCultureInfo, Is.Not.Null);
-
-            var expectedDescription = description.Replace("[Price]", price.ToString("C", priceCultureInfo));
+            var expectedDescription = description.Replace("[Price]", price.ToString("C", new CultureInfo(cultureName)));
             Assert.That(expectedDescription, Is.Not.Null);
             Assert.That(expectedDescription, Is.Not.Empty);
             Assert.That(expectedDescription.Contains("[Price]"), Is.False);
@@ -95,15 +93,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             {
                 Description = description,
                 Price = price,
-                PriceCultureInfo = priceCultureInfo
+                PriceCultureInfoName = cultureName
             };
             Assert.That(membershipModel, Is.Not.Null);
             Assert.That(membershipModel.Description, Is.Not.Null);
             Assert.That(membershipModel.Description, Is.Not.Empty);
             Assert.That(membershipModel.Description, Is.EqualTo(expectedDescription));
             Assert.That(membershipModel.Price, Is.EqualTo(price));
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(cultureName));
             Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(priceCultureInfo));
+            Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(new CultureInfo(cultureName)));
         }
 
         /// <summary>
@@ -179,48 +180,50 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         }
 
         /// <summary>
-        /// Tests that the setter for PriceCultureInfo sets a new value.
+        /// Tests that the setter for PriceCultureInfoName sets a new value.
         /// </summary>
         [Test]
         [TestCase("da-DK")]
         [TestCase("en-US")]
         [TestCase("es-ES")]
-        public void TestThatPriceCultureInfoSetterSetsValue(string cultureName)
+        public void TestThatPriceCultureInfoNameSetterSetsValue(string cultureName)
         {
             var membershipModel = new MembershipModel();
             Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Null);
             Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
             Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(CultureInfo.CurrentUICulture));
 
-            var newValue = new CultureInfo(cultureName);
-            Assert.That(newValue, Is.Not.Null);
-
-            membershipModel.PriceCultureInfo = newValue;
+            membershipModel.PriceCultureInfoName = cultureName;
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(cultureName));
             Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(newValue));
+            Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(new CultureInfo(cultureName)));
         }
 
         /// <summary>
-        /// Tests that the setter for PriceCultureInfo sets the value to NULL.
+        /// Tests that the setter for PriceCultureInfoName sets the value to NULL.
         /// </summary>
         [Test]
         [TestCase("da-DK")]
         [TestCase("en-US")]
         [TestCase("es-ES")]
-        public void TestThatPriceCultureInfoSetterSetsValueToNull(string cultureName)
+        public void TestThatPriceCultureInfoNameSetterSetsValueToNull(string cultureName)
         {
-            var cultureInfo = new CultureInfo(cultureName);
-            Assert.That(cultureInfo, Is.Not.Null);
-
             var membershipModel = new MembershipModel
             {
-                PriceCultureInfo = cultureInfo
+                PriceCultureInfoName = cultureName
             };
             Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(cultureName));
             Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(cultureInfo));
+            Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(new CultureInfo(cultureName)));
 
-            membershipModel.PriceCultureInfo = null;
+            membershipModel.PriceCultureInfoName = null;
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Null);
             Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
             Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(CultureInfo.CurrentUICulture));
         }

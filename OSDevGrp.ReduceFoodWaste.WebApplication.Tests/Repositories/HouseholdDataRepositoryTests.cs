@@ -533,11 +533,28 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var householdDataRepository = CreateHouseholdDataRepository();
             Assert.IsNotNull(householdDataRepository);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.GetMembershipsAsync(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.GetMembershipsAsync(null, Thread.CurrentThread.CurrentUICulture));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that GetMembershipsAsync throws an ArgumentNullException when the culture informations which should be used for translation is null.
+        /// </summary>
+        [Test]
+        public void TestThatGetMembershipsAsyncThrowsArgumentNullExceptionWhenCultureInfoIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.GetMembershipsAsync(MockRepository.GenerateMock<IIdentity>(), null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("cultureInfo"));
             Assert.That(exception.InnerException, Is.Null);
         }
 
