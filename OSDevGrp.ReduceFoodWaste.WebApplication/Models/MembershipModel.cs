@@ -32,6 +32,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
                     return _description;
                 }
                 return _description
+                    .Replace("[Name]", Name)
                     .Replace("[Price]", Price.ToString("C", PriceCultureInfo));
             }
             set { _description = value; }

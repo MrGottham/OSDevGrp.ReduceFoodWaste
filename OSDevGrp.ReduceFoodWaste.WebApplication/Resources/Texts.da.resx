@@ -309,4 +309,13 @@
   <data name="MembershipPremium" xml:space="preserve">
     <value>Premium</value>
   </data>
+  <data name="MembershipBasicDescription" xml:space="preserve">
+    <value>Et [Name] medlemskab omfatter:&lt;br&gt;- Som husstandsmedlem kan du kun administrere og være medlem af en husstand.&lt;br&gt;&lt;br&gt;Dette medlemsskab er gratis.&lt;/b&gt;</value>
+  </data>
+  <data name="MembershipDeluxeDescription" xml:space="preserve">
+    <value>Et [Name] medlemskab omfatter:&lt;br&gt;- Som husstandsmedlem kan du kun administrere og være medlem af to husstande.&lt;br&gt;&lt;br&gt;Omkostninger pr. år: &lt;b&gt;[Price]&lt;/b&gt;</value>
+  </data>
+  <data name="MembershipPremiumDescription" xml:space="preserve">
+    <value>Et [Name] medlemskab omfatter:&lt;br&gt;- Som husstandsmedlem kan du administrere og være medlem af flere husstande.&lt;br&gt;&lt;br&gt;Omkostninger pr. år: &lt;b&gt;[Price]&lt;/b&gt;</value>
+  </data>
 </root>

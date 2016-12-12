@@ -309,4 +309,13 @@
   <data name="MembershipPremium" xml:space="preserve">
     <value>Premium</value>
   </data>
+  <data name="MembershipBasicDescription" xml:space="preserve">
+    <value>The [Name] membership includes:&lt;br&gt;- As a household member you can only manage and be member of one household.&lt;br&gt;&lt;br&gt;This membership is free.</value>
+  </data>
+  <data name="MembershipDeluxeDescription" xml:space="preserve">
+    <value>The [Name] membership includes:&lt;br&gt;- As a household member you can only manage and be member of two households.&lt;br&gt;&lt;br&gt;Membership costs &lt;b&gt;[Price]&lt;/b&gt; per year.</value>
+  </data>
+  <data name="MembershipPremiumDescription" xml:space="preserve">
+    <value>The [Name] membership includes:&lt;br&gt;- As a household member you can manage and be member of multiple households.&lt;br&gt;&lt;br&gt;Membership costs &lt;b&gt;[Price]&lt;/b&gt; per year.</value>
+  </data>
 </root>

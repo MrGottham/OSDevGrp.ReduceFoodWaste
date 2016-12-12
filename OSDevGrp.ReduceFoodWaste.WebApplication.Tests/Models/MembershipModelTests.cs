@@ -69,6 +69,40 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         }
 
         /// <summary>
+        /// Tests that the getter for Description converts the name tag.
+        /// </summary>
+        [Test]
+        public void TestThatDescriptionGetterConvertsNameTag()
+        {
+            var description = string.Format("{0}[Name]{1}", Fixture.Create<string>(), Fixture.Create<string>());
+            Assert.That(description, Is.Not.Null);
+            Assert.That(description, Is.Not.Empty);
+            Assert.That(description.Contains("[Name]"), Is.True);
+
+            var name = Fixture.Create<string>();
+            Assert.That(name, Is.Not.Null);
+            Assert.That(name, Is.Not.Empty);
+
+            var expectedDescription = description.Replace("[Name]", name);
+            Assert.That(expectedDescription, Is.Not.Null);
+            Assert.That(expectedDescription, Is.Not.Empty);
+            Assert.That(expectedDescription.Contains("[Name]"), Is.False);
+
+            var membershipModel = new MembershipModel
+            {
+                Name = name,
+                Description = description,
+            };
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Empty);
+            Assert.That(membershipModel.Name, Is.EqualTo(name));
+            Assert.That(membershipModel.Description, Is.Not.Null);
+            Assert.That(membershipModel.Description, Is.Not.Empty);
+            Assert.That(membershipModel.Description, Is.EqualTo(expectedDescription));
+        }
+
+        /// <summary>
         /// Tests that the getter for Description converts the price tag.
         /// </summary>
         [Test]

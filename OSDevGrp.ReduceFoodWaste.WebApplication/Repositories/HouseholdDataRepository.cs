@@ -458,21 +458,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 
                 return new List<MembershipModel>
                 {
-
-/*
-The [Name] membership includes:
-- As a household member you can only be member and manage one household.
-
-The [Name] membership includes:
-- As a household member you can only be member and manage two households.
-
-The [Name] membership includes:
-- As a household member you can be member and manage multiple households.
- */
                     new MembershipModel
                     {
                         Name = Texts.MembershipBasic,
-                        Description = null,
+                        Description = Texts.MembershipBasicDescription,
                         Price = 0M,
                         PriceCultureInfoName = null,
                         CanRenew = false,
@@ -481,7 +470,7 @@ The [Name] membership includes:
                     new MembershipModel
                     {
                         Name = Texts.MembershipDeluxe,
-                        Description = null,
+                        Description = Texts.MembershipDeluxeDescription,
                         Price = 0M,
                         PriceCultureInfoName = null,
                         CanRenew = false,
@@ -490,7 +479,7 @@ The [Name] membership includes:
                     new MembershipModel
                     {
                         Name = Texts.MembershipPremium,
-                        Description = null,
+                        Description = Texts.MembershipPremiumDescription,
                         Price = 0M,
                         PriceCultureInfoName = null,
                         CanRenew = false,

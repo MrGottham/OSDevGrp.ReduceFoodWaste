@@ -412,6 +412,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The [Name] membership includes:&lt;br&gt;- As a household member you can only manage and be member of one household.&lt;br&gt;&lt;br&gt;This membership is free..
+        /// </summary>
+        public static string MembershipBasicDescription {
+            get {
+                return ResourceManager.GetString("MembershipBasicDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deluxe.
         /// </summary>
         public static string MembershipDeluxe {
@@ -421,11 +430,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The [Name] membership includes:&lt;br&gt;- As a household member you can only manage and be member of two households.&lt;br&gt;&lt;br&gt;Membership costs &lt;b&gt;[Price]&lt;/b&gt; per year..
+        /// </summary>
+        public static string MembershipDeluxeDescription {
+            get {
+                return ResourceManager.GetString("MembershipDeluxeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Premium.
         /// </summary>
         public static string MembershipPremium {
             get {
                 return ResourceManager.GetString("MembershipPremium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The [Name] membership includes:&lt;br&gt;- As a household member you can manage and be member of multiple households.&lt;br&gt;&lt;br&gt;Membership costs &lt;b&gt;[Price]&lt;/b&gt; per year..
+        /// </summary>
+        public static string MembershipPremiumDescription {
+            get {
+                return ResourceManager.GetString("MembershipPremiumDescription", resourceCulture);
             }
         }
         
