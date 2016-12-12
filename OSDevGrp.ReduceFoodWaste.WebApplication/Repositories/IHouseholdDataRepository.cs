@@ -108,6 +108,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         Task<PrivacyPolicyModel> AcceptPrivacyPolicyAsync(IIdentity identity, PrivacyPolicyModel privacyPolicyModel);
 
         /// <summary>
+        /// Gets all the possible memberships for a given identity.
+        /// </summary>
+        /// <param name="identity">Identity for who the possible memberships should be returned.</param>
+        /// <returns>Possible memberships for the given identity.</returns>
+        Task<MembershipModel> GetMembershipsAsync(IIdentity identity);
+
+        /// <summary>
         /// Gets the privacy policies which should be accepted by a given identity.
         /// </summary>
         /// <param name="identity">Identity which should accept the privacy policies.</param>
