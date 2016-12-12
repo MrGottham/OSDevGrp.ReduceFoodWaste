@@ -48,9 +48,9 @@
                     <td style="width: 15%" nowrap></td>
                     <td>
                         <div class="btn-group">
-                            @if (true)
+                            @if (Model.CanRenewMembership)
                             {
-                                if (true)
+                                if (Model.CanUpgradeMembership)
                                 {
                                     @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary", style = "margin-right: 10px" })
                                 }
@@ -59,7 +59,7 @@
                                     @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
                                 }
                             }
-                            @if (true)
+                            @if (Model.CanUpgradeMembership)
                             {
                                 @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
                             }
