@@ -120,6 +120,7 @@
     <Compile Include="Models\MembershipModelTests.cs" />
     <Compile Include="Models\PrivacyPolicyModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ConfigurationProviderTests.cs" />
     <Compile Include="Repositories\CredentialsProviderTests.cs" />
     <Compile Include="Repositories\HouseholdDataConverterTests.cs" />
     <Compile Include="Repositories\HouseholdDataRepositoryTests.cs" />

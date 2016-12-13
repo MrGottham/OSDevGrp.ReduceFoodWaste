@@ -54,6 +54,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             {
                 throw new ArgumentNullException("container");
             }
+
             container.RegisterType<IClaimValueProvider, ClaimValueProvider>();
             container.RegisterType<ILocalClaimProvider, LocalClaimProvider>();
             container.RegisterType<ICookieHelper, CookieHelper>();
@@ -65,7 +66,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             {
                 throw new ArgumentNullException("container");
             }
+
             container.RegisterType<ICredentialsProvider, CredentialsProvider>();
+            container.RegisterType<IConfigurationProvider, ConfigurationProvider>();
             container.RegisterType<IHouseholdDataConverter, HouseholdDataConverter>();
             container.RegisterType<IHouseholdDataRepository, HouseholdDataRepository>();
         }
