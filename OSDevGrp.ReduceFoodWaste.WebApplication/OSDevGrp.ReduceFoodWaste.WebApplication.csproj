@@ -281,6 +281,8 @@
     <Compile Include="Models\PrivacyPolicyModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ConfigurationProvider.cs" />
+    <Compile Include="Repositories\Configuration\IMembershipConfiguration.cs" />
+    <Compile Include="Repositories\Configuration\MembershipConfiguration.cs" />
     <Compile Include="Repositories\CredentialsProvider.cs" />
     <Compile Include="Repositories\HouseholdDataConverter.cs" />
     <Compile Include="Repositories\HouseholdDataRepository.cs" />

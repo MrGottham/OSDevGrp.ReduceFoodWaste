@@ -3,6 +3,7 @@ using Microsoft.Practices.Unity;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Cookies;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication
 {
@@ -68,6 +69,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             }
 
             container.RegisterType<ICredentialsProvider, CredentialsProvider>();
+            container.RegisterType<IMembershipConfiguration, MembershipConfiguration>();
             container.RegisterType<IConfigurationProvider, ConfigurationProvider>();
             container.RegisterType<IHouseholdDataConverter, HouseholdDataConverter>();
             container.RegisterType<IHouseholdDataRepository, HouseholdDataRepository>();
