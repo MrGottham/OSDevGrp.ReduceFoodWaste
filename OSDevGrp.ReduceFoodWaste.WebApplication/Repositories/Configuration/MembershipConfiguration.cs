@@ -1,4 +1,7 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.Reflection;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration
 {
@@ -7,5 +10,62 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration
     /// </summary>
     public class MembershipConfiguration : ConfigurationSection, IMembershipConfiguration
     {
+        #region Properties
+
+        /// <summary>
+        /// Gets the membership configuration elements.
+        /// </summary>
+        [ConfigurationProperty("memberships", IsDefaultCollection = false, IsRequired = true)]
+        [ConfigurationCollection(typeof(MembershipElementCollection), AddItemName = "add", ClearItemsName = "clear", RemoveItemName = "remove")]
+        public MembershipElementCollection MembershipElements
+        {
+            get { return (MembershipElementCollection) base["memberships"]; }
+        }
+
+        /// <summary>
+        /// Gets the membership configuration element for the membership named Basic.
+        /// </summary>
+        public IMembershipElement BasicMembership
+        {
+            get { return MembershipElements["Basic"]; }
+        }
+
+        /// <summary>
+        /// Gets the membership configuration element for the membership named Deluxe.
+        /// </summary>
+        public IMembershipElement DeluxeMembership
+        {
+            get { return MembershipElements["Deluxe"]; }
+        }
+
+        /// <summary>
+        /// Gets the membership configuration element for the membership named Premium.
+        /// </summary>
+        public IMembershipElement PremiumMembership
+        {
+            get { return MembershipElements["Premium"]; }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Creates and initialize the membership configuration.
+        /// </summary>
+        /// <returns>Created and intialized membership configuration.</returns>
+        public static IMembershipConfiguration Create()
+        {
+            try
+            {
+                return (IMembershipConfiguration) ConfigurationManager.GetSection("membershipConfiguration");
+            }
+            catch (Exception ex)
+            {
+                throw new ReduceFoodWasteRepositoryException(ex.Message, MethodBase.GetCurrentMethod(), ex);
+            }
+        }
+
+        #endregion
     }
 }

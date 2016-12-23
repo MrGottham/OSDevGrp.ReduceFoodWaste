@@ -68,8 +68,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
                 throw new ArgumentNullException("container");
             }
 
+            container.RegisterInstance<IMembershipConfiguration>(MembershipConfiguration.Create());
+
             container.RegisterType<ICredentialsProvider, CredentialsProvider>();
-            container.RegisterType<IMembershipConfiguration, MembershipConfiguration>();
             container.RegisterType<IConfigurationProvider, ConfigurationProvider>();
             container.RegisterType<IHouseholdDataConverter, HouseholdDataConverter>();
             container.RegisterType<IHouseholdDataRepository, HouseholdDataRepository>();
