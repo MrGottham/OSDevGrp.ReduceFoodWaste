@@ -14,8 +14,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration
         string Name { get; }
 
         /// <summary>
-        /// Gets the dictionary containing the pricing for the membership.
+        /// Gets the membership price configuration elements for the membership.
         /// </summary>
-        IEnumerable<KeyValuePair<CultureInfo, decimal>> Pricing { get; }
+        IEnumerable<IMembershipPriceElement> Pricing { get; }
+
+        /// <summary>
+        /// Gets the membership price configuration element for a given culture information.
+        /// </summary>
+        /// <param name="cultureInfo">Culture information for which to get the membership price configuration element.</param>
+        /// <returns>Membership price configuration element for the given culture information.</returns>
+        IMembershipPriceElement GetMembershipPriceElement(CultureInfo cultureInfo);
     }
 }

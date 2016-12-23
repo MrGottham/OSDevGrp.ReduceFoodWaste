@@ -10,6 +10,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration
     /// </summary>
     public class MembershipConfiguration : ConfigurationSection, IMembershipConfiguration
     {
+        #region Private variables
+
+        private static IMembershipConfiguration _membershipConfiguration;
+        private static readonly object SyncRoot = new object();
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -58,7 +65,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration
         {
             try
             {
-                return (IMembershipConfiguration) ConfigurationManager.GetSection("membershipConfiguration");
+                lock (SyncRoot)
+                {
+                    if (_membershipConfiguration != null)
+                    {
+                        return _membershipConfiguration;
+                    }
+                    _membershipConfiguration = (IMembershipConfiguration) ConfigurationManager.GetSection("membershipConfiguration");
+                    return _membershipConfiguration;
+                }
             }
             catch (Exception ex)
             {

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
@@ -31,6 +32,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         #region Private variables
 
         private readonly ICredentialsProvider _credentialsProvider;
+        private readonly IConfigurationProvider _configurationProvider;
         private readonly IHouseholdDataConverter _householdDataConverter;
         private readonly ObjectCache _objectCache = MemoryCache.Default; 
 
@@ -42,18 +44,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// Creates a repository which can access household data.
         /// </summary>
         /// <param name="credentialsProvider">Implementation of a provider which can creates credentials.</param>
+        /// <param name="configurationProvider">Implementation of a provider which can provide configuration.</param>
         /// <param name="householdDataConverter">Implementation of a converter which can convert household data.</param>
-        public HouseholdDataRepository(ICredentialsProvider credentialsProvider, IHouseholdDataConverter householdDataConverter)
+        public HouseholdDataRepository(ICredentialsProvider credentialsProvider, IConfigurationProvider configurationProvider, IHouseholdDataConverter householdDataConverter)
         {
             if (credentialsProvider == null)
             {
-                throw new ArgumentNullException("credentialsProvider");
+                throw new ArgumentNullException(nameof(credentialsProvider));
+            }
+            if (configurationProvider == null)
+            {
+                throw new ArgumentNullException(nameof(configurationProvider));
             }
             if (householdDataConverter == null)
             {
-                throw new ArgumentNullException("householdDataConverter");
+                throw new ArgumentNullException(nameof(householdDataConverter));
             }
             _credentialsProvider = credentialsProvider;
+            _configurationProvider = configurationProvider;
             _householdDataConverter = householdDataConverter;
         }
 
@@ -456,14 +464,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             {
                 var householdMemberModel = GetHouseholdMember(channel, identity, cultureInfo);
 
+                IMembershipPriceElement basicMembershipPriceElement = _configurationProvider.MembershipConfiguration.BasicMembership.GetMembershipPriceElement(cultureInfo);
+                IMembershipPriceElement deluxeMembershipPriceElement = _configurationProvider.MembershipConfiguration.DeluxeMembership.GetMembershipPriceElement(cultureInfo);
+                IMembershipPriceElement premiumMembership = _configurationProvider.MembershipConfiguration.PremiumMembership.GetMembershipPriceElement(cultureInfo);
+
                 return new List<MembershipModel>
                 {
                     new MembershipModel
                     {
                         Name = Texts.MembershipBasic,
                         Description = Texts.MembershipBasicDescription,
-                        Price = 0M,
-                        PriceCultureInfoName = null,
+                        Price = basicMembershipPriceElement.Price,
+                        PriceCultureInfoName = basicMembershipPriceElement.CultureName,
                         CanRenew = false,
                         CanUpgrade = false
                     },
@@ -471,8 +483,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     {
                         Name = Texts.MembershipDeluxe,
                         Description = Texts.MembershipDeluxeDescription,
-                        Price = 0M,
-                        PriceCultureInfoName = null,
+                        Price = deluxeMembershipPriceElement.Price,
+                        PriceCultureInfoName = deluxeMembershipPriceElement.CultureName,
                         CanRenew = false,
                         CanUpgrade = false
                     },
@@ -480,8 +492,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     {
                         Name = Texts.MembershipPremium,
                         Description = Texts.MembershipPremiumDescription,
-                        Price = 0M,
-                        PriceCultureInfoName = null,
+                        Price = premiumMembership.Price,
+                        PriceCultureInfoName = premiumMembership.CultureName,
                         CanRenew = false,
                         CanUpgrade = false
                     },

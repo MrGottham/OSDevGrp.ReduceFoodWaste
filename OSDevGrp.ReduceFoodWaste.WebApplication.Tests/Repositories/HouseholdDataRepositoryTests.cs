@@ -19,6 +19,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         #region Private variables
 
         private ICredentialsProvider _credentialsProviderMock;
+        private IConfigurationProvider _configurationProviderMock;
         private IHouseholdDataConverter _householdDataConverterMock;
 
         #endregion
@@ -30,6 +31,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         public void TestInitialize()
         {
             _credentialsProviderMock = MockRepository.GenerateMock<ICredentialsProvider>();
+            _configurationProviderMock = MockRepository.GenerateMock<IConfigurationProvider>();
             _householdDataConverterMock = MockRepository.GenerateMock<IHouseholdDataConverter>();
         }
 
@@ -39,7 +41,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         [Test]
         public void TestThatConstructorInitializeHouseholdDataRepository()
         {
-            var householdDataRepository = new HouseholdDataRepository(_credentialsProviderMock, _householdDataConverterMock);
+            var householdDataRepository = new HouseholdDataRepository(_credentialsProviderMock, _configurationProviderMock, _householdDataConverterMock);
             Assert.That(householdDataRepository, Is.Not.Null);
         }
 
@@ -49,11 +51,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenCredentialsProviderIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdDataRepository(null, _householdDataConverterMock));
+            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdDataRepository(null, _configurationProviderMock, _householdDataConverterMock));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("credentialsProvider"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that the constructor throws an ArgumentNullException when the provider which can provide configuration is null.
+        /// </summary>
+        [Test]
+        public void TestThatConstructorThrowsArgumentNullExceptionWhenConfigurationProviderIsNull()
+        {
+            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdDataRepository(_credentialsProviderMock, null, _householdDataConverterMock));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("configurationProvider"));
             Assert.That(exception.InnerException, Is.Null);
         }
 
@@ -63,7 +79,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenHouseholdDataConverterIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdDataRepository(_credentialsProviderMock, null));
+            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdDataRepository(_credentialsProviderMock, _configurationProviderMock, null));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -598,7 +614,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         /// <returns>Repository which can access household data for unit testing.</returns>
         private IHouseholdDataRepository CreateHouseholdDataRepository()
         {
-            return new HouseholdDataRepository(_credentialsProviderMock, _householdDataConverterMock);
+            return new HouseholdDataRepository(_credentialsProviderMock, _configurationProviderMock, _householdDataConverterMock);
         }
     }
 }

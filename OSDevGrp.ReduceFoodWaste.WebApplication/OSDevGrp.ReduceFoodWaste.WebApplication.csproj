@@ -283,9 +283,12 @@
     <Compile Include="Repositories\ConfigurationProvider.cs" />
     <Compile Include="Repositories\Configuration\IMembershipConfiguration.cs" />
     <Compile Include="Repositories\Configuration\IMembershipElement.cs" />
+    <Compile Include="Repositories\Configuration\IMembershipPriceElement.cs" />
     <Compile Include="Repositories\Configuration\MembershipConfiguration.cs" />
     <Compile Include="Repositories\Configuration\MembershipElement.cs" />
     <Compile Include="Repositories\Configuration\MembershipElementCollection.cs" />
+    <Compile Include="Repositories\Configuration\MembershipPriceElement.cs" />
+    <Compile Include="Repositories\Configuration\MembershipPriceElementCollection.cs" />
     <Compile Include="Repositories\CredentialsProvider.cs" />
     <Compile Include="Repositories\HouseholdDataConverter.cs" />
     <Compile Include="Repositories\HouseholdDataRepository.cs" />
