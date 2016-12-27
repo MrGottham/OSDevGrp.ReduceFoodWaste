@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Security.Claims;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
@@ -334,7 +336,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [IsValidatedHouseholdMember]
         public ActionResult UpgradeMembership(string statusMessage = null, string errorMessage = null)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
+                task.Wait();
+
+                return null;
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.ToReduceFoodWasteException();
+            }
         }
 
         /// <summary>
@@ -346,7 +358,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [IsValidatedHouseholdMember]
         public ActionResult RenewMembership(string statusMessage = null, string errorMessage = null)
         {
-            throw new NotImplementedException();
+            try
+            {
+                try
+                {
+                    Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
+                    task.Wait();
+
+                    return null;
+                }
+                catch (AggregateException ex)
+                {
+                    throw ex.ToReduceFoodWasteException();
+                }
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.ToReduceFoodWasteException();
+            }
         }
 
         /// <summary>

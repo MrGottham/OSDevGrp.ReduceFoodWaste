@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -2598,6 +2599,198 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that UpgradeMembership without a status message calls GetMembershipsAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatUpgradeMembershipWithoutStatusMessageCallsGetMembershipsAsyncOnHouseholdDataRepository(string statusMessage)
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
+
+            householdMemberController.UpgradeMembership(statusMessage: statusMessage);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeMembership with a status message calls GetMembershipsAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeMembershipWithStatusMessageCallsGetMembershipsAsyncOnHouseholdDataRepository()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            var statusMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
+
+            householdMemberController.UpgradeMembership(statusMessage: statusMessage);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeMembership without an error message calls GetMembershipsAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatUpgradeMembershipWithoutErrorMessageCallsGetMembershipsAsyncOnHouseholdDataRepository(string errorMessage)
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
+
+            householdMemberController.UpgradeMembership(errorMessage: errorMessage);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeMembership with an error message calls GetMembershipsAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeMembershipWithErrorMessageCallsGetMembershipsAsyncOnHouseholdDataRepository()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            var errorMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
+
+            householdMemberController.UpgradeMembership(errorMessage: errorMessage);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership without a status message calls GetMembershipsAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatRenewMembershipWithoutStatusMessageCallsGetMembershipsAsyncOnHouseholdDataRepository(string statusMessage)
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
+
+            householdMemberController.RenewMembership(statusMessage: statusMessage);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership with a status message calls GetMembershipsAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatRenewMembershipWithStatusMessageCallsGetMembershipsAsyncOnHouseholdDataRepository()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            var statusMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
+
+            householdMemberController.RenewMembership(statusMessage: statusMessage);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership without an error message calls GetMembershipsAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatRenewMembershipWithoutErrorMessageCallsGetMembershipsAsyncOnHouseholdDataRepository(string errorMessage)
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
+
+            householdMemberController.RenewMembership(errorMessage: errorMessage);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership with an error message calls GetMembershipsAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        public void TestThatRenewMembershipWithErrorMessageCallsGetMembershipsAsyncOnHouseholdDataRepository()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            var errorMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
+
+            householdMemberController.RenewMembership(errorMessage: errorMessage);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
         /// Creates a controller for a household member for unit testing.
         /// </summary>
         /// <param name="privacyPolicyModel">Sets the privacy policy model which should be used by the controller.</param>
@@ -2611,8 +2804,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <param name="activatedHouseholdMemberModel">Sets the model for an activated household member.</param>
         /// <param name="acceptedPrivacyPolicyModel">Sets the model for a privacy model which has been accepted.</param>
         /// <param name="householdMemberModel">Sets the model for the current users household member account.</param>
+        /// <param name="membershipModelCollection">Sets the collection of membership models.</param>
         /// <returns>Controller for a household member for unit testing.</returns>
-        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null)
+        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null, IEnumerable<MembershipModel> membershipModelCollection = null)
         {
             Func<HouseholdModel> householdCreator = () =>
             {
@@ -2640,6 +2834,31 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                     .With(m => m.Households, null)
                     .Create();
             };
+            Func<IEnumerable<MembershipModel>> membershipModelsGetter = () =>
+            {
+                if (membershipModelCollection != null)
+                {
+                    return membershipModelCollection;
+                }
+                return new List<MembershipModel>
+                {
+                    Fixture.Build<MembershipModel>()
+                        .With(m => m.Name, "Basic")
+                        .With(m => m.Price, 0M)
+                        .With(m => m.PriceCultureInfoName, "en-US")
+                        .Create(),
+                    Fixture.Build<MembershipModel>()
+                        .With(m => m.Name, "Deluxe")
+                        .With(m => m.Price, 3M)
+                        .With(m => m.PriceCultureInfoName, "en-US")
+                        .Create(),
+                    Fixture.Build<MembershipModel>()
+                        .With(m => m.Name, "Premium")
+                        .With(m => m.Price, 5M)
+                        .With(m => m.PriceCultureInfoName, "en-US")
+                        .Create()
+                };
+            };
             _householdDataRepositoryMock.Stub(m => m.GetPrivacyPoliciesAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => privacyPolicyModel ?? Fixture.Create<PrivacyPolicyModel>()))
                 .Repeat.Any();
@@ -2654,6 +2873,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.GetHouseholdMemberAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(householdMemberGetter))
+                .Repeat.Any();
+            _householdDataRepositoryMock.Stub(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
+                .Return(Task.Run(membershipModelsGetter))
                 .Repeat.Any();
 
             _claimValueProviderMock.Stub(m => m.IsActivatedHouseholdMember(Arg<IIdentity>.Is.Anything))
