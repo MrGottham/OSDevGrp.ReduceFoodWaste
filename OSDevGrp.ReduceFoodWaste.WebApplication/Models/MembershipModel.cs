@@ -60,6 +60,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         }
 
         /// <summary>
+        /// Gets whether the membership is for free.
+        /// </summary>
+        public bool IsFree
+        {
+            get { return Price <= 0M; }
+        }
+
+        /// <summary>
         /// Gets or sets whether the membership can be renewed.
         /// </summary>
         public bool CanRenew { get; set; }

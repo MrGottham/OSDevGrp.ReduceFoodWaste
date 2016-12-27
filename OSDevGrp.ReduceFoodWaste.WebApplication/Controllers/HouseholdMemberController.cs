@@ -38,15 +38,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             if (householdDataRepository == null)
             {
-                throw new ArgumentNullException("householdDataRepository");
+                throw new ArgumentNullException(nameof(householdDataRepository));
             }
             if (claimValueProvider == null)
             {
-                throw new ArgumentNullException("claimValueProvider");
+                throw new ArgumentNullException(nameof(claimValueProvider));
             }
             if (localClaimProvider == null)
             {
-                throw new ArgumentNullException("localClaimProvider");
+                throw new ArgumentNullException(nameof(localClaimProvider));
             }
             _householdDataRepository = householdDataRepository;
             _claimValueProvider = claimValueProvider;
@@ -98,7 +98,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             if (householdModel == null)
             {
-                throw new ArgumentNullException("householdModel");
+                throw new ArgumentNullException(nameof(householdModel));
             }
             try
             {
@@ -217,7 +217,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             if (householdMemberModel == null)
             {
-                throw new ArgumentNullException("householdMemberModel");
+                throw new ArgumentNullException(nameof(householdMemberModel));
             }
             try
             {
@@ -357,7 +357,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             if (claim == null)
             {
-                throw new ArgumentNullException("claim");
+                throw new ArgumentNullException(nameof(claim));
             }
             
             if (User == null || User.Identity is ClaimsIdentity == false)

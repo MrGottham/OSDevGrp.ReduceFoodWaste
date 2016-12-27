@@ -78,7 +78,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
 
             Func<HouseholdDataServiceChannel, bool> callbackFunc = channel =>
@@ -101,7 +101,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
 
             Func<HouseholdDataServiceChannel, bool> callbackFunc = channel =>
@@ -124,7 +124,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
 
             Func<HouseholdDataServiceChannel, bool> callbackFunc = channel =>
@@ -148,11 +148,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (cultureInfo == null)
             {
-                throw new ArgumentNullException("cultureInfo");
+                throw new ArgumentNullException(nameof(cultureInfo));
             }
 
             Func<HouseholdDataServiceChannel, HouseholdMemberModel> callbackFunc = channel => GetHouseholdMember(channel, identity, cultureInfo);
@@ -170,11 +170,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (cultureInfo == null)
             {
-                throw new ArgumentNullException("cultureInfo");
+                throw new ArgumentNullException(nameof(cultureInfo));
             }
 
             Func<HouseholdDataServiceChannel, IEnumerable<HouseholdIdentificationModel>> callbackFunc = channel =>
@@ -211,15 +211,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (householdModel == null)
             {
-                throw new ArgumentNullException("householdModel");
+                throw new ArgumentNullException(nameof(householdModel));
             }
             if (cultureInfo == null)
             {
-                throw new ArgumentNullException("cultureInfo");
+                throw new ArgumentNullException(nameof(cultureInfo));
             }
 
             Func<HouseholdDataServiceChannel, HouseholdModel> callbackFunc = channel =>
@@ -259,15 +259,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (householdModel == null)
             {
-                throw new ArgumentNullException("householdModel");
+                throw new ArgumentNullException(nameof(householdModel));
             }
             if (cultureInfo == null)
             {
-                throw new ArgumentNullException("cultureInfo");
+                throw new ArgumentNullException(nameof(cultureInfo));
             }
 
             Func<HouseholdDataServiceChannel, HouseholdModel> callbackFunc = channel =>
@@ -296,11 +296,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (householdModel == null)
             {
-                throw new ArgumentNullException("householdModel");
+                throw new ArgumentNullException(nameof(householdModel));
             }
 
             Func<HouseholdDataServiceChannel, HouseholdModel> callbackFunc = channel =>
@@ -329,15 +329,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (memberOfHouseholdModel == null)
             {
-                throw new ArgumentNullException("memberOfHouseholdModel");
+                throw new ArgumentNullException(nameof(memberOfHouseholdModel));
             }
             if (cultureInfo == null)
             {
-                throw new ArgumentNullException("cultureInfo");
+                throw new ArgumentNullException(nameof(cultureInfo));
             }
 
             Func<HouseholdDataServiceChannel, MemberOfHouseholdModel> callbackFunc = channel =>
@@ -364,11 +364,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (memberOfHouseholdModel == null)
             {
-                throw new ArgumentNullException("memberOfHouseholdModel");
+                throw new ArgumentNullException(nameof(memberOfHouseholdModel));
             }
 
             Func<HouseholdDataServiceChannel, MemberOfHouseholdModel> callbackFunc = channel =>
@@ -394,11 +394,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (householdMemberModel == null)
             {
-                throw new ArgumentNullException("householdMemberModel");
+                throw new ArgumentNullException(nameof(householdMemberModel));
             }
 
             Func<HouseholdDataServiceChannel, HouseholdMemberModel> callbackFunc = channel =>
@@ -424,11 +424,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (privacyPolicyModel == null)
             {
-                throw new ArgumentNullException("privacyPolicyModel");
+                throw new ArgumentNullException(nameof(privacyPolicyModel));
             }
 
             Func<HouseholdDataServiceChannel, PrivacyPolicyModel> callbackFunc = channel =>
@@ -453,49 +453,53 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (cultureInfo == null)
             {
-                throw new ArgumentNullException("cultureInfo");
+                throw new ArgumentNullException(nameof(cultureInfo));
             }
 
             Func<HouseholdDataServiceChannel, IEnumerable<MembershipModel>> callbackFunc = channel =>
             {
                 var householdMemberModel = GetHouseholdMember(channel, identity, cultureInfo);
 
-                IMembershipPriceElement basicMembershipPriceElement = _configurationProvider.MembershipConfiguration.BasicMembership.GetMembershipPriceElement(cultureInfo);
-                IMembershipPriceElement deluxeMembershipPriceElement = _configurationProvider.MembershipConfiguration.DeluxeMembership.GetMembershipPriceElement(cultureInfo);
-                IMembershipPriceElement premiumMembership = _configurationProvider.MembershipConfiguration.PremiumMembership.GetMembershipPriceElement(cultureInfo);
+                IMembershipConfiguration membershipConfiguration = _configurationProvider.MembershipConfiguration;
+                IMembershipElement basicMembership = membershipConfiguration.BasicMembership;
+                IMembershipPriceElement basicMembershipPrice = basicMembership.GetMembershipPriceElement(cultureInfo);
+                IMembershipElement deluxeMembership = membershipConfiguration.DeluxeMembership;
+                IMembershipPriceElement deluxeMembershipPrice = deluxeMembership.GetMembershipPriceElement(cultureInfo);
+                IMembershipElement premiumMembership = membershipConfiguration.PremiumMembership;
+                IMembershipPriceElement premiumMembershipPrice = premiumMembership.GetMembershipPriceElement(cultureInfo);
 
                 return new List<MembershipModel>
                 {
                     new MembershipModel
                     {
-                        Name = Texts.MembershipBasic,
+                        Name = basicMembership.Name,
                         Description = Texts.MembershipBasicDescription,
-                        Price = basicMembershipPriceElement.Price,
-                        PriceCultureInfoName = basicMembershipPriceElement.CultureName,
-                        CanRenew = false,
-                        CanUpgrade = false
+                        Price = basicMembershipPrice.Price,
+                        PriceCultureInfoName = basicMembershipPrice.CultureName,
+                        CanRenew = householdMemberModel.CanRenewMembership && string.Compare(householdMemberModel.Membership, basicMembership.Name, StringComparison.Ordinal) == 0,
+                        CanUpgrade = householdMemberModel.CanUpgradeMembership && householdMemberModel.UpgradeableMemberships != null && householdMemberModel.UpgradeableMemberships.Contains(basicMembership.Name)
                     },
                     new MembershipModel
                     {
-                        Name = Texts.MembershipDeluxe,
+                        Name = deluxeMembership.Name,
                         Description = Texts.MembershipDeluxeDescription,
-                        Price = deluxeMembershipPriceElement.Price,
-                        PriceCultureInfoName = deluxeMembershipPriceElement.CultureName,
-                        CanRenew = false,
-                        CanUpgrade = false
+                        Price = deluxeMembershipPrice.Price,
+                        PriceCultureInfoName = deluxeMembershipPrice.CultureName,
+                        CanRenew = householdMemberModel.CanRenewMembership && string.Compare(householdMemberModel.Membership, deluxeMembership.Name, StringComparison.Ordinal) == 0,
+                        CanUpgrade = householdMemberModel.CanUpgradeMembership && householdMemberModel.UpgradeableMemberships != null && householdMemberModel.UpgradeableMemberships.Contains(deluxeMembership.Name)
                     },
                     new MembershipModel
                     {
-                        Name = Texts.MembershipPremium,
+                        Name = premiumMembership.Name,
                         Description = Texts.MembershipPremiumDescription,
-                        Price = premiumMembership.Price,
-                        PriceCultureInfoName = premiumMembership.CultureName,
-                        CanRenew = false,
-                        CanUpgrade = false
+                        Price = premiumMembershipPrice.Price,
+                        PriceCultureInfoName = premiumMembershipPrice.CultureName,
+                        CanRenew = householdMemberModel.CanRenewMembership &&  string.Compare(householdMemberModel.Membership, premiumMembership.Name, StringComparison.Ordinal) == 0,
+                        CanUpgrade = householdMemberModel.CanUpgradeMembership && householdMemberModel.UpgradeableMemberships != null && householdMemberModel.UpgradeableMemberships.Contains(premiumMembership.Name)
                     },
                 };
             };
@@ -513,11 +517,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (cultureInfo == null)
             {
-                throw new ArgumentNullException("cultureInfo");
+                throw new ArgumentNullException(nameof(cultureInfo));
             }
 
             return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), channel => GetPrivacyPolicies(channel, cultureInfo)));
@@ -535,15 +539,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (methodBase == null)
             {
-                throw new ArgumentNullException("methodBase");
+                throw new ArgumentNullException(nameof(methodBase));
             }
             if (callbackFunc == null)
             {
-                throw new ArgumentNullException("callbackFunc");
+                throw new ArgumentNullException(nameof(callbackFunc));
             }
 
             return () =>
@@ -611,15 +615,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (channel == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (cultureInfo == null)
             {
-                throw new ArgumentNullException("cultureInfo");
+                throw new ArgumentNullException(nameof(cultureInfo));
             }
 
             var query = new HouseholdMemberDataGetQuery
@@ -649,11 +653,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (channel == null)
             {
-                throw new ArgumentNullException("channel");
+                throw new ArgumentNullException(nameof(channel));
             }
             if (cultureInfo == null)
             {
-                throw new ArgumentNullException("cultureInfo");
+                throw new ArgumentNullException(nameof(cultureInfo));
             }
 
             var query = new PrivacyPolicyGetQuery
@@ -703,11 +707,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (channel == null)
             {
-                throw new ArgumentNullException("channel");
+                throw new ArgumentNullException(nameof(channel));
             }
             if (cultureInfo == null)
             {
-                throw new ArgumentNullException("cultureInfo");
+                throw new ArgumentNullException(nameof(cultureInfo));
             }
 
             var translationInfoIdentifierCache = _objectCache.Get(TranslationInfoIdentifierCacheName) as IDictionary<string, Guid>;
@@ -737,7 +741,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
 
             var channelFactory = new ChannelFactory<HouseholdDataServiceChannel>(HouseholdDataServiceEndpointConfigurationName);
@@ -760,7 +764,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
 
             var householdIdentificationCollectionCacheName = GetHouseholdIdentificationCollectionCacheName(identity);
@@ -776,11 +780,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
             if (householdIdentificationCollection == null)
             {
-                throw new ArgumentNullException("householdIdentificationCollection");
+                throw new ArgumentNullException(nameof(householdIdentificationCollection));
             }
 
             var householdIdentificationCollectionCacheName = GetHouseholdIdentificationCollectionCacheName(identity);
@@ -795,7 +799,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
 
             var householdIdentificationCollectionCacheName = GetHouseholdIdentificationCollectionCacheName(identity);
@@ -815,11 +819,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
 
             var userNamePasswordCredential = _credentialsProvider.CreateUserNamePasswordCredential(identity);
-            return string.Format("{0}:{1}", HouseholdIdentificationCollectionCacheName, _credentialsProvider.CalculateHashForCredential(userNamePasswordCredential));
+            return $"{HouseholdIdentificationCollectionCacheName}:{_credentialsProvider.CalculateHashForCredential(userNamePasswordCredential)}";
         }
 
         #endregion

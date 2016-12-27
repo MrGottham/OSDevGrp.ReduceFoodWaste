@@ -26,6 +26,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(membershipModel.PriceCultureInfoName, Is.Null);
             Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
             Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(CultureInfo.CurrentUICulture));
+            Assert.That(membershipModel.IsFree, Is.True);
             Assert.That(membershipModel.CanRenew, Is.False);
             Assert.That(membershipModel.CanUpgrade, Is.False);
         }
@@ -188,12 +189,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             var membershipModel = new MembershipModel();
             Assert.That(membershipModel, Is.Not.Null);
             Assert.That(membershipModel.Price, Is.EqualTo(0M));
+            Assert.That(membershipModel.IsFree, Is.True);
 
             var newValue = Fixture.Create<decimal>();
             Assert.That(newValue, Is.Not.EqualTo(0M));
 
             membershipModel.Price = newValue;
             Assert.That(membershipModel.Price, Is.EqualTo(newValue));
+            Assert.That(membershipModel.IsFree, Is.EqualTo(newValue <= 0));
         }
 
         /// <summary>
@@ -208,9 +211,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             };
             Assert.That(membershipModel, Is.Not.Null);
             Assert.That(membershipModel.Price, Is.Not.EqualTo(0M));
+            Assert.That(membershipModel.IsFree, Is.EqualTo(membershipModel.Price <= 0));
 
             membershipModel.Price = 0M;
             Assert.That(membershipModel.Price, Is.EqualTo(0M));
+            Assert.That(membershipModel.IsFree, Is.True);
         }
 
         /// <summary>
