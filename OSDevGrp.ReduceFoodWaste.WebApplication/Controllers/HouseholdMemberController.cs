@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 {
@@ -341,7 +343,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
                 task.Wait();
 
-                return null;
+                IList<MembershipModel> membershipModelCollection = task.Result.ToList();
+                if (membershipModelCollection.Any(m => m.CanUpgrade) == false)
+                {
+                    throw new ReduceFoodWasteSystemException(Texts.MembershipUpgradeNotPossible);
+                }
+
+                if (string.IsNullOrWhiteSpace(statusMessage) == false)
+                {
+                    ViewBag.StatusMessage = statusMessage;
+                }
+                if (string.IsNullOrWhiteSpace(errorMessage) == false)
+                {
+                    ViewBag.ErrorMessage = errorMessage;
+                }
+
+                return View("UpgradeMembership", membershipModelCollection);
             }
             catch (AggregateException ex)
             {
@@ -365,7 +382,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
                     task.Wait();
 
-                    return null;
+                    MembershipModel membershipModel = task.Result.SingleOrDefault(m => m.CanRenew);
+                    if (membershipModel == null)
+                    {
+                        throw new ReduceFoodWasteSystemException(Texts.MembershipRenewNotPossible);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(statusMessage) == false)
+                    {
+                        ViewBag.StatusMessage = statusMessage;
+                    }
+                    if (string.IsNullOrWhiteSpace(errorMessage) == false)
+                    {
+                        ViewBag.ErrorMessage = errorMessage;
+                    }
+
+                    return View("RenewMembership", membershipModel);
                 }
                 catch (AggregateException ex)
                 {

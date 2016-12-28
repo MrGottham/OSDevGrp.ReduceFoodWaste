@@ -10,9 +10,11 @@ using System.Web;
 using System.Web.Mvc;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Ploeh.AutoFixture;
 using Rhino.Mocks;
@@ -2695,6 +2697,256 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that UpgradeMembership without a status message throws an ReduceFoodWasteSystemException when upgrade is not possible.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatUpgradeMembershipWithoutStatusMessageThrowsReduceFoodWasteSystemExceptionWhenUpgradeIsNotPossible(string statusMessage)
+        {
+            var membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.False);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(statusMessage: statusMessage));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.MembershipUpgradeNotPossible));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that UpgradeMembership without a status message throws an ReduceFoodWasteSystemException when upgrade is not possible.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeMembershipWithStatusMessageThrowsReduceFoodWasteSystemExceptionWhenUpgradeIsNotPossible()
+        {
+            var membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.False);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var statusMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(statusMessage: statusMessage));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.MembershipUpgradeNotPossible));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that UpgradeMembership without an error message throws an ReduceFoodWasteSystemException when upgrade is not possible.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatUpgradeMembershipWithoutErrorMessageThrowsReduceFoodWasteSystemExceptionWhenUpgradeIsNotPossible(string errorMessage)
+        {
+            var membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.False);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(errorMessage: errorMessage));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.MembershipUpgradeNotPossible));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that UpgradeMembership without an error message throws an ReduceFoodWasteSystemException when upgrade is not possible.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeMembershipWithErrorMessageThrowsReduceFoodWasteSystemExceptionWhenUpgradeIsNotPossible()
+        {
+            var membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.False);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var errorMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(errorMessage: errorMessage));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.MembershipUpgradeNotPossible));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that UpgradeMembership without a status message returns a ViewResult with membership models for upgrading.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatUpgradeMembershipWithoutStatusMessageReturnsViewResultWithModelsForUpgrade(string statusMessage)
+        {
+            var membershipModelCollection = CreateMembershipModelCollection();
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.True);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
+
+            var result = householdMemberController.UpgradeMembership(statusMessage: statusMessage);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult)result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("UpgradeMembership"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(membershipModelCollection));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Empty);
+        }
+
+        /// <summary>
+        /// Tests that UpgradeMembership without a status message returns a ViewResult with membership models for upgrading.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeMembershipWithStatusMessageReturnsViewResultWithModelsForUpgrade()
+        {
+            var membershipModelCollection = CreateMembershipModelCollection();
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.True);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var statusMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
+
+            var result = householdMemberController.UpgradeMembership(statusMessage: statusMessage);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult)result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("UpgradeMembership"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(membershipModelCollection));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["StatusMessage"], Is.EqualTo(statusMessage));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeMembership without an error message returns a ViewResult with membership models for upgrading.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatUpgradeMembershipWithoutErrorMessageReturnsViewResultWithModelsForUpgrade(string errorMessage)
+        {
+            var membershipModelCollection = CreateMembershipModelCollection();
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.True);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
+
+            var result = householdMemberController.UpgradeMembership(errorMessage: errorMessage);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult)result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("UpgradeMembership"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(membershipModelCollection));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Empty);
+        }
+
+        /// <summary>
+        /// Tests that UpgradeMembership without an error message returns a ViewResult with membership models for upgrading.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeMembershipWithErrorMessageReturnsViewResultWithWithModelsForUpgrade()
+        {
+            var membershipModelCollection = CreateMembershipModelCollection();
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.True);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var errorMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
+
+            var result = householdMemberController.UpgradeMembership(errorMessage: errorMessage);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult)result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("UpgradeMembership"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(membershipModelCollection));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ErrorMessage"], Is.EqualTo(errorMessage));
+        }
+
+        /// <summary>
         /// Tests that RenewMembership without a status message calls GetMembershipsAsync on the repository which can access household data.
         /// </summary>
         [Test]
@@ -2791,6 +3043,268 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that RenewMembership without a status message throws an ReduceFoodWasteSystemException when renew is not possible.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatRenewMembershipWithoutStatusMessageThrowsReduceFoodWasteSystemExceptionWhenRenewIsNotPossible(string statusMessage)
+        {
+            var membershipModelCollection = CreateMembershipModelCollection(canReview: false);
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.False);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(statusMessage: statusMessage));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.MembershipRenewNotPossible));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership without a status message throws an ReduceFoodWasteSystemException when renew is not possible.
+        /// </summary>
+        [Test]
+        public void TestThatRenewMembershipWithStatusMessageThrowsReduceFoodWasteSystemExceptionWhenRenewIsNotPossible()
+        {
+            var membershipModelCollection = CreateMembershipModelCollection(canReview: false);
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.False);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var statusMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(statusMessage: statusMessage));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.MembershipRenewNotPossible));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership without an error message throws an ReduceFoodWasteSystemException when renew is not possible.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatRenewMembershipWithoutErrorMessageThrowsReduceFoodWasteSystemExceptionWhenRenewIsNotPossible(string errorMessage)
+        {
+            var membershipModelCollection = CreateMembershipModelCollection(canReview: false);
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.False);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(errorMessage: errorMessage));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.MembershipRenewNotPossible));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership without an error message throws an ReduceFoodWasteSystemException when renew is not possible.
+        /// </summary>
+        [Test]
+        public void TestThatRenewMembershipWithErrorMessageThrowsReduceFoodWasteSystemExceptionWhenRenewIsNotPossible()
+        {
+            var membershipModelCollection = CreateMembershipModelCollection(canReview: false);
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.False);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var errorMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
+
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(errorMessage: errorMessage));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+            Assert.That(exception.Message, Is.EqualTo(Texts.MembershipRenewNotPossible));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership without a status message returns a ViewResult with a membership model for renewing.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatRenewMembershipWithoutStatusMessageReturnsViewResultWithWithModelForRenew(string statusMessage)
+        {
+            var membershipModelCollection = CreateMembershipModelCollection();
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.True);
+
+            var membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
+            Assert.That(membershipModel, Is.Not.Null);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
+
+            var result = householdMemberController.RenewMembership(statusMessage: statusMessage);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("RenewMembership"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(membershipModel));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Empty);
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership without a status message returns a ViewResult with a membership model for renewing.
+        /// </summary>
+        [Test]
+        public void TestThatRenewMembershipWithStatusMessageReturnsViewResultWithWithModelForRenew()
+        {
+            var membershipModelCollection = CreateMembershipModelCollection();
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.True);
+
+            var membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
+            Assert.That(membershipModel, Is.Not.Null);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var statusMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
+
+            var result = householdMemberController.RenewMembership(statusMessage: statusMessage);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("RenewMembership"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(membershipModel));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["StatusMessage"], Is.EqualTo(statusMessage));
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership without an error message returns a ViewResult with a membership model for renewing.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase("   ")]
+        public void TestThatRenewMembershipWithoutErrorMessageReturnsViewResultWithWithModelForRenew(string errorMessage)
+        {
+            var membershipModelCollection = CreateMembershipModelCollection();
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.True);
+
+            var membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
+            Assert.That(membershipModel, Is.Not.Null);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
+
+            var result = householdMemberController.RenewMembership(errorMessage: errorMessage);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("RenewMembership"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(membershipModel));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Empty);
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership without an error message returns a ViewResult with a membership model for renewing.
+        /// </summary>
+        [Test]
+        public void TestThatRenewMembershipWithErrorMessageReturnsViewResultWithWithModelForRenew()
+        {
+            var membershipModelCollection = CreateMembershipModelCollection();
+            Assert.That(membershipModelCollection, Is.Not.Null);
+            Assert.That(membershipModelCollection, Is.Not.Empty);
+            Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.True);
+
+            var membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
+            Assert.That(membershipModel, Is.Not.Null);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var errorMessage = Fixture.Create<string>();
+            Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
+
+            var result = householdMemberController.RenewMembership(errorMessage: errorMessage);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            var viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("RenewMembership"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(membershipModel));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ErrorMessage"], Is.EqualTo(errorMessage));
+        }
+
+        /// <summary>
         /// Creates a controller for a household member for unit testing.
         /// </summary>
         /// <param name="privacyPolicyModel">Sets the privacy policy model which should be used by the controller.</param>
@@ -2834,31 +3348,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                     .With(m => m.Households, null)
                     .Create();
             };
-            Func<IEnumerable<MembershipModel>> membershipModelsGetter = () =>
-            {
-                if (membershipModelCollection != null)
-                {
-                    return membershipModelCollection;
-                }
-                return new List<MembershipModel>
-                {
-                    Fixture.Build<MembershipModel>()
-                        .With(m => m.Name, "Basic")
-                        .With(m => m.Price, 0M)
-                        .With(m => m.PriceCultureInfoName, "en-US")
-                        .Create(),
-                    Fixture.Build<MembershipModel>()
-                        .With(m => m.Name, "Deluxe")
-                        .With(m => m.Price, 3M)
-                        .With(m => m.PriceCultureInfoName, "en-US")
-                        .Create(),
-                    Fixture.Build<MembershipModel>()
-                        .With(m => m.Name, "Premium")
-                        .With(m => m.Price, 5M)
-                        .With(m => m.PriceCultureInfoName, "en-US")
-                        .Create()
-                };
-            };
+            Func<IEnumerable<MembershipModel>> membershipModelsGetter = () => membershipModelCollection ?? CreateMembershipModelCollection();
             _householdDataRepositoryMock.Stub(m => m.GetPrivacyPoliciesAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => privacyPolicyModel ?? Fixture.Create<PrivacyPolicyModel>()))
                 .Repeat.Any();
@@ -2905,6 +3395,40 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock);
             householdMemberController.ControllerContext = ControllerTestHelper.CreateControllerContext(householdMemberController, principal: principal);
             return householdMemberController;
+        }
+
+        /// <summary>
+        /// Creates a default collection of membership models.
+        /// </summary>
+        /// <param name="canReview">Sets whether it should be possible to renew one of the memberships.</param>
+        /// <param name="canUpgrade">Sets whether it should be possible to upgrade one or more memberships.</param>
+        /// <returns>Default collection of membership models.</returns>
+        private IList<MembershipModel> CreateMembershipModelCollection(bool canReview = true, bool canUpgrade = true)
+        {
+            return new List<MembershipModel>
+            {
+                Fixture.Build<MembershipModel>()
+                    .With(m => m.Name, "Basic")
+                    .With(m => m.Price, 0M)
+                    .With(m => m.PriceCultureInfoName, "en-US")
+                    .With(m => m.CanRenew, false)
+                    .With(m => m.CanUpgrade, false)
+                    .Create(),
+                Fixture.Build<MembershipModel>()
+                    .With(m => m.Name, "Deluxe")
+                    .With(m => m.Price, 3M)
+                    .With(m => m.PriceCultureInfoName, "en-US")
+                    .With(m => m.CanRenew, canReview)
+                    .With(m => m.CanUpgrade, canUpgrade)
+                    .Create(),
+                Fixture.Build<MembershipModel>()
+                    .With(m => m.Name, "Premium")
+                    .With(m => m.Price, 5M)
+                    .With(m => m.PriceCultureInfoName, "en-US")
+                    .With(m => m.CanRenew, false)
+                    .With(m => m.CanUpgrade, canUpgrade)
+                    .Create()
+            };
         }
     }
 }

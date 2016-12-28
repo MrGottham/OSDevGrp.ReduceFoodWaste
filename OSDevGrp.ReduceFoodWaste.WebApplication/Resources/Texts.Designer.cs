@@ -430,6 +430,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It&apos;s not possible to renew your membership..
+        /// </summary>
+        public static string MembershipRenewNotPossible {
+            get {
+                return ResourceManager.GetString("MembershipRenewNotPossible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It&apos;s not possible to upgrade your membership..
+        /// </summary>
+        public static string MembershipUpgradeNotPossible {
+            get {
+                return ResourceManager.GetString("MembershipUpgradeNotPossible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {

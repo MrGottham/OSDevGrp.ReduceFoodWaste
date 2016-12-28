@@ -510,6 +510,8 @@
     <Content Include="Views\Household\Edit.cshtml" />
     <Content Include="Views\Household\_AddHouseholdMember.cshtml" />
     <Content Include="Views\Shared\_HouseholdIdentificationCollection.cshtml" />
+    <Content Include="Views\HouseholdMember\UpgradeMembership.cshtml" />
+    <Content Include="Views\HouseholdMember\RenewMembership.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
