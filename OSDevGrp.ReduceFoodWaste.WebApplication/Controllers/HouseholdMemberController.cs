@@ -420,6 +420,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [IsValidatedHouseholdMember]
         public ActionResult UpgradeOrRenewMembership(MembershipModel membershipModel)
         {
+            if (membershipModel == null)
+            {
+                throw new ArgumentNullException(nameof(membershipModel));
+            }
+
             throw new NotImplementedException();
         }
 

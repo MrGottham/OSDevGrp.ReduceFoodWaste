@@ -3305,6 +3305,23 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that UpgradeOrRenewMembership with a model throws an ArgumentNullException when the model is null.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeOrRenewMembershipWithModelThrowsArgumentNullExceptionWhenModelIsNull()
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var exception =Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembership((MembershipModel) null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("membershipModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
         /// Creates a controller for a household member for unit testing.
         /// </summary>
         /// <param name="privacyPolicyModel">Sets the privacy policy model which should be used by the controller.</param>
