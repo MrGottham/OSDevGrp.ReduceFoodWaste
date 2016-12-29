@@ -50,5 +50,7 @@
             <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)</div>
         </div>
     }
-    <input class="bnt btn-primary float-right" type="submit" value="@Texts.Next" title="@Texts.Next" />
+    <div class="btn-group float-right">
+        <input class="btn btn-primary" type="submit" value="@Texts.Next" title="@Texts.Next" />
+    </div>
 }

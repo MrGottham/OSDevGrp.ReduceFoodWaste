@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.Caching;
 using System.Security.Principal;
 using System.ServiceModel;
@@ -11,7 +12,6 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
 {
@@ -34,7 +34,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         private readonly ICredentialsProvider _credentialsProvider;
         private readonly IConfigurationProvider _configurationProvider;
         private readonly IHouseholdDataConverter _householdDataConverter;
-        private readonly ObjectCache _objectCache = MemoryCache.Default; 
+        private readonly ObjectCache _objectCache = MemoryCache.Default;
+        private static readonly ResourceManager Texts = new ResourceManager("OSDevGrp.ReduceFoodWaste.WebApplication.Resources.Texts", typeof(HouseholdDataRepository).Assembly);
 
         #endregion
 
@@ -477,7 +478,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     new MembershipModel
                     {
                         Name = basicMembership.Name,
-                        Description = Texts.MembershipBasicDescription,
+                        Description = Texts.GetString("MembershipBasicDescription", cultureInfo),
                         Price = basicMembershipPrice.Price,
                         PriceCultureInfoName = basicMembershipPrice.CultureName,
                         CanRenew = householdMemberModel.CanRenewMembership && string.Compare(householdMemberModel.Membership, basicMembership.Name, StringComparison.Ordinal) == 0,
@@ -486,7 +487,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     new MembershipModel
                     {
                         Name = deluxeMembership.Name,
-                        Description = Texts.MembershipDeluxeDescription,
+                        Description = Texts.GetString("MembershipDeluxeDescription", cultureInfo),
                         Price = deluxeMembershipPrice.Price,
                         PriceCultureInfoName = deluxeMembershipPrice.CultureName,
                         CanRenew = householdMemberModel.CanRenewMembership && string.Compare(householdMemberModel.Membership, deluxeMembership.Name, StringComparison.Ordinal) == 0,
@@ -495,7 +496,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     new MembershipModel
                     {
                         Name = premiumMembership.Name,
-                        Description = Texts.MembershipPremiumDescription,
+                        Description = Texts.GetString("MembershipPremiumDescription", cultureInfo),
                         Price = premiumMembershipPrice.Price,
                         PriceCultureInfoName = premiumMembershipPrice.CultureName,
                         CanRenew = householdMemberModel.CanRenewMembership &&  string.Compare(householdMemberModel.Membership, premiumMembership.Name, StringComparison.Ordinal) == 0,

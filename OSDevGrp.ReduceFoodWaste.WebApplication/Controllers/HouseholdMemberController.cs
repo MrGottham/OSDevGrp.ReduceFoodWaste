@@ -334,7 +334,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// </summary>
         /// <param name="statusMessage">Status message to show in the view.</param>
         /// <param name="errorMessage">Error message to show in the view.</param>
-        /// <returns>Viwe for upgrading a household members membership.</returns>
+        /// <returns>View for upgrading a household members membership.</returns>
         [IsValidatedHouseholdMember]
         public ActionResult UpgradeMembership(string statusMessage = null, string errorMessage = null)
         {
@@ -408,6 +408,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 throw ex.ToReduceFoodWasteException();
             }
+        }
+
+        /// <summary>
+        /// Upgrade or renew a household members membership.
+        /// </summary>
+        /// <param name="membershipModel">Model for the membership which should be upgraded or renewed.</param>
+        /// <returns>View for the next step in the process of upgrading or renewing a membership.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [IsValidatedHouseholdMember]
+        public ActionResult UpgradeOrRenewMembership(MembershipModel membershipModel)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

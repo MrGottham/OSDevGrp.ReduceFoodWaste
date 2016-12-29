@@ -5,7 +5,9 @@
     @Html.Partial("_HouseholdBasicInformation", Model)
 </div>
 <div class="row">
-    <h4>@Texts.HouseholdMembers</h4>
+    <hgroup class="title">
+        <h4>@Texts.HouseholdMembers</h4>
+    </hgroup>
     @if (ViewBag.AddingHouseholdMemberMode == null || ViewBag.AddingHouseholdMemberMode == false)
     {
         <div id="addHouseholdMember"></div>
@@ -16,39 +18,45 @@
     }
     <table class="table table-sm">
         <thead class="table-inverse">
-            <tr>
-                <th>@Texts.MailAddress</th>
-                <th></th>
-            </tr>
+        <tr>
+            <th>@Texts.MailAddress</th>
+            <th></th>
+        </tr>
         </thead>
         <tbody>
-            <tr>
-                <td style="vertical-align: middle">@Texts.AddHouseholdMemberToHousehold</td>
-                <td><a class="btn btn-primary" onclick="@string.Format("parent.addHouseholdMember('{0}')", Model.Identifier)">@Texts.Add</a></td>
-            </tr>
-            @if (Model.HouseholdMembers != null)
+        <tr>
+            <td style="vertical-align: middle">@Texts.AddHouseholdMemberToHousehold</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-primary" onclick="@string.Format("parent.addHouseholdMember('{0}')", Model.Identifier)">@Texts.Add</a>
+                </div>
+            </td>
+        </tr>
+        @if (Model.HouseholdMembers != null)
+        {
+            foreach (var householdMember in Model.HouseholdMembers.Take(Model.HouseholdMembers.Count() - (ViewBag.AddingHouseholdMemberMode == null || ViewBag.AddingHouseholdMemberMode == false ? 0 : 1)))
             {
-                foreach (var householdMember in Model.HouseholdMembers.Take(Model.HouseholdMembers.Count() - (ViewBag.AddingHouseholdMemberMode == null || ViewBag.AddingHouseholdMemberMode == false ? 0 : 1)))
-                {
-                    <tr>
-                        <td style="vertical-align: middle">@householdMember.MailAddress</td>
-                        <td>
-                            @if (householdMember.Removable)
+                <tr>
+                    <td style="vertical-align: middle">@householdMember.MailAddress</td>
+                    <td>
+                        @if (householdMember.Removable)
+                        {
+                            using (Html.BeginForm("RemoveHouseholdMember", "Household", FormMethod.Post))
                             {
-                                using (Html.BeginForm("RemoveHouseholdMember", "Household", FormMethod.Post))
-                                {
-                                    @Html.AntiForgeryToken()
-                                    @Html.Hidden("HouseholdIdentifier", householdMember.HouseholdIdentifier)
-                                    @Html.Hidden("HouseholdMemberIdentifier", householdMember.HouseholdMemberIdentifier)
-                                    @Html.Hidden("MailAddress", householdMember.MailAddress)
-                                    @Html.Hidden("Removable", householdMember.Removable)
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("HouseholdIdentifier", householdMember.HouseholdIdentifier)
+                                @Html.Hidden("HouseholdMemberIdentifier", householdMember.HouseholdMemberIdentifier)
+                                @Html.Hidden("MailAddress", householdMember.MailAddress)
+                                @Html.Hidden("Removable", householdMember.Removable)
+                                <div class="btn-group">
                                     <input class="btn btn-danger" type="submit" value="@Texts.Remove" @(!householdMember.Removable ? "disabled" : "") />
-                                }
+                                </div>
                             }
-                        </td>
-                    </tr>
-                }
+                        }
+                    </td>
+                </tr>
             }
+        }
         </tbody>
     </table>
 </div>

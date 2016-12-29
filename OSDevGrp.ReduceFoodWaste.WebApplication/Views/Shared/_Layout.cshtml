@@ -25,7 +25,7 @@
                             <li class="nav-item active">@Html.ActionLink(Texts.Dashboard, "Dashboard", "Dashboard", null, new { @class = "nav-link" })</li>
                         }
                     </ul>
-                    <ul class="nav navbar-nav pull-xs-right">
+                    <ul class="nav navbar-nav float-right">
                         @if (Request.IsAuthenticated)
                         {
                             if (User != null && User.Identity != null && User.Identity.IsAuthenticated)
@@ -54,7 +54,6 @@
             @if (IsSectionDefined("sidebar"))
             {
                 <div class="col-sm-3 col-md-2 sidebar">
-                    @* TODO: View the source of http://v4-alpha.getbootstrap.com/examples/dashboard/ *@
                     @RenderSection("sidebar", required: true)
                 </div>
                 <div class="col-sm-9 col-md-10">

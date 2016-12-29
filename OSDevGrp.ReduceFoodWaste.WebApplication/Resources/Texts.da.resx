@@ -315,4 +315,7 @@
   <data name="MembershipUpgradeNotPossible" xml:space="preserve">
     <value>Det er ikke muligt at opgradere dit medlemskab.</value>
   </data>
+  <data name="Buy" xml:space="preserve">
+    <value>Køb</value>
+  </data>
 </root>

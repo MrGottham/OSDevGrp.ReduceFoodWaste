@@ -47,21 +47,18 @@
                 <tr>
                     <td style="width: 15%" nowrap></td>
                     <td>
-                        <div class="btn-group">
+                        <div class="btn-toolbar">
                             @if (Model.CanRenewMembership)
                             {
-                                if (Model.CanUpgradeMembership)
-                                {
-                                    @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary", style = "margin-right: 10px" })
-                                }
-                                else
-                                {
+                                <div class="btn-group">
                                     @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
-                                }
+                                </div>
                             }
                             @if (Model.CanUpgradeMembership)
                             {
-                                @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                                <div class="btn-group">
+                                    @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                                </div>
                             }
                         </div>
                     </td>
@@ -71,7 +68,9 @@
     </table>
 </div>
 <div class="row">
-    <h4>@Texts.ExternalLoginProviders</h4>
+    <hgroup class="title">
+        <h4>@Texts.ExternalLoginProviders</h4>
+    </hgroup>
     <div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute("~/Account/RemoveExternalLogins")">
         <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
     </div>

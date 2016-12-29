@@ -1,0 +1,25 @@
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.MembershipModel
+
+<div class="row">
+    <hgroup class="title">
+        <h4>@Model.Name</h4>
+    </hgroup>
+    <p>@Html.Raw(Model.Description)</p>
+    @if (Model.IsFree == false && (Model.CanRenew || Model.CanUpgrade))
+    {
+        using (Html.BeginForm("UpgradeOrRenewMembership", "HouseholdMember", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Name)
+            @Html.HiddenFor(m => m.Price)
+            @Html.HiddenFor(m => m.PriceCultureInfoName)
+            @Html.HiddenFor(m => m.CanRenew)
+            @Html.HiddenFor(m => m.CanUpgrade)
+            <div class="btn-group float-right">
+                <input class="btn btn-primary" type="submit" value="@Texts.Buy" title="@Texts.Buy" />
+            </div>
+        }
+    }
+    <hr />
+</div>

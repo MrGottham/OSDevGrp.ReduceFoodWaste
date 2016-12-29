@@ -39,7 +39,9 @@
     }
     if (Model.IsActivated == false)
     {
-        <h3>@Texts.Activation</h3>
+        <hgroup class="title">
+            <h3>@Texts.Activation</h3>
+        </hgroup>
         <div class="form-group">
             @Html.LabelFor(m => m.ActivationCode, Texts.ActivationCode)
             @Html.TextBoxFor(m => m.ActivationCode, null, new { @class = "form-control" })
@@ -56,5 +58,7 @@
             <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)</div>
         </div>
     }
-    <input class="bnt btn-primary float-right" type="submit" value="@Texts.Next" title="@Texts.Next" />
+    <div class="btn-group float-right">
+        <input class="btn btn-primary" type="submit" value="@Texts.Next" title="@Texts.Next" />
+    </div>
 }

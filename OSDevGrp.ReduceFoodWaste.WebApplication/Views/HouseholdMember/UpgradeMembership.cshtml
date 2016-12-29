@@ -1,5 +1,6 @@
-﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
-@model IEnumerable<OSDevGrp.ReduceFoodWaste.WebApplication.Models.MembershipModel>
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Models
+@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@model IEnumerable<MembershipModel>
 
 @{
     ViewBag.Title = string.Format("{0} {1}", Texts.Upgrade, Texts.Membership.ToLower());
@@ -22,3 +23,7 @@
         <p class="message-error">@ViewBag.ErrorMessage</p>
     }
 </div>
+@foreach (MembershipModel membershipModel in Model)
+{
+    @Html.Partial("_MembershipInformation", membershipModel)
+}
