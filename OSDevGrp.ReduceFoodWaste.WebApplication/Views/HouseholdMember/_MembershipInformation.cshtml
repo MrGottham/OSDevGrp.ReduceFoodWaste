@@ -16,8 +16,12 @@
             @Html.HiddenFor(m => m.PriceCultureInfoName)
             @Html.HiddenFor(m => m.CanRenew)
             @Html.HiddenFor(m => m.CanUpgrade)
-            <div class="btn-group float-right">
-                <input class="btn btn-primary" type="submit" value="@Texts.Buy" title="@Texts.Buy" />
+            <div>
+                <div class="btn-group float-right">
+                    <input class="btn btn-primary" type="submit" value="@Texts.Buy" title="@Texts.Buy" />
+                </div>
+                <div class="clear-fix">
+                </div>
             </div>
         }
     }
