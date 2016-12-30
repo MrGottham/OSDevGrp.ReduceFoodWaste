@@ -1,17 +1,13 @@
-﻿using System.Globalization;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Payments;
-
-namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
+﻿namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
 {
     /// <summary>
     /// Model for a membership.
     /// </summary>
-    public class MembershipModel : IPayable
+    public class MembershipModel : PayableModel
     {
         #region Private variables
 
         private string _description;
-        private string _billingInformation;
 
         #endregion
 
@@ -43,48 +39,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// <summary>
         /// Gets or sets the billing information for the membership.
         /// </summary>
-        public string BillingInformation
+        public override string BillingInformation
         {
             get
             {
-                if (_billingInformation == null)
+                if (base.BillingInformation == null)
                 {
-                    return _billingInformation;
+                    return base.BillingInformation;
                 }
-                return _billingInformation
-                    .Replace("[Name]", Name)
-                    .Replace("[Price]", Price.ToString("C", PriceCultureInfo));
+                return base.BillingInformation
+                    .Replace("[Name]", Name);
             }
-            set { _billingInformation = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the price of the membership.
-        /// </summary>
-        public decimal Price { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the culture informations for the price of the membership.
-        /// </summary>
-        public string PriceCultureInfoName { get; set; }
-
-        /// <summary>
-        /// Gets the culture informations for the price of the membership.
-        /// </summary>
-        public CultureInfo PriceCultureInfo
-        {
-            get
-            {
-                return string.IsNullOrWhiteSpace(PriceCultureInfoName) ? CultureInfo.CurrentUICulture : new CultureInfo(PriceCultureInfoName);
-            }
-        }
-
-        /// <summary>
-        /// Gets whether the membership is for free.
-        /// </summary>
-        public bool IsFree
-        {
-            get { return Price <= 0M; }
+            set { base.BillingInformation = value; }
         }
 
         /// <summary>

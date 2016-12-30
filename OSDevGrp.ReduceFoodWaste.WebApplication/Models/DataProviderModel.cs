@@ -1,12 +1,11 @@
 ﻿using System;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Payments;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
 {
     /// <summary>
     /// Model for a data provider who provides data.
     /// </summary>
-    public class DataProviderModel : IPaymentHandler
+    public class DataProviderModel
     {
         #region Properties
 

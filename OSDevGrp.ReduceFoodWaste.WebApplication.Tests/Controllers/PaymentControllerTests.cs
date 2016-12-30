@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Payments;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Ploeh.AutoFixture;
@@ -67,7 +67,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PaymentController paymentController = CreatePaymentController();
             Assert.That(paymentController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.Pay((IPayable) null, returnUrl));
+            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.Pay(null, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -83,8 +83,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("")]
         public void TestThatPayThrowsArgumentNullExceptionWhenPayableReturnUrlIsNullOrEmpty(string returnUrl)
         {
-            IPayable payableModel = MockRepository.GenerateMock<IPayable>();
+            PayableModel payableModel = Fixture.Build<PayableModel>()
+                .With(m => m.PriceCultureInfoName, null)
+                .Create();
             Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PriceCultureInfoName, Is.Null);
 
             PaymentController paymentController = CreatePaymentController();
             Assert.That(paymentController, Is.Not.Null);

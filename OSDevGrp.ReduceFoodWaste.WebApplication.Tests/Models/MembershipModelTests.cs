@@ -27,7 +27,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(membershipModel.PriceCultureInfoName, Is.Null);
             Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
             Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(CultureInfo.CurrentUICulture));
-            Assert.That(membershipModel.IsFree, Is.True);
+            Assert.That(membershipModel.IsFreeOfCost, Is.True);
             Assert.That(membershipModel.CanRenew, Is.False);
             Assert.That(membershipModel.CanUpgrade, Is.False);
         }
@@ -144,6 +144,44 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         }
 
         /// <summary>
+        /// Tests that the setter for Description sets a new value.
+        /// </summary>
+        [Test]
+        public void TestThatDescriptionSetterSetsValue()
+        {
+            var membershipModel = new MembershipModel();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Description, Is.Null);
+
+            var newValue = Fixture.Create<string>();
+            Assert.That(newValue, Is.Not.Null);
+            Assert.That(newValue, Is.Not.Empty);
+
+            membershipModel.Description = newValue;
+            Assert.That(membershipModel.Description, Is.Not.Null);
+            Assert.That(membershipModel.Description, Is.Not.Empty);
+            Assert.That(membershipModel.Description, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for Description sets the value to NULL.
+        /// </summary>
+        [Test]
+        public void TestThatDescriptionSetterSetsValueToNull()
+        {
+            var membershipModel = new MembershipModel
+            {
+                Description = Fixture.Create<string>()
+            };
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Description, Is.Not.Null);
+            Assert.That(membershipModel.Description, Is.Not.Empty);
+
+            membershipModel.Description = null;
+            Assert.That(membershipModel.Description, Is.Null);
+        }
+
+        /// <summary>
         /// Tests that the getter for BillingInformation converts the name tag.
         /// </summary>
         [Test]
@@ -217,44 +255,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         }
 
         /// <summary>
-        /// Tests that the setter for Description sets a new value.
-        /// </summary>
-        [Test]
-        public void TestThatDescriptionSetterSetsValue()
-        {
-            var membershipModel = new MembershipModel();
-            Assert.That(membershipModel, Is.Not.Null);
-            Assert.That(membershipModel.Description, Is.Null);
-
-            var newValue = Fixture.Create<string>();
-            Assert.That(newValue, Is.Not.Null);
-            Assert.That(newValue, Is.Not.Empty);
-
-            membershipModel.Description = newValue;
-            Assert.That(membershipModel.Description, Is.Not.Null);
-            Assert.That(membershipModel.Description, Is.Not.Empty);
-            Assert.That(membershipModel.Description, Is.EqualTo(newValue));
-        }
-
-        /// <summary>
-        /// Tests that the setter for Description sets the value to NULL.
-        /// </summary>
-        [Test]
-        public void TestThatDescriptionSetterSetsValueToNull()
-        {
-            var membershipModel = new MembershipModel
-            {
-                Description = Fixture.Create<string>()
-            };
-            Assert.That(membershipModel, Is.Not.Null);
-            Assert.That(membershipModel.Description, Is.Not.Null);
-            Assert.That(membershipModel.Description, Is.Not.Empty);
-
-            membershipModel.Description = null;
-            Assert.That(membershipModel.Description, Is.Null);
-        }
-
-        /// <summary>
         /// Tests that the setter for BillingInformation sets a new value.
         /// </summary>
         [Test]
@@ -290,93 +290,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
 
             membershipModel.BillingInformation = null;
             Assert.That(membershipModel.BillingInformation, Is.Null);
-        }
-
-        /// <summary>
-        /// Tests that the setter for Price sets a new value.
-        /// </summary>
-        [Test]
-        public void TestThatPriceSetterSetsValue()
-        {
-            var membershipModel = new MembershipModel();
-            Assert.That(membershipModel, Is.Not.Null);
-            Assert.That(membershipModel.Price, Is.EqualTo(0M));
-            Assert.That(membershipModel.IsFree, Is.True);
-
-            var newValue = Fixture.Create<decimal>();
-            Assert.That(newValue, Is.Not.EqualTo(0M));
-
-            membershipModel.Price = newValue;
-            Assert.That(membershipModel.Price, Is.EqualTo(newValue));
-            Assert.That(membershipModel.IsFree, Is.EqualTo(newValue <= 0));
-        }
-
-        /// <summary>
-        /// Tests that the setter for Price sets the value to 0.
-        /// </summary>
-        [Test]
-        public void TestThatPriceSetterSetsValueToZero()
-        {
-            var membershipModel = new MembershipModel
-            {
-                Price = Fixture.Create<decimal>()
-            };
-            Assert.That(membershipModel, Is.Not.Null);
-            Assert.That(membershipModel.Price, Is.Not.EqualTo(0M));
-            Assert.That(membershipModel.IsFree, Is.EqualTo(membershipModel.Price <= 0));
-
-            membershipModel.Price = 0M;
-            Assert.That(membershipModel.Price, Is.EqualTo(0M));
-            Assert.That(membershipModel.IsFree, Is.True);
-        }
-
-        /// <summary>
-        /// Tests that the setter for PriceCultureInfoName sets a new value.
-        /// </summary>
-        [Test]
-        [TestCase("da-DK")]
-        [TestCase("en-US")]
-        [TestCase("es-ES")]
-        public void TestThatPriceCultureInfoNameSetterSetsValue(string cultureName)
-        {
-            var membershipModel = new MembershipModel();
-            Assert.That(membershipModel, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Null);
-            Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(CultureInfo.CurrentUICulture));
-
-            membershipModel.PriceCultureInfoName = cultureName;
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(cultureName));
-            Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(new CultureInfo(cultureName)));
-        }
-
-        /// <summary>
-        /// Tests that the setter for PriceCultureInfoName sets the value to NULL.
-        /// </summary>
-        [Test]
-        [TestCase("da-DK")]
-        [TestCase("en-US")]
-        [TestCase("es-ES")]
-        public void TestThatPriceCultureInfoNameSetterSetsValueToNull(string cultureName)
-        {
-            var membershipModel = new MembershipModel
-            {
-                PriceCultureInfoName = cultureName
-            };
-            Assert.That(membershipModel, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(cultureName));
-            Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(new CultureInfo(cultureName)));
-
-            membershipModel.PriceCultureInfoName = null;
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Null);
-            Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(CultureInfo.CurrentUICulture));
         }
 
         /// <summary>

@@ -3451,7 +3451,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Create();
             Assert.That(membershipModel, Is.Not.Null);
             Assert.That(membershipModel.Price, Is.EqualTo(0M));
-            Assert.That(membershipModel.IsFree, Is.True);
+            Assert.That(membershipModel.IsFreeOfCost, Is.True);
             Assert.That(membershipModel.CanRenew, Is.True);
             Assert.That(membershipModel.CanUpgrade, Is.True);
 
@@ -3487,7 +3487,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Create();
             Assert.That(membershipModel, Is.Not.Null);
             Assert.That(membershipModel.Price, Is.EqualTo(10M));
-            Assert.That(membershipModel.IsFree, Is.False);
+            Assert.That(membershipModel.IsFreeOfCost, Is.False);
             Assert.That(membershipModel.CanRenew, Is.False);
             Assert.That(membershipModel.CanUpgrade, Is.False);
 
@@ -3526,7 +3526,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Create();
             Assert.That(membershipModel, Is.Not.Null);
             Assert.That(membershipModel.Price, Is.EqualTo(10M));
-            Assert.That(membershipModel.IsFree, Is.False);
+            Assert.That(membershipModel.IsFreeOfCost, Is.False);
             Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
             Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
 

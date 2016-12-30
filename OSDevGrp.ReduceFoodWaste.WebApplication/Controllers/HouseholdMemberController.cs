@@ -438,14 +438,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 throw new ArgumentNullException(nameof(returnUrl));
             }
 
-            if (membershipModel.IsFree || (membershipModel.CanRenew == false && membershipModel.CanUpgrade == false))
+            if (membershipModel.IsFreeOfCost || (membershipModel.CanRenew == false && membershipModel.CanUpgrade == false))
             {
                 return Redirect(returnUrl);
             }
 
             RouteValueDictionary routeValueDictionary = new RouteValueDictionary
             {
-                {"membershipModel", membershipModel},
+                {"payableModel", membershipModel},
                 {"returnUrl", returnUrl}
             };
             return RedirectToAction("Pay", "Payment", routeValueDictionary);

@@ -262,8 +262,6 @@
     <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteExceptionBase.cs" />
     <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteRepositoryException.cs" />
     <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteSystemException.cs" />
-    <Compile Include="Infrastructure\Payments\IPayable.cs" />
-    <Compile Include="Infrastructure\Payments\IPaymentHandler.cs" />
     <Compile Include="Infrastructure\Security\Authentication\FacebookScopedClient.cs" />
     <Compile Include="Infrastructure\Security\Authentication\FormsAuthenticationHelper.cs" />
     <Compile Include="Infrastructure\Security\Authentication\GooglePlusScopedClient.cs" />
@@ -282,6 +280,7 @@
     <Compile Include="Models\HouseholdModel.cs" />
     <Compile Include="Models\MemberOfHouseholdModel.cs" />
     <Compile Include="Models\MembershipModel.cs" />
+    <Compile Include="Models\PayableModel.cs" />
     <Compile Include="Models\PrivacyPolicyModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ConfigurationProvider.cs" />
