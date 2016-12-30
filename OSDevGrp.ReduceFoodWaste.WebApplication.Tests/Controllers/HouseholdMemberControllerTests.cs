@@ -3519,6 +3519,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostButRenewableOrUpgradeableReturnsRedirectToRouteResultToPay(bool canRenew, bool canUpgrade)
         {
             var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.BillingInformation, null)
                 .With(m => m.Price, 10M)
                 .With(m => m.PriceCultureInfoName, Thread.CurrentThread.Name)
                 .With(m => m.CanRenew, canRenew)

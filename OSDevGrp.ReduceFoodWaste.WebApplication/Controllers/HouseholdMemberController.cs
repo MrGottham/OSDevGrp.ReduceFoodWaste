@@ -445,7 +445,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             RouteValueDictionary routeValueDictionary = new RouteValueDictionary
             {
-                {"payableModel", membershipModel},
+                {"PayableModel.Price", membershipModel.Price},
+                {"PayableModel.PriceCultureInfoName", membershipModel.PriceCultureInfoName},
                 {"returnUrl", returnUrl}
             };
             return RedirectToAction("Pay", "Payment", routeValueDictionary);

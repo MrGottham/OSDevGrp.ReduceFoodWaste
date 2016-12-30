@@ -281,6 +281,7 @@
     <Compile Include="Models\MemberOfHouseholdModel.cs" />
     <Compile Include="Models\MembershipModel.cs" />
     <Compile Include="Models\PayableModel.cs" />
+    <Compile Include="Models\PaymentHandlerModel.cs" />
     <Compile Include="Models\PrivacyPolicyModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ConfigurationProvider.cs" />
