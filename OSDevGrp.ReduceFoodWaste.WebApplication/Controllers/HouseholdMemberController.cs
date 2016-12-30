@@ -438,9 +438,27 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 throw new ArgumentNullException(nameof(returnUrl));
             }
 
-            if (membershipModel.IsFreeOfCost || (membershipModel.CanRenew == false && membershipModel.CanUpgrade == false))
+            try
             {
-                return Redirect(returnUrl);
+                Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
+                task.Wait();
+
+                IEnumerable<MembershipModel> membershipModelCollection = task.Result;
+                MembershipModel reloadedMembershipModel = membershipModelCollection.SingleOrDefault(m => string.Compare(m.Name, membershipModel.Name, StringComparison.Ordinal) == 0);
+                if (reloadedMembershipModel == null)
+                {
+                    throw new ReduceFoodWasteSystemException(string.Format(Texts.MembershipNameUnknownToSystem, membershipModel.Name));
+                }
+
+                if (reloadedMembershipModel.IsFreeOfCost || (reloadedMembershipModel.CanRenew == false && reloadedMembershipModel.CanUpgrade == false))
+                {
+                    return Redirect(returnUrl);
+                }
+
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.ToReduceFoodWasteException();
             }
 
 //            membershipModel.BillingInformation = Texts.MembershipBasicBillingInformation;

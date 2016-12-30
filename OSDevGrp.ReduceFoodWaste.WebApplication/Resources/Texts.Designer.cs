@@ -448,6 +448,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The given membership name &apos;{0}&apos; is unknown to the system..
+        /// </summary>
+        public static string MembershipNameUnknownToSystem {
+            get {
+                return ResourceManager.GetString("MembershipNameUnknownToSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A [Name] membership for &lt;b&gt;[Price]&lt;/b&gt; per year..
         /// </summary>
         public static string MembershipPremiumBillingInformation {

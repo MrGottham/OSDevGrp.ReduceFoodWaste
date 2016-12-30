@@ -327,4 +327,7 @@
   <data name="MembershipPremiumBillingInformation" xml:space="preserve">
     <value>A [Name] membership for &lt;b&gt;[Price]&lt;/b&gt; per year.</value>
   </data>
+  <data name="MembershipNameUnknownToSystem" xml:space="preserve">
+    <value>The given membership name '{0}' is unknown to the system.</value>
+  </data>
 </root>
