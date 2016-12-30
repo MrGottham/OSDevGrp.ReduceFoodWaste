@@ -12,6 +12,10 @@
         {
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m => m.Name)
+            @Html.HiddenFor(m => m.Price)
+            @Html.HiddenFor(m => m.PriceCultureInfoName)
+            @Html.HiddenFor(m => m.CanRenew)
+            @Html.HiddenFor(m => m.CanUpgrade)
             <div>
                 <div class="btn-group float-right">
                     <input class="btn btn-primary" type="submit" value="@Texts.Buy" title="@Texts.Buy" />

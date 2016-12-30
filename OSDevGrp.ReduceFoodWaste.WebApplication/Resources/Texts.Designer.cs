@@ -412,7 +412,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A [Name] membership is free of costs..
+        ///   Looks up a localized string similar to 1 piece of [Name] membership which are free of costs..
         /// </summary>
         public static string MembershipBasicBillingInformation {
             get {
@@ -430,7 +430,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A [Name] membership for &lt;b&gt;[Price]&lt;/b&gt; per year..
+        ///   Looks up a localized string similar to 1 piece of [Name] by the price of &lt;b&gt;[Price]&lt;/b&gt; for the next year..
         /// </summary>
         public static string MembershipDeluxeBillingInformation {
             get {
@@ -448,16 +448,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The given membership name &apos;{0}&apos; is unknown to the system..
-        /// </summary>
-        public static string MembershipNameUnknownToSystem {
-            get {
-                return ResourceManager.GetString("MembershipNameUnknownToSystem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A [Name] membership for &lt;b&gt;[Price]&lt;/b&gt; per year..
+        ///   Looks up a localized string similar to 1 piece of [Name] by the price of &lt;b&gt;[Price]&lt;/b&gt; for the next year..
         /// </summary>
         public static string MembershipPremiumBillingInformation {
             get {

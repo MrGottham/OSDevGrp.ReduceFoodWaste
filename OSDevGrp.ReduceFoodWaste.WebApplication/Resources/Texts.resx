@@ -319,15 +319,12 @@
     <value>Buy</value>
   </data>
   <data name="MembershipBasicBillingInformation" xml:space="preserve">
-    <value>A [Name] membership is free of costs.</value>
+    <value>1 piece of [Name] membership which are free of costs.</value>
   </data>
   <data name="MembershipDeluxeBillingInformation" xml:space="preserve">
-    <value>A [Name] membership for &lt;b&gt;[Price]&lt;/b&gt; per year.</value>
+    <value>1 piece of [Name] by the price of &lt;b&gt;[Price]&lt;/b&gt; for the next year.</value>
   </data>
   <data name="MembershipPremiumBillingInformation" xml:space="preserve">
-    <value>A [Name] membership for &lt;b&gt;[Price]&lt;/b&gt; per year.</value>
-  </data>
-  <data name="MembershipNameUnknownToSystem" xml:space="preserve">
-    <value>The given membership name '{0}' is unknown to the system.</value>
+    <value>1 piece of [Name] by the price of &lt;b&gt;[Price]&lt;/b&gt; for the next year.</value>
   </data>
 </root>

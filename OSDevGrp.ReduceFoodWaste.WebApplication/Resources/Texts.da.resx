@@ -319,15 +319,12 @@
     <value>Køb</value>
   </data>
   <data name="MembershipBasicBillingInformation" xml:space="preserve">
-    <value>Et [Name] medlemsskab er gratis.</value>
+    <value>1 stk. [Name] medlemsskab, der er gratis.</value>
   </data>
   <data name="MembershipDeluxeBillingInformation" xml:space="preserve">
-    <value>Et [Name] medlemsskab til &lt;b&gt;[Price]&lt;/b&gt; pr. år.</value>
+    <value>1 stk. [Name] medlemsskab á &lt;b&gt;[Price]&lt;/b&gt; for det næste år.</value>
   </data>
   <data name="MembershipPremiumBillingInformation" xml:space="preserve">
-    <value>Et [Name] medlemsskab til &lt;b&gt;[Price]&lt;/b&gt; pr. år.</value>
-  </data>
-  <data name="MembershipNameUnknownToSystem" xml:space="preserve">
-    <value>Navnet på det angivne medlemsskab '{0}' er ukendt for systemet.</value>
+    <value>1 stk. [Name] medlemsskab á &lt;b&gt;[Price]&lt;/b&gt; for det næste år.</value>
   </data>
 </root>
