@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Routing;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
@@ -437,7 +438,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 throw new ArgumentNullException(nameof(returnUrl));
             }
 
-            throw new NotImplementedException();
+            if (membershipModel.IsFree || (membershipModel.CanRenew == false && membershipModel.CanUpgrade == false))
+            {
+                return Redirect(returnUrl);
+            }
+
+            RouteValueDictionary routeValueDictionary = new RouteValueDictionary
+            {
+                {"membershipModel", membershipModel},
+                {"returnUrl", returnUrl}
+            };
+            return RedirectToAction("Pay", "Payment", routeValueDictionary);
         }
 
         /// <summary>

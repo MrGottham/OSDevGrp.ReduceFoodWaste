@@ -3438,6 +3438,131 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is free of cost returns a RedirectResult to the url on which to return when the membership upgrade or renew process has finished.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsFreeOfCostReturnsRedirectResultToReturnUrl()
+        {
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Price, 0M)
+                .With(m => m.PriceCultureInfoName, Thread.CurrentThread.Name)
+                .With(m => m.CanRenew, true)
+                .With(m => m.CanUpgrade, true)
+                .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Price, Is.EqualTo(0M));
+            Assert.That(membershipModel.IsFree, Is.True);
+            Assert.That(membershipModel.CanRenew, Is.True);
+            Assert.That(membershipModel.CanUpgrade, Is.True);
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var result = householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectResult>());
+
+            var redirectResult = (RedirectResult) result;
+            Assert.That(redirectResult, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Empty);
+            Assert.That(redirectResult.Url, Is.EqualTo(returnUrl));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradebale returns a RedirectResult to the url on which to return when the membership upgrade or renew process has finished.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostButNotRenewableAndNotUpgradeableReturnsRedirectResultToReturnUrl()
+        {
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Price, 10M)
+                .With(m => m.PriceCultureInfoName, Thread.CurrentThread.Name)
+                .With(m => m.CanRenew, false)
+                .With(m => m.CanUpgrade, false)
+                .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Price, Is.EqualTo(10M));
+            Assert.That(membershipModel.IsFree, Is.False);
+            Assert.That(membershipModel.CanRenew, Is.False);
+            Assert.That(membershipModel.CanUpgrade, Is.False);
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var result = householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectResult>());
+
+            var redirectResult = (RedirectResult) result;
+            Assert.That(redirectResult, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Empty);
+            Assert.That(redirectResult.Url, Is.EqualTo(returnUrl));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale returns a RedirectToRouteResult to the payment.
+        /// </summary>
+        [Test]
+        [TestCase(true, true)]
+        [TestCase(true, false)]
+        [TestCase(false, true)]
+        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostButRenewableOrUpgradeableReturnsRedirectToRouteResultToPay(bool canRenew, bool canUpgrade)
+        {
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Price, 10M)
+                .With(m => m.PriceCultureInfoName, Thread.CurrentThread.Name)
+                .With(m => m.CanRenew, canRenew)
+                .With(m => m.CanUpgrade, canUpgrade)
+                .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Price, Is.EqualTo(10M));
+            Assert.That(membershipModel.IsFree, Is.False);
+            Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
+            Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var result = householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
+
+            var redirectToRouteResult = (RedirectToRouteResult) result;
+            Assert.That(redirectToRouteResult, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("action"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.EqualTo("Pay"));
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("controller"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.EqualTo("Payment"));
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("payableModel"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["payableModel"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["payableModel"], Is.EqualTo(membershipModel));
+            Assert.That(redirectToRouteResult.RouteValues.ContainsKey("returnUrl"), Is.True);
+            Assert.That(redirectToRouteResult.RouteValues["returnUrl"], Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["returnUrl"], Is.Not.Empty);
+            Assert.That(redirectToRouteResult.RouteValues["returnUrl"], Is.EqualTo(returnUrl));
+        }
+
+        /// <summary>
         /// Creates a controller for a household member for unit testing.
         /// </summary>
         /// <param name="privacyPolicyModel">Sets the privacy policy model which should be used by the controller.</param>

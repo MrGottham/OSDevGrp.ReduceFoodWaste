@@ -243,6 +243,7 @@
     <Compile Include="Controllers\HouseholdController.cs" />
     <Compile Include="Controllers\HouseholdMemberController.cs" />
     <Compile Include="Controllers\LanguageController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\SidebarController.cs" />
     <Compile Include="Filters\CookieConsentAttribute.cs" />
     <Compile Include="Filters\CultureAttribute.cs" />
