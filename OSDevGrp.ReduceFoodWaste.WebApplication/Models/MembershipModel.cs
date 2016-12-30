@@ -1,8 +1,11 @@
-﻿namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
+﻿using System;
+
+namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
 {
     /// <summary>
     /// Model for a membership.
     /// </summary>
+    [Serializable]
     public class MembershipModel : PayableModel
     {
         #region Private variables

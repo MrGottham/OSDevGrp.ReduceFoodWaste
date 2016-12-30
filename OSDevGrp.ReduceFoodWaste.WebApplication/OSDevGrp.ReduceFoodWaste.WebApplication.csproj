@@ -278,6 +278,7 @@
     <Compile Include="Models\HouseholdIdentificationModel.cs" />
     <Compile Include="Models\HouseholdMemberModel.cs" />
     <Compile Include="Models\HouseholdModel.cs" />
+    <Compile Include="Models\IModelHelper.cs" />
     <Compile Include="Models\MemberOfHouseholdModel.cs" />
     <Compile Include="Models\MembershipModel.cs" />
     <Compile Include="Models\ModelHelper.cs" />

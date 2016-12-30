@@ -121,6 +121,7 @@
     <Compile Include="Models\HouseholdModelTests.cs" />
     <Compile Include="Models\MemberOfHouseholdModelTests.cs" />
     <Compile Include="Models\MembershipModelTests.cs" />
+    <Compile Include="Models\ModelHelperTests.cs" />
     <Compile Include="Models\PayableModelTests.cs" />
     <Compile Include="Models\PaymentHandlerModelTests.cs" />
     <Compile Include="Models\PrivacyPolicyModelTests.cs" />

@@ -1,10 +1,12 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
 {
     /// <summary>
     /// Model on which it's possible to make a payment.
     /// </summary>
+    [Serializable]
     public class PayableModel
     {
         #region Private variables
