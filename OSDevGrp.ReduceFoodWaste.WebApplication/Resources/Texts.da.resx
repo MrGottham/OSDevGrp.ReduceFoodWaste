@@ -318,4 +318,13 @@
   <data name="Buy" xml:space="preserve">
     <value>Køb</value>
   </data>
+  <data name="MembershipBasicBillingInformation" xml:space="preserve">
+    <value>Et [Name] medlemsskab er gratis.</value>
+  </data>
+  <data name="MembershipDeluxeBillingInformation" xml:space="preserve">
+    <value>Et [Name] medlemsskab til &lt;b&gt;[Price]&lt;/b&gt; pr. år.</value>
+  </data>
+  <data name="MembershipPremiumBillingInformation" xml:space="preserve">
+    <value>Et [Name] medlemsskab til &lt;b&gt;[Price]&lt;/b&gt; pr. år.</value>
+  </data>
 </root>

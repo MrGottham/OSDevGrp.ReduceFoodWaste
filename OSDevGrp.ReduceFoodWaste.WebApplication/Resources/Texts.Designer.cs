@@ -412,6 +412,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A [Name] membership is free of costs..
+        /// </summary>
+        public static string MembershipBasicBillingInformation {
+            get {
+                return ResourceManager.GetString("MembershipBasicBillingInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The [Name] membership includes:&lt;br&gt;- As a household member you can only manage and be member of one household.&lt;br&gt;&lt;br&gt;This membership is free..
         /// </summary>
         public static string MembershipBasicDescription {
@@ -421,11 +430,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A [Name] membership for &lt;b&gt;[Price]&lt;/b&gt; per year..
+        /// </summary>
+        public static string MembershipDeluxeBillingInformation {
+            get {
+                return ResourceManager.GetString("MembershipDeluxeBillingInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The [Name] membership includes:&lt;br&gt;- As a household member you can only manage and be member of two households.&lt;br&gt;&lt;br&gt;Membership costs &lt;b&gt;[Price]&lt;/b&gt; per year..
         /// </summary>
         public static string MembershipDeluxeDescription {
             get {
                 return ResourceManager.GetString("MembershipDeluxeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A [Name] membership for &lt;b&gt;[Price]&lt;/b&gt; per year..
+        /// </summary>
+        public static string MembershipPremiumBillingInformation {
+            get {
+                return ResourceManager.GetString("MembershipPremiumBillingInformation", resourceCulture);
             }
         }
         

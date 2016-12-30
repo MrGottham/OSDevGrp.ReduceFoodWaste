@@ -51,13 +51,13 @@
                             @if (Model.CanRenewMembership)
                             {
                                 <div class="btn-group">
-                                    @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                                    @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/HouseholdMember/Manage") }, new { @class = "btn btn-primary" })
                                 </div>
                             }
                             @if (Model.CanUpgradeMembership)
                             {
                                 <div class="btn-group">
-                                    @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                                    @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/HouseholdMember/Manage") }, new { @class = "btn btn-primary" })
                                 </div>
                             }
                         </div>

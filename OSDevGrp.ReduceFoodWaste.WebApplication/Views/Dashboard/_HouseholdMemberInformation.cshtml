@@ -16,7 +16,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-8">
                 <b>@household.Name</b>
-                <hr/>
+                <hr />
             </div>
         </div>
     }
@@ -39,16 +39,16 @@
                 {
                     if (Model.HouseholdMember.CanUpgradeMembership)
                     {
-                        @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary", style = "margin-bottom: 10px" })
+                        @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/Dashboard/Dashboard") }, new { @class = "btn btn-primary", style = "margin-bottom: 10px" })
                     }
                     else
                     {
-                        @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                        @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/Dashboard/Dashboard") }, new { @class = "btn btn-primary" })
                     }
                 }
                 @if (Model.HouseholdMember.CanUpgradeMembership)
                 {
-                    @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", null, new { @class = "btn btn-primary" })
+                    @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/Dashboard/Dashboard") }, new { @class = "btn btn-primary" })
                 }
             </div>
         </div>

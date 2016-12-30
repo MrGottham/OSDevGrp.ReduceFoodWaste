@@ -479,6 +479,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     {
                         Name = basicMembership.Name,
                         Description = Texts.GetString("MembershipBasicDescription", cultureInfo),
+                        BillingInformation = Texts.GetString("MembershipBasicBillingInformation", cultureInfo),
                         Price = basicMembershipPrice.Price,
                         PriceCultureInfoName = basicMembershipPrice.CultureName,
                         CanRenew = householdMemberModel.CanRenewMembership && string.Compare(householdMemberModel.Membership, basicMembership.Name, StringComparison.Ordinal) == 0,
@@ -488,6 +489,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     {
                         Name = deluxeMembership.Name,
                         Description = Texts.GetString("MembershipDeluxeDescription", cultureInfo),
+                        BillingInformation = Texts.GetString("MembershipDeluxeBillingInformation", cultureInfo),
                         Price = deluxeMembershipPrice.Price,
                         PriceCultureInfoName = deluxeMembershipPrice.CultureName,
                         CanRenew = householdMemberModel.CanRenewMembership && string.Compare(householdMemberModel.Membership, deluxeMembership.Name, StringComparison.Ordinal) == 0,
@@ -497,6 +499,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     {
                         Name = premiumMembership.Name,
                         Description = Texts.GetString("MembershipPremiumDescription", cultureInfo),
+                        BillingInformation = Texts.GetString("MembershipPremiumBillingInformation", cultureInfo),
                         Price = premiumMembershipPrice.Price,
                         PriceCultureInfoName = premiumMembershipPrice.CultureName,
                         CanRenew = householdMemberModel.CanRenewMembership &&  string.Compare(householdMemberModel.Membership, premiumMembership.Name, StringComparison.Ordinal) == 0,

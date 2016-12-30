@@ -332,12 +332,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <summary>
         /// Upgrades a household members membership.
         /// </summary>
+        /// <param name="returnUrl">Url on which to return when the membership upgrade process has finished.</param>
         /// <param name="statusMessage">Status message to show in the view.</param>
         /// <param name="errorMessage">Error message to show in the view.</param>
         /// <returns>View for upgrading a household members membership.</returns>
         [IsValidatedHouseholdMember]
-        public ActionResult UpgradeMembership(string statusMessage = null, string errorMessage = null)
+        public ActionResult UpgradeMembership(string returnUrl, string statusMessage = null, string errorMessage = null)
         {
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                throw new ArgumentNullException(nameof(returnUrl));
+            }
             try
             {
                 Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
@@ -348,6 +353,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 {
                     throw new ReduceFoodWasteSystemException(Texts.MembershipUpgradeNotPossible);
                 }
+
+                ViewBag.ReturnUrl = returnUrl;
 
                 if (string.IsNullOrWhiteSpace(statusMessage) == false)
                 {
@@ -369,40 +376,40 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <summary>
         /// Renews a household members current membership.
         /// </summary>
+        /// <param name="returnUrl">Url on which to return when the membership renew process has finished.</param>
         /// <param name="statusMessage">Status message to show in the view.</param>
         /// <param name="errorMessage">Error message to show in the view.</param>
         /// <returns>View for renewing a household members current membership.</returns>
         [IsValidatedHouseholdMember]
-        public ActionResult RenewMembership(string statusMessage = null, string errorMessage = null)
+        public ActionResult RenewMembership(string returnUrl, string statusMessage = null, string errorMessage = null)
         {
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                throw new ArgumentNullException(nameof(returnUrl));
+            }
             try
             {
-                try
+                Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
+                task.Wait();
+
+                MembershipModel membershipModel = task.Result.SingleOrDefault(m => m.CanRenew);
+                if (membershipModel == null)
                 {
-                    Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
-                    task.Wait();
-
-                    MembershipModel membershipModel = task.Result.SingleOrDefault(m => m.CanRenew);
-                    if (membershipModel == null)
-                    {
-                        throw new ReduceFoodWasteSystemException(Texts.MembershipRenewNotPossible);
-                    }
-
-                    if (string.IsNullOrWhiteSpace(statusMessage) == false)
-                    {
-                        ViewBag.StatusMessage = statusMessage;
-                    }
-                    if (string.IsNullOrWhiteSpace(errorMessage) == false)
-                    {
-                        ViewBag.ErrorMessage = errorMessage;
-                    }
-
-                    return View("RenewMembership", membershipModel);
+                    throw new ReduceFoodWasteSystemException(Texts.MembershipRenewNotPossible);
                 }
-                catch (AggregateException ex)
+
+                ViewBag.ReturnUrl = returnUrl;
+
+                if (string.IsNullOrWhiteSpace(statusMessage) == false)
                 {
-                    throw ex.ToReduceFoodWasteException();
+                    ViewBag.StatusMessage = statusMessage;
                 }
+                if (string.IsNullOrWhiteSpace(errorMessage) == false)
+                {
+                    ViewBag.ErrorMessage = errorMessage;
+                }
+
+                return View("RenewMembership", membershipModel);
             }
             catch (AggregateException ex)
             {
@@ -414,15 +421,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// Upgrade or renew a household members membership.
         /// </summary>
         /// <param name="membershipModel">Model for the membership which should be upgraded or renewed.</param>
+        /// <param name="returnUrl">Url on which to return when the membership upgrade or renew process has finished.</param>
         /// <returns>View for the next step in the process of upgrading or renewing a membership.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         [IsValidatedHouseholdMember]
-        public ActionResult UpgradeOrRenewMembership(MembershipModel membershipModel)
+        public ActionResult UpgradeOrRenewMembership(MembershipModel membershipModel, string returnUrl)
         {
             if (membershipModel == null)
             {
                 throw new ArgumentNullException(nameof(membershipModel));
+            }
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                throw new ArgumentNullException(nameof(returnUrl));
             }
 
             throw new NotImplementedException();

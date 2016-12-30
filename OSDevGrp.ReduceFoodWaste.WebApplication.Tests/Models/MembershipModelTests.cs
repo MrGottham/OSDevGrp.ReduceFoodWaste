@@ -22,6 +22,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(membershipModel, Is.Not.Null);
             Assert.That(membershipModel.Name, Is.Null);
             Assert.That(membershipModel.Description, Is.Null);
+            Assert.That(membershipModel.BillingInformation, Is.Null);
             Assert.That(membershipModel.Price, Is.EqualTo(0M));
             Assert.That(membershipModel.PriceCultureInfoName, Is.Null);
             Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
@@ -75,7 +76,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         [Test]
         public void TestThatDescriptionGetterConvertsNameTag()
         {
-            var description = string.Format("{0}[Name]{1}", Fixture.Create<string>(), Fixture.Create<string>());
+            var description = $"{Fixture.Create<string>()}[Name]{Fixture.Create<string>()}";
             Assert.That(description, Is.Not.Null);
             Assert.That(description, Is.Not.Empty);
             Assert.That(description.Contains("[Name]"), Is.True);
@@ -112,7 +113,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         [TestCase("es-ES")]
         public void TestThatDescriptionGetterConvertsPriceTag(string cultureName)
         {
-            var description = string.Format("{0}[Price]{1}", Fixture.Create<string>(), Fixture.Create<string>());
+            var description = $"{Fixture.Create<string>()}[Price]{Fixture.Create<string>()}";
             Assert.That(description, Is.Not.Null);
             Assert.That(description, Is.Not.Empty);
             Assert.That(description.Contains("[Price]"), Is.True);
@@ -134,6 +135,79 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(membershipModel.Description, Is.Not.Null);
             Assert.That(membershipModel.Description, Is.Not.Empty);
             Assert.That(membershipModel.Description, Is.EqualTo(expectedDescription));
+            Assert.That(membershipModel.Price, Is.EqualTo(price));
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(cultureName));
+            Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfo, Is.EqualTo(new CultureInfo(cultureName)));
+        }
+
+        /// <summary>
+        /// Tests that the getter for BillingInformation converts the name tag.
+        /// </summary>
+        [Test]
+        public void TestThatBillingInformationGetterConvertsNameTag()
+        {
+            var billingInformation = $"{Fixture.Create<string>()}[Name]{Fixture.Create<string>()}";
+            Assert.That(billingInformation, Is.Not.Null);
+            Assert.That(billingInformation, Is.Not.Empty);
+            Assert.That(billingInformation.Contains("[Name]"), Is.True);
+
+            var name = Fixture.Create<string>();
+            Assert.That(name, Is.Not.Null);
+            Assert.That(name, Is.Not.Empty);
+
+            var expectedBillingInformation = billingInformation.Replace("[Name]", name);
+            Assert.That(expectedBillingInformation, Is.Not.Null);
+            Assert.That(expectedBillingInformation, Is.Not.Empty);
+            Assert.That(expectedBillingInformation.Contains("[Name]"), Is.False);
+
+            var membershipModel = new MembershipModel
+            {
+                Name = name,
+                BillingInformation = billingInformation,
+            };
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Empty);
+            Assert.That(membershipModel.Name, Is.EqualTo(name));
+            Assert.That(membershipModel.BillingInformation, Is.Not.Null);
+            Assert.That(membershipModel.BillingInformation, Is.Not.Empty);
+            Assert.That(membershipModel.BillingInformation, Is.EqualTo(expectedBillingInformation));
+        }
+
+        /// <summary>
+        /// Tests that the getter for BillingInformation converts the price tag.
+        /// </summary>
+        [Test]
+        [TestCase("da-DK")]
+        [TestCase("en-US")]
+        [TestCase("es-ES")]
+        public void TestThatBillingInformationGetterConvertsPriceTag(string cultureName)
+        {
+            var billingInformation = $"{Fixture.Create<string>()}[Price]{Fixture.Create<string>()}";
+            Assert.That(billingInformation, Is.Not.Null);
+            Assert.That(billingInformation, Is.Not.Empty);
+            Assert.That(billingInformation.Contains("[Price]"), Is.True);
+
+            var price = Fixture.Create<decimal>();
+
+            var expectedBillingInformation = billingInformation.Replace("[Price]", price.ToString("C", new CultureInfo(cultureName)));
+            Assert.That(expectedBillingInformation, Is.Not.Null);
+            Assert.That(expectedBillingInformation, Is.Not.Empty);
+            Assert.That(expectedBillingInformation.Contains("[Price]"), Is.False);
+
+            var membershipModel = new MembershipModel
+            {
+                BillingInformation = billingInformation,
+                Price = price,
+                PriceCultureInfoName = cultureName
+            };
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.BillingInformation, Is.Not.Null);
+            Assert.That(membershipModel.BillingInformation, Is.Not.Empty);
+            Assert.That(membershipModel.BillingInformation, Is.EqualTo(expectedBillingInformation));
             Assert.That(membershipModel.Price, Is.EqualTo(price));
             Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
             Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
@@ -178,6 +252,44 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
 
             membershipModel.Description = null;
             Assert.That(membershipModel.Description, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that the setter for BillingInformation sets a new value.
+        /// </summary>
+        [Test]
+        public void TestThatBillingInformationSetterSetsValue()
+        {
+            var membershipModel = new MembershipModel();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.BillingInformation, Is.Null);
+
+            var newValue = Fixture.Create<string>();
+            Assert.That(newValue, Is.Not.Null);
+            Assert.That(newValue, Is.Not.Empty);
+
+            membershipModel.BillingInformation = newValue;
+            Assert.That(membershipModel.BillingInformation, Is.Not.Null);
+            Assert.That(membershipModel.BillingInformation, Is.Not.Empty);
+            Assert.That(membershipModel.BillingInformation, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for BillingInformation sets the value to NULL.
+        /// </summary>
+        [Test]
+        public void TestThatBillingInformationSetterSetsValueToNull()
+        {
+            var membershipModel = new MembershipModel
+            {
+                BillingInformation = Fixture.Create<string>()
+            };
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.BillingInformation, Is.Not.Null);
+            Assert.That(membershipModel.BillingInformation, Is.Not.Empty);
+
+            membershipModel.BillingInformation = null;
+            Assert.That(membershipModel.BillingInformation, Is.Null);
         }
 
         /// <summary>

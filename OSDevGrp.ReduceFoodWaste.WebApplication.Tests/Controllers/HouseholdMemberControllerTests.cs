@@ -2601,6 +2601,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that UpgradeMembership throws an ArgumentNullException when the url on which to return when the upgrade process has finished is null or empty.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void TestThatUpgradeMembershipThrowsArgumentNullExceptionWhenReturnUrlIsNullOrEmpty(string returnUrl)
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeMembership(returnUrl));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("returnUrl"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
         /// Tests that UpgradeMembership without a status message calls GetMembershipsAsync on the repository which can access household data.
         /// </summary>
         [Test]
@@ -2621,7 +2640,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            householdMemberController.UpgradeMembership(statusMessage: statusMessage);
+            householdMemberController.UpgradeMembership(Fixture.Create<string>(), statusMessage: statusMessage);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
         }
@@ -2643,7 +2662,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            householdMemberController.UpgradeMembership(statusMessage: statusMessage);
+            householdMemberController.UpgradeMembership(Fixture.Create<string>(), statusMessage: statusMessage);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
         }
@@ -2669,7 +2688,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            householdMemberController.UpgradeMembership(errorMessage: errorMessage);
+            householdMemberController.UpgradeMembership(Fixture.Create<string>(), errorMessage: errorMessage);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
         }
@@ -2691,7 +2710,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            householdMemberController.UpgradeMembership(errorMessage: errorMessage);
+            householdMemberController.UpgradeMembership(Fixture.Create<string>(), errorMessage: errorMessage);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
         }
@@ -2717,7 +2736,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(statusMessage: statusMessage));
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), statusMessage: statusMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -2742,7 +2761,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(statusMessage: statusMessage));
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), statusMessage: statusMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -2771,7 +2790,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(errorMessage: errorMessage));
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), errorMessage: errorMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -2796,7 +2815,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(errorMessage: errorMessage));
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), errorMessage: errorMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -2823,9 +2842,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            var result = householdMemberController.UpgradeMembership(statusMessage: statusMessage);
+            var result = householdMemberController.UpgradeMembership(returnUrl, statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
@@ -2837,7 +2860,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.Model, Is.Not.Null);
             Assert.That(viewResult.Model, Is.EqualTo(membershipModelCollection));
             Assert.That(viewResult.ViewData, Is.Not.Null);
-            Assert.That(viewResult.ViewData, Is.Empty);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.EqualTo(returnUrl));
         }
 
         /// <summary>
@@ -2854,10 +2880,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
             var statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            var result = householdMemberController.UpgradeMembership(statusMessage: statusMessage);
+            var result = householdMemberController.UpgradeMembership(returnUrl, statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
@@ -2870,6 +2900,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.Model, Is.EqualTo(membershipModelCollection));
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.EqualTo(returnUrl));
             Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Null);
             Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Empty);
             Assert.That(viewResult.ViewData["StatusMessage"], Is.EqualTo(statusMessage));
@@ -2894,9 +2927,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            var result = householdMemberController.UpgradeMembership(errorMessage: errorMessage);
+            var result = householdMemberController.UpgradeMembership(returnUrl, errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
@@ -2908,7 +2945,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.Model, Is.Not.Null);
             Assert.That(viewResult.Model, Is.EqualTo(membershipModelCollection));
             Assert.That(viewResult.ViewData, Is.Not.Null);
-            Assert.That(viewResult.ViewData, Is.Empty);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.EqualTo(returnUrl));
         }
 
         /// <summary>
@@ -2925,10 +2965,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
             var errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            var result = householdMemberController.UpgradeMembership(errorMessage: errorMessage);
+            var result = householdMemberController.UpgradeMembership(returnUrl, errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
@@ -2941,9 +2985,31 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.Model, Is.EqualTo(membershipModelCollection));
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.EqualTo(returnUrl));
             Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Null);
             Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Empty);
             Assert.That(viewResult.ViewData["ErrorMessage"], Is.EqualTo(errorMessage));
+        }
+
+        /// <summary>
+        /// Tests that RenewMembership throws an ArgumentNullException when the url on which to return when the renew process has finished is null or empty.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void TestThatRenewMembershipThrowsArgumentNullExceptionWhenReturnUrlIsNullOrEmpty(string returnUrl)
+        {
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.RenewMembership(returnUrl));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("returnUrl"));
+            Assert.That(exception.InnerException, Is.Null);
         }
 
         /// <summary>
@@ -2967,7 +3033,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            householdMemberController.RenewMembership(statusMessage: statusMessage);
+            householdMemberController.RenewMembership(Fixture.Create<string>(), statusMessage: statusMessage);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
         }
@@ -2989,7 +3055,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            householdMemberController.RenewMembership(statusMessage: statusMessage);
+            householdMemberController.RenewMembership(Fixture.Create<string>(), statusMessage: statusMessage);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
         }
@@ -3015,7 +3081,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            householdMemberController.RenewMembership(errorMessage: errorMessage);
+            householdMemberController.RenewMembership(Fixture.Create<string>(), errorMessage: errorMessage);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
         }
@@ -3037,7 +3103,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            householdMemberController.RenewMembership(errorMessage: errorMessage);
+            householdMemberController.RenewMembership(Fixture.Create<string>(), errorMessage: errorMessage);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
         }
@@ -3063,7 +3129,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(statusMessage: statusMessage));
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), statusMessage: statusMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -3088,7 +3154,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(statusMessage: statusMessage));
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), statusMessage: statusMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -3117,7 +3183,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(errorMessage: errorMessage));
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), errorMessage: errorMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -3142,7 +3208,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(errorMessage: errorMessage));
+            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), errorMessage: errorMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -3172,9 +3238,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            var result = householdMemberController.RenewMembership(statusMessage: statusMessage);
+            var result = householdMemberController.RenewMembership(returnUrl, statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
@@ -3186,7 +3256,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.Model, Is.Not.Null);
             Assert.That(viewResult.Model, Is.EqualTo(membershipModel));
             Assert.That(viewResult.ViewData, Is.Not.Null);
-            Assert.That(viewResult.ViewData, Is.Empty);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.EqualTo(returnUrl));
         }
 
         /// <summary>
@@ -3206,10 +3279,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
             var statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            var result = householdMemberController.RenewMembership(statusMessage: statusMessage);
+            var result = householdMemberController.RenewMembership(returnUrl, statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
@@ -3222,6 +3299,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.Model, Is.EqualTo(membershipModel));
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.EqualTo(returnUrl));
             Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Null);
             Assert.That(viewResult.ViewData["StatusMessage"], Is.Not.Empty);
             Assert.That(viewResult.ViewData["StatusMessage"], Is.EqualTo(statusMessage));
@@ -3249,9 +3329,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            var result = householdMemberController.RenewMembership(errorMessage: errorMessage);
+            var result = householdMemberController.RenewMembership(returnUrl, errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
@@ -3263,7 +3347,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.Model, Is.Not.Null);
             Assert.That(viewResult.Model, Is.EqualTo(membershipModel));
             Assert.That(viewResult.ViewData, Is.Not.Null);
-            Assert.That(viewResult.ViewData, Is.Empty);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.EqualTo(returnUrl));
         }
 
         /// <summary>
@@ -3283,10 +3370,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
             var errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            var result = householdMemberController.RenewMembership(errorMessage: errorMessage);
+            var result = householdMemberController.RenewMembership(returnUrl, errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
@@ -3299,6 +3390,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.Model, Is.EqualTo(membershipModel));
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.EqualTo(returnUrl));
             Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Null);
             Assert.That(viewResult.ViewData["ErrorMessage"], Is.Not.Empty);
             Assert.That(viewResult.ViewData["ErrorMessage"], Is.EqualTo(errorMessage));
@@ -3313,11 +3407,33 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception =Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembership((MembershipModel) null));
+            var exception =Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembership((MembershipModel) null, Fixture.Create<string>()));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("membershipModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembership with a model throws an ArgumentNullException when the url on which to return when the membership upgrade or renew process has finished is null.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void TestThatUpgradeOrRenewMembershipWithModelThrowsArgumentNullExceptionWhenReturnUrlIsNull(string returnUrl)
+        {
+            var membershipModel = Fixture.Create<MembershipModel>();
+            Assert.That(membershipModel, Is.Not.Null);
+
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("returnUrl"));
             Assert.That(exception.InnerException, Is.Null);
         }
 

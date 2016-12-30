@@ -318,4 +318,13 @@
   <data name="Buy" xml:space="preserve">
     <value>Buy</value>
   </data>
+  <data name="MembershipBasicBillingInformation" xml:space="preserve">
+    <value>A [Name] membership is free of costs.</value>
+  </data>
+  <data name="MembershipDeluxeBillingInformation" xml:space="preserve">
+    <value>A [Name] membership for &lt;b&gt;[Price]&lt;/b&gt; per year.</value>
+  </data>
+  <data name="MembershipPremiumBillingInformation" xml:space="preserve">
+    <value>A [Name] membership for &lt;b&gt;[Price]&lt;/b&gt; per year.</value>
+  </data>
 </root>

@@ -1,15 +1,17 @@
 ﻿using System.Globalization;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Payments;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
 {
     /// <summary>
     /// Model for a membership.
     /// </summary>
-    public class MembershipModel
+    public class MembershipModel : IPayable
     {
         #region Private variables
 
         private string _description;
+        private string _billingInformation;
 
         #endregion
 
@@ -36,6 +38,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
                     .Replace("[Price]", Price.ToString("C", PriceCultureInfo));
             }
             set { _description = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the billing information for the membership.
+        /// </summary>
+        public string BillingInformation
+        {
+            get
+            {
+                if (_billingInformation == null)
+                {
+                    return _billingInformation;
+                }
+                return _billingInformation
+                    .Replace("[Name]", Name)
+                    .Replace("[Price]", Price.ToString("C", PriceCultureInfo));
+            }
+            set { _billingInformation = value; }
         }
 
         /// <summary>
