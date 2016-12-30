@@ -443,6 +443,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 return Redirect(returnUrl);
             }
 
+//            membershipModel.BillingInformation = Texts.MembershipBasicBillingInformation;
+
             RouteValueDictionary routeValueDictionary = new RouteValueDictionary
             {
                 {"PayableModel.Price", membershipModel.Price},

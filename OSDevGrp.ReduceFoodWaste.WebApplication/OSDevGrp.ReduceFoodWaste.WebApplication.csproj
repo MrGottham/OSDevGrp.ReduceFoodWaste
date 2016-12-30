@@ -280,6 +280,7 @@
     <Compile Include="Models\HouseholdModel.cs" />
     <Compile Include="Models\MemberOfHouseholdModel.cs" />
     <Compile Include="Models\MembershipModel.cs" />
+    <Compile Include="Models\ModelHelper.cs" />
     <Compile Include="Models\PayableModel.cs" />
     <Compile Include="Models\PaymentHandlerModel.cs" />
     <Compile Include="Models\PrivacyPolicyModel.cs" />
