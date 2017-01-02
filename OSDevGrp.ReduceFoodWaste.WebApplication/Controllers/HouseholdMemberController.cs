@@ -445,16 +445,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return Redirect(returnUrl);
                 }
 
-
-
-
-
-
                 Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
                 task.Wait();
 
                 IEnumerable<MembershipModel> membershipModelCollection = task.Result;
                 MembershipModel reloadedMembershipModel = membershipModelCollection.SingleOrDefault(m => string.Compare(m.Name, membershipModel.Name, StringComparison.Ordinal) == 0);
+
+
                 // TODO: Use model helper.
             }
             catch (AggregateException ex)

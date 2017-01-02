@@ -3438,13 +3438,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is free of cost does not call X on X.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is free of cost does not call GetMembershipsAsync on the repository which can access household data.
         /// </summary>
         [Test]
         [TestCase("Basic")]
         [TestCase("Deluxe")]
         [TestCase("Premium")]
-        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsFreeOfCostDoesNotCallXOnX(string membershipName)
+        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsFreeOfCostDoesNotCallGetMembershipsAsyncOnHouseholdDataRepository(string membershipName)
         {
             var membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
@@ -3522,6 +3522,45 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradebale does not call GetMembershipsAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        [TestCase("Basic")]
+        [TestCase("Deluxe")]
+        [TestCase("Premium")]
+        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostNotRenewableAndNotUpgradeableDoesNotCallGetMembershipsAsyncOnHouseholdDataRepository(string membershipName)
+        {
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Name, membershipName)
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.CanRenew, false)
+                .With(m => m.CanUpgrade, false)
+                .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Empty);
+            Assert.That(membershipModel.Name, Is.EqualTo(membershipName));
+            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(membershipModel.CanRenew, Is.False);
+            Assert.That(membershipModel.CanUpgrade, Is.False);
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
+
+            _householdDataRepositoryMock.AssertWasNotCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything));
+        }
+
+        /// <summary>
         /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradebale returns a RedirectResult to the url on which to return when the membership upgrade or renew process has finished.
         /// </summary>
         [Test]
@@ -3564,6 +3603,57 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(redirectResult.Url, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Empty);
             Assert.That(redirectResult.Url, Is.EqualTo(returnUrl));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale calls GetMembershipsAsync on the repository which can access household data.
+        /// </summary>
+        [Test]
+        [TestCase("Basic", true, true)]
+        [TestCase("Basic", true, false)]
+        [TestCase("Basic", false, true)]
+        [TestCase("Deluxe", true, true)]
+        [TestCase("Deluxe", true, false)]
+        [TestCase("Deluxe", false, true)]
+        [TestCase("Premium", true, true)]
+        [TestCase("Premium", true, false)]
+        [TestCase("Premium", false, true)]
+        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableCallsGetMembershipsAsyncOnHouseholdDataRepository(string membershipName, bool canRenew, bool canUpgrade)
+        {
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Name, membershipName)
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.CanRenew, canRenew)
+                .With(m => m.CanUpgrade, canUpgrade)
+                .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Empty);
+            Assert.That(membershipModel.Name, Is.EqualTo(membershipName));
+            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
+            Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+
+            householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
         }
 
         /// <summary>
