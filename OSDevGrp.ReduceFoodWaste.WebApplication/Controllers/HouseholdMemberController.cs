@@ -28,6 +28,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         private readonly IHouseholdDataRepository _householdDataRepository;
         private readonly IClaimValueProvider _claimValueProvider;
         private readonly ILocalClaimProvider _localClaimProvider;
+        private readonly IModelHelper _modelHelper;
 
         #endregion
 
@@ -39,7 +40,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <param name="householdDataRepository">Implementation of a repository which can access household data.</param>
         /// <param name="claimValueProvider">Implementation of a provider which can get values from claims.</param>
         /// <param name="localClaimProvider">Implementation of a provider which can append local claims to a claims identity.</param>
-        public HouseholdMemberController(IHouseholdDataRepository householdDataRepository, IClaimValueProvider claimValueProvider, ILocalClaimProvider localClaimProvider)
+        /// <param name="modelHelper">Implementation of a model helper.</param>
+        public HouseholdMemberController(IHouseholdDataRepository householdDataRepository, IClaimValueProvider claimValueProvider, ILocalClaimProvider localClaimProvider, IModelHelper modelHelper)
         {
             if (householdDataRepository == null)
             {
@@ -53,9 +55,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 throw new ArgumentNullException(nameof(localClaimProvider));
             }
+            if (modelHelper == null)
+            {
+                throw new ArgumentNullException(nameof(modelHelper));
+            }
             _householdDataRepository = householdDataRepository;
             _claimValueProvider = claimValueProvider;
             _localClaimProvider = localClaimProvider;
+            _modelHelper = modelHelper;
         }
 
         #endregion
@@ -450,24 +457,36 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
                 IEnumerable<MembershipModel> membershipModelCollection = task.Result;
                 MembershipModel reloadedMembershipModel = membershipModelCollection.SingleOrDefault(m => string.Compare(m.Name, membershipModel.Name, StringComparison.Ordinal) == 0);
+                if (reloadedMembershipModel == null)
+                {
+                    return Redirect(returnUrl);
+                }
+                membershipModel.BillingInformation = reloadedMembershipModel.BillingInformation;
+                membershipModel.Description = reloadedMembershipModel.Description;
 
+                string payableModelTypeNameAsBase64 = _modelHelper.ToBase64(membershipModel.GetType());
+                string payableModelAsBase64 = _modelHelper.ToBase64(membershipModel);
 
-                // TODO: Use model helper.
+                RouteValueDictionary routeValueDictionary = new RouteValueDictionary
+                {
+                    {"payableModelTypeNameAsBase64", payableModelTypeNameAsBase64},
+                    {"payableModelAsBase64", payableModelAsBase64},
+                    {"returnUrl", returnUrl}
+                };
+                return RedirectToAction("Pay", "Payment", routeValueDictionary);
             }
             catch (AggregateException ex)
             {
                 throw ex.ToReduceFoodWasteException();
             }
+        }
 
-//            membershipModel.BillingInformation = Texts.MembershipBasicBillingInformation;
-
-            RouteValueDictionary routeValueDictionary = new RouteValueDictionary
-            {
-                {"PayableModel.Price", membershipModel.Price},
-                {"PayableModel.PriceCultureInfoName", membershipModel.PriceCultureInfoName},
-                {"returnUrl", returnUrl}
-            };
-            return RedirectToAction("Pay", "Payment", routeValueDictionary);
+        // TODO: Make documentation.
+        [ValidateAntiForgeryToken]
+        [IsValidatedHouseholdMember]
+        public ActionResult UpgradeOrRenewMembershipCallback(string membershipModelAsBase64, string returnUrl)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

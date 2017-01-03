@@ -16,6 +16,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         #region Private variables
 
         private readonly IHouseholdDataRepository _householdDataRepository;
+        private readonly IModelHelper _modelHelper;
 
         #endregion
 
@@ -25,13 +26,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// Creates a controller which can handle payments.
         /// </summary>
         /// <param name="householdDataRepository">Implementation of a repository which can access household data.</param>
-        public PaymentController(IHouseholdDataRepository householdDataRepository)
+        /// <param name="modelHelper">Implementation of a model helper.</param>
+        public PaymentController(IHouseholdDataRepository householdDataRepository, IModelHelper modelHelper)
         {
             if (householdDataRepository == null)
             {
                 throw new ArgumentNullException(nameof(householdDataRepository));
             }
+            if (modelHelper == null)
+            {
+                throw new ArgumentNullException(nameof(modelHelper));
+            }
             _householdDataRepository = householdDataRepository;
+            _modelHelper = modelHelper;
         }
 
         #endregion
@@ -41,14 +48,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <summary>
         /// Execute payment on a given payable model.
         /// </summary>
-        /// <param name="payableModel">Payable model on which to execute the payment.</param>
+        /// <param name="payableModelTypeNameAsBase64">Base64 encoded value for the type name of the payable model.</param>
+        /// <param name="payableModelAsBase64">Base64 encoded value for the payable model on which to execute the payment.</param>
         /// <param name="returnUrl">Url on which to return to when the payment process has finished.</param>
         /// <returns>View on which to pay for the given payable model.</returns>
-        public ActionResult Pay(PayableModel payableModel, string returnUrl)
+        public ActionResult Pay(string payableModelTypeNameAsBase64, string payableModelAsBase64, string returnUrl)
         {
-            if (payableModel == null)
+            if (string.IsNullOrEmpty(payableModelTypeNameAsBase64))
             {
-                throw new ArgumentNullException(nameof(payableModel));
+                throw new ArgumentNullException(nameof(payableModelTypeNameAsBase64));
+            }
+            if (string.IsNullOrEmpty(payableModelAsBase64))
+            {
+                throw new ArgumentNullException(nameof(payableModelAsBase64));
             }
             if (string.IsNullOrEmpty(returnUrl))
             {
