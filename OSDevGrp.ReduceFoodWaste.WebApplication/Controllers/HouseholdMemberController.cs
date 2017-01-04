@@ -464,12 +464,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 membershipModel.BillingInformation = reloadedMembershipModel.BillingInformation;
                 membershipModel.Description = reloadedMembershipModel.Description;
 
-                string payableModelTypeNameAsBase64 = _modelHelper.ToBase64(membershipModel.GetType());
                 string payableModelAsBase64 = _modelHelper.ToBase64(membershipModel);
 
                 RouteValueDictionary routeValueDictionary = new RouteValueDictionary
                 {
-                    {"payableModelTypeNameAsBase64", payableModelTypeNameAsBase64},
                     {"payableModelAsBase64", payableModelAsBase64},
                     {"returnUrl", returnUrl}
                 };

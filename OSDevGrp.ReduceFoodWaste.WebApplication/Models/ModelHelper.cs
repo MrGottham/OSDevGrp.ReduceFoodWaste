@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
 {
@@ -11,40 +10,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
     public class ModelHelper : IModelHelper
     {
         /// <summary>
-        /// Encodes and returns a given type's name.
+        /// Serializes a given model and returns the base64 encoded value for it.
         /// </summary>
-        /// <param name="type">Type for which to encode and return the name.</param>
-        /// <returns>Encoded value for the given type's name.</returns>
-        public string ToBase64(Type type)
-        {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-
-            return Convert.ToBase64String(Encoding.Default.GetBytes(type.FullName));
-        }
-
-        /// <summary>
-        /// Decodes and returns the type for a given encoded type name.
-        /// </summary>
-        /// <param name="encodedTypeName">Encoded type name.</param>
-        /// <returns>Type for the given encoded type name.</returns>
-        public Type ToType(string encodedTypeName)
-        {
-            if (string.IsNullOrEmpty(encodedTypeName))
-            {
-                throw new ArgumentNullException(nameof(encodedTypeName));
-            }
-
-            return GetType().Assembly.GetType(Encoding.Default.GetString(Convert.FromBase64String(encodedTypeName)), true);
-        }
-
-        /// <summary>
-        /// Serializes a given model and returns the encoded value for it.
-        /// </summary>
-        /// <param name="model">Model which should be serialized and returned as an encoded value.</param>
-        /// <returns>Encoded value for the serialized model.</returns>
+        /// <param name="model">Model which should be serialized and for which the base64 encoded value should be returned.</param>
+        /// <returns>Base64 encoded value for the serialized model.</returns>
         public string ToBase64(object model)
         {
             if (model == null)
@@ -63,10 +32,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         }
 
         /// <summary>
-        /// Deserialize and returns a the model from a given encoded model.
+        /// Deserialize and returns a given model from a given base64 encoded model.
         /// </summary>
-        /// <param name="encodedModel">Encoded model.</param>
-        /// <returns>Model for the given encoded model.</returns>
+        /// <param name="encodedModel">Base64 encoded model.</param>
+        /// <returns>Model for the given base64 encoded model.</returns>
         public object ToModel(string encodedModel)
         {
             if (string.IsNullOrEmpty(encodedModel))

@@ -48,16 +48,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <summary>
         /// Execute payment on a given payable model.
         /// </summary>
-        /// <param name="payableModelTypeNameAsBase64">Base64 encoded value for the type name of the payable model.</param>
         /// <param name="payableModelAsBase64">Base64 encoded value for the payable model on which to execute the payment.</param>
         /// <param name="returnUrl">Url on which to return to when the payment process has finished.</param>
         /// <returns>View on which to pay for the given payable model.</returns>
-        public ActionResult Pay(string payableModelTypeNameAsBase64, string payableModelAsBase64, string returnUrl)
+        public ActionResult Pay(string payableModelAsBase64, string returnUrl)
         {
-            if (string.IsNullOrEmpty(payableModelTypeNameAsBase64))
-            {
-                throw new ArgumentNullException(nameof(payableModelTypeNameAsBase64));
-            }
             if (string.IsNullOrEmpty(payableModelAsBase64))
             {
                 throw new ArgumentNullException(nameof(payableModelAsBase64));

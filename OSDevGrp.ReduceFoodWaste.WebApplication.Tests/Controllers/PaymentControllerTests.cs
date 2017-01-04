@@ -71,33 +71,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that Pay throws an ArgumentNullException when the Base64 encoded value for the type name of the payable model is null or empty.
-        /// </summary>
-        [Test]
-        [TestCase(null)]
-        [TestCase("")]
-        public void TestThatPayThrowsArgumentNullExceptionWhenPayableModelTypeNameAsBase64IsNullOrEmpty(string payableModelTypeNameAsBase64)
-        {
-            string payableModelAsBase64 = Fixture.Create<string>();
-            Assert.That(payableModelAsBase64, Is.Not.Null);
-            Assert.That(payableModelAsBase64, Is.Not.Empty);
-
-            string returnUrl = Fixture.Create<string>();
-            Assert.That(returnUrl, Is.Not.Null);
-            Assert.That(returnUrl, Is.Not.Empty);
-
-            PaymentController paymentController = CreatePaymentController();
-            Assert.That(paymentController, Is.Not.Null);
-
-            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.Pay(payableModelTypeNameAsBase64, payableModelAsBase64, returnUrl));
-            Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.Not.Empty);
-            Assert.That(exception.ParamName, Is.EqualTo("payableModelTypeNameAsBase64"));
-            Assert.That(exception.InnerException, Is.Null);
-        }
-
-        /// <summary>
         /// Tests that Pay throws an ArgumentNullException when the Base64 encoded value for the payable model is null or empty.
         /// </summary>
         [Test]
@@ -105,10 +78,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("")]
         public void TestThatPayThrowsArgumentNullExceptionWhenPayableModelAsBase64IsNullOrEmpty(string payableModelAsBase64)
         {
-            string payableModelTypeNameAsBase64 = Fixture.Create<string>();
-            Assert.That(payableModelTypeNameAsBase64, Is.Not.Null);
-            Assert.That(payableModelTypeNameAsBase64, Is.Not.Empty);
-
             string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
@@ -116,7 +85,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PaymentController paymentController = CreatePaymentController();
             Assert.That(paymentController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.Pay(payableModelTypeNameAsBase64, payableModelAsBase64, returnUrl));
+            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.Pay(payableModelAsBase64, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -132,10 +101,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("")]
         public void TestThatPayThrowsArgumentNullExceptionWhenPayableReturnUrlIsNullOrEmpty(string returnUrl)
         {
-            string payableModelTypeNameAsBase64 = Fixture.Create<string>();
-            Assert.That(payableModelTypeNameAsBase64, Is.Not.Null);
-            Assert.That(payableModelTypeNameAsBase64, Is.Not.Empty);
-
             string payableModelAsBase64 = Fixture.Create<string>();
             Assert.That(payableModelAsBase64, Is.Not.Null);
             Assert.That(payableModelAsBase64, Is.Not.Empty);
@@ -143,7 +108,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PaymentController paymentController = CreatePaymentController();
             Assert.That(paymentController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.Pay(payableModelAsBase64, payableModelAsBase64, returnUrl));
+            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.Pay(payableModelAsBase64, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);

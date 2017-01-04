@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -26,87 +25,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         }
 
         /// <summary>
-        /// Test that ToBase64 for a given type throws an ArgumentNullException when type is null.
-        /// </summary>
-        [Test]
-        public void TestThatToBase64ForTypeThrowsArgumentNullExceptionWhenTypeIsNull()
-        {
-            IModelHelper modelHelper = CreateModelHelper();
-            Assert.That(modelHelper, Is.Not.Null);
-
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => modelHelper.ToBase64(null));
-            Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.Not.Empty);
-            Assert.That(exception.ParamName, Is.EqualTo("type"));
-            Assert.That(exception.InnerException, Is.Null);
-        }
-
-        /// <summary>
-        /// Test that ToBase64 for a given type encodes and returns the given type's name.
-        /// </summary>
-        [Test]
-        [TestCase(typeof(MembershipModel))]
-        [TestCase(typeof(PayableModel))]
-        [TestCase(typeof(PaymentHandlerModel))]
-        [TestCase(typeof(DataProviderModel))]
-        public void TestThatToBase64ForTypeEncodesTypeName(Type type)
-        {
-            string expectedValue = Convert.ToBase64String(Encoding.Default.GetBytes(type.FullName));
-            Assert.That(expectedValue, Is.Not.Null);
-            Assert.That(expectedValue, Is.Not.Empty);
-
-            IModelHelper modelHelper = CreateModelHelper();
-            Assert.That(modelHelper, Is.Not.Null);
-
-            string result = modelHelper.ToBase64(type);
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result, Is.Not.Empty);
-            Assert.That(result, Is.EqualTo(expectedValue));
-        }
-
-        /// <summary>
-        /// Test that ToType for a given encoded type name throws an ArgumentNullException when the encoded type name is invalid.
-        /// </summary>
-        [Test]
-        [TestCase(null)]
-        [TestCase("")]
-        public void TestThatToTypeForEncodedTypeNameThrowsArgumentNullExceptionWhenEncodedTypeNameIsInvalid(string invalidEncodedTypeName)
-        {
-            IModelHelper modelHelper = CreateModelHelper();
-            Assert.That(modelHelper, Is.Not.Null);
-
-            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => modelHelper.ToType(invalidEncodedTypeName));
-            Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.Not.Empty);
-            Assert.That(exception.ParamName, Is.EqualTo("encodedTypeName"));
-            Assert.That(exception.InnerException, Is.Null);
-        }
-
-        /// <summary>
-        /// Test that ToType for a given encoded type name return the type fir the encoded type name is invalid.
-        /// </summary>
-        [Test]
-        [TestCase(typeof(MembershipModel))]
-        [TestCase(typeof(PayableModel))]
-        [TestCase(typeof(PaymentHandlerModel))]
-        [TestCase(typeof(DataProviderModel))]
-        public void TestThatToTypeForEncodedTypeNameReturnsTypeForEncodedTypeName(Type type)
-        {
-            IModelHelper modelHelper = CreateModelHelper();
-            Assert.That(modelHelper, Is.Not.Null);
-
-            var encodedTypeName = modelHelper.ToBase64(type);
-            Assert.That(encodedTypeName, Is.Not.Null);
-            Assert.That(encodedTypeName, Is.Not.Empty);
-
-            Type result = modelHelper.ToType(encodedTypeName);
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result, Is.EqualTo(type));
-        }
-
-        /// <summary>
         /// Test that ToBase64 for a given model throws an ArgumentNullException when model is null.
         /// </summary>
         [Test]
@@ -124,13 +42,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         }
 
         /// <summary>
-        /// Test that ToBase64 for a given model serialize and returns the encoded value for a given model.
+        /// Test that ToBase64 for a given model serialize and returns the base64 encoded value for a given model.
         /// </summary>
         [Test]
         [TestCase("da-DK")]
         [TestCase("en-US")]
         [TestCase("es-ES")]
-        public void TestThatToBase64ForModelSerializeAndReturnsEncodedValueForModel(string cultureName)
+        public void TestThatToBase64ForModelSerializeAndReturnsBase64EncodedValueForModel(string cultureName)
         {
             MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.PriceCultureInfoName, cultureName)
@@ -184,13 +102,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         }
 
         /// <summary>
-        /// Test that ToModel for a given encoded model deserialize and returns the model from a given encoded model.
+        /// Test that ToModel for a given base64 encoded model deserialize and returns the model from a given encoded model.
         /// </summary>
         [Test]
         [TestCase("da-DK")]
         [TestCase("en-US")]
         [TestCase("es-ES")]
-        public void TestThatToModelForEncodedModelDeserializeAndReturnsModelForEncodedModel(string cultureName)
+        public void TestThatToModelForBase64EncodedModelDeserializeAndReturnsModelForEncodedModel(string cultureName)
         {
             MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, Fixture.Create<string>())
