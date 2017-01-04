@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
@@ -117,11 +118,44 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Pay calls ToModel with the base64 encoded value for the payable model on which to execute the payment on the model helper.
+        /// </summary>
+        [Test]
+        public void TestThatPayCallsToModelWithPayableModelAsBase64OnModelHelper()
+        {
+            PayableModel payableModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .Create();
+            Assert.That(payableModel, Is.Not.Null);
+
+            string payableModelAsBase64 = Fixture.Create<string>();
+            Assert.That(payableModelAsBase64, Is.Not.Null);
+            Assert.That(payableModelAsBase64, Is.Not.Empty);
+
+            string returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            PaymentController paymentController = CreatePaymentController(toModel: payableModel);
+            Assert.That(paymentController, Is.Not.Null);
+
+            paymentController.Pay(payableModelAsBase64, returnUrl);
+            
+            _modelHelperMock.AssertWasCalled(m => m.ToModel(Arg<string>.Is.Equal(payableModelAsBase64)));
+        }
+
+        /// <summary>
         /// Creates a controller which can handle payments for unit testing.
         /// </summary>
+        /// <param name="toModel">Sets the model which should be returned for a given base64 encoded model.</param>
         /// <returns>Controller which can handle payments for unit testing.</returns>
-        private PaymentController CreatePaymentController()
+        private PaymentController CreatePaymentController(object toModel = null)
         {
+            _modelHelperMock.Stub(m => m.ToModel(Arg<string>.Is.Anything))
+                .Return(toModel)
+                .Repeat.Any();
+
             var paymentController = new PaymentController(_householdDataRepositoryMock, _modelHelperMock);
             paymentController.ControllerContext = ControllerTestHelper.CreateControllerContext(paymentController);
             return paymentController;

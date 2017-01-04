@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 
@@ -62,7 +63,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 throw new ArgumentNullException(nameof(returnUrl));
             }
 
-            throw new NotImplementedException();
+            try
+            {
+                PayableModel payableModel = (PayableModel) _modelHelper.ToModel(payableModelAsBase64);
+
+                return null;
+                //throw new NotImplementedException();
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.ToReduceFoodWasteException();
+            }
         }
 
         #endregion
