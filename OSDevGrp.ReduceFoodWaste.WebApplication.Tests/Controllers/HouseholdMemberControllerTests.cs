@@ -3987,11 +3987,122 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(redirectToRouteResult.RouteValues["payableModelAsBase64"], Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues["payableModelAsBase64"], Is.Not.Empty);
             Assert.That(redirectToRouteResult.RouteValues["payableModelAsBase64"], Is.EqualTo(toBase64ForMembershipModel));
-
             Assert.That(redirectToRouteResult.RouteValues.ContainsKey("returnUrl"), Is.True);
             Assert.That(redirectToRouteResult.RouteValues["returnUrl"], Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues["returnUrl"], Is.Not.Empty);
-            Assert.That(redirectToRouteResult.RouteValues["returnUrl"], Is.EqualTo(VirtualPathUtility.ToAbsolute("~/X/X")));
+            Assert.That(redirectToRouteResult.RouteValues["returnUrl"], Is.EqualTo(string.Format("~/HouseholdMember/UpgradeOrRenewMembershipCallback?membershipModelAsBase64={0}&returnUrl={1}", HttpUtility.HtmlEncode(toBase64ForMembershipModel), HttpUtility.HtmlEncode(returnUrl))));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembershipCallback throws an ArgumentNullException when the base64 encoded value for the model of the membership which should be upgraded or renewed is null or empty.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void TestThatUpgradeOrRenewMembershipCallbackThrowsArgumentNullExceptionWhenMembershipModelAsBase64IsNullOrEmpty(string membershipModelAsBase64)
+        {
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, HttpUtility.HtmlEncode(returnUrl)));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("membershipModelAsBase64"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembershipCallback throws an ArgumentNullException when the url on which to return when the upgrade process has finished is null or empty.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void TestThatUpgradeOrRenewMembershipCallbackThrowsArgumentNullExceptionWhenReturnUrlIsNullOrEmpty(string returnUrl)
+        {
+            var membershipModelAsBase64 = Fixture.Create<string>();
+            Assert.That(membershipModelAsBase64, Is.Not.Null);
+            Assert.That(membershipModelAsBase64, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(HttpUtility.HtmlEncode(membershipModelAsBase64), returnUrl));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("returnUrl"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembershipCallback calls ToModel with the base64 encoded value for the model of the membership which should be upgraded or renewed on the model helper.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeOrRenewMembershipCallbackCallsToModelWithMembershipModelAsBase64OnModelHelper()
+        {
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Name, Fixture.Create<string>())
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.CanRenew, Fixture.Create<bool>())
+                .With(m => m.CanUpgrade, Fixture.Create<bool>())
+                .Create();
+
+            var membershipModelAsBase64 = Fixture.Create<string>();
+            Assert.That(membershipModelAsBase64, Is.Not.Null);
+            Assert.That(membershipModelAsBase64, Is.Not.Empty);
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController(toModel: membershipModel);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            householdMemberController.UpgradeOrRenewMembershipCallback(HttpUtility.HtmlEncode(membershipModelAsBase64), HttpUtility.HtmlEncode(returnUrl));
+
+            _modelHelperMock.AssertWasCalled(m => m.ToModel(Arg<string>.Is.Equal(membershipModelAsBase64)));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembershipCallback returns a RedirectResult to the url on which to return when the membership upgrade or renew process has finished.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeOrRenewMembershipCallbackReturnsRedirectResultToReturnUrl()
+        {
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Name, Fixture.Create<string>())
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.CanRenew, Fixture.Create<bool>())
+                .With(m => m.CanUpgrade, Fixture.Create<bool>())
+                .Create();
+
+            var membershipModelAsBase64 = Fixture.Create<string>();
+            Assert.That(membershipModelAsBase64, Is.Not.Null);
+            Assert.That(membershipModelAsBase64, Is.Not.Empty);
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController(toModel: membershipModel);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var result = householdMemberController.UpgradeOrRenewMembershipCallback(HttpUtility.HtmlEncode(membershipModelAsBase64), HttpUtility.HtmlEncode(returnUrl));
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectResult>());
+
+            var redirectResult = (RedirectResult)result;
+            Assert.That(redirectResult, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Empty);
+            Assert.That(redirectResult.Url, Is.EqualTo(returnUrl));
         }
 
         /// <summary>
@@ -4011,8 +4122,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <param name="membershipModelCollection">Sets the collection of membership models.</param>
         /// <param name="toBase64ForMembershipModel">Sets the encoded base64 value for a given membership model.</param>
         /// <param name="toBase64ForMembershipModelCallback">Sets the callback method called when encoding the base64 value for a given membership model.</param>
+        /// <param name="toModel">Sets the model which should be returned for a given encoded base64 value.</param>
         /// <returns>Controller for a household member for unit testing.</returns>
-        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null, IEnumerable<MembershipModel> membershipModelCollection = null, string toBase64ForMembershipModel = null, Action<MembershipModel> toBase64ForMembershipModelCallback = null)
+        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null, IEnumerable<MembershipModel> membershipModelCollection = null, string toBase64ForMembershipModel = null, Action<MembershipModel> toBase64ForMembershipModelCallback = null, object toModel = null)
         {
             Func<HouseholdModel> householdCreator = () =>
             {
@@ -4094,6 +4206,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                     toBase64ForMembershipModelCallback.Invoke((MembershipModel) e.Arguments.ElementAt(0));
                 })
                 .Return(toBase64ForMembershipModel ?? Fixture.Create<string>())
+                .Repeat.Any();
+            _modelHelperMock.Stub(m => m.ToModel(Arg<string>.Is.Anything))
+                .Return(toModel)
                 .Repeat.Any();
 
             var householdMemberController = new HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock, _modelHelperMock);

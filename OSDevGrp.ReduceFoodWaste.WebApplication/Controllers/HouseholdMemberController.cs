@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
@@ -464,12 +465,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 membershipModel.BillingInformation = reloadedMembershipModel.BillingInformation;
                 membershipModel.Description = reloadedMembershipModel.Description;
 
-                string payableModelAsBase64 = _modelHelper.ToBase64(membershipModel);
+                string membershipModelAsBase64 = _modelHelper.ToBase64(membershipModel);
 
                 RouteValueDictionary routeValueDictionary = new RouteValueDictionary
                 {
-                    {"payableModelAsBase64", payableModelAsBase64},
-                    {"returnUrl", returnUrl}
+                    {"payableModelAsBase64", membershipModelAsBase64},
+                    {"returnUrl", string.Format("~/HouseholdMember/UpgradeOrRenewMembershipCallback?membershipModelAsBase64={0}&returnUrl={1}", HttpUtility.HtmlEncode(membershipModelAsBase64), HttpUtility.HtmlEncode(returnUrl))}
                 };
                 return RedirectToAction("Pay", "Payment", routeValueDictionary);
             }
@@ -479,12 +480,36 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
         }
 
-        // TODO: Make documentation.
-        [ValidateAntiForgeryToken]
+        /// <summary>
+        /// Callback action which finish the upgrade or renew process after the payment.
+        /// </summary>
+        /// <param name="membershipModelAsBase64">Base64 encoded value for the model of the membership which should be upgraded or renewed.</param>
+        /// <param name="returnUrl">Url on which to return when the membership upgrade or renew process has finished.</param>
+        /// <returns>Redirect to the url on which to return when the membership upgrade or renew process has finished.</returns>
         [IsValidatedHouseholdMember]
         public ActionResult UpgradeOrRenewMembershipCallback(string membershipModelAsBase64, string returnUrl)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(membershipModelAsBase64))
+            {
+                throw new ArgumentNullException(nameof(membershipModelAsBase64));
+            }
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                throw new ArgumentNullException(nameof(returnUrl));
+            }
+
+            try
+            {
+                MembershipModel membershipModel = (MembershipModel) _modelHelper.ToModel(HttpUtility.HtmlDecode(membershipModelAsBase64));
+
+                // TODO: Upgrade or renew the paid membership.
+
+                return Redirect	(HttpUtility.HtmlDecode(returnUrl));
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.ToReduceFoodWasteException();
+            }
         }
 
         /// <summary>
