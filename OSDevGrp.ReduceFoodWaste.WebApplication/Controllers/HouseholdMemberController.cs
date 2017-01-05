@@ -5,12 +5,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
@@ -30,6 +30,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         private readonly IClaimValueProvider _claimValueProvider;
         private readonly ILocalClaimProvider _localClaimProvider;
         private readonly IModelHelper _modelHelper;
+        private readonly IUtilities _utilities;
 
         #endregion
 
@@ -42,7 +43,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <param name="claimValueProvider">Implementation of a provider which can get values from claims.</param>
         /// <param name="localClaimProvider">Implementation of a provider which can append local claims to a claims identity.</param>
         /// <param name="modelHelper">Implementation of a model helper.</param>
-        public HouseholdMemberController(IHouseholdDataRepository householdDataRepository, IClaimValueProvider claimValueProvider, ILocalClaimProvider localClaimProvider, IModelHelper modelHelper)
+        /// <param name="utilities">Implementation of the utilities which support the infrastructure.</param>
+        public HouseholdMemberController(IHouseholdDataRepository householdDataRepository, IClaimValueProvider claimValueProvider, ILocalClaimProvider localClaimProvider, IModelHelper modelHelper, IUtilities utilities)
         {
             if (householdDataRepository == null)
             {
@@ -60,10 +62,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 throw new ArgumentNullException(nameof(modelHelper));
             }
+            if (utilities == null)
+            {
+                throw new ArgumentNullException(nameof(utilities));
+            }
             _householdDataRepository = householdDataRepository;
             _claimValueProvider = claimValueProvider;
             _localClaimProvider = localClaimProvider;
             _modelHelper = modelHelper;
+            _utilities = utilities;
         }
 
         #endregion
@@ -466,11 +473,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 membershipModel.Description = reloadedMembershipModel.Description;
 
                 string membershipModelAsBase64 = _modelHelper.ToBase64(membershipModel);
+                string callbackUrl = $"{_utilities.ToAbsolutePath("~/HouseholdMember/UpgradeOrRenewMembershipCallback")}?membershipModelAsBase64={_utilities.HtmlEncode(membershipModelAsBase64)}&returnUrl={_utilities.HtmlEncode(returnUrl)}";
 
                 RouteValueDictionary routeValueDictionary = new RouteValueDictionary
                 {
                     {"payableModelAsBase64", membershipModelAsBase64},
-                    {"returnUrl", string.Format("~/HouseholdMember/UpgradeOrRenewMembershipCallback?membershipModelAsBase64={0}&returnUrl={1}", HttpUtility.HtmlEncode(membershipModelAsBase64), HttpUtility.HtmlEncode(returnUrl))}
+                    {"returnUrl", callbackUrl}
                 };
                 return RedirectToAction("Pay", "Payment", routeValueDictionary);
             }
@@ -500,11 +508,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             try
             {
-                MembershipModel membershipModel = (MembershipModel) _modelHelper.ToModel(HttpUtility.HtmlDecode(membershipModelAsBase64));
+                MembershipModel membershipModel = (MembershipModel) _modelHelper.ToModel(_utilities.HtmlDecode(membershipModelAsBase64));
 
                 // TODO: Upgrade or renew the paid membership.
 
-                return Redirect	(HttpUtility.HtmlDecode(returnUrl));
+                return Redirect(_utilities.HtmlDecode(returnUrl));
             }
             catch (AggregateException ex)
             {

@@ -528,7 +528,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 throw new ArgumentNullException(nameof(cultureInfo));
             }
 
-            throw new NotImplementedException();
+            Func<HouseholdDataServiceChannel, IEnumerable<PaymentHandlerModel>> callbackFunc = channel =>
+            {
+                DataProviderWhoHandlesPaymentsCollectionGetQuery query = new DataProviderWhoHandlesPaymentsCollectionGetQuery
+                {
+                    TranslationInfoIdentifier = GetTranslationInfoIdentifier(channel, cultureInfo)
+                };
+                IEnumerable<DataProviderView> result = channel.DataProviderWhoHandlesPaymentsCollectionGet(query);
+
+                return _householdDataConverter.Convert<IEnumerable<DataProviderView>, IEnumerable<PaymentHandlerModel>>(result);
+            };
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
         }
 
         /// <summary>

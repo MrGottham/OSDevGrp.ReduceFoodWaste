@@ -272,6 +272,8 @@
     <Compile Include="Infrastructure\Security\Providers\LocalClaimTypes.cs" />
     <Compile Include="Infrastructure\Security\Providers\ClaimValueProvider.cs" />
     <Compile Include="Infrastructure\Security\Providers\IClaimValueProvider.cs" />
+    <Compile Include="Infrastructure\Utilities\IUtilities.cs" />
+    <Compile Include="Infrastructure\Utilities\Utilities.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\DashboardModel.cs" />
     <Compile Include="Models\DataProviderModel.cs" />

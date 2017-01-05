@@ -2,6 +2,7 @@ using System;
 using Microsoft.Practices.Unity;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Cookies;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration;
@@ -58,6 +59,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
                 throw new ArgumentNullException("container");
             }
 
+            container.RegisterType<IUtilities, Utilities>();
             container.RegisterType<IClaimValueProvider, ClaimValueProvider>();
             container.RegisterType<ILocalClaimProvider, LocalClaimProvider>();
             container.RegisterType<ICookieHelper, CookieHelper>();
