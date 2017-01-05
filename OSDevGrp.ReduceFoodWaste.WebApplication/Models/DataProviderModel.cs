@@ -5,6 +5,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
     /// <summary>
     /// Model for a data provider who provides data.
     /// </summary>
+    [Serializable]
     public class DataProviderModel
     {
         #region Properties

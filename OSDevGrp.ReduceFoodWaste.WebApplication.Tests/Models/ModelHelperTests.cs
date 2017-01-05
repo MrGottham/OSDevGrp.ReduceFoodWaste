@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
@@ -33,7 +34,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             IModelHelper modelHelper = CreateModelHelper();
             Assert.That(modelHelper, Is.Not.Null);
 
-            ArgumentNullException exception =Assert.Throws<ArgumentNullException>(() => modelHelper.ToBase64((object) null));
+            ArgumentNullException exception =Assert.Throws<ArgumentNullException>(() => modelHelper.ToBase64(null));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -52,11 +53,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         {
             MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.PriceCultureInfoName, cultureName)
+                .With(m => m.PaymentHandler, Fixture.Create<PaymentHandlerModel>())
+                .With(m => m.PaymentHandlers, Fixture.CreateMany<PaymentHandlerModel>(Random.Next(5, 10)).ToList())
                 .Create();
             Assert.That(membershipModel, Is.Not.Null);
             Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
             Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
             Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(cultureName));
+            Assert.That(membershipModel.PaymentHandler, Is.Not.Null);
+            Assert.That(membershipModel.PaymentHandlers, Is.Not.Null);
+            Assert.That(membershipModel.PaymentHandlers, Is.Not.Empty);
 
             string expectedValue;
             using (MemoryStream memoryStream = new MemoryStream())
@@ -116,6 +122,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
                 .With(m => m.BillingInformation, Fixture.Create<string>())
                 .With(m => m.Price, Fixture.Create<decimal>())
                 .With(m => m.PriceCultureInfoName, cultureName)
+                .With(m => m.PaymentHandler, Fixture.Create<PaymentHandlerModel>())
+                .With(m => m.PaymentHandlers, Fixture.CreateMany<PaymentHandlerModel>(Random.Next(5, 10)).ToList())
                 .With(m => m.CanRenew, Fixture.Create<bool>())
                 .With(m => m.CanUpgrade, Fixture.Create<bool>())
                 .Create();
@@ -130,6 +138,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
             Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(cultureName));
             Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
+            Assert.That(membershipModel.PaymentHandler, Is.Not.Null);
+            Assert.That(membershipModel.PaymentHandlers, Is.Not.Null);
+            Assert.That(membershipModel.PaymentHandlers, Is.Not.Empty);
 
             IModelHelper modelHelper = CreateModelHelper();
             Assert.That(modelHelper, Is.Not.Null);
@@ -159,6 +170,28 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(clone.PriceCultureInfoName, Is.EqualTo(membershipModel.PriceCultureInfoName));
             Assert.That(clone.PriceCultureInfo, Is.Not.Null);
             Assert.That(clone.PriceCultureInfo, Is.EqualTo(membershipModel.PriceCultureInfo));
+            Assert.That(clone.PaymentHandler, Is.Not.Null);
+            Assert.That(clone.PaymentHandler.Identifier, Is.EqualTo(membershipModel.PaymentHandler.Identifier));
+            Assert.That(clone.PaymentHandler.Name, Is.Not.Null);
+            Assert.That(clone.PaymentHandler.Name, Is.Not.Empty);
+            Assert.That(clone.PaymentHandler.Name, Is.EqualTo(membershipModel.PaymentHandler.Name));
+            Assert.That(clone.PaymentHandler.DataSourceStatement, Is.Not.Null);
+            Assert.That(clone.PaymentHandler.DataSourceStatement, Is.Not.Empty);
+            Assert.That(clone.PaymentHandler.DataSourceStatement, Is.EqualTo(membershipModel.PaymentHandler.DataSourceStatement));
+            Assert.That(clone.PaymentHandlers, Is.Not.Null);
+            Assert.That(clone.PaymentHandlers, Is.Not.Empty);
+            Assert.That(clone.PaymentHandlers.Count(), Is.EqualTo(membershipModel.PaymentHandlers.Count()));
+            for (var i = 0; i < membershipModel.PaymentHandlers.Count(); i++)
+            {
+                Assert.That(clone.PaymentHandlers.ElementAt(i), Is.Not.Null);
+                Assert.That(clone.PaymentHandlers.ElementAt(i).Identifier, Is.EqualTo(membershipModel.PaymentHandlers.ElementAt(i).Identifier));
+                Assert.That(clone.PaymentHandlers.ElementAt(i).Name, Is.Not.Null);
+                Assert.That(clone.PaymentHandlers.ElementAt(i).Name, Is.Not.Empty);
+                Assert.That(clone.PaymentHandlers.ElementAt(i).Name, Is.EqualTo(membershipModel.PaymentHandlers.ElementAt(i).Name));
+                Assert.That(clone.PaymentHandlers.ElementAt(i).DataSourceStatement, Is.Not.Null);
+                Assert.That(clone.PaymentHandlers.ElementAt(i).DataSourceStatement, Is.Not.Empty);
+                Assert.That(clone.PaymentHandlers.ElementAt(i).DataSourceStatement, Is.EqualTo(membershipModel.PaymentHandlers.ElementAt(i).DataSourceStatement));
+            }
             Assert.That(clone.CanRenew, Is.EqualTo(membershipModel.CanRenew));
             Assert.That(clone.CanUpgrade, Is.EqualTo(membershipModel.CanUpgrade));
         }
