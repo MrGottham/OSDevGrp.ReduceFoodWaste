@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Security.Principal;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
@@ -237,12 +241,120 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Pay calls GetPaymentHandlersAsync on the repository which can access household data when the payable model is not free of cost.
+        /// </summary>
+        [Test]
+        public void TestThatPayCallsGetPaymentHandlersAsyncOnHouseholdDataRepositoryWhenPayableModelIsNotFreeOfCost()
+        {
+            PayableModel payableModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandler, null)
+                .With(m => m.PaymentHandlers, null)
+                .Create();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.Price, Is.GreaterThan(0M));
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(payableModel.IsFreeOfCost, Is.False);
+            Assert.That(payableModel.PaymentHandler, Is.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
+
+            string payableModelAsBase64 = Fixture.Create<string>();
+            Assert.That(payableModelAsBase64, Is.Not.Null);
+            Assert.That(payableModelAsBase64, Is.Not.Empty);
+
+            string returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            PaymentController paymentController = CreatePaymentController(toModel: payableModel);
+            Assert.That(paymentController, Is.Not.Null);
+            Assert.That(paymentController.User, Is.Not.Null);
+            Assert.That(paymentController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            paymentController.Pay(payableModelAsBase64, returnUrl);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.GetPaymentHandlersAsync(Arg<IIdentity>.Is.Equal(paymentController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));
+        }
+
+        /// <summary>
+        /// Tests that Pay returns a ViewResult on which to pay for the payable model when the payable model is not free of cost.
+        /// </summary>
+        [Test]
+        public void TestThatPayReturnsViewResultForPaymentWhenPayableModelIsNotFreeOfCost()
+        {
+            PayableModel payableModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandler, Fixture.Create<PaymentHandlerModel>())
+                .With(m => m.PaymentHandlers, null)
+                .Create();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.Price, Is.GreaterThan(0M));
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(payableModel.IsFreeOfCost, Is.False);
+            Assert.That(payableModel.PaymentHandler, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
+
+            string payableModelAsBase64 = Fixture.Create<string>();
+            Assert.That(payableModelAsBase64, Is.Not.Null);
+            Assert.That(payableModelAsBase64, Is.Not.Empty);
+
+            string returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            IEnumerable<PaymentHandlerModel> paymentHandlerModelCollection = Fixture.CreateMany<PaymentHandlerModel>(Random.Next(5, 10)).ToList();
+            Assert.That(paymentHandlerModelCollection, Is.Not.Null);
+            Assert.That(paymentHandlerModelCollection, Is.Not.Empty);
+
+            PaymentController paymentController = CreatePaymentController(paymentHandlerModelCollection: paymentHandlerModelCollection, toModel: payableModel);
+            Assert.That(paymentController, Is.Not.Null);
+
+            ActionResult result = paymentController.Pay(payableModelAsBase64, returnUrl);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ViewResult>());
+
+            ViewResult viewResult = (ViewResult) result;
+            Assert.That(viewResult, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Null);
+            Assert.That(viewResult.ViewName, Is.Not.Empty);
+            Assert.That(viewResult.ViewName, Is.EqualTo("Pay"));
+            Assert.That(viewResult.Model, Is.Not.Null);
+            Assert.That(viewResult.Model, Is.EqualTo(payableModel));
+            Assert.That(viewResult.ViewData, Is.Not.Null);
+            Assert.That(viewResult.ViewData, Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["ReturnUrl"], Is.EqualTo(returnUrl));
+
+            PayableModel model = (PayableModel) viewResult.Model;
+            Assert.That(model, Is.Not.Null);
+            Assert.That(model.PaymentHandler, Is.Null);
+            Assert.That(model.PaymentHandlers, Is.Not.Null);
+            Assert.That(model.PaymentHandlers, Is.Not.Empty);
+            Assert.That(model.PaymentHandlers, Is.EqualTo(paymentHandlerModelCollection));
+        }
+
+        /// <summary>
         /// Creates a controller which can handle payments for unit testing.
         /// </summary>
+        /// <param name="paymentHandlerModelCollection">Sets the collection of models for the data providers who handles payments.</param>
         /// <param name="toModel">Sets the model which should be returned for a given base64 encoded model.</param>
         /// <returns>Controller which can handle payments for unit testing.</returns>
-        private PaymentController CreatePaymentController(object toModel = null)
+        private PaymentController CreatePaymentController(IEnumerable<PaymentHandlerModel> paymentHandlerModelCollection = null, object toModel = null)
         {
+            _householdDataRepositoryMock.Stub(m => m.GetPaymentHandlersAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
+                .Return(Task.Run(() => paymentHandlerModelCollection ?? Fixture.CreateMany<PaymentHandlerModel>(Random.Next(5, 10)).ToList()))
+                .Repeat.Any();
+
             _modelHelperMock.Stub(m => m.ToModel(Arg<string>.Is.Anything))
                 .Return(toModel)
                 .Repeat.Any();

@@ -327,4 +327,7 @@
   <data name="MembershipPremiumBillingInformation" xml:space="preserve">
     <value>1 stk. [Name] medlemsskab á &lt;b&gt;[Price]&lt;/b&gt; for det næste år.</value>
   </data>
+  <data name="Payment" xml:space="preserve">
+    <value>Betaling</value>
+  </data>
 </root>

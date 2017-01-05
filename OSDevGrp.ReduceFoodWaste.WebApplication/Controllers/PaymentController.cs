@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
@@ -71,8 +74,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return Redirect(returnUrl);
                 }
 
-                return null;
-                //throw new NotImplementedException();
+                Task<IEnumerable<PaymentHandlerModel>> task = _householdDataRepository.GetPaymentHandlersAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
+                task.Wait();
+
+                payableModel.PaymentHandler = null;
+                payableModel.PaymentHandlers = task.Result;
+
+                ViewBag.ReturnUrl = returnUrl;
+
+                return View("Pay", payableModel);
             }
             catch (AggregateException ex)
             {

@@ -26,6 +26,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         private const string HouseholdIdentificationCollectionCacheName = "OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdIdentificationCollectionCache";
         private const string TranslationInfoIdentifierCacheName = "OSDevGrp.ReduceFoodWaste.WebApplication.TranslationInfoIdentifierCache";
         private const string PrivacyPolicyModelCacheName = "OSDevGrp.ReduceFoodWaste.WebApplication.PrivacyPolicyModelCache";
+        private const string PaymentHandlerModelCollectionCacheName = "OSDevGrp.ReduceFoodWaste.WebApplication.PaymentHandlerModelCollectionCacheName";
 
         #endregion
 
@@ -528,18 +529,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 throw new ArgumentNullException(nameof(cultureInfo));
             }
 
-            Func<HouseholdDataServiceChannel, IEnumerable<PaymentHandlerModel>> callbackFunc = channel =>
-            {
-                DataProviderWhoHandlesPaymentsCollectionGetQuery query = new DataProviderWhoHandlesPaymentsCollectionGetQuery
-                {
-                    TranslationInfoIdentifier = GetTranslationInfoIdentifier(channel, cultureInfo)
-                };
-                IEnumerable<DataProviderView> result = channel.DataProviderWhoHandlesPaymentsCollectionGet(query);
-
-                return _householdDataConverter.Convert<IEnumerable<DataProviderView>, IEnumerable<PaymentHandlerModel>>(result);
-            };
-
-            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), channel => GetPaymentHandlers(channel, cultureInfo)));
         }
 
         /// <summary>
@@ -730,6 +720,75 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             _objectCache.Set(PrivacyPolicyModelCacheName, privacyPolicyModelCache, new DateTimeOffset(DateTime.Now.AddHours(1)));
 
             return (PrivacyPolicyModel) privacyPolicyModelCache[query.TranslationInfoIdentifier].Clone();
+        }
+
+        /// <summary>
+        /// Gets all data providers who can handle payments for a given culture.
+        /// </summary>
+        /// <param name="channel">Channel on which to get all data providers who can handle payments.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Data providers who can handle payments for the given culture.</returns>
+        private IEnumerable<PaymentHandlerModel> GetPaymentHandlers(HouseholdDataServiceChannel channel, CultureInfo cultureInfo)
+        {
+            if (channel == null)
+            {
+                throw new ArgumentNullException(nameof(channel));
+            }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException(nameof(cultureInfo));
+            }
+
+            DataProviderWhoHandlesPaymentsCollectionGetQuery query = new DataProviderWhoHandlesPaymentsCollectionGetQuery
+            {
+                TranslationInfoIdentifier = GetTranslationInfoIdentifier(channel, cultureInfo)
+            };
+
+            IEnumerable<PaymentHandlerModel> paymentHandlerModelCollection;
+
+            IDictionary<Guid, IEnumerable<PaymentHandlerModel>> paymentHandlerModelCollectionCache = _objectCache.Get(PaymentHandlerModelCollectionCacheName) as IDictionary<Guid, IEnumerable<PaymentHandlerModel>>;
+            if (paymentHandlerModelCollectionCache == null)
+            {
+                paymentHandlerModelCollection = channel.DataProviderWhoHandlesPaymentsCollectionGet(query)
+                    .Select(ToPaymentHandler)
+                    .ToList();
+
+                paymentHandlerModelCollectionCache = new Dictionary<Guid, IEnumerable<PaymentHandlerModel>>
+                {
+                    {query.TranslationInfoIdentifier, paymentHandlerModelCollection}
+                };
+                _objectCache.Set(PaymentHandlerModelCollectionCacheName, paymentHandlerModelCollectionCache, new DateTimeOffset(DateTime.Now.AddHours(1)));
+
+                return paymentHandlerModelCollection;
+            }
+
+            if (paymentHandlerModelCollectionCache.ContainsKey(query.TranslationInfoIdentifier))
+            {
+                return paymentHandlerModelCollectionCache[query.TranslationInfoIdentifier];
+            }
+
+            paymentHandlerModelCollection = channel.DataProviderWhoHandlesPaymentsCollectionGet(query)
+                .Select(ToPaymentHandler)
+                .ToList();
+
+            paymentHandlerModelCollectionCache.Add(query.TranslationInfoIdentifier, paymentHandlerModelCollection);
+            _objectCache.Set(PaymentHandlerModelCollectionCacheName, paymentHandlerModelCollectionCache, new DateTimeOffset(DateTime.Now.AddHours(1)));
+
+            return paymentHandlerModelCollection;
+        }
+
+        /// <summary>
+        /// Converts a DataProviderView to a model for a data provider who can handle payments.
+        /// </summary>
+        /// <param name="dataProviderView">DataProviderView which should be converted.</param>
+        /// <returns>Model for a data provider who can handle payments.</returns>
+        private PaymentHandlerModel ToPaymentHandler(DataProviderView dataProviderView)
+        {
+            if (dataProviderView == null)
+            {
+                throw new ArgumentException(nameof(dataProviderView));
+            }
+            return _householdDataConverter.Convert<DataProviderView, PaymentHandlerModel>(dataProviderView);
         }
 
         /// <summary>

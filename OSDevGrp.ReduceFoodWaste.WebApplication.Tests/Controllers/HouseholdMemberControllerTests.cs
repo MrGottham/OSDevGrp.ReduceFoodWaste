@@ -3917,7 +3917,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity), Arg<CultureInfo>.Is.Equal(Thread.CurrentThread.CurrentUICulture)));

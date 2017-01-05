@@ -521,6 +521,7 @@
     <Content Include="Views\HouseholdMember\UpgradeMembership.cshtml" />
     <Content Include="Views\HouseholdMember\RenewMembership.cshtml" />
     <Content Include="Views\HouseholdMember\_MembershipInformation.cshtml" />
+    <Content Include="Views\Payment\Pay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
