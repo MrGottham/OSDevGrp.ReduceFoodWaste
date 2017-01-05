@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using System.Security.Principal;
+using System.Web.Mvc;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
@@ -126,8 +128,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PayableModel payableModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandler, null)
+                .With(m => m.PaymentHandlers, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.Price, Is.GreaterThan(0M));
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(payableModel.IsFreeOfCost, Is.False);
+            Assert.That(payableModel.PaymentHandler, Is.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
             Assert.That(payableModelAsBase64, Is.Not.Null);
@@ -143,6 +154,86 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             paymentController.Pay(payableModelAsBase64, returnUrl);
             
             _modelHelperMock.AssertWasCalled(m => m.ToModel(Arg<string>.Is.Equal(payableModelAsBase64)));
+        }
+
+        /// <summary>
+        /// Tests that Pay does not call GetPaymentHandlersAsync on the repository which can access household data when the payable model is free of cost.
+        /// </summary>
+        [Test]
+        public void TestThatPayDoesNotCallGetPaymentHandlersAsyncOnHouseholdDataRepositoryWhenPayableModelIsFreeOfCost()
+        {
+            PayableModel payableModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, 0M)
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandler, null)
+                .With(m => m.PaymentHandlers, null)
+                .Create();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.Price, Is.EqualTo(0M));
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(payableModel.IsFreeOfCost, Is.True);
+            Assert.That(payableModel.PaymentHandler, Is.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
+
+            string payableModelAsBase64 = Fixture.Create<string>();
+            Assert.That(payableModelAsBase64, Is.Not.Null);
+            Assert.That(payableModelAsBase64, Is.Not.Empty);
+
+            string returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            PaymentController paymentController = CreatePaymentController(toModel: payableModel);
+            Assert.That(paymentController, Is.Not.Null);
+
+            paymentController.Pay(payableModelAsBase64, returnUrl);
+
+            _householdDataRepositoryMock.AssertWasNotCalled(m => m.GetPaymentHandlersAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that Pay returns a RedirectResult to the url on which to return to when the payment process has finished when the payable model is free of cost.
+        /// </summary>
+        [Test]
+        public void TestThatPayReturnsRedirectResultToReturnUrlWhenPayableModelIsFreeOfCost()
+        {
+            PayableModel payableModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, 0M)
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandler, null)
+                .With(m => m.PaymentHandlers, null)
+                .Create();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.Price, Is.EqualTo(0M));
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(payableModel.IsFreeOfCost, Is.True);
+            Assert.That(payableModel.PaymentHandler, Is.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
+
+            string payableModelAsBase64 = Fixture.Create<string>();
+            Assert.That(payableModelAsBase64, Is.Not.Null);
+            Assert.That(payableModelAsBase64, Is.Not.Empty);
+
+            string returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            PaymentController paymentController = CreatePaymentController(toModel: payableModel);
+            Assert.That(paymentController, Is.Not.Null);
+
+            var result = paymentController.Pay(payableModelAsBase64, returnUrl);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectResult>());
+
+            var redirectResult = (RedirectResult) result;
+            Assert.That(redirectResult, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Empty);
+            Assert.That(redirectResult.Url, Is.EqualTo(returnUrl));
         }
 
         /// <summary>

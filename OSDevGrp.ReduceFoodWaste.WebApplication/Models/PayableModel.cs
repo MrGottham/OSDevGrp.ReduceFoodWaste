@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
@@ -62,6 +63,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         {
             get { return Price <= 0M; }
         }
+
+        /// <summary>
+        /// Gets or sets the data provider who handles this payment.
+        /// </summary>
+        public virtual PaymentHandlerModel PaymentHandler { get; set; }
+
+        /// <summary>
+        /// Gets or sets the data providers who can handle payments.
+        /// </summary>
+        public virtual IEnumerable<PaymentHandlerModel> PaymentHandlers { get; set; }
 
         #endregion
     }

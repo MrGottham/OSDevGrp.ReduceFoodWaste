@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -26,6 +27,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(payableModel.PriceCultureInfo, Is.Not.Null);
             Assert.That(payableModel.PriceCultureInfo, Is.EqualTo(CultureInfo.CurrentUICulture));
             Assert.That(payableModel.IsFreeOfCost, Is.True);
+            Assert.That(payableModel.PaymentHandler, Is.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
         }
 
         /// <summary>
@@ -190,6 +193,79 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(payableModel.PriceCultureInfoName, Is.Null);
             Assert.That(payableModel.PriceCultureInfo, Is.Not.Null);
             Assert.That(payableModel.PriceCultureInfo, Is.EqualTo(CultureInfo.CurrentUICulture));
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentHandler sets a new value.
+        /// </summary>
+        [Test]
+        public void TestThatPaymentHandlerSetterSetsValue()
+        {
+            var payableModel = new PayableModel();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandler, Is.Null);
+
+            var newValue = Fixture.Create<PaymentHandlerModel>();
+            Assert.That(newValue, Is.Not.Null);
+
+            payableModel.PaymentHandler = newValue;
+            Assert.That(payableModel.PaymentHandler, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandler, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentHandler sets the value to NULL.
+        /// </summary>
+        [Test]
+        public void TestThatPaymentHandlerSetterSetsValueToNull()
+        {
+            var payableModel = new PayableModel
+            {
+                PaymentHandler = Fixture.Create<PaymentHandlerModel>()
+            };
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandler, Is.Not.Null);
+
+            payableModel.PaymentHandler = null;
+            Assert.That(payableModel.PaymentHandler, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentHandlers sets a new value.
+        /// </summary>
+        [Test]
+        public void TestThatPaymentHandlersSetterSetsValue()
+        {
+            var payableModel = new PayableModel();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
+
+            var newValue = Fixture.CreateMany<PaymentHandlerModel>(Random.Next(5, 10)).ToList();
+            Assert.That(newValue, Is.Not.Null);
+            Assert.That(newValue, Is.Not.Empty);
+
+            payableModel.PaymentHandlers = newValue;
+            Assert.That(payableModel.PaymentHandlers, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Not.Empty);
+            Assert.That(payableModel.PaymentHandlers, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentHandlers sets the value to NULL.
+        /// </summary>
+        [Test]
+        public void TestThatPaymentHandlersSetterSetsValueToNull()
+        {
+            var payableModel = new PayableModel
+            {
+                PaymentHandlers = Fixture.CreateMany<PaymentHandlerModel>(Random.Next(5, 10)).ToList()
+            };
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Not.Empty);
+
+            payableModel.PaymentHandlers = null;
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
         }
     }
 }

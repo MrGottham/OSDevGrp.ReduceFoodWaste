@@ -66,6 +66,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             try
             {
                 PayableModel payableModel = (PayableModel) _modelHelper.ToModel(payableModelAsBase64);
+                if (payableModel.IsFreeOfCost)
+                {
+                    return Redirect(returnUrl);
+                }
 
                 return null;
                 //throw new NotImplementedException();
