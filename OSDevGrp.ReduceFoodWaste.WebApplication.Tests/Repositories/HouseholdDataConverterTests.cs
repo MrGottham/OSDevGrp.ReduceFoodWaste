@@ -821,6 +821,68 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that Convert converts a DataProviderView to a PaymentHandlerModel.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsDataProviderViewToPaymentHandlerModel()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var dataProviderView = Fixture.Build<DataProviderView>()
+                .With(m => m.DataProviderIdentifier, Guid.NewGuid())
+                .With(m => m.ExtensionData, null)
+                .Create();
+            Assert.That(dataProviderView, Is.Not.Null);
+            Assert.That(dataProviderView.DataProviderIdentifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(dataProviderView.Name, Is.Not.Null);
+            Assert.That(dataProviderView.Name, Is.Not.Empty);
+            Assert.That(dataProviderView.DataSourceStatement, Is.Not.Null);
+            Assert.That(dataProviderView.DataSourceStatement, Is.Not.Empty);
+
+            var result = householdDataConverter.Convert<DataProviderView, PaymentHandlerModel>(dataProviderView);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Identifier, Is.EqualTo(dataProviderView.DataProviderIdentifier));
+            Assert.That(result.Name, Is.Not.Null);
+            Assert.That(result.Name, Is.Not.Empty);
+            Assert.That(result.Name, Is.EqualTo(dataProviderView.Name));
+            Assert.That(result.DataSourceStatement, Is.Not.Null);
+            Assert.That(result.DataSourceStatement, Is.Not.Empty);
+            Assert.That(result.DataSourceStatement, Is.EqualTo(dataProviderView.DataSourceStatement));
+        }
+
+        /// <summary>
+        /// Tests that Convert converts a DataProviderView to a DataProviderModel.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsDataProviderViewToDataProviderModel()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var dataProviderView = Fixture.Build<DataProviderView>()
+                .With(m => m.DataProviderIdentifier, Guid.NewGuid())
+                .With(m => m.ExtensionData, null)
+                .Create();
+            Assert.That(dataProviderView, Is.Not.Null);
+            Assert.That(dataProviderView.DataProviderIdentifier, Is.Not.EqualTo(default(Guid)));
+            Assert.That(dataProviderView.Name, Is.Not.Null);
+            Assert.That(dataProviderView.Name, Is.Not.Empty);
+            Assert.That(dataProviderView.DataSourceStatement, Is.Not.Null);
+            Assert.That(dataProviderView.DataSourceStatement, Is.Not.Empty);
+
+            var result = householdDataConverter.Convert<DataProviderView, DataProviderModel>(dataProviderView);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Identifier, Is.EqualTo(dataProviderView.DataProviderIdentifier));
+            Assert.That(result.Name, Is.Not.Null);
+            Assert.That(result.Name, Is.Not.Empty);
+            Assert.That(result.Name, Is.EqualTo(dataProviderView.Name));
+            Assert.That(result.DataSourceStatement, Is.Not.Null);
+            Assert.That(result.DataSourceStatement, Is.Not.Empty);
+            Assert.That(result.DataSourceStatement, Is.EqualTo(dataProviderView.DataSourceStatement));
+        }
+
+        /// <summary>
         /// Tests that Convert converts a StaticTextView to a PrivacyPolicyModel.
         /// </summary>
         [Test]
@@ -865,7 +927,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
 
             var staticTextView = Fixture.Build<StaticTextView>()
                 .With(m => m.StaticTextIdentifier, Guid.NewGuid())
-                .With(m => m.BodyTranslation, string.Format("<html>{0}</html>", Fixture.Create<string>()))
+                .With(m => m.BodyTranslation, $"<html>{Fixture.Create<string>()}</html>")
                 .With(m => m.ExtensionData, null)
                 .Create();
             Assert.That(staticTextView, Is.Not.Null);

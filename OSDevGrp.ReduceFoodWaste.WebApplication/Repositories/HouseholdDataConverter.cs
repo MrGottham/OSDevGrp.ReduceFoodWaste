@@ -157,6 +157,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 configuration.CreateMap<BooleanResult, bool>()
                     .ConvertUsing(src => src.Result);
 
+                configuration.CreateMap<DataProviderView, PaymentHandlerModel>()
+                    .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.DataProviderIdentifier))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.DataSourceStatement, opt => opt.MapFrom(src => src.DataSourceStatement));
+
+                configuration.CreateMap<DataProviderView, DataProviderModel>()
+                    .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.DataProviderIdentifier))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.DataSourceStatement, opt => opt.MapFrom(src => src.DataSourceStatement));
+
                 configuration.CreateMap<StaticTextView, PrivacyPolicyModel>()
                     .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.StaticTextIdentifier))
                     .ForMember(dest => dest.Header, opt => opt.MapFrom(src => src.SubjectTranslation))
@@ -194,7 +204,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         {
             if (Equals(source, null))
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             try
             {

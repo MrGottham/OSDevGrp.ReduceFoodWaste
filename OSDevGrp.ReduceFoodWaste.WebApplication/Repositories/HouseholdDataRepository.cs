@@ -512,6 +512,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         }
 
         /// <summary>
+        /// Gets all data providers who can handle payments.
+        /// </summary>
+        /// <param name="identity">Identity for who to get all the data providers who can handle payments.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Data providers who can handle payments.</returns>
+        public Task<IEnumerable<PaymentHandlerModel>> GetPaymentHandlersAsync(IIdentity identity, CultureInfo cultureInfo)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException(nameof(identity));
+            }
+            if (cultureInfo == null)
+            {
+                throw new ArgumentNullException(nameof(cultureInfo));
+            }
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Gets the privacy policies which should be accepted by a given identity.
         /// </summary>
         /// <param name="identity">Identity which should accept the privacy policies.</param>

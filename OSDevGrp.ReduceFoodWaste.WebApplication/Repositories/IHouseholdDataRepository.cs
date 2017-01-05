@@ -116,6 +116,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         Task<IEnumerable<MembershipModel>> GetMembershipsAsync(IIdentity identity, CultureInfo cultureInfo);
 
         /// <summary>
+        /// Gets all data providers who can handle payments.
+        /// </summary>
+        /// <param name="identity">Identity for who to get all the data providers who can handle payments.</param>
+        /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
+        /// <returns>Data providers who can handle payments.</returns>
+        Task<IEnumerable<PaymentHandlerModel>> GetPaymentHandlersAsync(IIdentity identity, CultureInfo cultureInfo);
+
+        /// <summary>
         /// Gets the privacy policies which should be accepted by a given identity.
         /// </summary>
         /// <param name="identity">Identity which should accept the privacy policies.</param>
