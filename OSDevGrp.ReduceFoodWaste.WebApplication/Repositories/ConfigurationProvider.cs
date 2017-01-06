@@ -14,14 +14,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// Create an instance of the configuration provider.
         /// </summary>
         /// <param name="membershipConfiguration">Implementation of the configuration for memberships.</param>
-        public ConfigurationProvider(IMembershipConfiguration membershipConfiguration)
+        /// <param name="paymentConfiguration">Implementation of the configuration for payments.</param>
+        public ConfigurationProvider(IMembershipConfiguration membershipConfiguration, IPaymentConfiguration paymentConfiguration)
         {
             if (membershipConfiguration == null)
             {
                 throw new ArgumentNullException(nameof(membershipConfiguration));
             }
+            if (paymentConfiguration == null)
+            {
+                throw new ArgumentNullException(nameof(paymentConfiguration));
+            }
 
             MembershipConfiguration = membershipConfiguration;
+            PaymentConfiguration = paymentConfiguration;
         }
 
         #endregion
@@ -32,6 +38,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// Gets the configuration for memberships.
         /// </summary>
         public IMembershipConfiguration MembershipConfiguration { get; }
+
+        /// <summary>
+        /// Gets the configuration for payments.
+        /// </summary>
+        public IPaymentConfiguration PaymentConfiguration { get; }
 
         #endregion
     }

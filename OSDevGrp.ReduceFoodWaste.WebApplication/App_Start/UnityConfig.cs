@@ -83,6 +83,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             }
 
             container.RegisterInstance<IMembershipConfiguration>(MembershipConfiguration.Create());
+            container.RegisterInstance<IPaymentConfiguration>(PaymentConfiguration.Create());
 
             container.RegisterType<ICredentialsProvider, CredentialsProvider>();
             container.RegisterType<IConfigurationProvider, ConfigurationProvider>();

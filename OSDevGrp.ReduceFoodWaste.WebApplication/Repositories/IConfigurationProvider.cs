@@ -11,5 +11,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// Gets the configuration for memberships.
         /// </summary>
         IMembershipConfiguration MembershipConfiguration { get; }
+
+        /// <summary>
+        /// Gets the configuration for payments.
+        /// </summary>
+        IPaymentConfiguration PaymentConfiguration { get; }
     }
 }

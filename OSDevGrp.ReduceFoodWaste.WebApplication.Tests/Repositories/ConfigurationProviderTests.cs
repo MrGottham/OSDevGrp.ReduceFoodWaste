@@ -22,10 +22,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var membershipConfigurationMock = MockRepository.GenerateMock<IMembershipConfiguration>();
             Assert.That(membershipConfigurationMock, Is.Not.Null);
 
-            var configurationProvider = new ConfigurationProvider(membershipConfigurationMock);
+            var paymentConfigurationMock = MockRepository.GenerateMock<IPaymentConfiguration>();
+            Assert.That(paymentConfigurationMock, Is.Not.Null);
+
+            var configurationProvider = new ConfigurationProvider(membershipConfigurationMock, paymentConfigurationMock);
             Assert.That(configurationProvider, Is.Not.Null);
             Assert.That(configurationProvider.MembershipConfiguration, Is.Not.Null);
             Assert.That(configurationProvider.MembershipConfiguration, Is.EqualTo(membershipConfigurationMock));
+            Assert.That(configurationProvider.PaymentConfiguration, Is.Not.Null);
+            Assert.That(configurationProvider.PaymentConfiguration, Is.EqualTo(paymentConfigurationMock));
         }
 
         /// <summary>
@@ -34,11 +39,31 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenMembershipConfigurationIsNull()
         {
-            var exeption = Assert.Throws<ArgumentNullException>(() => new ConfigurationProvider(null));
+            var paymentConfigurationMock = MockRepository.GenerateMock<IPaymentConfiguration>();
+            Assert.That(paymentConfigurationMock, Is.Not.Null);
+
+            var exeption = Assert.Throws<ArgumentNullException>(() => new ConfigurationProvider(null, paymentConfigurationMock));
             Assert.That(exeption, Is.Not.Null);
             Assert.That(exeption.ParamName, Is.Not.Null);
             Assert.That(exeption.ParamName, Is.Not.Empty);
             Assert.That(exeption.ParamName, Is.EqualTo("membershipConfiguration"));
+            Assert.That(exeption.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that the constructor throws an ArgumentNullException when configuration for payments is null.
+        /// </summary>
+        [Test]
+        public void TestThatConstructorThrowsArgumentNullExceptionWhenPaymentConfigurationIsNull()
+        {
+            var membershipConfigurationMock = MockRepository.GenerateMock<IMembershipConfiguration>();
+            Assert.That(membershipConfigurationMock, Is.Not.Null);
+
+            var exeption = Assert.Throws<ArgumentNullException>(() => new ConfigurationProvider(membershipConfigurationMock, null));
+            Assert.That(exeption, Is.Not.Null);
+            Assert.That(exeption.ParamName, Is.Not.Null);
+            Assert.That(exeption.ParamName, Is.Not.Empty);
+            Assert.That(exeption.ParamName, Is.EqualTo("paymentConfiguration"));
             Assert.That(exeption.InnerException, Is.Null);
         }
     }

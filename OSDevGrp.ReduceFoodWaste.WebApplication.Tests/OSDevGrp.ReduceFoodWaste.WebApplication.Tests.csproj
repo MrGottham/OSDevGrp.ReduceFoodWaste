@@ -128,6 +128,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ConfigurationProviderTests.cs" />
     <Compile Include="Repositories\Configuration\MembershipConfigurationTests.cs" />
+    <Compile Include="Repositories\Configuration\PaymentConfigurationTests.cs" />
     <Compile Include="Repositories\CredentialsProviderTests.cs" />
     <Compile Include="Repositories\HouseholdDataConverterTests.cs" />
     <Compile Include="Repositories\HouseholdDataRepositoryTests.cs" />
@@ -141,7 +142,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

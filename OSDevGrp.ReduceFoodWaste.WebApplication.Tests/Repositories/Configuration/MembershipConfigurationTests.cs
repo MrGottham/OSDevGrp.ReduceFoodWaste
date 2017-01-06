@@ -14,7 +14,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories.Configurati
     public class MembershipConfigurationTests : TestBase
     {
         /// <summary>
-        /// Tests that the constructor initialize the configuration for memberships-
+        /// Tests that the constructor initialize the configuration for memberships.
         /// </summary>
         [Test]
         public void TestThatConstructorInitializeMembershipConfiguration()

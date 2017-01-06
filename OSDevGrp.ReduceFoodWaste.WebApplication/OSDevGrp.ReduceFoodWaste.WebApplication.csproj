@@ -292,11 +292,13 @@
     <Compile Include="Repositories\Configuration\IMembershipConfiguration.cs" />
     <Compile Include="Repositories\Configuration\IMembershipElement.cs" />
     <Compile Include="Repositories\Configuration\IMembershipPriceElement.cs" />
+    <Compile Include="Repositories\Configuration\IPaymentConfiguration.cs" />
     <Compile Include="Repositories\Configuration\MembershipConfiguration.cs" />
     <Compile Include="Repositories\Configuration\MembershipElement.cs" />
     <Compile Include="Repositories\Configuration\MembershipElementCollection.cs" />
     <Compile Include="Repositories\Configuration\MembershipPriceElement.cs" />
     <Compile Include="Repositories\Configuration\MembershipPriceElementCollection.cs" />
+    <Compile Include="Repositories\Configuration\PaymentConfiguration.cs" />
     <Compile Include="Repositories\CredentialsProvider.cs" />
     <Compile Include="Repositories\HouseholdDataConverter.cs" />
     <Compile Include="Repositories\HouseholdDataRepository.cs" />
@@ -466,7 +468,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
