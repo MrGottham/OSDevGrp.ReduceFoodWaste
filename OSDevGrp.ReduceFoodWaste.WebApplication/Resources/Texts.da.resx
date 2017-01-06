@@ -330,4 +330,7 @@
   <data name="Payment" xml:space="preserve">
     <value>Betaling</value>
   </data>
+  <data name="BillingInformations" xml:space="preserve">
+    <value>Faktureringsinformation</value>
+  </data>
 </root>

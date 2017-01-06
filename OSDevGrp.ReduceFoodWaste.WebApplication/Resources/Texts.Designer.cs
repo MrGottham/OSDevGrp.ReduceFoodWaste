@@ -124,6 +124,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Billing informations.
+        /// </summary>
+        public static string BillingInformations {
+            get {
+                return ResourceManager.GetString("BillingInformations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Business related error..
         /// </summary>
         public static string BusinessException {

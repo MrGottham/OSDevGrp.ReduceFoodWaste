@@ -21,4 +21,8 @@
     {
         <p class="message-error">@ViewBag.ErrorMessage</p>
     }
+    <hgroup class="title">
+        <h3>@Texts.BillingInformations</h3>
+    </hgroup>
+    <p>@Html.Raw(Model.BillingInformation)</p>
 </div>
