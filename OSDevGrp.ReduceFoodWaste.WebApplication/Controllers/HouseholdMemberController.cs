@@ -473,6 +473,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 membershipModel.Description = reloadedMembershipModel.Description;
 
                 string membershipModelAsBase64 = _modelHelper.ToBase64(membershipModel);
+
+                // TODO: Use Url.Action to generate callbackUrl
                 string callbackUrl = $"{_utilities.ToAbsolutePath("~/HouseholdMember/UpgradeOrRenewMembershipCallback")}?membershipModelAsBase64={_utilities.HtmlEncode(membershipModelAsBase64)}&returnUrl={_utilities.HtmlEncode(returnUrl)}";
 
                 RouteValueDictionary routeValueDictionary = new RouteValueDictionary
