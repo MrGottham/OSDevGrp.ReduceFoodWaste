@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
 {
@@ -48,6 +50,32 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
                 throw new ArgumentNullException(nameof(value));
             }
             return HttpUtility.HtmlDecode(value);
+        }
+
+        /// <summary>
+        /// Converts a given action to an url.
+        /// </summary>
+        /// <param name="requestContext">The current request context.</param>
+        /// <param name="actionName">The name of the action method.</param>
+        /// <param name="controllerName">The name of the controller.</param>
+        /// <param name="routeValueDictionary">The dictionary which contains the parameters for the action.</param>
+        /// <returns>Url for the given action.</returns>
+        public string ActionToUrl(RequestContext requestContext, string actionName, string controllerName, RouteValueDictionary routeValueDictionary)
+        {
+            if (requestContext == null)
+            {
+                throw new ArgumentNullException(nameof(requestContext));
+            }
+            if (string.IsNullOrWhiteSpace(actionName))
+            {
+                throw new ArgumentNullException(nameof(actionName));
+            }
+            if (string.IsNullOrWhiteSpace(controllerName))
+            {
+                throw new ArgumentNullException(nameof(controllerName));
+            }
+            var urlHelper = new UrlHelper(requestContext);
+            return urlHelper.Action(actionName, controllerName, routeValueDictionary);
         }
     }
 }

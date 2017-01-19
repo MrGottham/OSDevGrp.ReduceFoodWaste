@@ -46,6 +46,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Repeat.Any();
 
             var httpRequestMock = MockRepository.GenerateMock<HttpRequestBase>();
+            httpRequestMock.Stub(m => m.RequestContext)
+                .Return(new RequestContext())
+                .Repeat.Any();
 
             var httpResponseMock = MockRepository.GenerateMock<HttpResponseBase>();
 

@@ -473,11 +473,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 membershipModel.Description = reloadedMembershipModel.Description;
 
                 string membershipModelAsBase64 = _modelHelper.ToBase64(membershipModel);
-
-                // TODO: Use Url.Action to generate callbackUrl
-                string callbackUrl = $"{_utilities.ToAbsolutePath("~/HouseholdMember/UpgradeOrRenewMembershipCallback")}?membershipModelAsBase64={_utilities.HtmlEncode(membershipModelAsBase64)}&returnUrl={_utilities.HtmlEncode(returnUrl)}";
-
                 RouteValueDictionary routeValueDictionary = new RouteValueDictionary
+                {
+                    {"membershipModelAsBase64", membershipModelAsBase64},
+                    {"returnUrl", returnUrl}
+                };
+                string callbackUrl = _utilities.ActionToUrl(Request.RequestContext, "UpgradeOrRenewMembershipCallback", "HouseholdMember", routeValueDictionary);
+
+                routeValueDictionary = new RouteValueDictionary
                 {
                     {"payableModelAsBase64", membershipModelAsBase64},
                     {"returnUrl", callbackUrl}
@@ -510,11 +513,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             try
             {
-                MembershipModel membershipModel = (MembershipModel) _modelHelper.ToModel(_utilities.HtmlDecode(membershipModelAsBase64));
+                MembershipModel membershipModel = (MembershipModel) _modelHelper.ToModel(membershipModelAsBase64);
 
                 // TODO: Upgrade or renew the paid membership.
 
-                return Redirect(_utilities.HtmlDecode(returnUrl));
+                return Redirect(returnUrl);
             }
             catch (AggregateException ex)
             {

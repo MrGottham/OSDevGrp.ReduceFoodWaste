@@ -1,4 +1,6 @@
-﻿namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
+﻿using System.Web.Routing;
+
+namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
 {
     /// <summary>
     /// Interface for utilities which support the infrastructure.
@@ -25,5 +27,15 @@
         /// <param name="value">The string to decode.</param>
         /// <returns>The string to decode.</returns>
         string HtmlDecode(string value);
+
+        /// <summary>
+        /// Converts a given action to an url.
+        /// </summary>
+        /// <param name="requestContext">The current request context.</param>
+        /// <param name="actionName">The name of the action method.</param>
+        /// <param name="controllerName">The name of the controller.</param>
+        /// <param name="routeValueDictionary">The dictionary which contains the parameters for the action.</param>
+        /// <returns>Url for the given action.</returns>
+        string ActionToUrl(RequestContext requestContext, string actionName, string controllerName, RouteValueDictionary routeValueDictionary);
     }
 }

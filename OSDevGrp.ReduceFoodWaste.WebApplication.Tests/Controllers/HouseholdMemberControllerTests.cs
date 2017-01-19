@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
@@ -3549,13 +3550,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is free of cost does not call ToAbsolutePath on the utilities which support the infrastructure.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is free of cost does not call ActionToUrl on the utilities which support the infrastructure.
         /// </summary>
         [Test]
         [TestCase("Basic")]
         [TestCase("Deluxe")]
         [TestCase("Premium")]
-        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsFreeOfCostDoesNotCallToAbsolutePathOnUtilities(string membershipName)
+        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsFreeOfCostDoesNotCallActionToUrlOnUtilities(string membershipName)
         {
             var membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
@@ -3584,46 +3585,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
 
-            _utilitiesMock.AssertWasNotCalled(m => m.ToAbsolutePath(Arg<string>.Is.Anything));
-        }
-
-        /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is free of cost does not call HtmlEncode on the utilities which support the infrastructure.
-        /// </summary>
-        [Test]
-        [TestCase("Basic")]
-        [TestCase("Deluxe")]
-        [TestCase("Premium")]
-        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsFreeOfCostDoesNotCallToHtmlEncodeOnUtilities(string membershipName)
-        {
-            var membershipModel = Fixture.Build<MembershipModel>()
-                .With(m => m.Name, membershipName)
-                .With(m => m.Price, 0M)
-                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.CanRenew, true)
-                .With(m => m.CanUpgrade, true)
-                .Create();
-            Assert.That(membershipModel, Is.Not.Null);
-            Assert.That(membershipModel.Name, Is.Not.Null);
-            Assert.That(membershipModel.Name, Is.Not.Empty);
-            Assert.That(membershipModel.Name, Is.EqualTo(membershipName));
-            Assert.That(membershipModel.Price, Is.EqualTo(0M));
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
-            Assert.That(membershipModel.CanRenew, Is.True);
-            Assert.That(membershipModel.CanUpgrade, Is.True);
-
-            var returnUrl = Fixture.Create<string>();
-            Assert.That(returnUrl, Is.Not.Null);
-            Assert.That(returnUrl, Is.Not.Empty);
-
-            var householdMemberController = CreateHouseholdMemberController();
-            Assert.That(householdMemberController, Is.Not.Null);
-
-            householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
-
-            _utilitiesMock.AssertWasNotCalled(m => m.HtmlEncode(Arg<string>.Is.Anything));
+            _utilitiesMock.AssertWasNotCalled(m => m.ActionToUrl(Arg<RequestContext>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything));
         }
 
         /// <summary>
@@ -3750,13 +3712,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradebale does not call ToAbsolutePath on the utilities which support the infrastructure.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradebale does not call ActionToUrl on the utilities which support the infrastructure.
         /// </summary>
         [Test]
         [TestCase("Basic")]
         [TestCase("Deluxe")]
         [TestCase("Premium")]
-        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostNotRenewableAndNotUpgradeableDoesNotCallToAbsolutePathOnUtilities(string membershipName)
+        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostNotRenewableAndNotUpgradeableDoesNotCallActionToUrlOnUtilities(string membershipName)
         {
             var membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
@@ -3785,46 +3747,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
 
-            _utilitiesMock.AssertWasNotCalled(m => m.ToAbsolutePath(Arg<string>.Is.Anything));
-        }
-
-        /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradebale does not call HtmlEncode on the utilities which support the infrastructure.
-        /// </summary>
-        [Test]
-        [TestCase("Basic")]
-        [TestCase("Deluxe")]
-        [TestCase("Premium")]
-        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostNotRenewableAndNotUpgradeableDoesNotCallToHtmlEncodeOnUtilities(string membershipName)
-        {
-            var membershipModel = Fixture.Build<MembershipModel>()
-                .With(m => m.Name, membershipName)
-                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
-                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.CanRenew, false)
-                .With(m => m.CanUpgrade, false)
-                .Create();
-            Assert.That(membershipModel, Is.Not.Null);
-            Assert.That(membershipModel.Name, Is.Not.Null);
-            Assert.That(membershipModel.Name, Is.Not.Empty);
-            Assert.That(membershipModel.Name, Is.EqualTo(membershipName));
-            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
-            Assert.That(membershipModel.CanRenew, Is.False);
-            Assert.That(membershipModel.CanUpgrade, Is.False);
-
-            var returnUrl = Fixture.Create<string>();
-            Assert.That(returnUrl, Is.Not.Null);
-            Assert.That(returnUrl, Is.Not.Empty);
-
-            var householdMemberController = CreateHouseholdMemberController();
-            Assert.That(householdMemberController, Is.Not.Null);
-
-            householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
-
-            _utilitiesMock.AssertWasNotCalled(m => m.HtmlEncode(Arg<string>.Is.Anything));
+            _utilitiesMock.AssertWasNotCalled(m => m.ActionToUrl(Arg<RequestContext>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything));
         }
 
         /// <summary>
@@ -3973,7 +3896,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale does not call ToAbsolutePath on the utilities which support the infrastructure when the name of the membership is unknown.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale does not call ActionToUrl on the utilities which support the infrastructure when the name of the membership is unknown.
         /// </summary>
         [Test]
         [TestCase("XXX", true, true)]
@@ -3985,7 +3908,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("ZZZ", true, true)]
         [TestCase("ZZZ", true, false)]
         [TestCase("ZZZ", false, true)]
-        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableDoesNotCallToAbsolutePathOnUtilitiesWhenNameOfMembershipIsUnknown(string membershipName, bool canRenew, bool canUpgrade)
+        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableDoesNotCallActionToUrlOnUtilitiesWhenNameOfMembershipIsUnknown(string membershipName, bool canRenew, bool canUpgrade)
         {
             var membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
@@ -4019,57 +3942,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
 
-            _utilitiesMock.AssertWasNotCalled(m => m.ToAbsolutePath(Arg<string>.Is.Anything));
-        }
-
-        /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale does not call HtmlEncode on the utilities which support the infrastructure when the name of the membership is unknown.
-        /// </summary>
-        [Test]
-        [TestCase("XXX", true, true)]
-        [TestCase("XXX", true, false)]
-        [TestCase("XXX", false, true)]
-        [TestCase("YYY", true, true)]
-        [TestCase("YYY", true, false)]
-        [TestCase("YYY", false, true)]
-        [TestCase("ZZZ", true, true)]
-        [TestCase("ZZZ", true, false)]
-        [TestCase("ZZZ", false, true)]
-        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableDoesNotCallToHtmlEncodeOnUtilitiesWhenNameOfMembershipIsUnknown(string membershipName, bool canRenew, bool canUpgrade)
-        {
-            var membershipModel = Fixture.Build<MembershipModel>()
-                .With(m => m.Name, membershipName)
-                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
-                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.CanRenew, canRenew)
-                .With(m => m.CanUpgrade, canUpgrade)
-                .Create();
-            Assert.That(membershipModel, Is.Not.Null);
-            Assert.That(membershipModel.Name, Is.Not.Null);
-            Assert.That(membershipModel.Name, Is.Not.Empty);
-            Assert.That(membershipModel.Name, Is.EqualTo(membershipName));
-            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
-            Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
-            Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
-
-            var returnUrl = Fixture.Create<string>();
-            Assert.That(returnUrl, Is.Not.Null);
-            Assert.That(returnUrl, Is.Not.Empty);
-
-            var membershipModelCollection = CreateMembershipModelCollection();
-            Assert.That(membershipModelCollection, Is.Not.Null);
-            Assert.That(membershipModelCollection, Is.Not.Empty);
-            Assert.That(membershipModelCollection.Any(m => string.Compare(m.Name, membershipName, StringComparison.Ordinal) == 0), Is.False);
-
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
-            Assert.That(householdMemberController, Is.Not.Null);
-
-            householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
-
-            _utilitiesMock.AssertWasNotCalled(m => m.HtmlEncode(Arg<string>.Is.Anything));
+            _utilitiesMock.AssertWasNotCalled(m => m.ActionToUrl(Arg<RequestContext>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything));
         }
 
         /// <summary>
@@ -4191,7 +4064,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale calls ToAbsolutePath on the utilities which support the infrastructure when name of membership is known.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale calls ActionToUrl on the utilities which support the infrastructure when name of membership is known.
         /// </summary>
         [Test]
         [TestCase("Basic", true, true)]
@@ -4203,7 +4076,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium", true, true)]
         [TestCase("Premium", true, false)]
         [TestCase("Premium", false, true)]
-        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableCallsToAbsolutePathOnUtilitiesWhenNameOfMembershipIsKnown(string membershipName, bool canRenew, bool canUpgrade)
+        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableCallsActionToUrlOnUtilitiesWhenNameOfMembershipIsKnown(string membershipName, bool canRenew, bool canUpgrade)
         {
             var membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
@@ -4231,117 +4104,33 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => string.Compare(m.Name, membershipName, StringComparison.Ordinal) == 0), Is.True);
-
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
-            Assert.That(householdMemberController, Is.Not.Null);
-
-            householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
-
-            _utilitiesMock.AssertWasCalled(m => m.ToAbsolutePath(Arg<string>.Is.Equal("~/HouseholdMember/UpgradeOrRenewMembershipCallback")));
-        }
-
-        /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale calls HtmlEncode with the base64 encoded value for the mebership model on the utilities which support the infrastructure when name of membership is known.
-        /// </summary>
-        [Test]
-        [TestCase("Basic", true, true)]
-        [TestCase("Basic", true, false)]
-        [TestCase("Basic", false, true)]
-        [TestCase("Deluxe", true, true)]
-        [TestCase("Deluxe", true, false)]
-        [TestCase("Deluxe", false, true)]
-        [TestCase("Premium", true, true)]
-        [TestCase("Premium", true, false)]
-        [TestCase("Premium", false, true)]
-        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableCallsHtmlEncodeWithBase64EncodedValueForMembershipModelOnUtilitiesWhenNameOfMembershipIsKnown(string membershipName, bool canRenew, bool canUpgrade)
-        {
-            var membershipModel = Fixture.Build<MembershipModel>()
-                .With(m => m.Name, membershipName)
-                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
-                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.CanRenew, canRenew)
-                .With(m => m.CanUpgrade, canUpgrade)
-                .Create();
-            Assert.That(membershipModel, Is.Not.Null);
-            Assert.That(membershipModel.Name, Is.Not.Null);
-            Assert.That(membershipModel.Name, Is.Not.Empty);
-            Assert.That(membershipModel.Name, Is.EqualTo(membershipName));
-            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
-            Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
-            Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
-
-            var returnUrl = Fixture.Create<string>();
-            Assert.That(returnUrl, Is.Not.Null);
-            Assert.That(returnUrl, Is.Not.Empty);
 
             var toBase64ForMembershipModel = Fixture.Create<string>();
             Assert.That(toBase64ForMembershipModel, Is.Not.Null);
             Assert.That(toBase64ForMembershipModel, Is.Not.Empty);
 
-            var membershipModelCollection = CreateMembershipModelCollection();
-            Assert.That(membershipModelCollection, Is.Not.Null);
-            Assert.That(membershipModelCollection, Is.Not.Empty);
-            Assert.That(membershipModelCollection.Any(m => string.Compare(m.Name, membershipName, StringComparison.Ordinal) == 0), Is.True);
+            Action<RouteValueDictionary> actionToUrlCallback = routeValueDictionary =>
+            {
+                Assert.That(routeValueDictionary, Is.Not.Null);
+                Assert.That(routeValueDictionary, Is.Not.Empty);
+                Assert.That(routeValueDictionary.ContainsKey("membershipModelAsBase64"), Is.True);
+                Assert.That(routeValueDictionary["membershipModelAsBase64"], Is.Not.Null);
+                Assert.That(routeValueDictionary["membershipModelAsBase64"], Is.Not.Empty);
+                Assert.That(routeValueDictionary["membershipModelAsBase64"], Is.EqualTo(toBase64ForMembershipModel));
+                Assert.That(routeValueDictionary.ContainsKey("returnUrl"), Is.True);
+                Assert.That(routeValueDictionary["returnUrl"], Is.Not.Null);
+                Assert.That(routeValueDictionary["returnUrl"], Is.Not.Empty);
+                Assert.That(routeValueDictionary["returnUrl"], Is.EqualTo(returnUrl));
+            };
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection, toBase64ForMembershipModel: toBase64ForMembershipModel);
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection, toBase64ForMembershipModel: toBase64ForMembershipModel, actionToUrlCallback: actionToUrlCallback);
             Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.Request, Is.Not.Null);
+            Assert.That(householdMemberController.Request.RequestContext, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
 
-            _utilitiesMock.AssertWasCalled(m => m.HtmlEncode(Arg<string>.Is.Equal(toBase64ForMembershipModel)));
-        }
-
-        /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale calls HtmlEncode with the url on which to return when the membership upgrade or renew process has finished on the utilities which support the infrastructure when name of membership is known.
-        /// </summary>
-        [Test]
-        [TestCase("Basic", true, true)]
-        [TestCase("Basic", true, false)]
-        [TestCase("Basic", false, true)]
-        [TestCase("Deluxe", true, true)]
-        [TestCase("Deluxe", true, false)]
-        [TestCase("Deluxe", false, true)]
-        [TestCase("Premium", true, true)]
-        [TestCase("Premium", true, false)]
-        [TestCase("Premium", false, true)]
-        public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableCallsHtmlEncodeWithReturnUrlOnUtilitiesWhenNameOfMembershipIsKnown(string membershipName, bool canRenew, bool canUpgrade)
-        {
-            var membershipModel = Fixture.Build<MembershipModel>()
-                .With(m => m.Name, membershipName)
-                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
-                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.CanRenew, canRenew)
-                .With(m => m.CanUpgrade, canUpgrade)
-                .Create();
-            Assert.That(membershipModel, Is.Not.Null);
-            Assert.That(membershipModel.Name, Is.Not.Null);
-            Assert.That(membershipModel.Name, Is.Not.Empty);
-            Assert.That(membershipModel.Name, Is.EqualTo(membershipName));
-            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
-            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
-            Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
-            Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
-
-            var returnUrl = Fixture.Create<string>();
-            Assert.That(returnUrl, Is.Not.Null);
-            Assert.That(returnUrl, Is.Not.Empty);
-
-            var membershipModelCollection = CreateMembershipModelCollection();
-            Assert.That(membershipModelCollection, Is.Not.Null);
-            Assert.That(membershipModelCollection, Is.Not.Empty);
-            Assert.That(membershipModelCollection.Any(m => string.Compare(m.Name, membershipName, StringComparison.Ordinal) == 0), Is.True);
-
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
-            Assert.That(householdMemberController, Is.Not.Null);
-
-            householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
-
-            _utilitiesMock.AssertWasCalled(m => m.HtmlEncode(Arg<string>.Is.Equal(returnUrl)));
+            _utilitiesMock.AssertWasCalled(m => m.ActionToUrl(Arg<RequestContext>.Is.Equal(householdMemberController.Request.RequestContext), Arg<string>.Is.Equal("UpgradeOrRenewMembershipCallback"), Arg<string>.Is.Equal("HouseholdMember"), Arg<RouteValueDictionary>.Is.NotNull));
         }
 
         /// <summary>
@@ -4390,7 +4179,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(toBase64ForMembershipModel, Is.Not.Null);
             Assert.That(toBase64ForMembershipModel, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection, toBase64ForMembershipModel: toBase64ForMembershipModel);
+            var actionToUrl = Fixture.Create<string>();
+            Assert.That(actionToUrl, Is.Not.Null);
+            Assert.That(actionToUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection, toBase64ForMembershipModel: toBase64ForMembershipModel, actionToUrl: actionToUrl);
             Assert.That(householdMemberController, Is.Not.Null);
 
             var result = householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
@@ -4416,7 +4209,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(redirectToRouteResult.RouteValues.ContainsKey("returnUrl"), Is.True);
             Assert.That(redirectToRouteResult.RouteValues["returnUrl"], Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues["returnUrl"], Is.Not.Empty);
-            Assert.That(redirectToRouteResult.RouteValues["returnUrl"],Is.EqualTo($"~/HouseholdMember/UpgradeOrRenewMembershipCallback?membershipModelAsBase64={toBase64ForMembershipModel}&returnUrl={returnUrl}"));
+            Assert.That(redirectToRouteResult.RouteValues["returnUrl"],Is.EqualTo(actionToUrl));
         }
 
         /// <summary>
@@ -4466,36 +4259,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembershipCallback calls HtmlDecode with the base64 encoded value for the model of the membership which should be upgraded or renewed on the utilities which support the infrastructure.
-        /// </summary>
-        [Test]
-        public void TestThatUpgradeOrRenewMembershipCallbackCallsHtmlDecodeWithMembershipModelAsBase64OnUtilities()
-        {
-            var membershipModel = Fixture.Build<MembershipModel>()
-                .With(m => m.Name, Fixture.Create<string>())
-                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
-                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.CanRenew, Fixture.Create<bool>())
-                .With(m => m.CanUpgrade, Fixture.Create<bool>())
-                .Create();
-
-            var membershipModelAsBase64 = Fixture.Create<string>();
-            Assert.That(membershipModelAsBase64, Is.Not.Null);
-            Assert.That(membershipModelAsBase64, Is.Not.Empty);
-
-            var returnUrl = Fixture.Create<string>();
-            Assert.That(returnUrl, Is.Not.Null);
-            Assert.That(returnUrl, Is.Not.Empty);
-
-            var householdMemberController = CreateHouseholdMemberController(toModel: membershipModel);
-            Assert.That(householdMemberController, Is.Not.Null);
-
-            householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, returnUrl);
-
-            _utilitiesMock.AssertWasCalled(m => m.HtmlDecode(Arg<string>.Is.Equal(membershipModelAsBase64)));
-        }
-
-        /// <summary>
         /// Tests that UpgradeOrRenewMembershipCallback calls ToModel with the base64 encoded value for the model of the membership which should be upgraded or renewed on the model helper.
         /// </summary>
         [Test]
@@ -4523,36 +4286,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, returnUrl);
 
             _modelHelperMock.AssertWasCalled(m => m.ToModel(Arg<string>.Is.Equal(membershipModelAsBase64)));
-        }
-
-        /// <summary>
-        /// Tests that UpgradeOrRenewMembershipCallback calls HtmlDecode with the url on which to return when the membership upgrade or renew process has finished on the utilities which support the infrastructure.
-        /// </summary>
-        [Test]
-        public void TestThatUpgradeOrRenewMembershipCallbackCallsHtmlDecodeWithReturnUrlOnUtilities()
-        {
-            var membershipModel = Fixture.Build<MembershipModel>()
-                .With(m => m.Name, Fixture.Create<string>())
-                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
-                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.CanRenew, Fixture.Create<bool>())
-                .With(m => m.CanUpgrade, Fixture.Create<bool>())
-                .Create();
-
-            var membershipModelAsBase64 = Fixture.Create<string>();
-            Assert.That(membershipModelAsBase64, Is.Not.Null);
-            Assert.That(membershipModelAsBase64, Is.Not.Empty);
-
-            var returnUrl = Fixture.Create<string>();
-            Assert.That(returnUrl, Is.Not.Null);
-            Assert.That(returnUrl, Is.Not.Empty);
-
-            var householdMemberController = CreateHouseholdMemberController(toModel: membershipModel);
-            Assert.That(householdMemberController, Is.Not.Null);
-
-            householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, returnUrl);
-
-            _utilitiesMock.AssertWasCalled(m => m.HtmlDecode(Arg<string>.Is.Equal(returnUrl)));
         }
 
         /// <summary>
@@ -4609,8 +4342,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <param name="toBase64ForMembershipModel">Sets the encoded base64 value for a given membership model.</param>
         /// <param name="toBase64ForMembershipModelCallback">Sets the callback method called when encoding the base64 value for a given membership model.</param>
         /// <param name="toModel">Sets the model which should be returned for a given encoded base64 value.</param>
+        /// <param name="actionToUrl">Set the url which should be returned when an action should be converted to an url.</param>
+        /// <param name="actionToUrlCallback">Sets the callback method called when converting an action to an url.</param>
         /// <returns>Controller for a household member for unit testing.</returns>
-        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null, IEnumerable<MembershipModel> membershipModelCollection = null, string toBase64ForMembershipModel = null, Action<MembershipModel> toBase64ForMembershipModelCallback = null, object toModel = null)
+        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null, IEnumerable<MembershipModel> membershipModelCollection = null, string toBase64ForMembershipModel = null, Action<MembershipModel> toBase64ForMembershipModelCallback = null, object toModel = null, string actionToUrl = null, Action<RouteValueDictionary> actionToUrlCallback = null)
         {
             Func<HouseholdModel> householdCreator = () =>
             {
@@ -4697,24 +4432,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(toModel)
                 .Repeat.Any();
 
-            _utilitiesMock.Stub(m => m.ToAbsolutePath(Arg<string>.Is.Anything))
+            _utilitiesMock.Stub(m => m.ActionToUrl(Arg<RequestContext>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything))
                 .WhenCalled(e =>
                 {
-                    e.ReturnValue = e.Arguments.ElementAt(0);
-                })
-                .Return(null)
-                .Repeat.Any();
-            _utilitiesMock.Stub(m => m.HtmlEncode(Arg<string>.Is.Anything))
-                .WhenCalled(e =>
-                {
-                    e.ReturnValue = e.Arguments.ElementAt(0);
-                })
-                .Return(null)
-                .Repeat.Any();
-            _utilitiesMock.Stub(m => m.HtmlDecode(Arg<string>.Is.Anything))
-                .WhenCalled(e =>
-                {
-                    e.ReturnValue = e.Arguments.ElementAt(0);
+                    if (actionToUrlCallback == null)
+                    {
+                        e.ReturnValue = actionToUrl ?? Fixture.Create<string>();
+                        return;
+                    }
+                    actionToUrlCallback.Invoke((RouteValueDictionary) e.Arguments.ElementAt(3));
+                    e.ReturnValue = actionToUrl ?? Fixture.Create<string>();
                 })
                 .Return(null)
                 .Repeat.Any();
