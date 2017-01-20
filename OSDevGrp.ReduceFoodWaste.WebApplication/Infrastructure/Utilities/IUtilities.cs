@@ -1,4 +1,5 @@
-﻿using System.Web.Routing;
+﻿using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
 {
@@ -29,13 +30,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
         string HtmlDecode(string value);
 
         /// <summary>
-        /// Converts a given action to an url.
+        /// Converts a given action to an URL.
         /// </summary>
-        /// <param name="requestContext">The current request context.</param>
+        /// <param name="urlHelper">The URL helper which can be used to generate URLs by using routing.</param>
         /// <param name="actionName">The name of the action method.</param>
         /// <param name="controllerName">The name of the controller.</param>
         /// <param name="routeValueDictionary">The dictionary which contains the parameters for the action.</param>
-        /// <returns>Url for the given action.</returns>
-        string ActionToUrl(RequestContext requestContext, string actionName, string controllerName, RouteValueDictionary routeValueDictionary);
+        /// <returns>URL for the given action.</returns>
+        string ActionToUrl(UrlHelper urlHelper, string actionName, string controllerName, RouteValueDictionary routeValueDictionary);
     }
 }

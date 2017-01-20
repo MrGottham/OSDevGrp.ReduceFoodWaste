@@ -478,7 +478,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     {"membershipModelAsBase64", membershipModelAsBase64},
                     {"returnUrl", returnUrl}
                 };
-                string callbackUrl = _utilities.ActionToUrl(Request.RequestContext, "UpgradeOrRenewMembershipCallback", "HouseholdMember", routeValueDictionary);
+                string callbackUrl = _utilities.ActionToUrl(Url, "UpgradeOrRenewMembershipCallback", "HouseholdMember", routeValueDictionary);
 
                 routeValueDictionary = new RouteValueDictionary
                 {

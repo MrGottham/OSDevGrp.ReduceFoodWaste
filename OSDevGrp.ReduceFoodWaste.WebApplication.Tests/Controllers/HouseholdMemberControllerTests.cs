@@ -3585,7 +3585,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
 
-            _utilitiesMock.AssertWasNotCalled(m => m.ActionToUrl(Arg<RequestContext>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything));
+            _utilitiesMock.AssertWasNotCalled(m => m.ActionToUrl(Arg<UrlHelper>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything));
         }
 
         /// <summary>
@@ -3747,7 +3747,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
 
-            _utilitiesMock.AssertWasNotCalled(m => m.ActionToUrl(Arg<RequestContext>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything));
+            _utilitiesMock.AssertWasNotCalled(m => m.ActionToUrl(Arg<UrlHelper>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything));
         }
 
         /// <summary>
@@ -3942,7 +3942,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
 
-            _utilitiesMock.AssertWasNotCalled(m => m.ActionToUrl(Arg<RequestContext>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything));
+            _utilitiesMock.AssertWasNotCalled(m => m.ActionToUrl(Arg<UrlHelper>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything));
         }
 
         /// <summary>
@@ -4125,12 +4125,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection, toBase64ForMembershipModel: toBase64ForMembershipModel, actionToUrlCallback: actionToUrlCallback);
             Assert.That(householdMemberController, Is.Not.Null);
-            Assert.That(householdMemberController.Request, Is.Not.Null);
-            Assert.That(householdMemberController.Request.RequestContext, Is.Not.Null);
+            Assert.That(householdMemberController.Url, Is.Null);
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
 
-            _utilitiesMock.AssertWasCalled(m => m.ActionToUrl(Arg<RequestContext>.Is.Equal(householdMemberController.Request.RequestContext), Arg<string>.Is.Equal("UpgradeOrRenewMembershipCallback"), Arg<string>.Is.Equal("HouseholdMember"), Arg<RouteValueDictionary>.Is.NotNull));
+            _utilitiesMock.AssertWasCalled(m => m.ActionToUrl(Arg<UrlHelper>.Is.Equal(householdMemberController.Url), Arg<string>.Is.Equal("UpgradeOrRenewMembershipCallback"), Arg<string>.Is.Equal("HouseholdMember"), Arg<RouteValueDictionary>.Is.NotNull));
         }
 
         /// <summary>
@@ -4432,7 +4431,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(toModel)
                 .Repeat.Any();
 
-            _utilitiesMock.Stub(m => m.ActionToUrl(Arg<RequestContext>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything))
+            _utilitiesMock.Stub(m => m.ActionToUrl(Arg<UrlHelper>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything))
                 .WhenCalled(e =>
                 {
                     if (actionToUrlCallback == null)

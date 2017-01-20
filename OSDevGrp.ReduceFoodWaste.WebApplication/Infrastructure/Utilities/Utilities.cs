@@ -53,18 +53,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
         }
 
         /// <summary>
-        /// Converts a given action to an url.
+        /// Converts a given action to an URL.
         /// </summary>
-        /// <param name="requestContext">The current request context.</param>
+        /// <param name="urlHelper">The URL helper which can be used to generate URLs by using routing.</param>
         /// <param name="actionName">The name of the action method.</param>
         /// <param name="controllerName">The name of the controller.</param>
         /// <param name="routeValueDictionary">The dictionary which contains the parameters for the action.</param>
-        /// <returns>Url for the given action.</returns>
-        public string ActionToUrl(RequestContext requestContext, string actionName, string controllerName, RouteValueDictionary routeValueDictionary)
+        /// <returns>URL for the given action.</returns>
+        public string ActionToUrl(UrlHelper urlHelper, string actionName, string controllerName, RouteValueDictionary routeValueDictionary)
         {
-            if (requestContext == null)
+            if (urlHelper == null)
             {
-                throw new ArgumentNullException(nameof(requestContext));
+                throw new ArgumentNullException(nameof(urlHelper));
             }
             if (string.IsNullOrWhiteSpace(actionName))
             {
@@ -74,7 +74,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
             {
                 throw new ArgumentNullException(nameof(controllerName));
             }
-            var urlHelper = new UrlHelper(requestContext);
             return urlHelper.Action(actionName, controllerName, routeValueDictionary);
         }
     }
