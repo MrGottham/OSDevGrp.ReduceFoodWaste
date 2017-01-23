@@ -33,6 +33,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories.Configurati
             IPaymentHandlerElement paymentHandlerElementForPayPal = paymentConfiguration.GetPaymentHandler(DataProviderIdentifierForPayPal);
             Assert.That(paymentHandlerElementForPayPal, Is.Not.Null);
             Assert.That(paymentHandlerElementForPayPal.Identifier, Is.EqualTo(DataProviderIdentifierForPayPal));
+            Assert.That(paymentHandlerElementForPayPal.ImagePath, Is.Not.Null);
+            Assert.That(paymentHandlerElementForPayPal.ImagePath, Is.Not.Empty);
+            Assert.That(paymentHandlerElementForPayPal.ImagePath, Is.EqualTo("~/Images/paypal.png"));
         }
     }
 }
