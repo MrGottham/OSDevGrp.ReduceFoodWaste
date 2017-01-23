@@ -750,7 +750,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             if (paymentHandlerModelCollectionCache == null)
             {
                 paymentHandlerModelCollection = channel.DataProviderWhoHandlesPaymentsCollectionGet(query)
-                    .Select(ToPaymentHandler)
+                    .Select(dataProviderView => ToPaymentHandler(dataProviderView, _configurationProvider.PaymentConfiguration))
                     .ToList();
 
                 paymentHandlerModelCollectionCache = new Dictionary<Guid, IEnumerable<PaymentHandlerModel>>
@@ -768,7 +768,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             }
 
             paymentHandlerModelCollection = channel.DataProviderWhoHandlesPaymentsCollectionGet(query)
-                .Select(ToPaymentHandler)
+                .Select(dataProviderView => ToPaymentHandler(dataProviderView, _configurationProvider.PaymentConfiguration))
                 .ToList();
 
             paymentHandlerModelCollectionCache.Add(query.TranslationInfoIdentifier, paymentHandlerModelCollection);
@@ -781,14 +781,34 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// Converts a DataProviderView to a model for a data provider who can handle payments.
         /// </summary>
         /// <param name="dataProviderView">DataProviderView which should be converted.</param>
+        /// <param name="paymentConfiguration">Implementation of the configuration for payments.</param>
         /// <returns>Model for a data provider who can handle payments.</returns>
-        private PaymentHandlerModel ToPaymentHandler(DataProviderView dataProviderView)
+        private PaymentHandlerModel ToPaymentHandler(DataProviderView dataProviderView, IPaymentConfiguration paymentConfiguration)
         {
             if (dataProviderView == null)
             {
-                throw new ArgumentException(nameof(dataProviderView));
+                throw new ArgumentNullException(nameof(dataProviderView));
             }
-            return _householdDataConverter.Convert<DataProviderView, PaymentHandlerModel>(dataProviderView);
+            if (paymentConfiguration == null)
+            {
+                throw new ArgumentNullException(nameof(paymentConfiguration));
+            }
+
+            PaymentHandlerModel paymentHandlerModel = _householdDataConverter.Convert<DataProviderView, PaymentHandlerModel>(dataProviderView);
+
+            if (paymentConfiguration.PaymentHandlers == null)
+            {
+                return paymentHandlerModel;
+            }
+
+            IPaymentHandlerElement paymentHandlerElement = paymentConfiguration.PaymentHandlers.SingleOrDefault(m => m.Identifier == paymentHandlerModel.Identifier);
+            if (paymentHandlerElement == null)
+            {
+                return paymentHandlerModel;
+            }
+
+            paymentHandlerModel.ImagePath = paymentHandlerElement.ImagePath;
+            return paymentHandlerModel;
         }
 
         /// <summary>
