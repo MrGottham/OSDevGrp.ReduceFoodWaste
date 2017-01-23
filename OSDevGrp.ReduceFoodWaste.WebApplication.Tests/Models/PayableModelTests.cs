@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
@@ -27,7 +28,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(payableModel.PriceCultureInfo, Is.Not.Null);
             Assert.That(payableModel.PriceCultureInfo, Is.EqualTo(CultureInfo.CurrentUICulture));
             Assert.That(payableModel.IsFreeOfCost, Is.True);
-            Assert.That(payableModel.PaymentHandler, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
         }
 
@@ -196,38 +198,44 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         }
 
         /// <summary>
-        /// Tests that the setter for PaymentHandler sets a new value.
+        /// Tests that the setter for PaymentHandlerIdentifier sets a new value.
         /// </summary>
         [Test]
-        public void TestThatPaymentHandlerSetterSetsValue()
+        public void TestThatPaymentHandlerIdentifierSetterSetsValue()
         {
             var payableModel = new PayableModel();
             Assert.That(payableModel, Is.Not.Null);
-            Assert.That(payableModel.PaymentHandler, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
 
-            var newValue = Fixture.Create<PaymentHandlerModel>();
-            Assert.That(newValue, Is.Not.Null);
+            var newValue = Guid.NewGuid();
+            Assert.That(newValue, Is.Not.EqualTo(Guid.Empty));
 
-            payableModel.PaymentHandler = newValue;
-            Assert.That(payableModel.PaymentHandler, Is.Not.Null);
-            Assert.That(payableModel.PaymentHandler, Is.EqualTo(newValue));
+            payableModel.PaymentHandlerIdentifier = newValue;
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
+            Assert.That(payableModel.PaymentHandlerIdentifier.Value, Is.EqualTo(newValue));
         }
 
         /// <summary>
-        /// Tests that the setter for PaymentHandler sets the value to NULL.
+        /// Tests that the setter for PaymentHandlerIdentifier sets the value to NULL.
         /// </summary>
         [Test]
-        public void TestThatPaymentHandlerSetterSetsValueToNull()
+        public void TestThatPaymentHandlerIdentifierSetterSetsValueToNull()
         {
             var payableModel = new PayableModel
             {
-                PaymentHandler = Fixture.Create<PaymentHandlerModel>()
+                PaymentHandlerIdentifier = Guid.NewGuid()
             };
             Assert.That(payableModel, Is.Not.Null);
-            Assert.That(payableModel.PaymentHandler, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
 
-            payableModel.PaymentHandler = null;
-            Assert.That(payableModel.PaymentHandler, Is.Null);
+            payableModel.PaymentHandlerIdentifier = null;
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
         }
 
         /// <summary>

@@ -132,7 +132,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PayableModel payableModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandler, null)
+                .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
@@ -141,7 +141,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
             Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
             Assert.That(payableModel.IsFreeOfCost, Is.False);
-            Assert.That(payableModel.PaymentHandler, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
@@ -169,7 +170,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PayableModel payableModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, 0M)
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandler, null)
+                .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
@@ -178,7 +179,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
             Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
             Assert.That(payableModel.IsFreeOfCost, Is.True);
-            Assert.That(payableModel.PaymentHandler, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
@@ -206,7 +208,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PayableModel payableModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, 0M)
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandler, null)
+                .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
@@ -215,7 +217,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
             Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
             Assert.That(payableModel.IsFreeOfCost, Is.True);
-            Assert.That(payableModel.PaymentHandler, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
@@ -249,7 +252,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PayableModel payableModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandler, null)
+                .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
@@ -258,7 +261,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
             Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
             Assert.That(payableModel.IsFreeOfCost, Is.False);
-            Assert.That(payableModel.PaymentHandler, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
@@ -291,7 +295,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PayableModel payableModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandler, Fixture.Create<PaymentHandlerModel>())
+                .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
                 .With(m => m.PaymentHandlers, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
@@ -300,7 +304,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
             Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
             Assert.That(payableModel.IsFreeOfCost, Is.False);
-            Assert.That(payableModel.PaymentHandler, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
@@ -337,7 +342,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             PayableModel model = (PayableModel) viewResult.Model;
             Assert.That(model, Is.Not.Null);
-            Assert.That(model.PaymentHandler, Is.Null);
+            Assert.That(model.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(model.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(model.PaymentHandlers, Is.Not.Null);
             Assert.That(model.PaymentHandlers, Is.Not.Empty);
             Assert.That(model.PaymentHandlers, Is.EqualTo(paymentHandlerModelCollection));

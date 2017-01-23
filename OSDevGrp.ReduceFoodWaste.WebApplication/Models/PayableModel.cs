@@ -65,9 +65,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         }
 
         /// <summary>
-        /// Gets or sets the data provider who handles this payment.
+        /// Gets or sets the identifier for the data provider who handles this payment.
         /// </summary>
-        public virtual PaymentHandlerModel PaymentHandler { get; set; }
+        public virtual Guid? PaymentHandlerIdentifier { get; set; }
 
         /// <summary>
         /// Gets or sets the data providers who can handle payments.

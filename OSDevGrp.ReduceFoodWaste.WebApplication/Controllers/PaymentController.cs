@@ -77,7 +77,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 Task<IEnumerable<PaymentHandlerModel>> task = _householdDataRepository.GetPaymentHandlersAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
                 task.Wait();
 
-                payableModel.PaymentHandler = null;
+                payableModel.PaymentHandlerIdentifier = null;
                 payableModel.PaymentHandlers = task.Result;
 
                 ViewBag.ReturnUrl = returnUrl;

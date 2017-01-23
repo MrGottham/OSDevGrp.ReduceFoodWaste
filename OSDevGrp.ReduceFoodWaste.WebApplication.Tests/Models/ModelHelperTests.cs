@@ -46,21 +46,33 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         /// Test that ToBase64 for a given model serialize and returns the base64 encoded value for a given model.
         /// </summary>
         [Test]
-        [TestCase("da-DK")]
-        [TestCase("en-US")]
-        [TestCase("es-ES")]
-        public void TestThatToBase64ForModelSerializeAndReturnsBase64EncodedValueForModel(string cultureName)
+        [TestCase("da-DK", true)]
+        [TestCase("en-US", true)]
+        [TestCase("es-ES", true)]
+        [TestCase("da-DK", false)]
+        [TestCase("en-US", false)]
+        [TestCase("es-ES", false)]
+        public void TestThatToBase64ForModelSerializeAndReturnsBase64EncodedValueForModel(string cultureName, bool hasPaymentHandlerIdentifier)
         {
             MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.PriceCultureInfoName, cultureName)
-                .With(m => m.PaymentHandler, Fixture.Create<PaymentHandlerModel>())
+                .With(m => m.PaymentHandlerIdentifier, hasPaymentHandlerIdentifier ? Guid.NewGuid() : (Guid?) null)
                 .With(m => m.PaymentHandlers, Fixture.CreateMany<PaymentHandlerModel>(Random.Next(5, 10)).ToList())
                 .Create();
             Assert.That(membershipModel, Is.Not.Null);
             Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
             Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
             Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(cultureName));
-            Assert.That(membershipModel.PaymentHandler, Is.Not.Null);
+            if (hasPaymentHandlerIdentifier)
+            {
+                Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Not.Null);
+                Assert.That(membershipModel.PaymentHandlerIdentifier.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Null);
+                Assert.That(membershipModel.PaymentHandlerIdentifier.HasValue, Is.False);
+            }
             Assert.That(membershipModel.PaymentHandlers, Is.Not.Null);
             Assert.That(membershipModel.PaymentHandlers, Is.Not.Empty);
 
@@ -111,10 +123,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
         /// Test that ToModel for a given base64 encoded model deserialize and returns the model from a given encoded model.
         /// </summary>
         [Test]
-        [TestCase("da-DK")]
-        [TestCase("en-US")]
-        [TestCase("es-ES")]
-        public void TestThatToModelForBase64EncodedModelDeserializeAndReturnsModelForEncodedModel(string cultureName)
+        [TestCase("da-DK", true)]
+        [TestCase("en-US", true)]
+        [TestCase("es-ES", true)]
+        [TestCase("da-DK", false)]
+        [TestCase("en-US", false)]
+        [TestCase("es-ES", false)]
+        public void TestThatToModelForBase64EncodedModelDeserializeAndReturnsModelForEncodedModel(string cultureName, bool hasPaymentHandlerIdentifier)
         {
             MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, Fixture.Create<string>())
@@ -122,7 +137,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
                 .With(m => m.BillingInformation, Fixture.Create<string>())
                 .With(m => m.Price, Fixture.Create<decimal>())
                 .With(m => m.PriceCultureInfoName, cultureName)
-                .With(m => m.PaymentHandler, Fixture.Create<PaymentHandlerModel>())
+                .With(m => m.PaymentHandlerIdentifier, hasPaymentHandlerIdentifier ? Guid.NewGuid() : (Guid?) null)
                 .With(m => m.PaymentHandlers, Fixture.CreateMany<PaymentHandlerModel>(Random.Next(5, 10)).ToList())
                 .With(m => m.CanRenew, Fixture.Create<bool>())
                 .With(m => m.CanUpgrade, Fixture.Create<bool>())
@@ -138,7 +153,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
             Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(cultureName));
             Assert.That(membershipModel.PriceCultureInfo, Is.Not.Null);
-            Assert.That(membershipModel.PaymentHandler, Is.Not.Null);
+            if (hasPaymentHandlerIdentifier)
+            {
+                Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Not.Null);
+                Assert.That(membershipModel.PaymentHandlerIdentifier.HasValue, Is.True);
+            }
+            else
+            {
+                Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Null);
+                Assert.That(membershipModel.PaymentHandlerIdentifier.HasValue, Is.False);
+            }
             Assert.That(membershipModel.PaymentHandlers, Is.Not.Null);
             Assert.That(membershipModel.PaymentHandlers, Is.Not.Empty);
 
@@ -170,14 +194,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(clone.PriceCultureInfoName, Is.EqualTo(membershipModel.PriceCultureInfoName));
             Assert.That(clone.PriceCultureInfo, Is.Not.Null);
             Assert.That(clone.PriceCultureInfo, Is.EqualTo(membershipModel.PriceCultureInfo));
-            Assert.That(clone.PaymentHandler, Is.Not.Null);
-            Assert.That(clone.PaymentHandler.Identifier, Is.EqualTo(membershipModel.PaymentHandler.Identifier));
-            Assert.That(clone.PaymentHandler.Name, Is.Not.Null);
-            Assert.That(clone.PaymentHandler.Name, Is.Not.Empty);
-            Assert.That(clone.PaymentHandler.Name, Is.EqualTo(membershipModel.PaymentHandler.Name));
-            Assert.That(clone.PaymentHandler.DataSourceStatement, Is.Not.Null);
-            Assert.That(clone.PaymentHandler.DataSourceStatement, Is.Not.Empty);
-            Assert.That(clone.PaymentHandler.DataSourceStatement, Is.EqualTo(membershipModel.PaymentHandler.DataSourceStatement));
+            if (hasPaymentHandlerIdentifier)
+            {
+                Assert.That(clone.PaymentHandlerIdentifier, Is.Not.Null);
+                Assert.That(clone.PaymentHandlerIdentifier.HasValue, Is.True);
+                // ReSharper disable PossibleInvalidOperationException
+                Assert.That(clone.PaymentHandlerIdentifier.Value, Is.EqualTo(membershipModel.PaymentHandlerIdentifier.Value));
+                // ReSharper restore PossibleInvalidOperationException
+            }
+            else
+            {
+                Assert.That(clone.PaymentHandlerIdentifier, Is.Null);
+                Assert.That(clone.PaymentHandlerIdentifier.HasValue, Is.False);
+            }
             Assert.That(clone.PaymentHandlers, Is.Not.Null);
             Assert.That(clone.PaymentHandlers, Is.Not.Empty);
             Assert.That(clone.PaymentHandlers.Count(), Is.EqualTo(membershipModel.PaymentHandlers.Count()));
