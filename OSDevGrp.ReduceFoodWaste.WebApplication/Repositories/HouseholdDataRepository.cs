@@ -807,6 +807,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 return paymentHandlerModel;
             }
 
+            paymentHandlerModel.ActionName = paymentHandlerElement.ActionName;
             paymentHandlerModel.ImagePath = paymentHandlerElement.ImagePath;
             return paymentHandlerModel;
         }

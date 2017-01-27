@@ -161,6 +161,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.DataProviderIdentifier))
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                     .ForMember(dest => dest.DataSourceStatement, opt => opt.MapFrom(src => src.DataSourceStatement))
+                    .ForMember(dest => dest.ActionName, opt => opt.Ignore())
                     .ForMember(dest => dest.ImagePath, opt => opt.Ignore());
 
                 configuration.CreateMap<DataProviderView, DataProviderModel>()

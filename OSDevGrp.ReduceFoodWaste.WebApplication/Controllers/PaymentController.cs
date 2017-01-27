@@ -90,6 +90,28 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
         }
 
+        /// <summary>
+        /// Executes the payment process when the payable model should be paid by Paypal.
+        /// </summary>
+        /// <param name="payableModel">Payable model which should be paid by Paypal.</param>
+        /// <param name="returnUrl">Url on which to return to when the payment process has finished.</param>
+        /// <returns>Action the execute when the payable model should be paid by Paypal.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public Action PayWithPaypal(PayableModel payableModel, string returnUrl)
+        {
+            if (payableModel == null)
+            {
+                throw new ArgumentNullException(nameof(payableModel));
+            }
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                throw new ArgumentNullException(nameof(returnUrl));
+            }
+
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

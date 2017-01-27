@@ -17,6 +17,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration
         public Guid Identifier => (Guid) this["id"];
 
         /// <summary>
+        /// Gets the action name which starts the payment process handled by the data provider.
+        /// </summary>
+        [ConfigurationProperty("action", DefaultValue = "", IsRequired = true)]
+        public string ActionName => (string) this["action"];
+
+        /// <summary>
         /// Gets the path to the image which describes the data provider who can handle payments.
         /// </summary>
         [ConfigurationProperty("image", DefaultValue = "", IsRequired = true)]

@@ -849,6 +849,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.That(result.DataSourceStatement, Is.Not.Null);
             Assert.That(result.DataSourceStatement, Is.Not.Empty);
             Assert.That(result.DataSourceStatement, Is.EqualTo(dataProviderView.DataSourceStatement));
+            Assert.That(result.ActionName, Is.Null);
             Assert.That(result.ImagePath, Is.Null);
         }
 

@@ -106,7 +106,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         [TestCase(null)]
         [TestCase("")]
-        public void TestThatPayThrowsArgumentNullExceptionWhenPayableReturnUrlIsNullOrEmpty(string returnUrl)
+        public void TestThatPayThrowsArgumentNullExceptionWhenReturnUrlIsNullOrEmpty(string returnUrl)
         {
             string payableModelAsBase64 = Fixture.Create<string>();
             Assert.That(payableModelAsBase64, Is.Not.Null);
@@ -347,6 +347,55 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(model.PaymentHandlers, Is.Not.Null);
             Assert.That(model.PaymentHandlers, Is.Not.Empty);
             Assert.That(model.PaymentHandlers, Is.EqualTo(paymentHandlerModelCollection));
+        }
+
+        /// <summary>
+        /// Tests that PayWithPaypal throws an ArgumentNullException when the payable model which should be paid by Paypal is null.
+        /// </summary>
+        [Test]
+        public void TestThatPayWithPaypalThrowsArgumentNullExceptionWhenPayableModelIsNull()
+        {
+            string returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            PaymentController paymentController = CreatePaymentController();
+            Assert.That(paymentController, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.PayWithPaypal(null, returnUrl));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("payableModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that PayWithPaypal throws an ArgumentNullException when the url on which to return to when the payment process has finished is null.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void TestThatPayWithPaypalThrowsArgumentNullExceptionWhenReturnUrlIsNullOrEmpty(string returnUrl)
+        {
+            PayableModel payableModel = Fixture.Build<PayableModel>()
+                .With(m => m.BillingInformation, Fixture.Create<string>())
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
+                .With(m => m.PaymentHandlers, null)
+                .Create();
+            Assert.That(payableModel, Is.Not.Null);
+
+            PaymentController paymentController = CreatePaymentController();
+            Assert.That(paymentController, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.PayWithPaypal(payableModel, returnUrl));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("returnUrl"));
+            Assert.That(exception.InnerException, Is.Null);
         }
 
         /// <summary>

@@ -13,6 +13,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration
         Guid Identifier { get; }
 
         /// <summary>
+        /// Gets the action name which starts the payment process handled by the data provider.
+        /// </summary>
+        string ActionName { get; }
+
+        /// <summary>
         /// Gets the path to the image which describes the data provider who can handle payments.
         /// </summary>
         string ImagePath { get; }
