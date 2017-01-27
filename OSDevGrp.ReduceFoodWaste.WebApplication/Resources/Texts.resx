@@ -333,4 +333,7 @@
   <data name="BillingInformations" xml:space="preserve">
     <value>Billing informations</value>
   </data>
+  <data name="PayBy" xml:space="preserve">
+    <value>Pay by</value>
+  </data>
 </root>

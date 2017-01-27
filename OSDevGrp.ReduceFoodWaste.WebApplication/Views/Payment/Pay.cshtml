@@ -1,6 +1,7 @@
-﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Models
+@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model OSDevGrp.ReduceFoodWaste.WebApplication.Models.PayableModel
-    
+
 @{
     ViewBag.Title = Texts.Payment;
 }
@@ -25,4 +26,18 @@
         <h3>@Texts.BillingInformations</h3>
     </hgroup>
     <p>@Html.Raw(Model.BillingInformation)</p>
+    @if (Model.PaymentHandlers != null && Model.PaymentHandlers.Any(paymentHandler => string.IsNullOrWhiteSpace(paymentHandler.ImagePath) == false))
+    {
+        <hgroup class="title">
+            <h3>@Texts.PayBy</h3>
+        </hgroup>
+        <section>
+            @foreach (PaymentHandlerModel paymentHandler in Model.PaymentHandlers.Where(paymentHandler => string.IsNullOrWhiteSpace(paymentHandler.ImagePath) == false))
+            {
+                using (Html.BeginForm("XYZ", "Payment", FormMethod.Post, new {returnUrl = ViewBag.ReturnUrl}))
+                {
+                }
+            }
+        </section>
+    }
 </div>

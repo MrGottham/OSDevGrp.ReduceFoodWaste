@@ -333,4 +333,7 @@
   <data name="BillingInformations" xml:space="preserve">
     <value>Faktureringsinformation</value>
   </data>
+  <data name="PayBy" xml:space="preserve">
+    <value>Betal med</value>
+  </data>
 </root>
