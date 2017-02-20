@@ -31,6 +31,7 @@
         <hgroup class="title">
             <h3>@Texts.PayBy</h3>
         </hgroup>
+        <hr />
         <section>
             @foreach (PaymentHandlerModel paymentHandler in Model.PaymentHandlers.Where(paymentHandler => string.IsNullOrWhiteSpace(paymentHandler.ActionName) == false && string.IsNullOrWhiteSpace(paymentHandler.ImagePath) == false))
             {
