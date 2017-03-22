@@ -4117,6 +4117,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 Assert.That(routeValueDictionary["membershipModelAsBase64"], Is.Not.Null);
                 Assert.That(routeValueDictionary["membershipModelAsBase64"], Is.Not.Empty);
                 Assert.That(routeValueDictionary["membershipModelAsBase64"], Is.EqualTo(toBase64ForMembershipModel));
+                Assert.That(routeValueDictionary.ContainsKey("paymentModelAsBase64"), Is.True);
+                Assert.That(routeValueDictionary["paymentModelAsBase64"], Is.Not.Null);
+                Assert.That(routeValueDictionary["paymentModelAsBase64"], Is.Not.Empty);
+                Assert.That(routeValueDictionary["paymentModelAsBase64"], Is.EqualTo("[PaymentModelAsBase64]"));
                 Assert.That(routeValueDictionary.ContainsKey("returnUrl"), Is.True);
                 Assert.That(routeValueDictionary["returnUrl"], Is.Not.Null);
                 Assert.That(routeValueDictionary["returnUrl"], Is.Not.Empty);
@@ -4219,6 +4223,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("")]
         public void TestThatUpgradeOrRenewMembershipCallbackThrowsArgumentNullExceptionWhenMembershipModelAsBase64IsNullOrEmpty(string membershipModelAsBase64)
         {
+            var paymentModelAsBase64 = Fixture.Create<string>();
+            Assert.That(paymentModelAsBase64, Is.Not.Null);
+            Assert.That(paymentModelAsBase64, Is.Not.Empty);
+
             var returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
@@ -4226,11 +4234,38 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, returnUrl));
+            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("membershipModelAsBase64"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembershipCallback throws an ArgumentNullException when the base64 encoded value for a payable model which contains information about the payment is null or empty.
+        /// </summary>
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public void TestThatUpgradeOrRenewMembershipCallbackThrowsArgumentNullExceptionWhenPaymentModelAsBase64IsNullOrEmpty(string paymentModelAsBase64)
+        {
+            var membershipModelAsBase64 = Fixture.Create<string>();
+            Assert.That(membershipModelAsBase64, Is.Not.Null);
+            Assert.That(membershipModelAsBase64, Is.Not.Empty);
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController();
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("paymentModelAsBase64"));
             Assert.That(exception.InnerException, Is.Null);
         }
 
@@ -4246,10 +4281,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
+            var paymentModelAsBase64 = Fixture.Create<string>();
+            Assert.That(paymentModelAsBase64, Is.Not.Null);
+            Assert.That(paymentModelAsBase64, Is.Not.Empty);
+
             var householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, returnUrl));
+            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -4275,6 +4314,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
+            var paymentModelAsBase64 = Fixture.Create<string>();
+            Assert.That(paymentModelAsBase64, Is.Not.Null);
+            Assert.That(paymentModelAsBase64, Is.Not.Empty);
+
             var returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
@@ -4282,7 +4325,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController(toModel: membershipModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, returnUrl);
+            householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
 
             _modelHelperMock.AssertWasCalled(m => m.ToModel(Arg<string>.Is.Equal(membershipModelAsBase64)));
         }
@@ -4305,6 +4348,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
+            var paymentModelAsBase64 = Fixture.Create<string>();
+            Assert.That(paymentModelAsBase64, Is.Not.Null);
+            Assert.That(paymentModelAsBase64, Is.Not.Empty);
+
             var returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
@@ -4312,7 +4359,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var householdMemberController = CreateHouseholdMemberController(toModel: membershipModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var result = householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, returnUrl);
+            var result = householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectResult>());
 

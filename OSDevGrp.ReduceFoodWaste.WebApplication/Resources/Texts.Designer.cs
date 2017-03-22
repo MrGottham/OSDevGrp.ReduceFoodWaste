@@ -511,6 +511,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paid at {0}.
+        /// </summary>
+        public static string PaidAt {
+            get {
+                return ResourceManager.GetString("PaidAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pay by.
         /// </summary>
         public static string PayBy {

@@ -476,6 +476,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 RouteValueDictionary routeValueDictionary = new RouteValueDictionary
                 {
                     {"membershipModelAsBase64", membershipModelAsBase64},
+                    {"paymentModelAsBase64", "[PaymentModelAsBase64]"},
                     {"returnUrl", returnUrl}
                 };
                 string callbackUrl = _utilities.ActionToUrl(Url, "UpgradeOrRenewMembershipCallback", "HouseholdMember", routeValueDictionary);
@@ -497,14 +498,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// Callback action which finish the upgrade or renew process after the payment.
         /// </summary>
         /// <param name="membershipModelAsBase64">Base64 encoded value for the model of the membership which should be upgraded or renewed.</param>
+        /// <param name="paymentModelAsBase64">Base64 encoded value for a payable model which contains information about the payment.</param>
         /// <param name="returnUrl">Url on which to return when the membership upgrade or renew process has finished.</param>
         /// <returns>Redirect to the url on which to return when the membership upgrade or renew process has finished.</returns>
         [IsValidatedHouseholdMember]
-        public ActionResult UpgradeOrRenewMembershipCallback(string membershipModelAsBase64, string returnUrl)
+        public ActionResult UpgradeOrRenewMembershipCallback(string membershipModelAsBase64, string paymentModelAsBase64, string returnUrl)
         {
             if (string.IsNullOrEmpty(membershipModelAsBase64))
             {
                 throw new ArgumentNullException(nameof(membershipModelAsBase64));
+            }
+            if (string.IsNullOrEmpty(paymentModelAsBase64))
+            {
+                throw new ArgumentNullException(nameof(paymentModelAsBase64));
             }
             if (string.IsNullOrEmpty(returnUrl))
             {

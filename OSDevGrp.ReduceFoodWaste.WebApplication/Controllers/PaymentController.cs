@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -9,6 +11,7 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 {
@@ -110,7 +113,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <returns>Action the execute when the payable model should be paid by Paypal.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public Action PayWithPaypal(PayableModel payableModel, string returnUrl)
+        public ActionResult PayWithPaypal(PayableModel payableModel, string returnUrl)
         {
             if (payableModel == null)
             {
@@ -120,11 +123,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 throw new ArgumentNullException(nameof(returnUrl));
             }
+
             payableModel.PaymentStatus = PaymentStatus.Paid;
+
+            string payedAtText = string.Format(Texts.PaidAt, DateTime.Today.ToLongDateString());
+            string paymentReceiptText = $"{payableModel.BillingInformation}{Environment.NewLine}{payedAtText}";
+            using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(paymentReceiptText)))
+            {
+                payableModel.PaymentReceipt = Convert.ToBase64String(memoryStream.ToArray());
+                memoryStream.Close();
+            }
 
             string payment = _modelHelper.ToBase64(payableModel);
 
-            return null;
+            return Redirect(returnUrl);
         }
 
         #endregion

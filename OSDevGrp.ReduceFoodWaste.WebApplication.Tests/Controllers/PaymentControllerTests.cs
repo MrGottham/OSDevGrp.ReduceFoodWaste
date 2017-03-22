@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Principal;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -12,6 +14,7 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Ploeh.AutoFixture;
 using Rhino.Mocks;
@@ -583,11 +586,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PaymentReceipt, Is.Null);
             Assert.That(payableModel.PaymentReceipt, Is.Not.Empty);
 
-            string returnUrl = CreateReturnUrl();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            //string expectedPaymentReceipt = null;
+            string payAtText = string.Format(Texts.PaidAt, DateTime.Today.ToLongDateString());
+            string paymentReceiptText = $"{payableModel.BillingInformation}{Environment.NewLine}{payAtText}";
+            string expectedPaymentReceipt;
+            using (MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(paymentReceiptText)))
+            {
+                expectedPaymentReceipt = Convert.ToBase64String(memoryStream.ToArray());
+                memoryStream.Close();
+            }
+            Assert.That(expectedPaymentReceipt, Is.Not.Null);
+            Assert.That(expectedPaymentReceipt, Is.Not.Empty);
 
             PaymentController paymentController = CreatePaymentController();
             Assert.That(paymentController, Is.Not.Null);
@@ -597,18 +609,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             _modelHelperMock.AssertWasCalled(m => m.ToBase64(Arg<PayableModel>.Matches(model =>
                 model != null &&
                 model == payableModel &&
-                model.PaymentStatus == PaymentStatus.Paid)));
-        }
-
-        /// <summary>
-        /// Creates and returns a legal return url.
-        /// </summary>
-        /// <param name="id">Value for the id parameter in the return url.</param>
-        /// <param name="name">Value for the name parameter in the return url.</param>
-        /// <returns>Legal return url.</returns>
-        private string CreateReturnUrl(string id = null, string name = null)
-        {
-            return $"http://localhost/test?id={id ?? Fixture.Create<string>()}&name={name ?? Fixture.Create<string>()}";
+                model.PaymentStatus == PaymentStatus.Paid &&
+                model.PaymentReceipt != null &&
+                model.PaymentReceipt != string.Empty &&
+                string.Compare(model.PaymentReceipt, expectedPaymentReceipt, StringComparison.Ordinal) == 0)));
         }
 
         /// <summary>

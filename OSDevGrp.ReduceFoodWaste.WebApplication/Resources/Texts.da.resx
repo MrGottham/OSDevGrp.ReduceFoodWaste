@@ -336,4 +336,7 @@
   <data name="PayBy" xml:space="preserve">
     <value>Betal med</value>
   </data>
+  <data name="PaidAt" xml:space="preserve">
+    <value>Betalt den {0}</value>
+  </data>
 </root>
