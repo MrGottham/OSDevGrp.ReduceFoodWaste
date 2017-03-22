@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -26,6 +27,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
         private IHouseholdDataRepository _householdDataRepositoryMock;
         private IModelHelper _modelHelperMock;
+        private IUtilities _utilitiesMock;
 
         #endregion
 
@@ -37,6 +39,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             _householdDataRepositoryMock = MockRepository.GenerateMock<IHouseholdDataRepository>();
             _modelHelperMock = MockRepository.GenerateMock<IModelHelper>();
+            _utilitiesMock = MockRepository.GenerateMock<IUtilities>();
         }
 
         /// <summary>
@@ -45,7 +48,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorInitializePaymentController()
         {
-            var paymentController = new PaymentController(_householdDataRepositoryMock, _modelHelperMock);
+            var paymentController = new PaymentController(_householdDataRepositoryMock, _modelHelperMock, _utilitiesMock);
             Assert.That(paymentController, Is.Not.Null);
         }
 
@@ -55,7 +58,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenHouseholdDataRepositoryIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new PaymentController(null, _modelHelperMock));
+            var exception = Assert.Throws<ArgumentNullException>(() => new PaymentController(null, _modelHelperMock, _utilitiesMock));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -69,11 +72,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenModelHelperIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new PaymentController(_householdDataRepositoryMock, null));
+            var exception = Assert.Throws<ArgumentNullException>(() => new PaymentController(_householdDataRepositoryMock, null, _utilitiesMock));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
             Assert.That(exception.ParamName, Is.EqualTo("modelHelper"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that the constructor throws an ArgumentNullException when the utilities which support the infrastructure is null.
+        /// </summary>
+        [Test]
+        public void TestThatConstructorThrowsArgumentNullExceptionWhenUtilitiesIsNull()
+        {
+            var exception = Assert.Throws<ArgumentNullException>(() => new PaymentController(_householdDataRepositoryMock, _modelHelperMock, null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("utilities"));
             Assert.That(exception.InnerException, Is.Null);
         }
 
@@ -200,6 +217,44 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Pay does not call StripHtml on the utilities which support the infrastructure when the payable model is free of cost.
+        /// </summary>
+        [Test]
+        public void TestThatPayDoesNotCallStripHtmlOnUtilitiesWhenPayableModelIsFreeOfCost()
+        {
+            PayableModel payableModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, 0M)
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, null)
+                .With(m => m.PaymentHandlers, null)
+                .Create();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.Price, Is.EqualTo(0M));
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(payableModel.IsFreeOfCost, Is.True);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
+
+            string payableModelAsBase64 = Fixture.Create<string>();
+            Assert.That(payableModelAsBase64, Is.Not.Null);
+            Assert.That(payableModelAsBase64, Is.Not.Empty);
+
+            string returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            PaymentController paymentController = CreatePaymentController(toModel: payableModel);
+            Assert.That(paymentController, Is.Not.Null);
+
+            paymentController.Pay(payableModelAsBase64, returnUrl);
+
+            _utilitiesMock.AssertWasNotCalled(m => m.StripHtml(Arg<string>.Is.Anything));
+        }
+
+        /// <summary>
         /// Tests that Pay returns a RedirectResult to the url on which to return to when the payment process has finished when the payable model is free of cost.
         /// </summary>
         [Test]
@@ -287,6 +342,52 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that Pay calls StripHtml on the utilities which support the infrastructure when the payable model is not free of cost.
+        /// </summary>
+        [Test]
+        public void TestThatPayCallsStripHtmlOnUtilitiesWhenPayableModelIsNotFreeOfCost()
+        {
+            PayableModel payableModel = Fixture.Build<PayableModel>()
+                .With(m => m.BillingInformation, Fixture.Create<string>())
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, null)
+                .With(m => m.PaymentHandlers, null)
+                .Create();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.BillingInformation, Is.Not.Null);
+            Assert.That(payableModel.BillingInformation, Is.Not.Empty);
+            Assert.That(payableModel.Price, Is.GreaterThan(0M));
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(payableModel.IsFreeOfCost, Is.False);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
+
+            string payableModelAsBase64 = Fixture.Create<string>();
+            Assert.That(payableModelAsBase64, Is.Not.Null);
+            Assert.That(payableModelAsBase64, Is.Not.Empty);
+
+            string returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            PaymentController paymentController = CreatePaymentController(toModel: payableModel);
+            Assert.That(paymentController, Is.Not.Null);
+            Assert.That(paymentController.User, Is.Not.Null);
+            Assert.That(paymentController.User.Identity, Is.Not.Null);
+
+            Assert.That(Thread.CurrentThread, Is.Not.Null);
+            Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
+
+            paymentController.Pay(payableModelAsBase64, returnUrl);
+
+            _utilitiesMock.AssertWasCalled(m => m.StripHtml(Arg<string>.Is.Equal(payableModel.BillingInformation)));
+        }
+
+        /// <summary>
         /// Tests that Pay returns a ViewResult on which to pay for the payable model when the payable model is not free of cost.
         /// </summary>
         [Test]
@@ -320,7 +421,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(paymentHandlerModelCollection, Is.Not.Null);
             Assert.That(paymentHandlerModelCollection, Is.Not.Empty);
 
-            PaymentController paymentController = CreatePaymentController(paymentHandlerModelCollection: paymentHandlerModelCollection, toModel: payableModel);
+            string billingInformationWithoutHtmlTags = Fixture.Create<string>();
+            Assert.That(billingInformationWithoutHtmlTags, Is.Not.Null);
+            Assert.That(billingInformationWithoutHtmlTags, Is.Not.Empty);
+
+            PaymentController paymentController = CreatePaymentController(paymentHandlerModelCollection: paymentHandlerModelCollection, toModel: payableModel, billingInformationWithoutHtmlTags: billingInformationWithoutHtmlTags);
             Assert.That(paymentController, Is.Not.Null);
 
             ActionResult result = paymentController.Pay(payableModelAsBase64, returnUrl);
@@ -339,6 +444,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Null);
             Assert.That(viewResult.ViewData["ReturnUrl"], Is.Not.Empty);
             Assert.That(viewResult.ViewData["ReturnUrl"], Is.EqualTo(returnUrl));
+            Assert.That(viewResult.ViewData["BillingInformationWithoutHTMLTags"], Is.Not.Null);
+            Assert.That(viewResult.ViewData["BillingInformationWithoutHTMLTags"], Is.Not.Empty);
+            Assert.That(viewResult.ViewData["BillingInformationWithoutHTMLTags"], Is.EqualTo(billingInformationWithoutHtmlTags));
 
             PayableModel model = (PayableModel) viewResult.Model;
             Assert.That(model, Is.Not.Null);
@@ -403,8 +511,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// </summary>
         /// <param name="paymentHandlerModelCollection">Sets the collection of models for the data providers who handles payments.</param>
         /// <param name="toModel">Sets the model which should be returned for a given base64 encoded model.</param>
+        /// <param name="billingInformationWithoutHtmlTags">Sets the billing information where all the HTML tags has been removed.</param>
         /// <returns>Controller which can handle payments for unit testing.</returns>
-        private PaymentController CreatePaymentController(IEnumerable<PaymentHandlerModel> paymentHandlerModelCollection = null, object toModel = null)
+        private PaymentController CreatePaymentController(IEnumerable<PaymentHandlerModel> paymentHandlerModelCollection = null, object toModel = null, string billingInformationWithoutHtmlTags = null)
         {
             _householdDataRepositoryMock.Stub(m => m.GetPaymentHandlersAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => paymentHandlerModelCollection ?? Fixture.CreateMany<PaymentHandlerModel>(Random.Next(5, 10)).ToList()))
@@ -414,7 +523,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(toModel)
                 .Repeat.Any();
 
-            var paymentController = new PaymentController(_householdDataRepositoryMock, _modelHelperMock);
+            _utilitiesMock.Stub(m => m.StripHtml(Arg<string>.Is.Anything))
+                .Return(billingInformationWithoutHtmlTags ?? Fixture.Create<string>())
+                .Repeat.Any();
+
+            var paymentController = new PaymentController(_householdDataRepositoryMock, _modelHelperMock, _utilitiesMock);
             paymentController.ControllerContext = ControllerTestHelper.CreateControllerContext(paymentController);
             return paymentController;
         }

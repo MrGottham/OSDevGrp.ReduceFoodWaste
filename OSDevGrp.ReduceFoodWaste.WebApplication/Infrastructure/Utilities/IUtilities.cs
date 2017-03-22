@@ -30,6 +30,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
         string HtmlDecode(string value);
 
         /// <summary>
+        /// Removes HTML tags from a given string.
+        /// </summary>
+        /// <param name="value">The string to which to remove HTML tags.</param>
+        /// <returns>Teh string without HTML tags.</returns>
+        string StripHtml(string value);
+
+        /// <summary>
         /// Converts a given action to an URL.
         /// </summary>
         /// <param name="urlHelper">The URL helper which can be used to generate URLs by using routing.</param>

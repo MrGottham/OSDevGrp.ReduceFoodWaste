@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -50,6 +51,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
                 throw new ArgumentNullException(nameof(value));
             }
             return HttpUtility.HtmlDecode(value);
+        }
+
+        /// <summary>
+        /// Removes HTML tags from a given string.
+        /// </summary>
+        /// <param name="value">The string to which to remove HTML tags.</param>
+        /// <returns>Teh string without HTML tags.</returns>
+        public string StripHtml(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            Regex regularExpression = new Regex("<.*?>", RegexOptions.Compiled);
+            return regularExpression.Replace(value, string.Empty);
         }
 
         /// <summary>

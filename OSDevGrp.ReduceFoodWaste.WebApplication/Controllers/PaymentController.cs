@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 
@@ -21,6 +22,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
         private readonly IHouseholdDataRepository _householdDataRepository;
         private readonly IModelHelper _modelHelper;
+        private readonly IUtilities _utilities;
 
         #endregion
 
@@ -31,7 +33,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// </summary>
         /// <param name="householdDataRepository">Implementation of a repository which can access household data.</param>
         /// <param name="modelHelper">Implementation of a model helper.</param>
-        public PaymentController(IHouseholdDataRepository householdDataRepository, IModelHelper modelHelper)
+        /// <param name="utilities">Implementation of the utilities which support the infrastructure.</param>
+        public PaymentController(IHouseholdDataRepository householdDataRepository, IModelHelper modelHelper, IUtilities utilities)
         {
             if (householdDataRepository == null)
             {
@@ -41,8 +44,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 throw new ArgumentNullException(nameof(modelHelper));
             }
+            if (utilities == null)
+            {
+                throw new ArgumentNullException(nameof(utilities));
+            }
             _householdDataRepository = householdDataRepository;
             _modelHelper = modelHelper;
+            _utilities = utilities;
         }
 
         #endregion
@@ -81,6 +89,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 payableModel.PaymentHandlers = task.Result;
 
                 ViewBag.ReturnUrl = returnUrl;
+                ViewBag.BillingInformationWithoutHTMLTags = _utilities.StripHtml(payableModel.BillingInformation);
 
                 return View("Pay", payableModel);
             }

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("OS Development Group")]
 [assembly: AssemblyProduct("Reduce Food Waste Project")]
-[assembly: AssemblyCopyright("Copyright © OS Development Group 2016")]
+[assembly: AssemblyCopyright("Copyright © OS Development Group 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
