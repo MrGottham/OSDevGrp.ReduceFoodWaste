@@ -120,8 +120,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 throw new ArgumentNullException(nameof(returnUrl));
             }
+            payableModel.PaymentStatus = PaymentStatus.Paid;
 
-            throw new NotImplementedException();
+            string payment = _modelHelper.ToBase64(payableModel);
+
+            return null;
         }
 
         #endregion
