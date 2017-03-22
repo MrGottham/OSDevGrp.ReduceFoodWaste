@@ -10,6 +10,7 @@ using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Ploeh.AutoFixture;
@@ -151,6 +152,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentReceipt, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.Price, Is.GreaterThan(0M));
@@ -161,6 +164,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
             Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
+            Assert.That(payableModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentReceipt, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
             Assert.That(payableModelAsBase64, Is.Not.Null);
@@ -189,6 +194,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentReceipt, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.Price, Is.EqualTo(0M));
@@ -199,6 +206,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
             Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
+            Assert.That(payableModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentReceipt, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
             Assert.That(payableModelAsBase64, Is.Not.Null);
@@ -227,6 +236,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentReceipt, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.Price, Is.EqualTo(0M));
@@ -237,6 +248,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
             Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
+            Assert.That(payableModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentReceipt, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
             Assert.That(payableModelAsBase64, Is.Not.Null);
@@ -265,6 +278,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentReceipt, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.Price, Is.EqualTo(0M));
@@ -275,6 +290,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
             Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
+            Assert.That(payableModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentReceipt, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
             Assert.That(payableModelAsBase64, Is.Not.Null);
@@ -309,6 +326,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentReceipt, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.Price, Is.GreaterThan(0M));
@@ -319,6 +338,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
             Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
+            Assert.That(payableModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentReceipt, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
             Assert.That(payableModelAsBase64, Is.Not.Null);
@@ -353,6 +374,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentReceipt, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.BillingInformation, Is.Not.Null);
@@ -365,6 +388,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
             Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
+            Assert.That(payableModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentReceipt, Is.Null);
 
             string payableModelAsBase64 = Fixture.Create<string>();
             Assert.That(payableModelAsBase64, Is.Not.Null);
@@ -398,6 +423,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
                 .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Paid)
+                .With(m => m.PaymentReceipt, Fixture.Create<string>())
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.Price, Is.GreaterThan(0M));
@@ -408,6 +435,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
             Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Not.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentReceipt, Is.Not.Null);
+            Assert.That(payableModel.PaymentReceipt, Is.Not.Empty);
 
             string payableModelAsBase64 = Fixture.Create<string>();
             Assert.That(payableModelAsBase64, Is.Not.Null);
@@ -455,6 +485,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(model.PaymentHandlers, Is.Not.Null);
             Assert.That(model.PaymentHandlers, Is.Not.Empty);
             Assert.That(model.PaymentHandlers, Is.EqualTo(paymentHandlerModelCollection));
+            Assert.That(model.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(model.PaymentReceipt, Is.Null);
         }
 
         /// <summary>
@@ -492,8 +524,23 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
                 .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentReceipt, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.BillingInformation, Is.Not.Null);
+            Assert.That(payableModel.BillingInformation, Is.Not.Empty);
+            Assert.That(payableModel.Price, Is.GreaterThan(0M));
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(payableModel.IsFreeOfCost, Is.False);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Not.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentReceipt, Is.Null);
+            Assert.That(payableModel.PaymentReceipt, Is.Not.Empty);
 
             PaymentController paymentController = CreatePaymentController();
             Assert.That(paymentController, Is.Not.Null);

@@ -42,6 +42,11 @@
                     @Html.HiddenFor(m => m.Price)
                     @Html.HiddenFor(m => m.PriceCultureInfoName)
                     @Html.Hidden(Html.NameFor(m => m.PaymentHandlerIdentifier).ToHtmlString(), paymentHandler.Identifier)
+                    @Html.HiddenFor(m => m.PaymentStatus)
+                    if (string.IsNullOrWhiteSpace(Model.PaymentReceipt) == false)
+                    {
+                        @Html.HiddenFor(m => m.PaymentReceipt)
+                    }
                     <button style="cursor: pointer; color: transparent; border: none; background: url(@VirtualPathUtility.ToAbsolute(paymentHandler.ImagePath)); width: 200px; height: 53px; margin-right: 20px; margin-bottom: 30px" type="submit" name="paymentHandler" value="@paymentHandler.Name" title="@string.Format("{0} {1}", Texts.PayBy, paymentHandler.Name)">@paymentHandler.Name</button>
                 }
             }

@@ -7,6 +7,7 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
@@ -87,6 +88,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
                 payableModel.PaymentHandlerIdentifier = null;
                 payableModel.PaymentHandlers = task.Result;
+                payableModel.PaymentStatus = PaymentStatus.Unpaid;
+                payableModel.PaymentReceipt = null;
 
                 ViewBag.ReturnUrl = returnUrl;
                 ViewBag.BillingInformationWithoutHTMLTags = _utilities.StripHtml(payableModel.BillingInformation);

@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Ploeh.AutoFixture;
 
@@ -31,6 +32,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Null);
             Assert.That(membershipModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(membershipModel.PaymentHandlers, Is.Null);
+            Assert.That(membershipModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(membershipModel.PaymentReceipt, Is.Null);
             Assert.That(membershipModel.CanRenew, Is.False);
             Assert.That(membershipModel.CanUpgrade, Is.False);
         }

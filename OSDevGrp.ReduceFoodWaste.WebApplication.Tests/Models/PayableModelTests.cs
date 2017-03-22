@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Ploeh.AutoFixture;
 
@@ -31,6 +32,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Null);
             Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
+            Assert.That(payableModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentReceipt, Is.Null);
         }
 
         /// <summary>
@@ -274,6 +277,79 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
 
             payableModel.PaymentHandlers = null;
             Assert.That(payableModel.PaymentHandlers, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentStatus sets a new value.
+        /// </summary>
+        [Test]
+        [TestCase(PaymentStatus.Paid)]
+        [TestCase(PaymentStatus.Cancelled)]
+        public void TestThatPaymentStatusSetterSetsValue(PaymentStatus newValue)
+        {
+            var payableModel = new PayableModel();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+
+            payableModel.PaymentStatus = newValue;
+            Assert.That(payableModel.PaymentStatus, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentStatus sets the value to Unpaid.
+        /// </summary>
+        [Test]
+        [TestCase(PaymentStatus.Paid)]
+        [TestCase(PaymentStatus.Cancelled)]
+        public void TestThatPaymentStatusSetterSetsValueToUnpaid(PaymentStatus value)
+        {
+            var payableModel = new PayableModel
+            {
+                PaymentStatus = value
+            };
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentStatus, Is.EqualTo(value));
+
+            payableModel.PaymentStatus = PaymentStatus.Unpaid;
+            Assert.That(payableModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentReceipt sets a new value.
+        /// </summary>
+        [Test]
+        public void TestThatPaymentReceiptSetterSetsValue()
+        {
+            var payableModel = new PayableModel();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentReceipt, Is.Null);
+
+            var newValue = Fixture.Create<string>();
+            Assert.That(newValue, Is.Not.Null);
+            Assert.That(newValue, Is.Not.Empty);
+
+            payableModel.PaymentReceipt = newValue;
+            Assert.That(payableModel.PaymentReceipt, Is.Not.Null);
+            Assert.That(payableModel.PaymentReceipt, Is.Not.Empty);
+            Assert.That(payableModel.PaymentReceipt, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentReceipt sets the value to NULL.
+        /// </summary>
+        [Test]
+        public void TestThatPaymentReceiptSetterSetsValueToNull()
+        {
+            var payableModel = new PayableModel
+            {
+                PaymentReceipt = Fixture.Create<string>()
+            };
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentReceipt, Is.Not.Null);
+            Assert.That(payableModel.PaymentReceipt, Is.Not.Empty);
+
+            payableModel.PaymentReceipt = null;
+            Assert.That(payableModel.PaymentReceipt, Is.Null);
         }
     }
 }

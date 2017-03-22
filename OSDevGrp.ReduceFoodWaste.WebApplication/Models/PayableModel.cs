@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
 {
@@ -13,6 +14,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         #region Private variables
 
         private string _billingInformation;
+        private PaymentStatus _paymentStatus = PaymentStatus.Unpaid;
 
         #endregion
 
@@ -73,6 +75,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         /// Gets or sets the data providers who can handle payments.
         /// </summary>
         public virtual IEnumerable<PaymentHandlerModel> PaymentHandlers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the payment status for the payable model.
+        /// </summary>
+        public virtual PaymentStatus PaymentStatus
+        {
+            get { return _paymentStatus; }
+            set { _paymentStatus = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the base64 encoded payment receipt.
+        /// </summary>
+        public virtual string PaymentReceipt { get; set; }
 
         #endregion
     }

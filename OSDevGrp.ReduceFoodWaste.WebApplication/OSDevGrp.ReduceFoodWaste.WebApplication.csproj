@@ -281,6 +281,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\DashboardModel.cs" />
     <Compile Include="Models\DataProviderModel.cs" />
+    <Compile Include="Models\Enums\PaymentStatus.cs" />
     <Compile Include="Models\HouseholdIdentificationModel.cs" />
     <Compile Include="Models\HouseholdMemberModel.cs" />
     <Compile Include="Models\HouseholdModel.cs" />
