@@ -35,7 +35,7 @@
         <section>
             @foreach (PaymentHandlerModel paymentHandler in Model.PaymentHandlers.Where(paymentHandler => string.IsNullOrWhiteSpace(paymentHandler.ActionName) == false && string.IsNullOrWhiteSpace(paymentHandler.ImagePath) == false))
             {
-                using (Html.BeginForm(paymentHandler.ActionName, "Payment", FormMethod.Post, new {returnUrl = ViewBag.ReturnUrl}))
+                using (Html.BeginForm(paymentHandler.ActionName, "Payment", new {returnUrl = ViewBag.ReturnUrl}, FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     @Html.Hidden(Html.NameFor(m => m.BillingInformation).ToHtmlString(), (string) ViewBag.BillingInformationWithoutHTMLTags)
