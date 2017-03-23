@@ -616,6 +616,52 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
+        /// Tests that PayWithPaypal calls UrlReplace on the utilities which support the infrastructure with the url on which to return to when the payment process has finished.
+        /// </summary>
+        [Test]
+        public void TestThatPayWithPaypalCallsUrlReplaceOnUtilitiesWithReturnUrl()
+        {
+            PayableModel payableModel = Fixture.Build<PayableModel>()
+                .With(m => m.BillingInformation, Fixture.Create<string>())
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentReceipt, null)
+                .Create();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.BillingInformation, Is.Not.Null);
+            Assert.That(payableModel.BillingInformation, Is.Not.Empty);
+            Assert.That(payableModel.Price, Is.GreaterThan(0M));
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(payableModel.IsFreeOfCost, Is.False);
+            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
+            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
+            Assert.That(payableModel.PaymentHandlers, Is.Null);
+            Assert.That(payableModel.PaymentHandlers, Is.Not.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentReceipt, Is.Null);
+            Assert.That(payableModel.PaymentReceipt, Is.Not.Empty);
+
+            string returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            string payableModelAsBase64 = Fixture.Create<string>();
+            Assert.That(payableModelAsBase64, Is.Not.Null);
+            Assert.That(payableModelAsBase64, Is.Not.Empty);
+
+            PaymentController paymentController = CreatePaymentController(toBase64: payableModelAsBase64);
+            Assert.That(paymentController, Is.Not.Null);
+
+            paymentController.PayWithPaypal(payableModel, returnUrl);
+
+            _utilitiesMock.AssertWasCalled(m => m.UrlReplace(Arg<string>.Is.Equal(returnUrl), Arg<string>.Is.Equal("[PaymentModelAsBase64]"), Arg<string>.Is.Equal(payableModelAsBase64)), opt => opt.Repeat.Once());
+        }
+
+        /// <summary>
         /// Tests that PayWithPaypal returns a RedirectResult to the return url.
         /// </summary>
         [Test]
@@ -646,11 +692,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            string payableModelAsBase64 = Fixture.Create<string>();
-            Assert.That(payableModelAsBase64, Is.Not.Null);
-            Assert.That(payableModelAsBase64, Is.Not.Empty);
-
-            PaymentController paymentController = CreatePaymentController(toBase64: payableModelAsBase64);
+            PaymentController paymentController = CreatePaymentController(urlReplace: returnUrl);
             Assert.That(paymentController, Is.Not.Null);
 
             ActionResult result = paymentController.PayWithPaypal(payableModel, returnUrl);
@@ -665,64 +707,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that PayWithPaypal returns a RedirectResult to the return url with replaced value for the PaymentModelAsBase64 tag.
-        /// </summary>
-        [Test]
-        public void TestThatPayWithPaypalReturnsRedirectResultToReturnUrlWithReplacedValueForPaymentModelAsBase64Tag()
-        {
-            PayableModel payableModel = Fixture.Build<PayableModel>()
-                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
-                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
-                .With(m => m.PaymentHandlers, null)
-                .With(m => m.PaymentStatus, PaymentStatus.Paid)
-                .With(m => m.PaymentReceipt, Fixture.Create<string>())
-                .Create();
-            Assert.That(payableModel, Is.Not.Null);
-            Assert.That(payableModel.Price, Is.GreaterThan(0M));
-            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Null);
-            Assert.That(payableModel.PriceCultureInfoName, Is.Not.Empty);
-            Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
-            Assert.That(payableModel.IsFreeOfCost, Is.False);
-            Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
-            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
-            Assert.That(payableModel.PaymentHandlers, Is.Null);
-            Assert.That(payableModel.PaymentHandlers, Is.Not.EqualTo(PaymentStatus.Unpaid));
-            Assert.That(payableModel.PaymentReceipt, Is.Not.Null);
-            Assert.That(payableModel.PaymentReceipt, Is.Not.Empty);
-
-            string returnUrl = $"{Fixture.Create<string>()}?{Fixture.Create<string>()}=[PaymentModelAsBase64]?{Fixture.Create<string>()}={Fixture.Create<string>()}";
-            Assert.That(returnUrl, Is.Not.Null);
-            Assert.That(returnUrl, Is.Not.Empty);
-            Assert.That(returnUrl.Contains("[PaymentModelAsBase64]"), Is.True);
-
-            string payableModelAsBase64 = Fixture.Create<string>();
-            Assert.That(payableModelAsBase64, Is.Not.Null);
-            Assert.That(payableModelAsBase64, Is.Not.Empty);
-
-            PaymentController paymentController = CreatePaymentController(toBase64: payableModelAsBase64);
-            Assert.That(paymentController, Is.Not.Null);
-
-            ActionResult result = paymentController.PayWithPaypal(payableModel, returnUrl);
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result, Is.TypeOf<RedirectResult>());
-
-            RedirectResult redirectResult = (RedirectResult)result;
-            Assert.That(redirectResult, Is.Not.Null);
-            Assert.That(redirectResult.Url, Is.Not.Null);
-            Assert.That(redirectResult.Url, Is.Not.Empty);
-            Assert.That(redirectResult.Url, Is.EqualTo(returnUrl.Replace("[PaymentModelAsBase64]", payableModelAsBase64)));
-        }
-
-        /// <summary>
         /// Creates a controller which can handle payments for unit testing.
         /// </summary>
         /// <param name="paymentHandlerModelCollection">Sets the collection of models for the data providers who handles payments.</param>
         /// <param name="toModel">Sets the model which should be returned for a given base64 encoded model.</param>
         /// <param name="billingInformationWithoutHtmlTags">Sets the billing information where all the HTML tags has been removed.</param>
         /// <param name="toBase64">Sets the base64 encoded value which sould be returned for a given model.</param>
+        /// <param name="urlReplace">Sets the value which sould be returned for all replacements on url strings.</param>
         /// <returns>Controller which can handle payments for unit testing.</returns>
-        private PaymentController CreatePaymentController(IEnumerable<PaymentHandlerModel> paymentHandlerModelCollection = null, object toModel = null, string billingInformationWithoutHtmlTags = null, string toBase64 = null)
+        private PaymentController CreatePaymentController(IEnumerable<PaymentHandlerModel> paymentHandlerModelCollection = null, object toModel = null, string billingInformationWithoutHtmlTags = null, string toBase64 = null, string urlReplace = null)
         {
             _householdDataRepositoryMock.Stub(m => m.GetPaymentHandlersAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => paymentHandlerModelCollection ?? Fixture.CreateMany<PaymentHandlerModel>(Random.Next(5, 10)).ToList()))
@@ -737,6 +730,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             _utilitiesMock.Stub(m => m.StripHtml(Arg<string>.Is.Anything))
                 .Return(billingInformationWithoutHtmlTags ?? Fixture.Create<string>())
+                .Repeat.Any();
+            _utilitiesMock.Stub(m => m.UrlReplace(Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything))
+                .Return(urlReplace ?? Fixture.Create<string>())
                 .Repeat.Any();
 
             var paymentController = new PaymentController(_householdDataRepositoryMock, _modelHelperMock, _utilitiesMock);

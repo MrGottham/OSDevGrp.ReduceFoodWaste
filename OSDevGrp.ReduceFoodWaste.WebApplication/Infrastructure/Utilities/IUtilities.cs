@@ -9,32 +9,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
     public interface IUtilities
     {
         /// <summary>
-        /// Converts a virtual path to an application absolute path.
-        /// </summary>
-        /// <param name="virutalPath">The virtual path to convert to an application-relative path.</param>
-        /// <returns>The absolute path representation of the specified virtual path.</returns>
-        string ToAbsolutePath(string virutalPath);
-
-        /// <summary>
-        /// Converts a string to an HTML-encoded string.
-        /// </summary>
-        /// <param name="value">The string to encode.</param>
-        /// <returns>An encoded string.</returns>
-        string HtmlEncode(string value);
-
-        /// <summary>
-        /// Converts a string that has been HTML-encoded for HTTP transmission into a decoded string.
-        /// </summary>
-        /// <param name="value">The string to decode.</param>
-        /// <returns>The string to decode.</returns>
-        string HtmlDecode(string value);
-
-        /// <summary>
         /// Removes HTML tags from a given string.
         /// </summary>
         /// <param name="value">The string to which to remove HTML tags.</param>
-        /// <returns>Teh string without HTML tags.</returns>
+        /// <returns>The string without HTML tags.</returns>
         string StripHtml(string value);
+
+        /// <summary>
+        /// Replaces a given value with another value in a given url encoded string.
+        /// </summary>
+        /// <param name="url">The url encoded string where the source value should be replaced with the target value.</param>
+        /// <param name="sourceValue">The source value which should be replaced.</param>
+        /// <param name="targetValue">The target value which the source value should be replaced with.</param>
+        /// <returns>Url encoded string where the source value has been replaced with the target value.</returns>
+        string UrlReplace(string url, string sourceValue, string targetValue);
 
         /// <summary>
         /// Converts a given action to an URL.
