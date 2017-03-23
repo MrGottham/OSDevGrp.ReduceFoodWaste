@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Web.Mvc;
+using System.Web;
+using System.Web.Http.Routing;
 using System.Web.Routing;
+using UrlHelper = System.Web.Mvc.UrlHelper;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
 {
@@ -46,7 +49,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
             {
                 throw new ArgumentNullException(nameof(targetValue));
             }
-            return url;
+            string decodedUrl = HttpUtility.UrlDecode(url, Encoding.UTF8);
+
+            string encodedUrl = HttpUtility.UrlEncode(decodedUrl, Encoding.UTF8);
+            return encodedUrl;
         }
 
         /// <summary>
