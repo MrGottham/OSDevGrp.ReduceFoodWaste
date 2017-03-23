@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using NUnit.Framework;
@@ -77,18 +78,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(membershipModel.PaymentHandlers, Is.Not.Empty);
 
             string expectedValue;
-            using (MemoryStream memoryStream = new MemoryStream())
+            using (MemoryStream serializeStream = new MemoryStream())
             {
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(memoryStream, membershipModel);
+                using (GZipStream gZipStream = new GZipStream(serializeStream, CompressionMode.Compress))
+                {
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    binaryFormatter.Serialize(gZipStream, membershipModel);
+                }
 
-                memoryStream.Seek(0, SeekOrigin.Begin);
-
-                expectedValue = Convert.ToBase64String(memoryStream.ToArray());
+                expectedValue = Convert.ToBase64String(serializeStream.ToArray());
                 Assert.That(expectedValue, Is.Not.Null);
                 Assert.That(expectedValue, Is.Not.Empty);
 
-                memoryStream.Close();
+                serializeStream.Close();
             }
 
             IModelHelper modelHelper = CreateModelHelper();

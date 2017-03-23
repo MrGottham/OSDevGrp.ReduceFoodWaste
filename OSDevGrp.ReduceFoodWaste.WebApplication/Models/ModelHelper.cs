@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
@@ -21,13 +22,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
                 throw new ArgumentNullException(nameof(model));
             }
 
-            using (MemoryStream memoryStream = new MemoryStream())
+            using (MemoryStream serializeStream = new MemoryStream())
             {
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(memoryStream, model);
-
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                return Convert.ToBase64String(memoryStream.ToArray());
+                using (GZipStream gZipStream = new GZipStream(serializeStream, CompressionMode.Compress))
+                {
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    binaryFormatter.Serialize(gZipStream, model);
+                }
+                return Convert.ToBase64String(serializeStream.ToArray());
             }
         }
 
@@ -43,10 +45,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
                 throw new ArgumentNullException(nameof(encodedModel));
             }
 
-            using (MemoryStream memoryStream = new MemoryStream(Convert.FromBase64String(encodedModel)))
+            using (MemoryStream decompressStream = new MemoryStream(Convert.FromBase64String(encodedModel)))
             {
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                return binaryFormatter.Deserialize(memoryStream);
+                using (GZipStream gZipStream = new GZipStream(decompressStream, CompressionMode.Decompress))
+                {
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+                    return binaryFormatter.Deserialize(gZipStream);
+                }
             }
         }
     }

@@ -136,7 +136,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             string payment = _modelHelper.ToBase64(payableModel);
 
-            return Redirect(returnUrl);
+            string redirectTo = returnUrl.Replace("[PaymentModelAsBase64]", payment);
+
+            return Redirect(redirectTo);
         }
 
         #endregion
