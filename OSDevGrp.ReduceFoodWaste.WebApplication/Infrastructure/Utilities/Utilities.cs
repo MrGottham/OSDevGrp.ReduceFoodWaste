@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Web.Http.Routing;
+using System.Web.Mvc;
 using System.Web.Routing;
-using UrlHelper = System.Web.Mvc.UrlHelper;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
 {
@@ -49,10 +50,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities
             {
                 throw new ArgumentNullException(nameof(targetValue));
             }
-            string decodedUrl = HttpUtility.UrlDecode(url, Encoding.UTF8);
 
-            string encodedUrl = HttpUtility.UrlEncode(decodedUrl, Encoding.UTF8);
-            return encodedUrl;
+            int pos = url.IndexOf("?", StringComparison.Ordinal);
+            if (pos < 0)
+            {
+                return url;
+            }
+
+            string newUrl = url.Substring(0, pos + 1);
+
+            NameValueCollection nameValueCollection = HttpUtility.ParseQueryString(url.Substring(pos));
+            foreach (string key in nameValueCollection.AllKeys)
+            {
+                if (string.Compare(key, nameValueCollection.AllKeys.First(), StringComparison.Ordinal) != 0)
+                {
+                    newUrl = newUrl + '&';
+                }
+                newUrl = newUrl + $"{key}={HttpUtility.UrlEncode(nameValueCollection[key].Replace(sourceValue, targetValue), Encoding.UTF8)}";
+            }
+
+            return newUrl;
         }
 
         /// <summary>
