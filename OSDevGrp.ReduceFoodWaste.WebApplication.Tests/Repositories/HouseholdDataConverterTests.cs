@@ -798,6 +798,47 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that Convert converts a MembershipModel to a HouseholdMemberUpgradeMembershipCommand.
+        /// </summary>
+        [Test]
+        public void TestThatConvertConvertsXToHouseholdMemberUpgradeMembershipCommand()
+        {
+            var householdDataConverter = CreateHouseholdDataConverter();
+            Assert.That(householdDataConverter, Is.Not.Null);
+
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Name, Fixture.Create<string>())
+                .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
+                .With(m => m.PaymentTime, DateTime.Now)
+                .With(m => m.PaymentReference, Fixture.Create<string>())
+                .With(m => m.PaymentReceipt, Fixture.Create<string>())
+                .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Empty);
+            Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Not.Null);
+            Assert.That(membershipModel.PaymentTime, Is.Not.Null);
+            Assert.That(membershipModel.PaymentReference, Is.Not.Null);
+            Assert.That(membershipModel.PaymentReference, Is.Not.Empty);
+            Assert.That(membershipModel.PaymentReceipt, Is.Not.Null);
+            Assert.That(membershipModel.PaymentReceipt, Is.Not.Empty);
+
+            var result = householdDataConverter.Convert<MembershipModel, HouseholdMemberUpgradeMembershipCommand>(membershipModel);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Membership, Is.Not.Null);
+            Assert.That(result.Membership, Is.Not.Empty);
+            Assert.That(result.Membership, Is.EqualTo(membershipModel.Name));
+            Assert.That(result.DataProviderIdentifier, Is.EqualTo(membershipModel.PaymentHandlerIdentifier));
+            Assert.That(result.PaymentTime, Is.EqualTo(membershipModel.PaymentTime));
+            Assert.That(result.PaymentReference, Is.Not.Null);
+            Assert.That(result.PaymentReference, Is.Not.Empty);
+            Assert.That(result.PaymentReference, Is.EqualTo(membershipModel.PaymentReference));
+            Assert.That(result.PaymentReceipt, Is.Not.Null);
+            Assert.That(result.PaymentReceipt, Is.Not.Empty);
+            Assert.That(result.PaymentReceipt, Is.EqualTo(membershipModel.PaymentReceipt));
+        }
+
+        /// <summary>
         /// Tests that Convert converts a BooleanResult to a Boolean.
         /// </summary>
         [Test]

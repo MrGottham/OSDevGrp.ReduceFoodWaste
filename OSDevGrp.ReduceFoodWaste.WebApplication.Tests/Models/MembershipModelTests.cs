@@ -33,6 +33,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(membershipModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(membershipModel.PaymentHandlers, Is.Null);
             Assert.That(membershipModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(membershipModel.PaymentTime, Is.Null);
+            Assert.That(membershipModel.PaymentTime.HasValue, Is.False);
+            Assert.That(membershipModel.PaymentReference, Is.Null);
             Assert.That(membershipModel.PaymentReceipt, Is.Null);
             Assert.That(membershipModel.CanRenew, Is.False);
             Assert.That(membershipModel.CanUpgrade, Is.False);

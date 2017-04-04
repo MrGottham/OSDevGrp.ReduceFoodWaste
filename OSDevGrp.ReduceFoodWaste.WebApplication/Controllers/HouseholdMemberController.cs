@@ -520,6 +520,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             try
             {
                 MembershipModel membershipModel = (MembershipModel) _modelHelper.ToModel(membershipModelAsBase64);
+                PayableModel paymentModel = (PayableModel) _modelHelper.ToModel(paymentModelAsBase64);
 
                 // TODO: Upgrade or renew the paid membership.
 

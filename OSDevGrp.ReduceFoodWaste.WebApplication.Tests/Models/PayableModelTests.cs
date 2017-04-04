@@ -33,6 +33,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.False);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
             Assert.That(payableModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentTime, Is.Null);
+            Assert.That(payableModel.PaymentTime.HasValue, Is.False);
+            Assert.That(payableModel.PaymentReference, Is.Null);
             Assert.That(payableModel.PaymentReceipt, Is.Null);
         }
 
@@ -312,6 +315,82 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
 
             payableModel.PaymentStatus = PaymentStatus.Unpaid;
             Assert.That(payableModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentTime sets a new value.
+        /// </summary>
+        [Test]
+        public void TestThatPaymentTimeSetterSetsValue()
+        {
+            var payableModel = new PayableModel();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentTime, Is.Null);
+            Assert.That(payableModel.PaymentTime.HasValue, Is.False);
+
+            var newValue = Fixture.Create<DateTime>();
+
+            payableModel.PaymentTime = newValue;
+            Assert.That(payableModel.PaymentTime, Is.Not.Null);
+            Assert.That(payableModel.PaymentTime.HasValue, Is.True);
+            Assert.That(payableModel.PaymentTime.Value, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentTime sets the value to NULL.
+        /// </summary>
+        [Test]
+        public void TestThatPaymentTimeSetterSetsValueToNull()
+        {
+            var payableModel = new PayableModel
+            {
+                PaymentTime = Fixture.Create<DateTime>()
+            };
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentTime, Is.Not.Null);
+            Assert.That(payableModel.PaymentTime.HasValue, Is.True);
+
+            payableModel.PaymentTime = null;
+            Assert.That(payableModel.PaymentTime, Is.Null);
+            Assert.That(payableModel.PaymentTime.HasValue, Is.False);
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentReference sets a new value.
+        /// </summary>
+        [Test]
+        public void TestThatPaymentReferenceSetterSetsValue()
+        {
+            var payableModel = new PayableModel();
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentReference, Is.Null);
+
+            var newValue = Fixture.Create<string>();
+            Assert.That(newValue, Is.Not.Null);
+            Assert.That(newValue, Is.Not.Empty);
+
+            payableModel.PaymentReference = newValue;
+            Assert.That(payableModel.PaymentReference, Is.Not.Null);
+            Assert.That(payableModel.PaymentReference, Is.Not.Empty);
+            Assert.That(payableModel.PaymentReference, Is.EqualTo(newValue));
+        }
+
+        /// <summary>
+        /// Tests that the setter for PaymentReference sets the value to NULL.
+        /// </summary>
+        [Test]
+        public void TestThatPaymentReferenceSetterSetsValueToNull()
+        {
+            var payableModel = new PayableModel
+            {
+                PaymentReference = Fixture.Create<string>()
+            };
+            Assert.That(payableModel, Is.Not.Null);
+            Assert.That(payableModel.PaymentReference, Is.Not.Null);
+            Assert.That(payableModel.PaymentReference, Is.Not.Empty);
+
+            payableModel.PaymentReference = null;
+            Assert.That(payableModel.PaymentReference, Is.Null);
         }
 
         /// <summary>

@@ -154,6 +154,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                         return new HouseholdMemberAcceptPrivacyPolicyCommand();
                     });
 
+                configuration.CreateMap<MembershipModel, HouseholdMemberUpgradeMembershipCommand>()
+                    .ForMember(dest => dest.Membership, opt => opt.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.DataProviderIdentifier, opt =>
+                    {
+                        opt.Condition(src => src.PaymentHandlerIdentifier.HasValue);
+                        opt.MapFrom(src => src.PaymentHandlerIdentifier.Value);
+                    })
+                    .ForMember(dest => dest.PaymentTime, opt =>
+                    {
+                        opt.Condition(src => src.PaymentTime.HasValue);
+                        opt.MapFrom(src => src.PaymentTime.Value);
+                    })
+                    .ForMember(dest => dest.PaymentReference, opt => opt.MapFrom(src => src.PaymentReference))
+                    .ForMember(dest => dest.PaymentReceipt, opt => opt.MapFrom(src => src.PaymentReceipt))
+                    .ForMember(dest => dest.ExtensionData, opt => opt.Ignore());
+
                 configuration.CreateMap<BooleanResult, bool>()
                     .ConvertUsing(src => src.Result);
 

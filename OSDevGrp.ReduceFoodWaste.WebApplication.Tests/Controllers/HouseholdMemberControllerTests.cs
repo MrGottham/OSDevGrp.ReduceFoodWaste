@@ -4310,16 +4310,55 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentTime, null)
+                .With(m => m.PaymentReference, null)
                 .With(m => m.PaymentReceipt, null)
                 .With(m => m.CanRenew, Fixture.Create<bool>())
                 .With(m => m.CanUpgrade, Fixture.Create<bool>())
                 .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Empty);
+            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(membershipModel.PaymentHandlers, Is.Null);
+            Assert.That(membershipModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(membershipModel.PaymentTime, Is.Null);
+            Assert.That(membershipModel.PaymentReference, Is.Null);
+            Assert.That(membershipModel.PaymentReceipt, Is.Null);
 
             var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
-            var paymentModelAsBase64 = Fixture.Create<string>();
+            var paymentModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Paid)
+                .With(m => m.PaymentTime, DateTime.Now)
+                .With(m => m.PaymentReference, Fixture.Create<string>())
+                .With(m => m.PaymentReceipt, Fixture.Create<string>())
+                .Create();
+            Assert.That(paymentModel, Is.Not.Null);
+            Assert.That(paymentModel.Price, Is.GreaterThan(0M));
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(paymentModel.PaymentHandlerIdentifier, Is.Not.Null);
+            Assert.That(paymentModel.PaymentHandlers, Is.Null);
+            Assert.That(paymentModel.PaymentStatus, Is.EqualTo(PaymentStatus.Paid));
+            Assert.That(paymentModel.PaymentTime, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReference, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReference, Is.Not.Empty);
+            Assert.That(paymentModel.PaymentReceipt, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReceipt, Is.Not.Empty);
+
+            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
             Assert.That(paymentModelAsBase64, Is.Not.Null);
             Assert.That(paymentModelAsBase64, Is.Not.Empty);
 
@@ -4327,12 +4366,89 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel);
+            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
 
             _modelHelperMock.AssertWasCalled(m => m.ToModel(Arg<string>.Is.Equal(membershipModelAsBase64)));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembershipCallback calls ToModel with the base64 encoded value for the model of the payment on the model helper.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeOrRenewMembershipCallbackCallsToModelWithPaymentModelAsBase64OnModelHelper()
+        {
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Name, Fixture.Create<string>())
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, null)
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentTime, null)
+                .With(m => m.PaymentReference, null)
+                .With(m => m.PaymentReceipt, null)
+                .With(m => m.CanRenew, Fixture.Create<bool>())
+                .With(m => m.CanUpgrade, Fixture.Create<bool>())
+                .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Empty);
+            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(membershipModel.PaymentHandlers, Is.Null);
+            Assert.That(membershipModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(membershipModel.PaymentTime, Is.Null);
+            Assert.That(membershipModel.PaymentReference, Is.Null);
+            Assert.That(membershipModel.PaymentReceipt, Is.Null);
+
+            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
+            Assert.That(membershipModelAsBase64, Is.Not.Null);
+            Assert.That(membershipModelAsBase64, Is.Not.Empty);
+
+            var paymentModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Paid)
+                .With(m => m.PaymentTime, DateTime.Now)
+                .With(m => m.PaymentReference, Fixture.Create<string>())
+                .With(m => m.PaymentReceipt, Fixture.Create<string>())
+                .Create();
+            Assert.That(paymentModel, Is.Not.Null);
+            Assert.That(paymentModel.Price, Is.GreaterThan(0M));
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(paymentModel.PaymentHandlerIdentifier, Is.Not.Null);
+            Assert.That(paymentModel.PaymentHandlers, Is.Null);
+            Assert.That(paymentModel.PaymentStatus, Is.EqualTo(PaymentStatus.Paid));
+            Assert.That(paymentModel.PaymentTime, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReference, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReference, Is.Not.Empty);
+            Assert.That(paymentModel.PaymentReceipt, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReceipt, Is.Not.Empty);
+
+            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
+            Assert.That(paymentModelAsBase64, Is.Not.Null);
+            Assert.That(paymentModelAsBase64, Is.Not.Empty);
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
+
+            _modelHelperMock.AssertWasCalled(m => m.ToModel(Arg<string>.Is.Equal(paymentModelAsBase64)));
         }
 
         /// <summary>
@@ -4348,16 +4464,55 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.PaymentHandlerIdentifier, null)
                 .With(m => m.PaymentHandlers, null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentTime, null)
+                .With(m => m.PaymentReference, null)
                 .With(m => m.PaymentReceipt, null)
                 .With(m => m.CanRenew, Fixture.Create<bool>())
                 .With(m => m.CanUpgrade, Fixture.Create<bool>())
                 .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Empty);
+            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(membershipModel.PaymentHandlers, Is.Null);
+            Assert.That(membershipModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(membershipModel.PaymentTime, Is.Null);
+            Assert.That(membershipModel.PaymentReference, Is.Null);
+            Assert.That(membershipModel.PaymentReceipt, Is.Null);
 
             var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
-            var paymentModelAsBase64 = Fixture.Create<string>();
+            var paymentModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Paid)
+                .With(m => m.PaymentTime, DateTime.Now)
+                .With(m => m.PaymentReference, Fixture.Create<string>())
+                .With(m => m.PaymentReceipt, Fixture.Create<string>())
+                .Create();
+            Assert.That(paymentModel, Is.Not.Null);
+            Assert.That(paymentModel.Price, Is.GreaterThan(0M));
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(paymentModel.PaymentHandlerIdentifier, Is.Not.Null);
+            Assert.That(paymentModel.PaymentHandlers, Is.Null);
+            Assert.That(paymentModel.PaymentStatus, Is.EqualTo(PaymentStatus.Paid));
+            Assert.That(paymentModel.PaymentTime, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReference, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReference, Is.Not.Empty);
+            Assert.That(paymentModel.PaymentReceipt, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReceipt, Is.Not.Empty);
+
+            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
             Assert.That(paymentModelAsBase64, Is.Not.Null);
             Assert.That(paymentModelAsBase64, Is.Not.Empty);
 
@@ -4365,7 +4520,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel);
+            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
             var result = householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);

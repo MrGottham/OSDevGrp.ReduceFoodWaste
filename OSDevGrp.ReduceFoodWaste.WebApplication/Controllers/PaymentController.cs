@@ -125,8 +125,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
 
             payableModel.PaymentStatus = PaymentStatus.Paid;
+            payableModel.PaymentTime = DateTime.Now;
+            payableModel.PaymentReference = Guid.NewGuid().ToString("N").ToUpper();
 
-            string payedAtText = string.Format(Texts.PaidAt, DateTime.Today.ToLongDateString());
+            string payedAtText = string.Format(Texts.PaidAt, payableModel.PaymentTime.Value.ToLongDateString());
             string paymentReceiptText = $"{payableModel.BillingInformation}{Environment.NewLine}{payedAtText}";
             using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(paymentReceiptText)))
             {

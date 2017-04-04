@@ -86,6 +86,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Models
         }
 
         /// <summary>
+        /// Gets or sets the time for the payment on the payable model.
+        /// </summary>
+        public virtual DateTime? PaymentTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the payment reference for the payable model.
+        /// </summary>
+        public virtual string PaymentReference { get; set; }
+
+        /// <summary>
         /// Gets or sets the base64 encoded payment receipt.
         /// </summary>
         public virtual string PaymentReceipt { get; set; }

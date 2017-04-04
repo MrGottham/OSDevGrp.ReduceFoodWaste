@@ -569,6 +569,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
                 .With(m => m.PaymentHandlers, null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentTime, null)
+                .With(m => m.PaymentReference, null)
                 .With(m => m.PaymentReceipt, null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
@@ -583,6 +585,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
             Assert.That(payableModel.PaymentHandlers, Is.Not.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(payableModel.PaymentTime, Is.Null);
+            Assert.That(payableModel.PaymentTime.HasValue, Is.False);
+            Assert.That(payableModel.PaymentReference, Is.Null);
+            Assert.That(payableModel.PaymentReference, Is.Not.Empty);
             Assert.That(payableModel.PaymentReceipt, Is.Null);
             Assert.That(payableModel.PaymentReceipt, Is.Not.Empty);
 
@@ -610,6 +616,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 model != null &&
                 model == payableModel &&
                 model.PaymentStatus == PaymentStatus.Paid &&
+                model.PaymentTime != null &&
+                model.PaymentTime >= DateTime.Now.AddSeconds(-3) && model.PaymentTime <= DateTime.Now &&
+                model.PaymentReference != null &&
+                model.PaymentReference != string.Empty &&
                 model.PaymentReceipt != null &&
                 model.PaymentReceipt != string.Empty &&
                 string.Compare(model.PaymentReceipt, expectedPaymentReceipt, StringComparison.Ordinal) == 0)));
