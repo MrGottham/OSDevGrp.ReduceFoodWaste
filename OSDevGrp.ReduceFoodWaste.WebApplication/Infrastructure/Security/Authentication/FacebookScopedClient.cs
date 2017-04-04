@@ -32,11 +32,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
         {
             if (string.IsNullOrEmpty(appId))
             {
-                throw new ArgumentNullException("appId");
+                throw new ArgumentNullException(nameof(appId));
             }
             if (string.IsNullOrEmpty(appSecret))
             {
-                throw new ArgumentNullException("appSecret");
+                throw new ArgumentNullException(nameof(appSecret));
             }
             _appId = appId;
             _appSecret = appSecret;
@@ -50,7 +50,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
         {
             if (returnUrl == null)
             {
-                throw new ArgumentNullException("returnUrl");
+                throw new ArgumentNullException(nameof(returnUrl));
             }
 
             var queryData = HttpUtility.ParseQueryString(string.Empty);
@@ -59,17 +59,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
             queryData.Add("scope", "public_profile,email");
             queryData.Add("display", "page");
 
-            return new Uri(string.Format("{0}?{1}", AuthorizationEndpoint, queryData));
+            return new Uri($"{AuthorizationEndpoint}?{queryData}");
         }
 
         protected override IDictionary<string, string> GetUserData(string accessToken)
         {
             if (string.IsNullOrEmpty(accessToken))
             {
-                throw new ArgumentNullException("accessToken");
+                throw new ArgumentNullException(nameof(accessToken));
             }
 
-            var request = WebRequest.Create(string.Format("https://graph.facebook.com/me?access_token={0}&fields=id,name,first_name,last_name,link,gender,email", Uri.EscapeDataString(accessToken)));
+            var request = WebRequest.Create($"https://graph.facebook.com/me?access_token={Uri.EscapeDataString(accessToken)}&fields=id,name,first_name,last_name,link,gender,email");
             using (var response = request.GetResponse())
             {
                 using (var responseStream = response.GetResponseStream())
@@ -86,11 +86,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
         {
             if (returnUrl == null)
             {
-                throw new ArgumentNullException("returnUrl");
+                throw new ArgumentNullException(nameof(returnUrl));
             }
             if (string.IsNullOrEmpty(authorizationCode))
             {
-                throw new ArgumentNullException("authorizationCode");
+                throw new ArgumentNullException(nameof(authorizationCode));
             }
 
             var requestData = HttpUtility.ParseQueryString(string.Empty);
@@ -114,7 +114,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
             {
                 using (var streamReader = new StreamReader(webResponse.GetResponseStream()))
                 {
-                    var nameValueCollection = HttpUtility.ParseQueryString(streamReader.ReadToEnd());
+                    var nameValueCollection = JsonConvert.DeserializeObject<Dictionary<string, string>>(streamReader.ReadToEnd());
                     return nameValueCollection["access_token"];
                 }
             }
