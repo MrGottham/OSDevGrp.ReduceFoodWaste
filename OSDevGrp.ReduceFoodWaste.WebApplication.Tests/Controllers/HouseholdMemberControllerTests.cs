@@ -4310,7 +4310,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.CanUpgrade, Fixture.Create<bool>())
                 .Create();
 
-            var membershipModelAsBase64 = Fixture.Create<string>();
+            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
@@ -4322,7 +4322,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(toModel: membershipModel);
+            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
@@ -4344,7 +4344,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.CanUpgrade, Fixture.Create<bool>())
                 .Create();
 
-            var membershipModelAsBase64 = Fixture.Create<string>();
+            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
@@ -4356,7 +4356,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(toModel: membershipModel);
+            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
             var result = householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
@@ -4387,11 +4387,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <param name="membershipModelCollection">Sets the collection of membership models.</param>
         /// <param name="toBase64ForMembershipModel">Sets the encoded base64 value for a given membership model.</param>
         /// <param name="toBase64ForMembershipModelCallback">Sets the callback method called when encoding the base64 value for a given membership model.</param>
-        /// <param name="toModel">Sets the model which should be returned for a given encoded base64 value.</param>
+        /// <param name="toMembershipModel">Sets the model for the membership which should be returned for a given encoded base64 value.</param>
         /// <param name="actionToUrl">Set the url which should be returned when an action should be converted to an url.</param>
         /// <param name="actionToUrlCallback">Sets the callback method called when converting an action to an url.</param>
         /// <returns>Controller for a household member for unit testing.</returns>
-        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null, IEnumerable<MembershipModel> membershipModelCollection = null, string toBase64ForMembershipModel = null, Action<MembershipModel> toBase64ForMembershipModelCallback = null, object toModel = null, string actionToUrl = null, Action<RouteValueDictionary> actionToUrlCallback = null)
+        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null, IEnumerable<MembershipModel> membershipModelCollection = null, string toBase64ForMembershipModel = null, Action<MembershipModel> toBase64ForMembershipModelCallback = null, object toMembershipModel = null, string actionToUrl = null, Action<RouteValueDictionary> actionToUrlCallback = null)
         {
             Func<HouseholdModel> householdCreator = () =>
             {
@@ -4474,9 +4474,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 })
                 .Return(toBase64ForMembershipModel ?? Fixture.Create<string>())
                 .Repeat.Any();
-            _modelHelperMock.Stub(m => m.ToModel(Arg<string>.Is.Anything))
-                .Return(toModel)
-                .Repeat.Any();
+            if (toMembershipModel != null)
+            {
+                _modelHelperMock.Stub(m => m.ToModel(Arg<string>.Is.Equal(Convert.ToString(toMembershipModel.GetHashCode()))))
+                    .Return(toMembershipModel)
+                    .Repeat.Any();
+            }
 
             _utilitiesMock.Stub(m => m.ActionToUrl(Arg<UrlHelper>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything))
                 .WhenCalled(e =>
