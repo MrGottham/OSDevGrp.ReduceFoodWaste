@@ -15,6 +15,7 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
@@ -4306,6 +4307,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, null)
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentReceipt, null)
                 .With(m => m.CanRenew, Fixture.Create<bool>())
                 .With(m => m.CanUpgrade, Fixture.Create<bool>())
                 .Create();
@@ -4340,6 +4345,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, null)
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentReceipt, null)
                 .With(m => m.CanRenew, Fixture.Create<bool>())
                 .With(m => m.CanUpgrade, Fixture.Create<bool>())
                 .Create();
@@ -4388,10 +4397,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <param name="toBase64ForMembershipModel">Sets the encoded base64 value for a given membership model.</param>
         /// <param name="toBase64ForMembershipModelCallback">Sets the callback method called when encoding the base64 value for a given membership model.</param>
         /// <param name="toMembershipModel">Sets the model for the membership which should be returned for a given encoded base64 value.</param>
+        /// <param name="toPaymentModel">Sets the model for the payment which should be returned for a given encoded base64 value.</param>
         /// <param name="actionToUrl">Set the url which should be returned when an action should be converted to an url.</param>
         /// <param name="actionToUrlCallback">Sets the callback method called when converting an action to an url.</param>
         /// <returns>Controller for a household member for unit testing.</returns>
-        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null, IEnumerable<MembershipModel> membershipModelCollection = null, string toBase64ForMembershipModel = null, Action<MembershipModel> toBase64ForMembershipModelCallback = null, object toMembershipModel = null, string actionToUrl = null, Action<RouteValueDictionary> actionToUrlCallback = null)
+        private HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null, IEnumerable<MembershipModel> membershipModelCollection = null, string toBase64ForMembershipModel = null, Action<MembershipModel> toBase64ForMembershipModelCallback = null, MembershipModel toMembershipModel = null, PayableModel toPaymentModel = null, string actionToUrl = null, Action<RouteValueDictionary> actionToUrlCallback = null)
         {
             Func<HouseholdModel> householdCreator = () =>
             {
@@ -4474,12 +4484,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 })
                 .Return(toBase64ForMembershipModel ?? Fixture.Create<string>())
                 .Repeat.Any();
-            if (toMembershipModel != null)
-            {
-                _modelHelperMock.Stub(m => m.ToModel(Arg<string>.Is.Equal(Convert.ToString(toMembershipModel.GetHashCode()))))
-                    .Return(toMembershipModel)
-                    .Repeat.Any();
-            }
+            _modelHelperMock.Stub(m => m.ToModel(Arg<string>.Is.Anything))
+                .WhenCalled(e =>
+                {
+                    string modelAsBase64 = (string) e.Arguments.ElementAt(0);
+                    if (toMembershipModel != null && string.Compare(modelAsBase64, Convert.ToString(toMembershipModel.GetHashCode()), StringComparison.Ordinal) == 0)
+                    {
+                        e.ReturnValue = toMembershipModel;
+                        return;
+                    }
+                    if (toPaymentModel != null && string.Compare(modelAsBase64, Convert.ToString(toPaymentModel.GetHashCode()), StringComparison.Ordinal) == 0)
+                    {
+                        e.ReturnValue = toPaymentModel;
+                        return;
+                    }
+                    e.ReturnValue = null;
+                })
+                .Return(null)
+                .Repeat.Any();
 
             _utilitiesMock.Stub(m => m.ActionToUrl(Arg<UrlHelper>.Is.Anything, Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<RouteValueDictionary>.Is.Anything))
                 .WhenCalled(e =>
