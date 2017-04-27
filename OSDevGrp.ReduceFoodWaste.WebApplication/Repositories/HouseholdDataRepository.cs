@@ -168,7 +168,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// <param name="identity">Identity for which to get the collection of household identifications.</param>
         /// <param name="cultureInfo">Culture informations which should be used for translation.</param>
         /// <returns>Collection of household identifications for the given identity.</returns>
-        public Task<IEnumerable<HouseholdIdentificationModel>> GetHouseholdIdentificationCollectionAsync(IIdentity identity, CultureInfo cultureInfo)
+        public Task<HouseholdIdentificationCollectionModel> GetHouseholdIdentificationCollectionAsync(IIdentity identity, CultureInfo cultureInfo)
         {
             if (identity == null)
             {
@@ -179,24 +179,24 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 throw new ArgumentNullException(nameof(cultureInfo));
             }
 
-            Func<HouseholdDataServiceChannel, IEnumerable<HouseholdIdentificationModel>> callbackFunc = channel =>
+            Func<HouseholdDataServiceChannel, HouseholdIdentificationCollectionModel> callbackFunc = channel =>
             {
-                var householdIdentificationCollection = GetHouseholdIdentificationCollection(identity);
-                if (householdIdentificationCollection != null)
+                HouseholdIdentificationCollectionModel householdIdentificationCollectionModel = GetHouseholdIdentificationCollection(identity);
+                if (householdIdentificationCollectionModel != null)
                 {
-                    return householdIdentificationCollection;
+                    return householdIdentificationCollectionModel;
                 }
 
                 var householdMember = GetHouseholdMember(channel, identity, cultureInfo);
                 if (householdMember.Households == null || householdMember.Households.Any() == false)
                 {
-                    return new List<HouseholdIdentificationModel>();
+                    return new HouseholdIdentificationCollectionModel(new List<HouseholdIdentificationModel>(), householdMember.HasReachedHouseholdLimit == false);
                 }
 
-                householdIdentificationCollection = householdMember.Households.Cast<HouseholdIdentificationModel>().ToList();
-                StoreHouseholdIdentificationCollection(identity, householdIdentificationCollection);
+                householdIdentificationCollectionModel = new HouseholdIdentificationCollectionModel(householdMember.Households.Cast<HouseholdIdentificationModel>().ToList(), householdMember.HasReachedHouseholdLimit == false);
+                StoreHouseholdIdentificationCollection(identity, householdIdentificationCollectionModel);
 
-                return householdIdentificationCollection;
+                return householdIdentificationCollectionModel;
             };
 
             return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
@@ -466,6 +466,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             {
                 HouseholdMemberUpgradeMembershipCommand command = _householdDataConverter.Convert<MembershipModel, HouseholdMemberUpgradeMembershipCommand>(membershipModel);
                 channel.HouseholdMemberUpgradeMembership(command);
+
+                ClearHouseholdIdentificationCollection(identity);
 
                 return membershipModel;
             };
@@ -903,7 +905,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         /// </summary>
         /// <param name="identity">Identity which for which to get the household identification collection from the cache..</param>
         /// <returns>Household identification collection for a given identity from the cache.</returns>
-        private IList<HouseholdIdentificationModel> GetHouseholdIdentificationCollection(IIdentity identity)
+        private HouseholdIdentificationCollectionModel GetHouseholdIdentificationCollection(IIdentity identity)
         {
             if (identity == null)
             {
@@ -911,27 +913,27 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
             }
 
             var householdIdentificationCollectionCacheName = GetHouseholdIdentificationCollectionCacheName(identity);
-            return _objectCache.Get(householdIdentificationCollectionCacheName) as IList<HouseholdIdentificationModel>;
+            return _objectCache.Get(householdIdentificationCollectionCacheName) as HouseholdIdentificationCollectionModel;
         }
 
         /// <summary>
         /// Store the household identification collection for a given identity in the cache.
         /// </summary>
         /// <param name="identity">Identity which for which to store the household identification collection in the cache.</param>
-        /// <param name="householdIdentificationCollection">The household identification collection to store in the cache.</param>
-        private void StoreHouseholdIdentificationCollection(IIdentity identity, IList<HouseholdIdentificationModel> householdIdentificationCollection)
+        /// <param name="householdIdentificationCollectionModel">The model for the household identification collection to store in the cache.</param>
+        private void StoreHouseholdIdentificationCollection(IIdentity identity, HouseholdIdentificationCollectionModel householdIdentificationCollectionModel)
         {
             if (identity == null)
             {
                 throw new ArgumentNullException(nameof(identity));
             }
-            if (householdIdentificationCollection == null)
+            if (householdIdentificationCollectionModel == null)
             {
-                throw new ArgumentNullException(nameof(householdIdentificationCollection));
+                throw new ArgumentNullException(nameof(householdIdentificationCollectionModel));
             }
 
             var householdIdentificationCollectionCacheName = GetHouseholdIdentificationCollectionCacheName(identity);
-            _objectCache.Set(householdIdentificationCollectionCacheName, householdIdentificationCollection, DateTimeOffset.Now.AddMinutes(15));
+            _objectCache.Set(householdIdentificationCollectionCacheName, householdIdentificationCollectionModel, DateTimeOffset.Now.AddMinutes(15));
         }
 
         /// <summary>

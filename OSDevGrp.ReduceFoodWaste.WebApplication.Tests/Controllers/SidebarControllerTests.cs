@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading;
@@ -59,13 +58,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// Tests that HouseholdIdentificationCollection returns a PartialViewResult with a model for the household identification collection.
         /// </summary>
         [Test]
-        public void TestThatHouseholdIdentificationCollectionReturnsPartialViewResultWithHouseholdIdentificationCollection()
+        public void TestThatHouseholdIdentificationCollectionReturnsPartialViewResultWithHouseholdIdentificationCollectionModel()
         {
-            var householdIdentificationCollection = Fixture.CreateMany<HouseholdIdentificationModel>(Random.Next(3, 10)).ToList();
-            Assert.That(householdIdentificationCollection, Is.Not.Null);
-            Assert.That(householdIdentificationCollection, Is.Not.Empty);
+            HouseholdIdentificationCollectionModel householdIdentificationCollectionModel = new HouseholdIdentificationCollectionModel(Fixture.CreateMany<HouseholdIdentificationModel>(Random.Next(3, 10)).ToList(), Fixture.Create<bool>());
+            Assert.That(householdIdentificationCollectionModel, Is.Not.Null);
+            Assert.That(householdIdentificationCollectionModel, Is.Not.Empty);
 
-            var sidebarController = CreateSidebarController(householdIdentificationCollection: householdIdentificationCollection);
+            var sidebarController = CreateSidebarController(householdIdentificationCollectionModel: householdIdentificationCollectionModel);
             Assert.That(sidebarController, Is.Not.Null);
 
             var result = sidebarController.HouseholdIdentificationCollection();
@@ -81,17 +80,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(partialViewResult.ViewData, Is.Empty);
             Assert.That(partialViewResult.Model, Is.Not.Null);
             Assert.That(partialViewResult.Model, Is.Not.Empty);
-            Assert.That(partialViewResult.Model, Is.EqualTo(householdIdentificationCollection));
+            Assert.That(partialViewResult.Model, Is.EqualTo(householdIdentificationCollectionModel));
         }
 
         /// <summary>
         /// Creates a controller for the sidebar for unit testing.
         /// </summary>
-        /// <param name="householdIdentificationCollection">Sets the collection of household identifications.</param>
+        /// <param name="householdIdentificationCollectionModel">Sets the model for the collection of household identifications.</param>
         /// <returns>Controller for the sidebar for unit testing.</returns>
-        private SidebarController CreateSidebarController(IEnumerable<HouseholdIdentificationModel> householdIdentificationCollection = null)
+        private SidebarController CreateSidebarController(HouseholdIdentificationCollectionModel householdIdentificationCollectionModel = null)
         {
-            IEnumerable<HouseholdIdentificationModel> householdIdentificationCollectionGetter = householdIdentificationCollection ?? Fixture.CreateMany<HouseholdIdentificationModel>(Random.Next(3, 10)).ToList();
+            HouseholdIdentificationCollectionModel householdIdentificationCollectionGetter = householdIdentificationCollectionModel ?? new HouseholdIdentificationCollectionModel(Fixture.CreateMany<HouseholdIdentificationModel>(Random.Next(3, 10)).ToList(), Fixture.Create<bool>());
             _householdDataRepositoryMock.Stub(m => m.GetHouseholdIdentificationCollectionAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => householdIdentificationCollectionGetter))
                 .Repeat.Any();

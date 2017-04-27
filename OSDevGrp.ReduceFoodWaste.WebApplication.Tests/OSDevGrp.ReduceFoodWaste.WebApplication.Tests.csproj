@@ -116,6 +116,7 @@
     <Compile Include="Infrastructure\Security\Providers\LocalClaimProviderTests.cs" />
     <Compile Include="Models\DashboardModelTests.cs" />
     <Compile Include="Models\DataProviderModelTests.cs" />
+    <Compile Include="Models\HouseholdIdentificationCollectionModelTests.cs" />
     <Compile Include="Models\HouseholdIdentificationModelTestscs.cs" />
     <Compile Include="Models\HouseholdMemberModelTests.cs" />
     <Compile Include="Models\HouseholdModelTests.cs" />
