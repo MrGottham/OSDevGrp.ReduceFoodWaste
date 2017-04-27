@@ -1,16 +1,17 @@
-﻿@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdIdentificationCollectionModel
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdIdentificationCollectionModel
 
 @if (Model.Any() || Model.HouseholdMemberCanAddHouseholds)
 {
-    <hr/>
+    <hr />
     <ul class="nav nav-sidebar">
         @foreach (var householdIdentificationModel in Model)
         {
-            <li class="nav-item active">@Html.ActionLink(householdIdentificationModel.Name, "Manage", "Household", new {householdIdentifier = householdIdentificationModel.Identifier}, new {@class = "nav-link"})</li>
+            <li class="nav-item active">@Html.ActionLink(householdIdentificationModel.Name, "Manage", "Household", new { householdIdentifier = householdIdentificationModel.Identifier }, new { @class = "nav-link" })</li>
         }
         @if (Model.HouseholdMemberCanAddHouseholds)
         {
-            <li class="nav-item active">XYZ</li>
+            <li class="nav-item active">@Html.ActionLink(string.Format("{0} {1}", Texts.Add, Texts.Household.ToLower()), "AddHousehold", "HouseholdMember", null, new { @class = "nav-link" })</li>
         }
     </ul>
 }

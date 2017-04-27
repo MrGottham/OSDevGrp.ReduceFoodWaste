@@ -545,6 +545,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Adds a new household to the current household member.
+        /// </summary>
+        /// <returns>View for adding a new household to the current household member.</returns>
+        [IsValidatedHouseholdMember]
+        public ActionResult AddHousehold()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Adds a local claim to the current user's identity.
         /// </summary>
