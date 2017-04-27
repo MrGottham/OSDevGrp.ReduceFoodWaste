@@ -446,6 +446,34 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         }
 
         /// <summary>
+        /// Upgrade the membership for a given household member.
+        /// </summary>
+        /// <param name="identity">Identity on which to upgrade the membership.</param>
+        /// <param name="membershipModel">Model for the membership to upgrade to.</param>
+        /// <returns>Model for the upgraded membership.</returns>
+        public Task<MembershipModel> UpgradeMembershipAsync(IIdentity identity, MembershipModel membershipModel)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException(nameof(identity));
+            }
+            if (membershipModel == null)
+            {
+                throw new ArgumentNullException(nameof(membershipModel));
+            }
+
+            Func<HouseholdDataServiceChannel, MembershipModel> callbackFunc = channel =>
+            {
+                HouseholdMemberUpgradeMembershipCommand command = _householdDataConverter.Convert<MembershipModel, HouseholdMemberUpgradeMembershipCommand>(membershipModel);
+                channel.HouseholdMemberUpgradeMembership(command);
+
+                return membershipModel;
+            };
+
+            return Task.Run(CallWrapper(identity, MethodBase.GetCurrentMethod(), callbackFunc));
+        }
+
+        /// <summary>
         /// Gets all the possible memberships for a given identity.
         /// </summary>
         /// <param name="identity">Identity for who the possible memberships should be returned.</param>

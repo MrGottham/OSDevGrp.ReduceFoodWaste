@@ -4452,10 +4452,266 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembershipCallback returns a RedirectResult to the url on which to return when the membership upgrade or renew process has finished.
+        /// Tests that UpgradeOrRenewMembershipCallback does not call UpgradeMembershipAsync on the repository which can access household data when the model of the payment has not been paid.
         /// </summary>
         [Test]
-        public void TestThatUpgradeOrRenewMembershipCallbackReturnsRedirectResultToReturnUrl()
+        [TestCase(PaymentStatus.Unpaid)]
+        [TestCase(PaymentStatus.Cancelled)]
+        public void TestThatUpgradeOrRenewMembershipCallbackDoesNotCallUpgradeMembershipAsyncOnHouseholdDataRepositoryWhenPaymentModelHasNotBeenPaid(PaymentStatus paymentStatus)
+        {
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Name, Fixture.Create<string>())
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, null)
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentTime, null)
+                .With(m => m.PaymentReference, null)
+                .With(m => m.PaymentReceipt, null)
+                .With(m => m.CanRenew, Fixture.Create<bool>())
+                .With(m => m.CanUpgrade, Fixture.Create<bool>())
+                .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Empty);
+            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(membershipModel.PaymentHandlers, Is.Null);
+            Assert.That(membershipModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(membershipModel.PaymentTime, Is.Null);
+            Assert.That(membershipModel.PaymentReference, Is.Null);
+            Assert.That(membershipModel.PaymentReceipt, Is.Null);
+
+            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
+            Assert.That(membershipModelAsBase64, Is.Not.Null);
+            Assert.That(membershipModelAsBase64, Is.Not.Empty);
+
+            var paymentModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, paymentStatus)
+                .With(m => m.PaymentTime, null)
+                .With(m => m.PaymentReference, null)
+                .With(m => m.PaymentReceipt, null)
+                .Create();
+            Assert.That(paymentModel, Is.Not.Null);
+            Assert.That(paymentModel.Price, Is.GreaterThan(0M));
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(paymentModel.PaymentHandlerIdentifier, Is.Not.Null);
+            Assert.That(paymentModel.PaymentHandlers, Is.Null);
+            Assert.That(paymentModel.PaymentStatus, Is.EqualTo(paymentStatus));
+            Assert.That(paymentModel.PaymentTime, Is.Null);
+            Assert.That(paymentModel.PaymentReference, Is.Null);
+            Assert.That(paymentModel.PaymentReceipt, Is.Null);
+
+            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
+            Assert.That(paymentModelAsBase64, Is.Not.Null);
+            Assert.That(paymentModelAsBase64, Is.Not.Empty);
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
+
+            _householdDataRepositoryMock.AssertWasNotCalled(m => m.UpgradeMembershipAsync(Arg<IIdentity>.Is.Anything, Arg<MembershipModel>.Is.Anything));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembershipCallback returns a RedirectResult to the url on which to return when the membership upgrade or renew process has finished when the model of the payment has not been paid.
+        /// </summary>
+        [Test]
+        [TestCase(PaymentStatus.Unpaid)]
+        [TestCase(PaymentStatus.Cancelled)]
+        public void TestThatUpgradeOrRenewMembershipCallbackReturnsRedirectResultToReturnUrlWhenPaymentModelHasNotBeenPaid(PaymentStatus paymentStatus)
+        {
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Name, Fixture.Create<string>())
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, null)
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentTime, null)
+                .With(m => m.PaymentReference, null)
+                .With(m => m.PaymentReceipt, null)
+                .With(m => m.CanRenew, Fixture.Create<bool>())
+                .With(m => m.CanUpgrade, Fixture.Create<bool>())
+                .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Empty);
+            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(membershipModel.PaymentHandlers, Is.Null);
+            Assert.That(membershipModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(membershipModel.PaymentTime, Is.Null);
+            Assert.That(membershipModel.PaymentReference, Is.Null);
+            Assert.That(membershipModel.PaymentReceipt, Is.Null);
+
+            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
+            Assert.That(membershipModelAsBase64, Is.Not.Null);
+            Assert.That(membershipModelAsBase64, Is.Not.Empty);
+
+            var paymentModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, paymentStatus)
+                .With(m => m.PaymentTime, null)
+                .With(m => m.PaymentReference, null)
+                .With(m => m.PaymentReceipt, null)
+                .Create();
+            Assert.That(paymentModel, Is.Not.Null);
+            Assert.That(paymentModel.Price, Is.GreaterThan(0M));
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(paymentModel.PaymentHandlerIdentifier, Is.Not.Null);
+            Assert.That(paymentModel.PaymentHandlers, Is.Null);
+            Assert.That(paymentModel.PaymentStatus, Is.EqualTo(paymentStatus));
+            Assert.That(paymentModel.PaymentTime, Is.Null);
+            Assert.That(paymentModel.PaymentReference, Is.Null);
+            Assert.That(paymentModel.PaymentReceipt, Is.Null);
+
+            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
+            Assert.That(paymentModelAsBase64, Is.Not.Null);
+            Assert.That(paymentModelAsBase64, Is.Not.Empty);
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
+            Assert.That(householdMemberController, Is.Not.Null);
+
+            var result = householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<RedirectResult>());
+
+            var redirectResult = (RedirectResult) result;
+            Assert.That(redirectResult, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Null);
+            Assert.That(redirectResult.Url, Is.Not.Empty);
+            Assert.That(redirectResult.Url, Is.EqualTo(returnUrl));
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembershipCallback calls UpgradeMembershipAsync on the repository which can access household data when the model of the payment has not been paid.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeOrRenewMembershipCallbackCallsUpgradeMembershipAsyncOnHouseholdDataRepositoryWhenPaymentModelHasBeenPaid()
+        {
+            var membershipModel = Fixture.Build<MembershipModel>()
+                .With(m => m.Name, Fixture.Create<string>())
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, null)
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
+                .With(m => m.PaymentTime, null)
+                .With(m => m.PaymentReference, null)
+                .With(m => m.PaymentReceipt, null)
+                .With(m => m.CanRenew, Fixture.Create<bool>())
+                .With(m => m.CanUpgrade, Fixture.Create<bool>())
+                .Create();
+            Assert.That(membershipModel, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Null);
+            Assert.That(membershipModel.Name, Is.Not.Empty);
+            Assert.That(membershipModel.Price, Is.GreaterThan(0M));
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(membershipModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(membershipModel.PaymentHandlerIdentifier, Is.Null);
+            Assert.That(membershipModel.PaymentHandlers, Is.Null);
+            Assert.That(membershipModel.PaymentStatus, Is.EqualTo(PaymentStatus.Unpaid));
+            Assert.That(membershipModel.PaymentTime, Is.Null);
+            Assert.That(membershipModel.PaymentReference, Is.Null);
+            Assert.That(membershipModel.PaymentReceipt, Is.Null);
+
+            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
+            Assert.That(membershipModelAsBase64, Is.Not.Null);
+            Assert.That(membershipModelAsBase64, Is.Not.Empty);
+
+            var paymentModel = Fixture.Build<PayableModel>()
+                .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
+                .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
+                .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
+                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentStatus, PaymentStatus.Paid)
+                .With(m => m.PaymentTime, DateTime.Now)
+                .With(m => m.PaymentReference, Fixture.Create<string>())
+                .With(m => m.PaymentReceipt, Fixture.Create<string>())
+                .Create();
+            Assert.That(paymentModel, Is.Not.Null);
+            Assert.That(paymentModel.Price, Is.GreaterThan(0M));
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Null);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.Not.Empty);
+            Assert.That(paymentModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
+            Assert.That(paymentModel.PaymentHandlerIdentifier, Is.Not.Null);
+            Assert.That(paymentModel.PaymentHandlers, Is.Null);
+            Assert.That(paymentModel.PaymentStatus, Is.EqualTo(PaymentStatus.Paid));
+            Assert.That(paymentModel.PaymentTime, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReference, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReference, Is.Not.Empty);
+            Assert.That(paymentModel.PaymentReceipt, Is.Not.Null);
+            Assert.That(paymentModel.PaymentReceipt, Is.Not.Empty);
+
+            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
+            Assert.That(paymentModelAsBase64, Is.Not.Null);
+            Assert.That(paymentModelAsBase64, Is.Not.Empty);
+
+            var returnUrl = Fixture.Create<string>();
+            Assert.That(returnUrl, Is.Not.Null);
+            Assert.That(returnUrl, Is.Not.Empty);
+
+            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
+            Assert.That(householdMemberController, Is.Not.Null);
+            Assert.That(householdMemberController.User, Is.Not.Null);
+            Assert.That(householdMemberController.User.Identity, Is.Not.Null);
+
+            householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
+
+            _householdDataRepositoryMock.AssertWasCalled(m => m.UpgradeMembershipAsync(
+                    Arg<IIdentity>.Is.Equal(householdMemberController.User.Identity),
+                    Arg<MembershipModel>.Matches(model =>
+                        model != null &&
+                        model == membershipModel &&
+                        model.PaymentHandlerIdentifier != null &&
+                        model.PaymentHandlerIdentifier.HasValue &&
+                        model.PaymentHandlerIdentifier.Value == paymentModel.PaymentHandlerIdentifier.Value &&
+                        model.PaymentStatus == PaymentStatus.Paid &&
+                        model.PaymentTime != null &&
+                        model.PaymentTime.HasValue &&
+                        model.PaymentTime.Value == paymentModel.PaymentTime.Value &&
+                        string.IsNullOrWhiteSpace(model.PaymentReference) == false &&
+                        string.Compare(model.PaymentReference, paymentModel.PaymentReference, StringComparison.Ordinal) == 0 &&
+                        string.IsNullOrWhiteSpace(model.PaymentReceipt) == false &&
+                        string.Compare(model.PaymentReceipt, paymentModel.PaymentReceipt, StringComparison.Ordinal) == 0
+                    )),
+                opt => opt.Repeat.Once());
+        }
+
+        /// <summary>
+        /// Tests that UpgradeOrRenewMembershipCallback returns a RedirectResult to the url on which to return when the membership upgrade or renew process has finished when the model of the payment has not been paid.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeOrRenewMembershipCallbackReturnsRedirectResultToReturnUrlWhenPaymentModelHasBeenPaid()
         {
             var membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, Fixture.Create<string>())
@@ -4602,6 +4858,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(membershipModelsGetter))
+                .Repeat.Any();
+            _householdDataRepositoryMock.Stub(m => m.UpgradeMembershipAsync(Arg<IIdentity>.Is.Anything, Arg<MembershipModel>.Is.Anything))
+                .Return(Task.Run(() => Fixture.Create<MembershipModel>()))
                 .Repeat.Any();
 
             _claimValueProviderMock.Stub(m => m.IsActivatedHouseholdMember(Arg<IIdentity>.Is.Anything))

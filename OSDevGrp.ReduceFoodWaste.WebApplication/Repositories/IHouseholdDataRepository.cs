@@ -108,6 +108,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
         Task<PrivacyPolicyModel> AcceptPrivacyPolicyAsync(IIdentity identity, PrivacyPolicyModel privacyPolicyModel);
 
         /// <summary>
+        /// Upgrade the membership for a given household member.
+        /// </summary>
+        /// <param name="identity">Identity on which to upgrade the membership.</param>
+        /// <param name="membershipModel">Model for the membership to upgrade to.</param>
+        /// <returns>Model for the upgraded membership.</returns>
+        Task<MembershipModel> UpgradeMembershipAsync(IIdentity identity, MembershipModel membershipModel);
+
+        /// <summary>
         /// Gets all the possible memberships for a given identity.
         /// </summary>
         /// <param name="identity">Identity for who the possible memberships should be returned.</param>

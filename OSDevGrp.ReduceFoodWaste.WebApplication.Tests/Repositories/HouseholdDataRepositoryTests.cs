@@ -541,6 +541,40 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         }
 
         /// <summary>
+        /// Tests that UpgradeMembershipAsync throws an ArgumentNullException when the identity is null.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeMembershipAsyncThrowsArgumentNullExceptionWhenIdentityIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.UpgradeMembershipAsync(null, Fixture.Create<MembershipModel>()));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("identity"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
+        /// Tests that UpgradeMembershipAsync throws an ArgumentNullException when the model for the membership to upgrade to is null.
+        /// </summary>
+        [Test]
+        public void TestThatUpgradeMembershipAsyncThrowsArgumentNullExceptionWhenMembershipModelIsNull()
+        {
+            var householdDataRepository = CreateHouseholdDataRepository();
+            Assert.IsNotNull(householdDataRepository);
+
+            var exception = Assert.Throws<ArgumentNullException>(() => householdDataRepository.UpgradeMembershipAsync(MockRepository.GenerateMock<IIdentity>(), null));
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Null);
+            Assert.That(exception.ParamName, Is.Not.Empty);
+            Assert.That(exception.ParamName, Is.EqualTo("membershipModel"));
+            Assert.That(exception.InnerException, Is.Null);
+        }
+
+        /// <summary>
         /// Tests that GetMembershipsAsync throws an ArgumentNullException when the identity is null.
         /// </summary>
         [Test]

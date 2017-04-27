@@ -12,6 +12,7 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 
@@ -522,7 +523,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 MembershipModel membershipModel = (MembershipModel) _modelHelper.ToModel(membershipModelAsBase64);
                 PayableModel paymentModel = (PayableModel) _modelHelper.ToModel(paymentModelAsBase64);
 
-                // TODO: Upgrade or renew the paid membership.
+                if (paymentModel.PaymentStatus != PaymentStatus.Paid)
+                {
+                    return Redirect(returnUrl);
+                }
+
+                membershipModel.PaymentHandlerIdentifier = paymentModel.PaymentHandlerIdentifier;
+                membershipModel.PaymentStatus = paymentModel.PaymentStatus;
+                membershipModel.PaymentTime = paymentModel.PaymentTime;
+                membershipModel.PaymentReference = paymentModel.PaymentReference;
+                membershipModel.PaymentReceipt = paymentModel.PaymentReceipt;
+
+                Task<MembershipModel> task = _householdDataRepository.UpgradeMembershipAsync(User.Identity, membershipModel);
+                task.Wait();
 
                 return Redirect(returnUrl);
             }
