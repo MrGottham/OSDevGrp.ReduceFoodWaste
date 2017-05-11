@@ -1,0 +1,42 @@
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdModel
+
+@{
+    ViewBag.Title = string.Format("{0} {1}", Texts.Add, Texts.Household.ToLower());
+}
+
+@section sidebar {
+    @Html.Partial("_Sidebar")
+}
+
+<div class="row">
+    <hgroup class="title">
+        <h2>@ViewBag.Title</h2>
+    </hgroup>
+    @if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
+    {
+        <p class="message-success">@ViewBag.StatusMessage</p>
+    }
+    @if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
+    {
+        <p class="message-error">@ViewBag.ErrorMessage</p>
+    }
+    @using (Html.BeginForm("AddHousehold", "HouseholdMember", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Identifier)
+        @Html.Partial("_HouseholdBasicInformation", Model)
+        <div class="btn-group">
+            <input class="btn btn-primary" type="submit" value="@Texts.Add" title="@Texts.Add" />
+            <input class="btn btn-primary" type="button" onclick="cancel()" value="@Texts.Cancel" title="@Texts.Cancel" />
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+        function cancel() {
+            window.location.href = "@VirtualPathUtility.ToAbsolute("~/Dashboard/Dashboard")";
+        }
+    </script>
+}

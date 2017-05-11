@@ -1,0 +1,13 @@
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdModel
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Name, Texts.Name)
+    @Html.TextBoxFor(m => m.Name, null, new { @class = "form-control" })
+    <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.Name)</div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Description, Texts.Description)
+    @Html.TextAreaFor(m => m.Description, 5, 1, new { @class = "form-control" })
+    <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.Description)</div>
+</div>

@@ -545,13 +545,38 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
         }
 
+        /// <summary>
+        /// Adds a new household to the current household member.
+        /// </summary>
+        /// <param name="statusMessage">Status message to show in the view.</param>
+        /// <param name="errorMessage">Error message to show in the view.</param>
+        /// <returns>View for adding a new household to the current household member.</returns>
+        [IsValidatedHouseholdMember]
+        public ActionResult AddHousehold(string statusMessage = null, string errorMessage = null)
+        {
+            if (string.IsNullOrWhiteSpace(statusMessage) == false)
+            {
+                ViewBag.StatusMessage = statusMessage;
+            }
+            if (string.IsNullOrWhiteSpace(errorMessage) == false)
+            {
+                ViewBag.ErrorMessage = errorMessage;
+            }
+
+            HouseholdModel householdModel = new HouseholdModel();
+
+            return View("AddHousehold", householdModel);
+        }
 
         /// <summary>
         /// Adds a new household to the current household member.
         /// </summary>
-        /// <returns>View for adding a new household to the current household member.</returns>
+        /// <param name="householdModel">Model for the household to add.</param>
+        /// <returns>Redirect to the dashboard.</returns>
         [IsValidatedHouseholdMember]
-        public ActionResult AddHousehold()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddHousehold(HouseholdModel householdModel)
         {
             throw new NotImplementedException();
         }

@@ -535,6 +535,8 @@
     <Content Include="Views\HouseholdMember\RenewMembership.cshtml" />
     <Content Include="Views\HouseholdMember\_MembershipInformation.cshtml" />
     <Content Include="Views\Payment\Pay.cshtml" />
+    <Content Include="Views\HouseholdMember\AddHousehold.cshtml" />
+    <Content Include="Views\HouseholdMember\_HouseholdBasicInformation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
