@@ -578,7 +578,32 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddHousehold(HouseholdModel householdModel)
         {
-            throw new NotImplementedException();
+            if (householdModel == null)
+            {
+                throw new ArgumentNullException(nameof(householdModel));
+            }
+            try
+            {
+                if (ModelState.IsValid == false)
+                {
+                    return View("AddHousehold", householdModel);
+                }
+
+                Task task = _householdDataRepository.CreateHouseholdAsync(User.Identity, householdModel, CultureInfo.CurrentUICulture);
+                task.Wait();
+
+                return RedirectToAction("Dashboard", "Dashboard");
+            }
+            catch (AggregateException ex)
+            {
+                ViewBag.ErrorMessage = ex.ToReduceFoodWasteException().Message;
+                return View("AddHousehold", householdModel);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View("AddHousehold", householdModel);
+            }
         }
 
         /// <summary>
