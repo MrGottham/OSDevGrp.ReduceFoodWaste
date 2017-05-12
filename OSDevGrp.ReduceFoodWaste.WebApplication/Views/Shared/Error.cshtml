@@ -1,4 +1,5 @@
-﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions
+﻿@using System.Reflection
+@using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions
 @using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model HandleErrorInfo
 
@@ -28,6 +29,11 @@
     {
         <p>@Texts.Type: @string.Format(Texts.RepositoryException, ((ReduceFoodWasteRepositoryException) Model.Exception).RepositoryName)</p>
         <p>@Texts.Reason: @Model.Exception.Message</p>
+        return;
+    }
+    if (Model.Exception is TargetInvocationException && Model.Exception.InnerException != null)
+    {
+        <p>@Texts.Reason: @Model.Exception.InnerException.Message</p>
         return;
     }
     <p>@Texts.Reason: @Model.Exception.Message</p>
