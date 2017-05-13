@@ -27,7 +27,9 @@
             message = "Vent venligst, mens data hentes...";
         }
 
-        var overlayElement = $("<div id='loadProgressOuterContainer'><div class='loadProgressOverlay'></div><div class='progressVerticalCentering'><div class='progressHorizontalCentering'><h3><strong>" + message + "</strong></h3><br><img id='progressSpinner' src='../Images/ajax-loader_bigspinner_green.gif'/></div></div></div>");
+        var imagePath = window.location.protocol + "//" + window.location.host + "/Images/ajax-loader_bigspinner_green.gif";
+
+        var overlayElement = $("<div id='loadProgressOuterContainer'><div class='loadProgressOverlay'></div><div class='progressVerticalCentering'><div class='progressHorizontalCentering'><h3><strong>" + message + "</strong></h3><br><img id='progressSpinner' src='" + imagePath + "'/></div></div></div>");
         $("body").append(overlayElement);
     }
 
@@ -36,7 +38,7 @@
         insertProgressHtmlOnPageAndShow();
         window.onunload = function() {
             // Must hide when unloading page to prevent the overlay being visible when using browser Back button.
-            methods.hide().call();
+            methods["hide"].call();
         }
     });
 
