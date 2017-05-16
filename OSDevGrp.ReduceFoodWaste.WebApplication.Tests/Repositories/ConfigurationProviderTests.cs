@@ -42,7 +42,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var paymentConfigurationMock = MockRepository.GenerateMock<IPaymentConfiguration>();
             Assert.That(paymentConfigurationMock, Is.Not.Null);
 
+            // ReSharper disable ObjectCreationAsStatement
             var exeption = Assert.Throws<ArgumentNullException>(() => new ConfigurationProvider(null, paymentConfigurationMock));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exeption, Is.Not.Null);
             Assert.That(exeption.ParamName, Is.Not.Null);
             Assert.That(exeption.ParamName, Is.Not.Empty);
@@ -59,7 +61,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var membershipConfigurationMock = MockRepository.GenerateMock<IMembershipConfiguration>();
             Assert.That(membershipConfigurationMock, Is.Not.Null);
 
+            // ReSharper disable ObjectCreationAsStatement
             var exeption = Assert.Throws<ArgumentNullException>(() => new ConfigurationProvider(membershipConfigurationMock, null));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exeption, Is.Not.Null);
             Assert.That(exeption.ParamName, Is.Not.Null);
             Assert.That(exeption.ParamName, Is.Not.Empty);

@@ -299,6 +299,7 @@
     <Compile Include="Repositories\Configuration\IMembershipPriceElement.cs" />
     <Compile Include="Repositories\Configuration\IPaymentConfiguration.cs" />
     <Compile Include="Repositories\Configuration\IPaymentHandlerElement.cs" />
+    <Compile Include="Repositories\Configuration\ISiteConfiguration.cs" />
     <Compile Include="Repositories\Configuration\MembershipConfiguration.cs" />
     <Compile Include="Repositories\Configuration\MembershipElement.cs" />
     <Compile Include="Repositories\Configuration\MembershipElementCollection.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="Repositories\Configuration\PaymentConfiguration.cs" />
     <Compile Include="Repositories\Configuration\PaymentHandlerElement.cs" />
     <Compile Include="Repositories\Configuration\PaymentHandlerElementCollection.cs" />
+    <Compile Include="Repositories\Configuration\SiteConfiguration.cs" />
     <Compile Include="Repositories\CredentialsProvider.cs" />
     <Compile Include="Repositories\HouseholdDataConverter.cs" />
     <Compile Include="Repositories\HouseholdDataRepository.cs" />

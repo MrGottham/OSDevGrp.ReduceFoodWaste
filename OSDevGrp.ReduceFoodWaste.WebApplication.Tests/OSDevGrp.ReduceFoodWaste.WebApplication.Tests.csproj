@@ -131,6 +131,7 @@
     <Compile Include="Repositories\ConfigurationProviderTests.cs" />
     <Compile Include="Repositories\Configuration\MembershipConfigurationTests.cs" />
     <Compile Include="Repositories\Configuration\PaymentConfigurationTests.cs" />
+    <Compile Include="Repositories\Configuration\SiteConfigurationTests.cs" />
     <Compile Include="Repositories\CredentialsProviderTests.cs" />
     <Compile Include="Repositories\HouseholdDataConverterTests.cs" />
     <Compile Include="Repositories\HouseholdDataRepositoryTests.cs" />
