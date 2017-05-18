@@ -273,8 +273,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
         private string GetReturnUrlForExternalLogin(string returnUrl)
         {
-            string url = Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl});
-            return url;
+            string urlAction = Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl});
+            return urlAction;
         }
 
         private void AddLocalClaims(ClaimsIdentity claimsIdentity)
