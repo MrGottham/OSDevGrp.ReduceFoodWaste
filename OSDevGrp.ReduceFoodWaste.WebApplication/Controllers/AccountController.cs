@@ -12,7 +12,6 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentica
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using WebMatrix.WebData;
 
@@ -279,15 +278,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             string action = Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl});
             if (string.IsNullOrWhiteSpace(action))
             {
-                return callbackAddress.AbsoluteUri;
+                return callbackAddress.AbsoluteUri.ToLower();
             }
 
             if (callbackAddress.AbsoluteUri.EndsWith("/") && action.StartsWith("/"))
             {
-                
+                return $"{callbackAddress.AbsoluteUri}{action.Substring(1)}".ToLower();
             }
 
-            return action;
+            return $"{callbackAddress.AbsoluteUri}/{action}".ToLower();
         }
 
         private void AddLocalClaims(ClaimsIdentity claimsIdentity)
