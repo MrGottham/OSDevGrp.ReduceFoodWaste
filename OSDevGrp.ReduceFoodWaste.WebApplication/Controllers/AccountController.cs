@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Transactions;
 using System.Web.Mvc;
+using AutoMapper;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
@@ -22,6 +23,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
     {
         #region Private variables
 
+        private readonly IConfigurationProvider _configurationProvider;
         private readonly IClaimValueProvider _claimValueProvider;
         private readonly ILocalClaimProvider _localClaimProvider;
 
@@ -29,16 +31,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
         #region Constructor
 
-        public AccountController(IClaimValueProvider claimValueProvider, ILocalClaimProvider localClaimProvider)
+        public AccountController(IConfigurationProvider configurationProvider, IClaimValueProvider claimValueProvider, ILocalClaimProvider localClaimProvider)
         {
+            if (configurationProvider == null)
+            {
+                throw new ArgumentNullException(nameof(configurationProvider));
+            }
             if (claimValueProvider == null)
             {
-                throw new ArgumentNullException("claimValueProvider");
+                throw new ArgumentNullException(nameof(claimValueProvider));
             }
             if (localClaimProvider == null)
             {
-                throw new ArgumentNullException("localClaimProvider");
+                throw new ArgumentNullException(nameof(localClaimProvider));
             }
+            _configurationProvider = configurationProvider;
             _claimValueProvider = claimValueProvider;
             _localClaimProvider = localClaimProvider;
         }
@@ -73,11 +80,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             if (string.IsNullOrEmpty(provider))
             {
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             }
             if (string.IsNullOrEmpty(providerUserId))
             {
-                throw new ArgumentNullException("providerUserId");
+                throw new ArgumentNullException(nameof(providerUserId));
             }
 
             var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
@@ -142,7 +149,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+            return new ExternalLoginResult(provider, GetReturnUrlForExternalLogin(returnUrl));
         }
 
         //
@@ -152,7 +159,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             GooglePlusScopedClient.RewriteRequest(HttpContext);
 
-            AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+            AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(GetReturnUrlForExternalLogin(returnUrl));
             if (!result.IsSuccessful)
             {
                 return RedirectToAction("ExternalLoginFailure", new { reason = Texts.UnsuccessfulLoginWithService });
@@ -264,11 +271,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
         #region Helpers
 
+        private string GetReturnUrlForExternalLogin(string returnUrl)
+        {
+            string url = Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl});
+            return url;
+        }
+
         private void AddLocalClaims(ClaimsIdentity claimsIdentity)
         {
             if (claimsIdentity == null)
             {
-                throw new ArgumentNullException("claimsIdentity");
+                throw new ArgumentNullException(nameof(claimsIdentity));
             }
             try
             {
@@ -298,8 +311,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 ReturnUrl = returnUrl;
             }
 
-            private string Provider { get; set; }
-            private string ReturnUrl { get; set; }
+            private string Provider { get; }
+            private string ReturnUrl { get; }
 
             public override void ExecuteResult(ControllerContext context)
             {

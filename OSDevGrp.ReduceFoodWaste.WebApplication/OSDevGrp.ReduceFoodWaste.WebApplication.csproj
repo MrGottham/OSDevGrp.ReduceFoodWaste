@@ -294,6 +294,7 @@
     <Compile Include="Models\PrivacyPolicyModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ConfigurationProvider.cs" />
+    <Compile Include="Repositories\Configuration\CallbackAddressElement.cs" />
     <Compile Include="Repositories\Configuration\IMembershipConfiguration.cs" />
     <Compile Include="Repositories\Configuration\IMembershipElement.cs" />
     <Compile Include="Repositories\Configuration\IMembershipPriceElement.cs" />

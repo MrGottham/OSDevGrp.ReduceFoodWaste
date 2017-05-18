@@ -19,18 +19,45 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         [Test]
         public void TestThatConstructorInitializeConfigurationProvider()
         {
+            var siteConfigurationMock = MockRepository.GenerateMock<ISiteConfiguration>();
+            Assert.That(siteConfigurationMock, Is.Not.Null);
+
             var membershipConfigurationMock = MockRepository.GenerateMock<IMembershipConfiguration>();
             Assert.That(membershipConfigurationMock, Is.Not.Null);
 
             var paymentConfigurationMock = MockRepository.GenerateMock<IPaymentConfiguration>();
             Assert.That(paymentConfigurationMock, Is.Not.Null);
 
-            var configurationProvider = new ConfigurationProvider(membershipConfigurationMock, paymentConfigurationMock);
+            var configurationProvider = new ConfigurationProvider(siteConfigurationMock, membershipConfigurationMock, paymentConfigurationMock);
             Assert.That(configurationProvider, Is.Not.Null);
+            Assert.That(configurationProvider.SiteConfiguration, Is.Not.Null);
+            Assert.That(configurationProvider.SiteConfiguration, Is.EqualTo(siteConfigurationMock));
             Assert.That(configurationProvider.MembershipConfiguration, Is.Not.Null);
             Assert.That(configurationProvider.MembershipConfiguration, Is.EqualTo(membershipConfigurationMock));
             Assert.That(configurationProvider.PaymentConfiguration, Is.Not.Null);
             Assert.That(configurationProvider.PaymentConfiguration, Is.EqualTo(paymentConfigurationMock));
+        }
+
+        /// <summary>
+        /// Tests that the constructor throws an ArgumentNullException when the configuration for the site is null.
+        /// </summary>
+        [Test]
+        public void TestThatConstructorThrowsArgumentNullExceptionWhenSiteConfigurationIsNull()
+        {
+            var membershipConfigurationMock = MockRepository.GenerateMock<IMembershipConfiguration>();
+            Assert.That(membershipConfigurationMock, Is.Not.Null);
+
+            var paymentConfigurationMock = MockRepository.GenerateMock<IPaymentConfiguration>();
+            Assert.That(paymentConfigurationMock, Is.Not.Null);
+
+            // ReSharper disable ObjectCreationAsStatement
+            var exeption = Assert.Throws<ArgumentNullException>(() => new ConfigurationProvider(null, membershipConfigurationMock, paymentConfigurationMock));
+            // ReSharper restore ObjectCreationAsStatement
+            Assert.That(exeption, Is.Not.Null);
+            Assert.That(exeption.ParamName, Is.Not.Null);
+            Assert.That(exeption.ParamName, Is.Not.Empty);
+            Assert.That(exeption.ParamName, Is.EqualTo("siteConfiguration"));
+            Assert.That(exeption.InnerException, Is.Null);
         }
 
         /// <summary>
@@ -39,11 +66,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenMembershipConfigurationIsNull()
         {
+            var siteConfigurationMock = MockRepository.GenerateMock<ISiteConfiguration>();
+            Assert.That(siteConfigurationMock, Is.Not.Null);
+
             var paymentConfigurationMock = MockRepository.GenerateMock<IPaymentConfiguration>();
             Assert.That(paymentConfigurationMock, Is.Not.Null);
 
             // ReSharper disable ObjectCreationAsStatement
-            var exeption = Assert.Throws<ArgumentNullException>(() => new ConfigurationProvider(null, paymentConfigurationMock));
+            var exeption = Assert.Throws<ArgumentNullException>(() => new ConfigurationProvider(siteConfigurationMock, null, paymentConfigurationMock));
             // ReSharper restore ObjectCreationAsStatement
             Assert.That(exeption, Is.Not.Null);
             Assert.That(exeption.ParamName, Is.Not.Null);
@@ -58,11 +88,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenPaymentConfigurationIsNull()
         {
+            var siteConfigurationMock = MockRepository.GenerateMock<ISiteConfiguration>();
+            Assert.That(siteConfigurationMock, Is.Not.Null);
+
             var membershipConfigurationMock = MockRepository.GenerateMock<IMembershipConfiguration>();
             Assert.That(membershipConfigurationMock, Is.Not.Null);
 
             // ReSharper disable ObjectCreationAsStatement
-            var exeption = Assert.Throws<ArgumentNullException>(() => new ConfigurationProvider(membershipConfigurationMock, null));
+            var exeption = Assert.Throws<ArgumentNullException>(() => new ConfigurationProvider(siteConfigurationMock, membershipConfigurationMock, null));
             // ReSharper restore ObjectCreationAsStatement
             Assert.That(exeption, Is.Not.Null);
             Assert.That(exeption.ParamName, Is.Not.Null);

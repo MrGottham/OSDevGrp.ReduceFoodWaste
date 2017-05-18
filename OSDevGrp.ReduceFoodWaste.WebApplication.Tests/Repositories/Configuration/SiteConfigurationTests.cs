@@ -19,8 +19,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories.Configurati
             ISiteConfiguration siteConfiguration = SiteConfiguration.Create();
             Assert.That(siteConfiguration, Is.Not.Null);
             Assert.That(siteConfiguration.CallbackAddress, Is.Not.Null);
-            Assert.That(siteConfiguration.CallbackAddress, Is.Not.Empty);
-            Assert.That(siteConfiguration.CallbackAddress, Is.EqualTo("http://localhost:62912"));
+            Assert.That(siteConfiguration.CallbackAddress.AbsoluteUri, Is.Not.Null);
+            Assert.That(siteConfiguration.CallbackAddress.AbsoluteUri, Is.Not.Empty);
+            Assert.That(siteConfiguration.CallbackAddress.AbsoluteUri, Is.EqualTo("http://localhost:62912/"));
         }
     }
 }

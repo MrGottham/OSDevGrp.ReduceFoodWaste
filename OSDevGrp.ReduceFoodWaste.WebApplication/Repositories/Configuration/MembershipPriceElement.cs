@@ -8,7 +8,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration
     /// </summary>
     public class MembershipPriceElement : ConfigurationElement, IMembershipPriceElement
     {
-        #region Private variables
+        #region Properties
 
         /// <summary>
         /// Gets the culture name for price of the membership.

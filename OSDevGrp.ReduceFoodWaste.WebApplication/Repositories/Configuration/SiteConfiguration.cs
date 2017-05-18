@@ -22,9 +22,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration
         /// <summary>
         /// Gets the callback address for the site.
         /// </summary>
-        [ConfigurationProperty("callbackAddress", DefaultValue = "http://localhost", IsRequired = true)]
-//        [RegexStringValidator(@"^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$")]
-        public string CallbackAddress => (string) this["callbackAddress"];
+        public Uri CallbackAddress => new Uri(CallbackAddressElement.Value);
+
+        /// <summary>
+        /// Gets the callback address configuration element.
+        /// </summary>
+        [ConfigurationProperty("callbackAddress", IsRequired = true)]
+        public CallbackAddressElement CallbackAddressElement => (CallbackAddressElement) this["callbackAddress"];
 
         #endregion
 

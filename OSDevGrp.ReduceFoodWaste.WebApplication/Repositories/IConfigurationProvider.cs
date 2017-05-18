@@ -8,6 +8,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
     public interface IConfigurationProvider
     {
         /// <summary>
+        /// Gets the configuration for the site.
+        /// </summary>
+        ISiteConfiguration SiteConfiguration { get; }
+
+        /// <summary>
         /// Gets the configuration for memberships.
         /// </summary>
         IMembershipConfiguration MembershipConfiguration { get; }
