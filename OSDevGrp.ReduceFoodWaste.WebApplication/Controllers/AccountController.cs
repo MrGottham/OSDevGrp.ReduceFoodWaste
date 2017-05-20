@@ -287,12 +287,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 action = action.Substring(startIndex);
             }
 
-            if (callbackAddress.AbsoluteUri.EndsWith("/") && action.StartsWith("/"))
-            {
-                return $"{callbackAddress.AbsoluteUri}{action.Substring(1)}".ToLower();
-            }
-
-            return $"{callbackAddress.AbsoluteUri}/{action}".ToLower();
+            return action.ToLower();
         }
 
         private void AddLocalClaims(ClaimsIdentity claimsIdentity)
