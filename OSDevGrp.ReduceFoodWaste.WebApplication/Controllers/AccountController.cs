@@ -275,10 +275,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             Uri callbackAddress = _configurationProvider.SiteConfiguration.CallbackAddress;
 
-            string action = Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl});
+            string action = Url.Action("ExternalLoginCallback", "Account", string.IsNullOrWhiteSpace(returnUrl) ? null : new {ReturnUrl = returnUrl});
             if (string.IsNullOrWhiteSpace(action))
             {
                 return callbackAddress.AbsoluteUri.ToLower();
+            }
+
+            int startIndex = action.IndexOf("/Account/", StringComparison.OrdinalIgnoreCase);
+            if (startIndex >= 0)
+            {
+                action = action.Substring(startIndex);
             }
 
             if (callbackAddress.AbsoluteUri.EndsWith("/") && action.StartsWith("/"))
