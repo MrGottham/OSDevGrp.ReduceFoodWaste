@@ -1,6 +1,5 @@
 ﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdMemberModel
-
 @{
     ViewBag.Title = string.Format("{0} {1}", Texts.Manage, Texts.HouseholdMemberAccount.ToLower());
 }
@@ -9,69 +8,61 @@
     @Html.Partial("_Sidebar")
 }
 
-<div class="row">
-    <hgroup class="title">
-        <h2>@ViewBag.Title</h2>
-    </hgroup>
-    @if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
-    {
-        <p class="message-success">@ViewBag.StatusMessage</p>
-    }
-    @if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
-    {
-        <p class="message-error">@ViewBag.ErrorMessage</p>
-    }
-    <table class="table table-sm">
-        <tbody>
-            <tr>
-                <td style="width: 15%" nowrap>@Texts.Name</td>
-                <td><strong>@Html.Raw(Model.Name)</strong></td>
-            </tr>
-            <tr>
-                <td style="width: 15%" nowrap>@Texts.MailAddress</td>
-                <td><strong>@Html.Raw(Model.MailAddress)</strong></td>
-            </tr>
-            <tr>
-                <td style="width: 15%" nowrap>@Texts.Membership</td>
-                @if (Model.MembershipExpireTime.HasValue)
-                {
-                    <td><strong>@Html.Raw(string.Format("{0} ({1}: {2})", Model.Membership, Texts.Expires, Model.MembershipExpireTime.Value.ToLongDateString()))</strong></td>
-                }
-                else
-                {
-                    <td><strong>@Html.Raw(Model.Membership)</strong></td>
-                }
-            </tr>
-            @if (Model.CanRenewMembership || Model.CanUpgradeMembership)
+<hgroup class="title">
+    <h2>@ViewBag.Title</h2>
+</hgroup>
+@if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
+{
+    <p class="message-success">@ViewBag.StatusMessage</p>
+}
+@if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
+{
+    <p class="message-error">@ViewBag.ErrorMessage</p>
+}
+<table class="table table-responsive">
+    <tbody>
+        <tr>
+            <td nowrap>@Texts.Name</td>
+            <td><strong>@Html.Raw(Model.Name)</strong></td>
+        </tr>
+        <tr>
+            <td nowrap>@Texts.MailAddress</td>
+            <td><strong>@Html.Raw(Model.MailAddress)</strong></td>
+        </tr>
+        <tr>
+            <td nowrap>@Texts.Membership</td>
+            @if (Model.MembershipExpireTime.HasValue)
             {
-                <tr>
-                    <td style="width: 15%" nowrap></td>
-                    <td>
-                        <div class="btn-toolbar">
-                            @if (Model.CanRenewMembership)
-                            {
-                                <div class="btn-group">
-                                    @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/HouseholdMember/Manage") }, new { @class = "btn btn-primary" })
-                                </div>
-                            }
-                            @if (Model.CanUpgradeMembership)
-                            {
-                                <div class="btn-group">
-                                    @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/HouseholdMember/Manage") }, new { @class = "btn btn-primary" })
-                                </div>
-                            }
-                        </div>
-                    </td>
-                </tr>
+                <td><strong>@Html.Raw(string.Format("{0} ({1}: {2})", Model.Membership, Texts.Expires, Model.MembershipExpireTime.Value.ToLongDateString()))</strong></td>
             }
-        </tbody>
-    </table>
-</div>
-<div class="row">
-    <hgroup class="title">
-        <h4>@Texts.ExternalLoginProviders</h4>
-    </hgroup>
-    <div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute("~/Account/RemoveExternalLogins")">
-        <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
-    </div>
+            else
+            {
+                <td><strong>@Html.Raw(Model.Membership)</strong></td>
+            }
+        </tr>
+        @if (Model.CanRenewMembership || Model.CanUpgradeMembership)
+        {
+            <tr>
+                <td nowrap></td>
+                <td>
+                    <div class="btn-group">
+                        @if (Model.CanRenewMembership)
+                        {
+                            @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/HouseholdMember/Manage") }, new { @class = "btn btn-primary" })
+                        }
+                        @if (Model.CanUpgradeMembership)
+                        {
+                            @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/HouseholdMember/Manage") }, new { @class = "btn btn-primary" })
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hgroup class="title">
+    <h4>@Texts.ExternalLoginProviders</h4>
+</hgroup>
+<div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute("~/Account/RemoveExternalLogins")">
+    <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
 </div>

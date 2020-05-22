@@ -1,12 +1,13 @@
-﻿using System;
-using System.Security.Principal;
-using System.Threading;
+﻿using AutoFixture;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
 using Rhino.Mocks;
+using System;
+using System.Collections.Generic;
+using System.Security.Principal;
+using System.Threading;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
 {
@@ -216,7 +217,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.IsNotNull(householdDataRepository);
 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
@@ -255,7 +256,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.IsNotNull(householdDataRepository);
 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
@@ -277,7 +278,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.IsNotNull(householdDataRepository);
 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
@@ -316,7 +317,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.IsNotNull(householdDataRepository);
 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
@@ -455,7 +456,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.IsNotNull(householdDataRepository);
 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
@@ -477,7 +478,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             Assert.IsNotNull(householdDataRepository);
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
-                .With(m => m.Households, null)
+                .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
 

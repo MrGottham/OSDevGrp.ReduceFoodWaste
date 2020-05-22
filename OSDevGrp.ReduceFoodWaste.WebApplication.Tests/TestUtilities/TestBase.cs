@@ -1,5 +1,5 @@
-﻿using System;
-using Ploeh.AutoFixture;
+﻿using AutoFixture;
+using System;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities
 {

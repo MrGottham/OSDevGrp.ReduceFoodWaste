@@ -1,11 +1,11 @@
-﻿using System;
-using System.Web;
+﻿using AutoFixture;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Cookies;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
 using Rhino.Mocks;
+using System;
+using System.Web;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.Cookies
 {

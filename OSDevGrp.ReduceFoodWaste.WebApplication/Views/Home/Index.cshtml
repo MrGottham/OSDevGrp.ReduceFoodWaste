@@ -19,21 +19,24 @@
 }
 
 <div class="row">
-    <div class="top-image">
-        <img src="@Url.Content(HomeController.TopImage)" />
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="top-image">
+            <img src="@Url.Content(HomeController.TopImage)"/>
+        </div>
     </div>
 </div>
-
 @if (Request.IsAuthenticated == false)
 {
     <div class="row">
-        <div class="box-rounded">
-            <hgroup class="title">
-                <h3>@Texts.LogInUsingAnotherService</h3>
-            </hgroup>
-            <section id="externalLogins">
-                @Html.Action("ExternalLoginsList", "Account", new { ViewBag.ReturnUrl })
-            </section>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="box-rounded">
+                <hgroup class="title">
+                    <h3>@Texts.LogInUsingAnotherService</h3>
+                </hgroup>
+                <section id="externalLogins">
+                    @Html.Action("ExternalLoginsList", "Account", new {ViewBag.ReturnUrl})
+                </section>
+            </div>
         </div>
     </div>
 }

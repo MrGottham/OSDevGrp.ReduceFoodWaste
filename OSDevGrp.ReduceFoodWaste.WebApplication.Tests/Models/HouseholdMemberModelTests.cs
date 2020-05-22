@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AutoFixture;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
 {
@@ -480,7 +480,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             while (householdModelCollection.Count < householdModelCollection.Capacity)
             {
                 var householdModel = Fixture.Build<HouseholdModel>()
-                    .With(m => m.HouseholdMembers, null)
+                    .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                     .Create();
                 householdModelCollection.Add(householdModel);
             }
@@ -501,7 +501,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
             while (householdModelCollection.Count < householdModelCollection.Capacity)
             {
                 var householdModel = Fixture.Build<HouseholdModel>()
-                    .With(m => m.HouseholdMembers, null)
+                    .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                     .Create();
                 householdModelCollection.Add(householdModel);
             }

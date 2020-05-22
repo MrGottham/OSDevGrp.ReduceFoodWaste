@@ -19,15 +19,15 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://mother/osintranet/foodwastehouseholddataservice.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost/osintranetdev/foodwastehouseholddataservice.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="foodwastehouseholddataservice.xsd" MetadataType="Schema" ID="c1e5f307-db1e-4449-a0e5-e527fb79db12" SourceId="1" SourceUrl="http://mother.osdevgrp.dk/osintranet/foodwastehouseholddataservice.svc?xsd=xsd1" />
-    <MetadataFile FileName="foodwastehouseholddataservice1.xsd" MetadataType="Schema" ID="85b24d9c-7c71-461a-8bc4-5ad4d523591d" SourceId="1" SourceUrl="http://mother.osdevgrp.dk/osintranet/foodwastehouseholddataservice.svc?xsd=xsd0" />
-    <MetadataFile FileName="foodwastehouseholddataservice.wsdl" MetadataType="Wsdl" ID="51773688-2c53-4a32-8169-6e1d6ef6626c" SourceId="1" SourceUrl="http://mother.osdevgrp.dk/osintranet/foodwastehouseholddataservice.svc?wsdl=wsdl0" />
-    <MetadataFile FileName="foodwastehouseholddataservice2.xsd" MetadataType="Schema" ID="42ebd844-8521-47ae-8b22-158d95af2e7d" SourceId="1" SourceUrl="http://mother.osdevgrp.dk/osintranet/foodwastehouseholddataservice.svc?xsd=xsd2" />
-    <MetadataFile FileName="FoodWasteHouseholdDataService1.wsdl" MetadataType="Wsdl" ID="dfa8f0b2-88e4-44a2-b8d5-431edc09ec06" SourceId="1" SourceUrl="http://mother.osdevgrp.dk/osintranet/foodwastehouseholddataservice.svc?wsdl" />
-    <MetadataFile FileName="foodwastehouseholddataservice.disco" MetadataType="Disco" ID="10f14bf5-78ae-4f25-b410-003449ef9c41" SourceId="1" SourceUrl="http://mother.osdevgrp.dk/osintranet/foodwastehouseholddataservice.svc?disco" />
+    <MetadataFile FileName="FoodWasteHouseholdDataService22.wsdl" MetadataType="Wsdl" ID="c8cc286e-38e5-4b26-b339-2818c2d64cbc" SourceId="1" SourceUrl="http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc?wsdl" />
+    <MetadataFile FileName="foodwastehouseholddataservice23.wsdl" MetadataType="Wsdl" ID="297a18a3-8ee0-4d72-ab9a-9206147ab86f" SourceId="1" SourceUrl="http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc?wsdl=wsdl0" />
+    <MetadataFile FileName="foodwastehouseholddataservice11.disco" MetadataType="Disco" ID="6b2e7c83-a5b0-483c-926b-eb07ee0dd9a7" SourceId="1" SourceUrl="http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc?disco" />
+    <MetadataFile FileName="foodwastehouseholddataservice33.xsd" MetadataType="Schema" ID="013dc139-dbc6-48cc-9c96-9fd8b7688266" SourceId="1" SourceUrl="http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc?xsd=xsd0" />
+    <MetadataFile FileName="foodwastehouseholddataservice34.xsd" MetadataType="Schema" ID="c94fffc9-5b3d-46a1-8711-4c02368f1418" SourceId="1" SourceUrl="http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc?xsd=xsd1" />
+    <MetadataFile FileName="foodwastehouseholddataservice35.xsd" MetadataType="Schema" ID="aa1f42bf-113a-4539-9716-d3b263d60d87" SourceId="1" SourceUrl="http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

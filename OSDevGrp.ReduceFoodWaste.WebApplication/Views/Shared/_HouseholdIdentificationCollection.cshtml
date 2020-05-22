@@ -3,15 +3,17 @@
 
 @if (Model.Any() || Model.HouseholdMemberCanAddHouseholds)
 {
-    <hr />
-    <ul class="nav nav-sidebar">
-        @foreach (var householdIdentificationModel in Model)
-        {
-            <li class="nav-item active">@Html.ActionLink(householdIdentificationModel.Name, "Manage", "Household", new { householdIdentifier = householdIdentificationModel.Identifier }, new { @class = "nav-link" })</li>
-        }
-        @if (Model.HouseholdMemberCanAddHouseholds)
-        {
-            <li class="nav-item active">@Html.ActionLink(string.Format("{0} {1}", Texts.Add, Texts.Household.ToLower()), "AddHousehold", "HouseholdMember", null, new { @class = "nav-link" })</li>
-        }
-    </ul>
+    <hr/>
+    foreach (var householdIdentificationModel in Model)
+    {
+        <ul class="nav nav-sidebar">
+            <li class="nav-item active">@Html.ActionLink(householdIdentificationModel.Name, "Manage", "Household", new {householdIdentifier = householdIdentificationModel.Identifier}, new {@class = "nav-link"})</li>
+        </ul>
+    }
+    if (Model.HouseholdMemberCanAddHouseholds)
+    {
+        <ul class="nav nav-sidebar">
+            <li class="nav-item active">@Html.ActionLink(string.Format("{0} {1}", Texts.Add, Texts.Household.ToLower()), "AddHousehold", "HouseholdMember", null, new {@class = "nav-link"})</li>
+        </ul>
+    }
 }

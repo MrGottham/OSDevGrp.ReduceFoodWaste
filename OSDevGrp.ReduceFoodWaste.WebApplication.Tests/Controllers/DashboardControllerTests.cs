@@ -1,4 +1,11 @@
-﻿using System;
+﻿using AutoFixture;
+using NUnit.Framework;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
+using Rhino.Mocks;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -6,13 +13,6 @@ using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using NUnit.Framework;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
-using Rhino.Mocks;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 {
@@ -118,7 +118,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             while (householdModelCollection.Count < householdModelCollection.Capacity)
             {
                 var householdModel = Fixture.Build<HouseholdModel>()
-                    .With(m => m.HouseholdMembers, null)
+                    .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                     .Create();
                 householdModelCollection.Add(householdModel);
             }

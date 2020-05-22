@@ -1,0 +1,32 @@
+﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdMemberModel
+    
+<div class="card">
+    <img class="card-img card-img-top img-fluid" alt="Responsive image" src="@VirtualPathUtility.ToAbsolute("~/Images/membership.png")" />
+    <div class="card-body text-center">
+        <h5 class="card-title">@Texts.Membership</h5>
+        @if (Model.MembershipExpireTime.HasValue)
+        {
+            <p class="card-text">@Html.Raw(string.Format("{0} ({1}: {2})", Model.Membership, Texts.Expires, Model.MembershipExpireTime.Value.ToLongDateString()))</p>
+        }
+        else
+        {
+            <p class="card-text">@Html.Raw(Model.Membership)</p>
+        }
+        @if (Model.CanRenewMembership)
+        {
+            if (Model.CanUpgradeMembership)
+            {
+                @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/Dashboard/Dashboard") }, new { @class = "btn btn-primary", style = "margin-bottom: 10px" })
+            }
+            else
+            {
+                @Html.ActionLink(Texts.Renew, "RenewMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/Dashboard/Dashboard") }, new { @class = "btn btn-primary" })
+            }
+        }
+        @if (Model.CanUpgradeMembership)
+        {
+            @Html.ActionLink(Texts.Upgrade, "UpgradeMembership", "HouseholdMember", new { returnUrl = VirtualPathUtility.ToAbsolute("~/Dashboard/Dashboard") }, new { @class = "btn btn-primary" })
+        }
+    </div>
+</div>

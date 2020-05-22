@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using AutoFixture;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
 {

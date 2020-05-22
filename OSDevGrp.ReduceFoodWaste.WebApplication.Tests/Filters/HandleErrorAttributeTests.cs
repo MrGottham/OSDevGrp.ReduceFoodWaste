@@ -1,11 +1,11 @@
-﻿using System;
-using System.Reflection;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using AutoFixture;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
+using System;
+using System.Reflection;
+using System.Web.Mvc;
+using System.Web.Routing;
 using HandleErrorAttribute = OSDevGrp.ReduceFoodWaste.WebApplication.Filters.HandleErrorAttribute;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Filters

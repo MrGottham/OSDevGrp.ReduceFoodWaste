@@ -12,19 +12,17 @@
     </section>
 }
 
-<div class="row">
-    <hgroup class="title">
-        <h1>@Texts.PrepareHouseholdMemberAccount</h1>
-    </hgroup>
-    @if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
-    {
-        <p class="message-success">@ViewBag.StatusMessage</p>
-    }
-    @if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
-    {
-        <p class="message-error">@ViewBag.ErrorMessage</p>
-    }
-</div>
+<hgroup class="title">
+    <h1>@Texts.PrepareHouseholdMemberAccount</h1>
+</hgroup>
+@if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
+{
+    <p class="message-success">@ViewBag.StatusMessage</p>
+}
+@if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
+{
+    <p class="message-error">@ViewBag.ErrorMessage</p>
+}
 @using (Html.BeginForm("Prepare", "HouseholdMember", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -55,10 +53,14 @@
                 @Html.CheckBoxFor(m => m.PrivacyPolicy.IsAccepted, new { @class = "form-check-input" })
                 @Html.LabelFor(m => m.PrivacyPolicy.IsAccepted, Texts.AcceptTermsAndPrivacyPolicy)
             </label>
-            <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)</div>
+            <div class="text-danger">@Html.ValidationMessageFor(m => m.PrivacyPolicy.IsAccepted)</div>
         </div>
     }
     <div class="btn-group float-right">
         <input class="btn btn-primary" type="submit" value="@Texts.Next" title="@Texts.Next" />
     </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

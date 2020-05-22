@@ -4,28 +4,27 @@
 <div id="basicInformation">
     @Html.Partial("_HouseholdBasicInformation", Model)
 </div>
-<div class="row">
-    <hgroup class="title">
-        <h4>@Texts.HouseholdMembers</h4>
-    </hgroup>
-    @if (ViewBag.AddingHouseholdMemberMode == null || ViewBag.AddingHouseholdMemberMode == false)
-    {
-        <div id="addHouseholdMember"></div>
-    }
-    else
-    {
-        @Html.Partial("_AddHouseholdMember", Model.HouseholdMembers.Last())
-    }
-    <table class="table table-sm">
-        <thead class="table-inverse">
+<hgroup class="title">
+    <h4>@Texts.HouseholdMembers</h4>
+</hgroup>
+@if (ViewBag.AddingHouseholdMemberMode == null || ViewBag.AddingHouseholdMemberMode == false)
+{
+    <div id="addHouseholdMember"></div>
+}
+else
+{
+    @Html.Partial("_AddHouseholdMember", Model.HouseholdMembers.Last())
+}
+<table class="table table-responsive">
+    <thead class="thead-light">
         <tr>
             <th>@Texts.MailAddress</th>
             <th></th>
         </tr>
-        </thead>
-        <tbody>
+    </thead>
+    <tbody>
         <tr>
-            <td style="vertical-align: middle">@Texts.AddHouseholdMemberToHousehold</td>
+            <td>@Texts.AddHouseholdMemberToHousehold</td>
             <td>
                 <div class="btn-group">
                     <a class="btn btn-primary" onclick="@string.Format("parent.addHouseholdMember('{0}')", Model.Identifier)">@Texts.Add</a>
@@ -37,7 +36,7 @@
             foreach (var householdMember in Model.HouseholdMembers.Take(Model.HouseholdMembers.Count() - (ViewBag.AddingHouseholdMemberMode == null || ViewBag.AddingHouseholdMemberMode == false ? 0 : 1)))
             {
                 <tr>
-                    <td style="vertical-align: middle">@householdMember.MailAddress</td>
+                    <td>@householdMember.MailAddress</td>
                     <td>
                         @if (householdMember.Removable)
                         {
@@ -57,6 +56,5 @@
                 </tr>
             }
         }
-        </tbody>
-    </table>
-</div>
+    </tbody>
+</table>

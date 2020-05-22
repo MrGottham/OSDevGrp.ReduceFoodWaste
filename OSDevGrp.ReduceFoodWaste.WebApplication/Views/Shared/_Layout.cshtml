@@ -6,7 +6,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title - @Texts.ReduceFoodWasteProject</title>
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/bootstrap/css")
@@ -14,23 +13,25 @@
 </head>
 <body>
     <header>
-        <div class="navbar navbar-light bg-faded">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom mb-3 fixed-top">
             <div class="container">
-                <nav class="navbar navbar-light bg-faded">
-                    @Html.ActionLink(Texts.ReduceFoodWasteProject, "Index", "Home", null, new { @class = "navbar-brand" })
-                    <ul class="nav navbar-nav">
-                        <li class="nav-item active">@Html.ActionLink(Texts.Home, "Index", "Home", null, new { @class = "nav-link" })</li>
+                @Html.ActionLink(Texts.ReduceFoodWasteProject, "Index", "Home", null, new { @class = "navbar-brand" })
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item active d-none d-lg-block d-xl-block">@Html.ActionLink(Texts.Home, "Index", "Home", null, new { @class = "nav-link" })</li>
                         @if (User != null && User.Identity != null && User.Identity.IsAuthenticated && User.Identity.IsValidatedHouseholdMember())
                         {
-                            <li class="nav-item active">@Html.ActionLink(Texts.Dashboard, "Dashboard", "Dashboard", null, new { @class = "nav-link" })</li>
+                            <li class="nav-item active d-none d-sm-block d-md-block d-lg-block d-xl-block">@Html.ActionLink(Texts.Dashboard, "Dashboard", "Dashboard", null, new { @class = "nav-link" })</li>
                         }
-                    </ul>
-                    <ul class="nav navbar-nav float-right">
+                        <li class="flex-grow-1" />
                         @if (Request.IsAuthenticated)
                         {
                             if (User != null && User.Identity != null && User.Identity.IsAuthenticated)
                             {
-                                <li class="nav-item">@Html.ActionLink(User.Identity.Name, "Manage", "Account", null, new { @class = "nav-link" })</li>
+                                <li class="nav-item d-none d-md-block d-lg-block d-xl-block">@Html.ActionLink(User.Identity.Name, "Manage", "Account", null, new { @class = "nav-link" })</li>
                             }
                             <li class="nav-item active">
                                 @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "form-inline", id = "logoutForm" }))
@@ -45,24 +46,28 @@
                             <li class="nav-item active">@Html.ActionLink(Texts.LogIn, "Login", "Account", null, new { @class = "nav-link" })</li>
                         }
                     </ul>
-                </nav>
+                </div>
             </div>
-        </div>
+        </nav>
     </header>
     <div id="body">
         <div class="container">
             @if (IsSectionDefined("sidebar"))
             {
-                <div class="col-sm-3 col-md-2 sidebar">
-                    @RenderSection("sidebar", required: true)
-                </div>
-                <div class="col-sm-9 col-md-10">
-                    @Html.Partial("_CookieConsent")
-                    <div class="row">
-                        @RenderSection("featured", required: false)
-                        <section class="content-wrapper clear-fix">
-                            @RenderBody()
-                        </section>
+                <div class="row">
+                    <div class="col-md-3 col-lg-3 col-xl-2 d-none d-md-block d-lg-block d-xl-block sidebar">
+                        @RenderSection("sidebar", required: true)
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
+                        @Html.Partial("_CookieConsent")
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                @RenderSection("featured", required: false)
+                                <section class="content-wrapper clear-fix">
+                                    @RenderBody()
+                                </section>
+                            </div>
+                        </div>
                     </div>
                 </div>
             }
@@ -70,10 +75,12 @@
             {
                 @Html.Partial("_CookieConsent")
                 <div class="row">
-                    @RenderSection("featured", required: false)
-                    <section class="content-wrapper clear-fix">
-                        @RenderBody()
-                    </section>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        @RenderSection("featured", required: false)
+                        <section class="content-wrapper clear-fix">
+                            @RenderBody()
+                        </section>
+                    </div>
                 </div>
             }
         </div>
@@ -81,7 +88,7 @@
     <footer>
         <div class="container">
             <div class="row">
-                <div class="float-left">
+                <div class="float-left flex-grow-1">
                     <p>Copyright &copy; OS Development Group @DateTime.Now.Year - @Texts.ReduceFoodWasteProject</p>
                 </div>
                 <div class="float-right">

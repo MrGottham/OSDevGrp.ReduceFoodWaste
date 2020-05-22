@@ -66,18 +66,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     .ForMember(dest => dest.ExtensionData, opt => opt.Ignore());
 
                 configuration.CreateMap<MemberOfHouseholdModel, HouseholdRemoveHouseholdMemberCommand>()
-                    .ConvertUsing(src =>
-                    {
-                        if (src.Removable == false)
-                        {
-                            throw new ReduceFoodWasteSystemException(Texts.CannotRemoveYourselfAsHouseholdMember);
-                        }
-                        return new HouseholdRemoveHouseholdMemberCommand
-                        {
-                            HouseholdIdentifier = src.HouseholdIdentifier,
-                            MailAddress = src.MailAddress
-                        };
-                    });
+                    .ConvertUsing(src => ToHouseholdRemoveHouseholdMemberCommand(src));
 
                 configuration.CreateMap<HouseholdMemberIdentificationView, HouseholdMemberModel>()
                     .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.HouseholdMemberIdentifier))
@@ -132,27 +121,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                     });
 
                 configuration.CreateMap<HouseholdMemberModel, HouseholdMemberActivateCommand>()
-                    .ConvertUsing(src =>
-                    {
-                        if (string.IsNullOrWhiteSpace(src.ActivationCode))
-                        {
-                            throw new ReduceFoodWasteSystemException(Texts.ActivationCodeMustBeGiven);
-                        }
-                        return new HouseholdMemberActivateCommand
-                        {
-                            ActivationCode = src.ActivationCode
-                        };
-                    });
+                    .ConvertUsing(src => ToHouseholdMemberActivateCommand(src));
 
                 configuration.CreateMap<PrivacyPolicyModel, HouseholdMemberAcceptPrivacyPolicyCommand>()
-                    .ConvertUsing(src =>
-                    {
-                        if (src.IsAccepted == false)
-                        {
-                            throw new ReduceFoodWasteSystemException(Texts.PrivacyPoliciesHasNotBeenAccepted);
-                        }
-                        return new HouseholdMemberAcceptPrivacyPolicyCommand();
-                    });
+                    .ConvertUsing(src => ToHouseholdMemberAcceptPrivacyPolicyCommand(src));
 
                 configuration.CreateMap<MembershipModel, HouseholdMemberUpgradeMembershipCommand>()
                     .ForMember(dest => dest.Membership, opt => opt.MapFrom(src => src.Name))
@@ -188,17 +160,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 configuration.CreateMap<StaticTextView, PrivacyPolicyModel>()
                     .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.StaticTextIdentifier))
                     .ForMember(dest => dest.Header, opt => opt.MapFrom(src => src.SubjectTranslation))
-                    .ForMember(dest => dest.Body, opt => opt.ResolveUsing(src =>
-                    {
-                        var body = src.BodyTranslation;
-                        if (string.IsNullOrEmpty(body))
-                        {
-                            return body;
-                        }
-                        body = body.Replace("<html>", string.Empty);
-                        body = body.Replace("</html>", string.Empty);
-                        return body;
-                    }))
+                    .ForMember(dest => dest.Body, opt => opt.MapFrom(src => ToBody(src)))
                     .ForMember(dest => dest.IsAccepted, opt => opt.Ignore())
                     .ForMember(dest => dest.AcceptedTime, opt => opt.Ignore());
             });
@@ -236,6 +198,56 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Repositories
                 }
                 throw;
             }
+        }
+
+        private static HouseholdRemoveHouseholdMemberCommand ToHouseholdRemoveHouseholdMemberCommand(MemberOfHouseholdModel source)
+        {
+            if (source.Removable == false)
+            {
+                throw new ReduceFoodWasteSystemException(Texts.CannotRemoveYourselfAsHouseholdMember);
+            }
+
+            return new HouseholdRemoveHouseholdMemberCommand
+            {
+                HouseholdIdentifier = source.HouseholdIdentifier,
+                MailAddress = source.MailAddress
+            };
+        }
+
+        private static HouseholdMemberActivateCommand ToHouseholdMemberActivateCommand(HouseholdMemberModel source)
+        {
+            if (string.IsNullOrWhiteSpace(source.ActivationCode))
+            {
+                throw new ReduceFoodWasteSystemException(Texts.ActivationCodeMustBeGiven);
+            }
+
+            return new HouseholdMemberActivateCommand
+            {
+                ActivationCode = source.ActivationCode
+            };
+        }
+
+        private static HouseholdMemberAcceptPrivacyPolicyCommand ToHouseholdMemberAcceptPrivacyPolicyCommand(PrivacyPolicyModel source)
+        {
+            if (source.IsAccepted == false)
+            {
+                throw new ReduceFoodWasteSystemException(Texts.PrivacyPoliciesHasNotBeenAccepted);
+            }
+
+            return new HouseholdMemberAcceptPrivacyPolicyCommand();
+        }
+
+        private static string ToBody(StaticTextView source)
+        {
+            var body = source.BodyTranslation;
+            if (string.IsNullOrEmpty(body))
+            {
+                return body;
+            }
+
+            body = body.Replace("<html>", string.Empty);
+            body = body.Replace("</html>", string.Empty);
+            return body;
         }
 
         #endregion

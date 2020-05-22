@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using AutoFixture;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
@@ -7,7 +6,10 @@ using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
 {
@@ -56,7 +58,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var householdIdentificationView = Fixture.Build<HouseholdIdentificationView>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
                 .With(m => m.Name, Fixture.Create<string>())
-                .With(m => m.ExtensionData, null)
+                .With(m => m.ExtensionData, (ExtensionDataObject) null)
                 .Create();
             Assert.That(householdIdentificationView, Is.Not.Null);
             Assert.That(householdIdentificationView.HouseholdIdentifier, Is.Not.EqualTo(default(Guid)));
@@ -95,7 +97,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                     var householdMemberIdentificationView = Fixture.Build<HouseholdMemberIdentificationView>()
                         .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
                         .With(m => m.MailAddress, Fixture.Create<string>())
-                        .With(m => m.ExtensionData, null)
+                        .With(m => m.ExtensionData, (ExtensionDataObject) null)
                         .Create();
                     Assert.That(householdMemberIdentificationView, Is.Not.Null);
                     Assert.That(householdMemberIdentificationView.HouseholdMemberIdentifier, Is.Not.EqualTo(default(Guid)));
@@ -115,7 +117,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                 .With(m => m.Description, hasDesciption ? Fixture.Create<string>() : null)
                 .With(m => m.CreationTime, DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)))
                 .With(m => m.HouseholdMembers, householdMemberIdentificationViewCollection)
-                .With(m => m.ExtensionData, null)
+                .With(m => m.Storages, new StorageView[0])
+                .With(m => m.ExtensionData, (ExtensionDataObject) null)
                 .Create();
             Assert.That(householdView, Is.Not.Null);
             Assert.That(householdView.HouseholdIdentifier, Is.Not.EqualTo(default(Guid)));
@@ -183,7 +186,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Description, Fixture.Create<string>())
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.Name, Is.Not.Null);
@@ -215,7 +218,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                 .With(m => m.Identifier, Guid.NewGuid())
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Description, Fixture.Create<string>())
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.Identifier, Is.Not.EqualTo(default(Guid)));
@@ -330,7 +333,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var householdMemberIdentificationView = Fixture.Build<HouseholdMemberIdentificationView>()
                 .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
                 .With(m => m.MailAddress, Fixture.Create<string>())
-                .With(m => m.ExtensionData, null)
+                .With(m => m.ExtensionData, (ExtensionDataObject) null)
                 .Create();
             Assert.That(householdMemberIdentificationView, Is.Not.Null);
             Assert.That(householdMemberIdentificationView.HouseholdMemberIdentifier, Is.Not.EqualTo(default(Guid)));
@@ -375,7 +378,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var householdMemberIdentificationView = Fixture.Build<HouseholdMemberIdentificationView>()
                 .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
                 .With(m => m.MailAddress, Fixture.Create<string>())
-                .With(m => m.ExtensionData, null)
+                .With(m => m.ExtensionData, (ExtensionDataObject) null)
                 .Create();
             Assert.That(householdMemberIdentificationView, Is.Not.Null);
             Assert.That(householdMemberIdentificationView.HouseholdMemberIdentifier, Is.Not.EqualTo(default(Guid)));
@@ -539,7 +542,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                     var householdIdentificationView = Fixture.Build<HouseholdIdentificationView>()
                         .With(m => m.HouseholdIdentifier, Guid.NewGuid())
                         .With(m => m.Name, Fixture.Create<string>())
-                        .With(m => m.ExtensionData, null)
+                        .With(m => m.ExtensionData, (ExtensionDataObject) null)
                         .Create();
                     Assert.That(householdIdentificationView, Is.Not.Null);
                     Assert.That(householdIdentificationView.HouseholdIdentifier, Is.Not.EqualTo(default(Guid)));
@@ -562,14 +565,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
                 .With(m => m.MembershipExpireTime, hasMembershipExpireTime ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .With(m => m.CanRenewMembership, canRenewMembership)
                 .With(m => m.CanUpgradeMembership, canUpgradeMembership)
-                .With(m => m.IsPrivacyPolictyAccepted, hasAcceptedPrivacyPolicy)
+                .With(m => m.IsPrivacyPolicyAccepted, hasAcceptedPrivacyPolicy)
                 .With(m => m.PrivacyPolicyAcceptedTime, hasAcceptedPrivacyPolicy ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .With(m => m.HasReachedHouseholdLimit, hasReachedHouseholdLimit)
                 .With(m => m.CreationTime, DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)))
                 .With(m => m.UpgradeableMemberships, upgradeableMemberships)
                 .With(m => m.Households, householdIdentificationViewCollection)
-                .With(m => m.Payments, null)
-                .With(m => m.ExtensionData, null)
+                .With(m => m.Payments, (IEnumerable<PaymentView>) null)
+                .With(m => m.ExtensionData, (ExtensionDataObject) null)
                 .Create();
             Assert.That(householdMemberView, Is.Not.Null);
             Assert.That(householdMemberView.HouseholdMemberIdentifier, Is.Not.EqualTo(default(Guid)));
@@ -600,7 +603,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             }
             Assert.That(householdMemberView.CanRenewMembership, Is.EqualTo(canRenewMembership));
             Assert.That(householdMemberView.CanUpgradeMembership, Is.EqualTo(canUpgradeMembership));
-            Assert.That(householdMemberView.IsPrivacyPolictyAccepted, Is.EqualTo(hasAcceptedPrivacyPolicy));
+            Assert.That(householdMemberView.IsPrivacyPolicyAccepted, Is.EqualTo(hasAcceptedPrivacyPolicy));
             if (hasAcceptedPrivacyPolicy)
             {
                 Assert.That(householdMemberView.PrivacyPolicyAcceptedTime, Is.Not.Null);
@@ -712,7 +715,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivationCode, activationCode)
-                .With(m => m.Households, null)
+                .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
@@ -742,7 +745,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
 
             var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivationCode, illegalActivationCode)
-                .With(m => m.Households, null)
+                .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(illegalActivationCode));
@@ -852,7 +855,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var booleanResult = Fixture.Build<BooleanResult>()
                 .With(m => m.Result, testValue)
                 .With(m => m.EventDate, DateTime.Now)
-                .With(m => m.ExtensionData, null)
+                .With(m => m.ExtensionData, (ExtensionDataObject) null)
                 .Create();
             Assert.That(booleanResult, Is.Not.Null);
             Assert.That(booleanResult.Result, Is.EqualTo(testValue));
@@ -872,7 +875,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
 
             var dataProviderView = Fixture.Build<DataProviderView>()
                 .With(m => m.DataProviderIdentifier, Guid.NewGuid())
-                .With(m => m.ExtensionData, null)
+                .With(m => m.ExtensionData, (ExtensionDataObject) null)
                 .Create();
             Assert.That(dataProviderView, Is.Not.Null);
             Assert.That(dataProviderView.DataProviderIdentifier, Is.Not.EqualTo(default(Guid)));
@@ -905,7 +908,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
 
             var dataProviderView = Fixture.Build<DataProviderView>()
                 .With(m => m.DataProviderIdentifier, Guid.NewGuid())
-                .With(m => m.ExtensionData, null)
+                .With(m => m.ExtensionData, (ExtensionDataObject) null)
                 .Create();
             Assert.That(dataProviderView, Is.Not.Null);
             Assert.That(dataProviderView.DataProviderIdentifier, Is.Not.EqualTo(default(Guid)));
@@ -936,7 +939,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
 
             var staticTextView = Fixture.Build<StaticTextView>()
                 .With(m => m.StaticTextIdentifier, Guid.NewGuid())
-                .With(m => m.ExtensionData, null)
+                .With(m => m.ExtensionData, (ExtensionDataObject) null)
                 .Create();
             Assert.That(staticTextView, Is.Not.Null);
             Assert.That(staticTextView.StaticTextIdentifier, Is.Not.EqualTo(default(Guid)));
@@ -971,7 +974,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Repositories
             var staticTextView = Fixture.Build<StaticTextView>()
                 .With(m => m.StaticTextIdentifier, Guid.NewGuid())
                 .With(m => m.BodyTranslation, $"<html>{Fixture.Create<string>()}</html>")
-                .With(m => m.ExtensionData, null)
+                .With(m => m.ExtensionData, (ExtensionDataObject) null)
                 .Create();
             Assert.That(staticTextView, Is.Not.Null);
             Assert.That(staticTextView.BodyTranslation, Is.Not.Null);

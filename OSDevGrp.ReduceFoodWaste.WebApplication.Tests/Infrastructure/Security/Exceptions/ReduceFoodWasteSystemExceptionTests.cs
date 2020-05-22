@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AutoFixture;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
+using System;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.Exceptions
 {

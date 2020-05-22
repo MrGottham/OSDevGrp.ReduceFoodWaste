@@ -1,4 +1,12 @@
-﻿using System;
+﻿using AutoFixture;
+using NUnit.Framework;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
+using Rhino.Mocks;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -6,14 +14,6 @@ using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using NUnit.Framework;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
-using Rhino.Mocks;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers.HouseholdMemberController
 {
@@ -145,7 +145,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers.HouseholdMem
         public void TestThatAddHouseholdWithInvalidModelForAddingNewHouseholdReturnsViewResultWithModelForAddingNewHousehold()
         {
             HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
@@ -168,7 +168,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers.HouseholdMem
         public void TestThatAddHouseholdWithValidModelForAddingNewHouseholdCallsCreateHouseholdAsyncOnHouseholdDataRepository()
         {
             HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
@@ -193,7 +193,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers.HouseholdMem
         public void TestThatAddHouseholdWithValidModelForAddingNewHouseholdReturnsRedirectToRouteResultForDashboard()
         {
             HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
@@ -228,7 +228,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers.HouseholdMem
         private WebApplication.Controllers.HouseholdMemberController CreateHouseholdMemberController()
         {
             _householdDataRepositoryMock.Stub(m => m.CreateHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything))
-                .Return(Task.Run(() => Fixture.Build<HouseholdModel>().With(m => m.HouseholdMembers, null).Create()))
+                .Return(Task.Run(() => Fixture.Build<HouseholdModel>().With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null).Create()))
                 .Repeat.Any();
 
             WebApplication.Controllers.HouseholdMemberController householdMemberController = new WebApplication.Controllers.HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock, _modelHelperMock, _utilitiesMock);

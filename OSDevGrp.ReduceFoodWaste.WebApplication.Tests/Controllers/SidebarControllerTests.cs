@@ -1,16 +1,16 @@
-﻿using System.Globalization;
-using System.Linq;
-using System.Security.Principal;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using AutoFixture;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
 using Rhino.Mocks;
+using System.Globalization;
+using System.Linq;
+using System.Security.Principal;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 {

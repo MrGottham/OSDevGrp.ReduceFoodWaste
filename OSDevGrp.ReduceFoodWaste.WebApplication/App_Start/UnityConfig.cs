@@ -1,11 +1,11 @@
 using System;
-using Microsoft.Practices.Unity;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Cookies;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories.Configuration;
+using Unity;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication
 {
@@ -15,8 +15,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
     public static class UnityConfig
     {
         #region Unity Container
-
-        private static readonly Lazy<IUnityContainer> Container = new Lazy<IUnityContainer>(() =>
+        private static readonly Lazy<IUnityContainer> _container = new Lazy<IUnityContainer>(() =>
         {
             var container = new UnityContainer();
             RegisterTypes(container);
@@ -24,31 +23,33 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
         });
 
         /// <summary>
-        /// Gets the configured Unity container.
+        /// Configured Unity Container.
         /// </summary>
-        public static IUnityContainer GetConfiguredContainer()
-        {
-            return Container.Value;
-        }
-
+        public static IUnityContainer Container => _container.Value;
         #endregion
 
-        /// <summary>Registers the type mappings with the Unity container.</summary>
+        /// <summary>
+        /// Registers the type mappings with the Unity container.
+        /// </summary>
         /// <param name="container">The unity container to configure.</param>
-        /// <remarks>There is no need to register concrete types such as controllers or API controllers (unless you want to 
-        /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
+        /// <remarks>
+        /// There is no need to register concrete types such as controllers or
+        /// API controllers (unless you want to change the defaults), as Unity
+        /// allows resolving a concrete type even if it was not previously
+        /// registered.
+        /// </remarks>
         private static void RegisterTypes(IUnityContainer container)
         {
             if (container == null)
             {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
 
             // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
             // container.LoadConfiguration();
 
             RegisterInfrastructureTypes(container);
-            RegiserModelHelperTypes(container);
+            RegisterModelHelperTypes(container);
             RegisterRepositoryTypes(container);
         }
 
@@ -56,7 +57,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
         {
             if (container == null)
             {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
 
             container.RegisterType<IUtilities, Utilities>();
@@ -65,11 +66,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
             container.RegisterType<ICookieHelper, CookieHelper>();
         }
 
-        private static void RegiserModelHelperTypes(IUnityContainer container)
+        private static void RegisterModelHelperTypes(IUnityContainer container)
         {
             if (container == null)
             {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
 
             container.RegisterType<IModelHelper, ModelHelper>();
@@ -79,12 +80,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
         {
             if (container == null)
             {
-                throw new ArgumentNullException("container");
+                throw new ArgumentNullException(nameof(container));
             }
 
-            container.RegisterInstance<ISiteConfiguration>(SiteConfiguration.Create());
-            container.RegisterInstance<IMembershipConfiguration>(MembershipConfiguration.Create());
-            container.RegisterInstance<IPaymentConfiguration>(PaymentConfiguration.Create());
+            container.RegisterInstance(SiteConfiguration.Create());
+            container.RegisterInstance(MembershipConfiguration.Create());
+            container.RegisterInstance(PaymentConfiguration.Create());
 
             container.RegisterType<ICredentialsProvider, CredentialsProvider>();
             container.RegisterType<IConfigurationProvider, ConfigurationProvider>();

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Security.Principal;
+﻿using AutoFixture;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
 using Rhino.Mocks;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.Providers
 {

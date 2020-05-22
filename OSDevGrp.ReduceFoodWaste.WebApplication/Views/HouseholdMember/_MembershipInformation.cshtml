@@ -1,29 +1,27 @@
 ﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model OSDevGrp.ReduceFoodWaste.WebApplication.Models.MembershipModel
 
-<div class="row">
-    <hgroup class="title">
-        <h4>@Model.Name</h4>
-    </hgroup>
-    <p>@Html.Raw(Model.Description)</p>
-    @if (Model.IsFreeOfCost == false && (Model.CanRenew || Model.CanUpgrade))
+<hgroup class="title">
+    <h4>@Model.Name</h4>
+</hgroup>
+<p>@Html.Raw(Model.Description)</p>
+@if (Model.IsFreeOfCost == false && (Model.CanRenew || Model.CanUpgrade))
+{
+    using (Html.BeginForm("UpgradeOrRenewMembership", "HouseholdMember", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
     {
-        using (Html.BeginForm("UpgradeOrRenewMembership", "HouseholdMember", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.Name)
-            @Html.HiddenFor(m => m.Price)
-            @Html.HiddenFor(m => m.PriceCultureInfoName)
-            @Html.HiddenFor(m => m.CanRenew)
-            @Html.HiddenFor(m => m.CanUpgrade)
-            <div>
-                <div class="btn-group float-right">
-                    <input class="btn btn-primary" type="submit" value="@Texts.Buy" title="@Texts.Buy" />
-                </div>
-                <div class="clear-fix">
-                </div>
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Name)
+        @Html.HiddenFor(m => m.Price)
+        @Html.HiddenFor(m => m.PriceCultureInfoName)
+        @Html.HiddenFor(m => m.CanRenew)
+        @Html.HiddenFor(m => m.CanUpgrade)
+        <div>
+            <div class="btn-group float-right">
+                <input class="btn btn-primary" type="submit" value="@Texts.Buy" title="@Texts.Buy" />
             </div>
-        }
+            <div class="clear-fix">
+            </div>
+        </div>
     }
-    <hr />
-</div>
+}
+<hr />

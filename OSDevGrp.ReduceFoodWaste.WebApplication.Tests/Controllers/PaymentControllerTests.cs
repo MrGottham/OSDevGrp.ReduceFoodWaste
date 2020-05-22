@@ -1,4 +1,14 @@
-﻿using System;
+﻿using AutoFixture;
+using NUnit.Framework;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
+using Rhino.Mocks;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -8,16 +18,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using NUnit.Framework;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Utilities;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
-using Rhino.Mocks;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 {
@@ -153,10 +153,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PayableModel payableModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandlerIdentifier, null)
-                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentHandlerIdentifier, (Guid?) null)
+                .With(m => m.PaymentHandlers, (IEnumerable<PaymentHandlerModel>) null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
-                .With(m => m.PaymentReceipt, null)
+                .With(m => m.PaymentReceipt, (string) null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.Price, Is.GreaterThan(0M));
@@ -195,10 +195,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PayableModel payableModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, 0M)
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandlerIdentifier, null)
-                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentHandlerIdentifier, (Guid?) null)
+                .With(m => m.PaymentHandlers, (IEnumerable<PaymentHandlerModel>) null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
-                .With(m => m.PaymentReceipt, null)
+                .With(m => m.PaymentReceipt, (string) null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.Price, Is.EqualTo(0M));
@@ -237,10 +237,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PayableModel payableModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, 0M)
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandlerIdentifier, null)
-                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentHandlerIdentifier, (Guid?) null)
+                .With(m => m.PaymentHandlers, (IEnumerable<PaymentHandlerModel>) null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
-                .With(m => m.PaymentReceipt, null)
+                .With(m => m.PaymentReceipt, (string) null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.Price, Is.EqualTo(0M));
@@ -279,10 +279,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PayableModel payableModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, 0M)
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandlerIdentifier, null)
-                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentHandlerIdentifier, (Guid?) null)
+                .With(m => m.PaymentHandlers, (IEnumerable<PaymentHandlerModel>) null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
-                .With(m => m.PaymentReceipt, null)
+                .With(m => m.PaymentReceipt, (string) null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.Price, Is.EqualTo(0M));
@@ -327,10 +327,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PayableModel payableModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandlerIdentifier, null)
-                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentHandlerIdentifier, (Guid?) null)
+                .With(m => m.PaymentHandlers, (IEnumerable<PaymentHandlerModel>) null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
-                .With(m => m.PaymentReceipt, null)
+                .With(m => m.PaymentReceipt, (string) null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.Price, Is.GreaterThan(0M));
@@ -375,10 +375,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.BillingInformation, Fixture.Create<string>())
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
-                .With(m => m.PaymentHandlerIdentifier, null)
-                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentHandlerIdentifier, (Guid?) null)
+                .With(m => m.PaymentHandlers, (IEnumerable<PaymentHandlerModel>) null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
-                .With(m => m.PaymentReceipt, null)
+                .With(m => m.PaymentReceipt, (string) null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.BillingInformation, Is.Not.Null);
@@ -425,7 +425,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
-                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentHandlers, (IEnumerable<PaymentHandlerModel>) null)
                 .With(m => m.PaymentStatus, PaymentStatus.Paid)
                 .With(m => m.PaymentReceipt, Fixture.Create<string>())
                 .Create();
@@ -526,9 +526,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
-                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentHandlers, (IEnumerable<PaymentHandlerModel>) null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
-                .With(m => m.PaymentReceipt, null)
+                .With(m => m.PaymentReceipt, (string) null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.BillingInformation, Is.Not.Null);
@@ -567,11 +567,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
-                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentHandlers, (IEnumerable<PaymentHandlerModel>) null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
-                .With(m => m.PaymentTime, null)
-                .With(m => m.PaymentReference, null)
-                .With(m => m.PaymentReceipt, null)
+                .With(m => m.PaymentTime, (DateTime?) null)
+                .With(m => m.PaymentReference, (string) null)
+                .With(m => m.PaymentReceipt, (string) null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.BillingInformation, Is.Not.Null);
@@ -636,9 +636,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
-                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentHandlers, (IEnumerable<PaymentHandlerModel>) null)
                 .With(m => m.PaymentStatus, PaymentStatus.Unpaid)
-                .With(m => m.PaymentReceipt, null)
+                .With(m => m.PaymentReceipt, (string) null)
                 .Create();
             Assert.That(payableModel, Is.Not.Null);
             Assert.That(payableModel.BillingInformation, Is.Not.Null);
@@ -681,7 +681,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
-                .With(m => m.PaymentHandlers, null)
+                .With(m => m.PaymentHandlers, (IEnumerable<PaymentHandlerModel>) null)
                 .With(m => m.PaymentStatus, PaymentStatus.Paid)
                 .With(m => m.PaymentReceipt, Fixture.Create<string>())
                 .Create();

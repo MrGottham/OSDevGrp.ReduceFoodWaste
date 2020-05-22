@@ -1,6 +1,5 @@
 ﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model OSDevGrp.ReduceFoodWaste.WebApplication.Models.HouseholdModel
-
 @{
     ViewBag.Title = string.Format("{0} {1}", Texts.Manage, Texts.Household.ToLower());
 }
@@ -9,41 +8,44 @@
     @Html.Partial("_Sidebar")
 }
 
-<div class="row">
-    <hgroup class="title">
-        <h2>@ViewBag.Title</h2>
-    </hgroup>
-    @if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
-    {
-        <p class="message-success">@ViewBag.StatusMessage</p>
-    }
-    @if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
-    {
-        <p class="message-error">@ViewBag.ErrorMessage</p>
-    }
-    @if ((ViewBag.EditMode == null || ViewBag.EditMode == false) && (ViewBag.AddingHouseholdMemberMode == null || ViewBag.AddingHouseholdMemberMode == false))
-    {
-        <div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute(string.Format("~/Household/HouseholdInformation?householdIdentifier={0}", Model.Identifier))">
-            <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
-        </div>
-    }
-    else
-    {
-        @Html.Partial("_HouseholdInformation", Model)
-    }
-</div>
+<hgroup class="title">
+    <h2>@ViewBag.Title</h2>
+</hgroup>
+@if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
+{
+    <p class="message-success">@ViewBag.StatusMessage</p>
+}
+@if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
+{
+    <p class="message-error">@ViewBag.ErrorMessage</p>
+}
+@if ((ViewBag.EditMode == null || ViewBag.EditMode == false) && (ViewBag.AddingHouseholdMemberMode == null || ViewBag.AddingHouseholdMemberMode == false))
+{
+    <div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute(string.Format("~/Household/HouseholdInformation?householdIdentifier={0}", Model.Identifier))">
+        <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
+    </div>
+}
+else
+{
+    @Html.Partial("_HouseholdInformation", Model)
+}
 
 @section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
         function editBasicInformation(householdIdentifier) {
             if ($("#basicInformation") != null) {
-                $("#basicInformation").load("@VirtualPathUtility.ToAbsolute("~/Household/Edit?householdIdentifier=")" + householdIdentifier);
+                $("#basicInformation").load("@VirtualPathUtility.ToAbsolute("~/Household/Edit?householdIdentifier=")" + householdIdentifier, function() {
+                    $.validator.unobtrusive.parse("#editHousehold");
+                });
             }
         }
 
         function addHouseholdMember(householdIdentifier) {
             if ($("#addHouseholdMember") != null) {
-                $("#addHouseholdMember").load("@VirtualPathUtility.ToAbsolute("~/Household/AddHouseholdMember?householdIdentifier=")" + householdIdentifier);
+                $("#addHouseholdMember").load("@VirtualPathUtility.ToAbsolute("~/Household/AddHouseholdMember?householdIdentifier=")" + householdIdentifier, function() {
+                    $.validator.unobtrusive.parse("#addHouseholdMember");
+                });
             }
         }
 

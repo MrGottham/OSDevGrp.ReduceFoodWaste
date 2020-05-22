@@ -1,6 +1,5 @@
 ﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model OSDevGrp.ReduceFoodWaste.WebApplication.Models.DashboardModel
-
 @{
     ViewBag.Title = Texts.Dashboard;
 }
@@ -9,11 +8,9 @@
     @Html.Partial("_Sidebar")
 }
 
-<div class="row">
-    <hgroup class="title">
-        <h2>@ViewBag.Title</h2>
-    </hgroup>
-    <div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute("~/Dashboard/HouseholdMemberInformation")">
-        <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
-    </div>
+<hgroup class="title">
+    <h2>@ViewBag.Title</h2>
+</hgroup>
+<div class="partialContents" data-url="@VirtualPathUtility.ToAbsolute("~/Dashboard/HouseholdMemberInformation")">
+    <img src="@VirtualPathUtility.ToAbsolute("~/Images/ajax-loader_bigspinner_green.gif")">
 </div>

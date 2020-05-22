@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="urn:osdevgrp:foodwaste:1.0.0" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:i0="http://tempuri.org/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="FoodWasteHouseholdDataService" targetNamespace="urn:osdevgrp:foodwaste:1.0.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://tempuri.org/" location="http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc?wsdl=wsdl0" />
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:osdevgrp:foodwaste:1.0.0/Imports">
+      <xsd:import schemaLocation="http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc?xsd=xsd0" namespace="urn:osdevgrp:foodwaste:1.0.0" />
+      <xsd:import schemaLocation="http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="HouseholdDataService_StorageTypeGetAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:StorageTypeGetAll" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_StorageTypeGetAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StorageTypeGetAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_StorageTypeGetAll_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdDataGet_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdDataGet" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdDataGet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdDataGetResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdDataGet_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdAdd_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdAdd" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdAdd_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdAddResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdAdd_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdUpdate" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdUpdate_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdAddHouseholdMember_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdAddHouseholdMember" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdAddHouseholdMember_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdAddHouseholdMemberResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdAddHouseholdMember_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdRemoveHouseholdMember_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdRemoveHouseholdMember" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdRemoveHouseholdMember_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdRemoveHouseholdMemberResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdRemoveHouseholdMember_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberIsCreated_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberIsCreated" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberIsCreated_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberIsCreatedResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberIsCreated_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberIsActivated_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberIsActivated" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberIsActivated_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberIsActivatedResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberIsActivated_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberHasAcceptedPrivacyPolicy_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberHasAcceptedPrivacyPolicy" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberHasAcceptedPrivacyPolicy_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberHasAcceptedPrivacyPolicyResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberHasAcceptedPrivacyPolicy_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberDataGet_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberDataGet" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberDataGet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberDataGetResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberDataGet_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberActivate_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberActivate" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberActivate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberActivateResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberActivate_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberAcceptPrivacyPolicy_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberAcceptPrivacyPolicy" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberAcceptPrivacyPolicy_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberAcceptPrivacyPolicyResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberAcceptPrivacyPolicy_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberUpgradeMembership_InputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberUpgradeMembership" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberUpgradeMembership_OutputMessage">
+    <wsdl:part name="parameters" element="tns:HouseholdMemberUpgradeMembershipResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_HouseholdMemberUpgradeMembership_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_FoodItemCollectionGet_InputMessage">
+    <wsdl:part name="parameters" element="tns:FoodItemCollectionGet" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_FoodItemCollectionGet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FoodItemCollectionGetResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_FoodItemCollectionGet_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_FoodGroupTreeGet_InputMessage">
+    <wsdl:part name="parameters" element="tns:FoodGroupTreeGet" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_FoodGroupTreeGet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FoodGroupTreeGetResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_FoodGroupTreeGet_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_PrivacyPolicyGet_InputMessage">
+    <wsdl:part name="parameters" element="tns:PrivacyPolicyGet" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_PrivacyPolicyGet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PrivacyPolicyGetResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_PrivacyPolicyGet_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_DataProviderWhoHandlesPaymentsCollectionGet_InputMessage">
+    <wsdl:part name="parameters" element="tns:DataProviderWhoHandlesPaymentsCollectionGet" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_DataProviderWhoHandlesPaymentsCollectionGet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DataProviderWhoHandlesPaymentsCollectionGetResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_DataProviderWhoHandlesPaymentsCollectionGet_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_TranslationInfoGetAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:TranslationInfoGetAll" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_TranslationInfoGetAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TranslationInfoGetAllResponse" />
+  </wsdl:message>
+  <wsdl:message name="HouseholdDataService_TranslationInfoGetAll_FoodWasteFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:Fault" />
+  </wsdl:message>
+  <wsdl:portType name="HouseholdDataService">
+    <wsdl:operation name="StorageTypeGetAll">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/StorageTypeGetAll" message="tns:HouseholdDataService_StorageTypeGetAll_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/StorageTypeGetAllResponse" message="tns:HouseholdDataService_StorageTypeGetAll_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/StorageTypeGetAllFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_StorageTypeGetAll_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdDataGet">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdDataGet" message="tns:HouseholdDataService_HouseholdDataGet_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdDataGetResponse" message="tns:HouseholdDataService_HouseholdDataGet_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdDataGetFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdDataGet_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdAdd">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdAdd" message="tns:HouseholdDataService_HouseholdAdd_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdAddResponse" message="tns:HouseholdDataService_HouseholdAdd_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdAddFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdAdd_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdUpdate">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdUpdate" message="tns:HouseholdDataService_HouseholdUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdUpdateResponse" message="tns:HouseholdDataService_HouseholdUpdate_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdUpdateFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdUpdate_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdAddHouseholdMember">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdAddHouseholdMember" message="tns:HouseholdDataService_HouseholdAddHouseholdMember_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdAddHouseholdMemberResponse" message="tns:HouseholdDataService_HouseholdAddHouseholdMember_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdAddHouseholdMemberFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdAddHouseholdMember_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdRemoveHouseholdMember">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdRemoveHouseholdMember" message="tns:HouseholdDataService_HouseholdRemoveHouseholdMember_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdRemoveHouseholdMemberResponse" message="tns:HouseholdDataService_HouseholdRemoveHouseholdMember_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdRemoveHouseholdMemberFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdRemoveHouseholdMember_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdMemberIsCreated">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberIsCreated" message="tns:HouseholdDataService_HouseholdMemberIsCreated_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberIsCreatedResponse" message="tns:HouseholdDataService_HouseholdMemberIsCreated_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberIsCreatedFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdMemberIsCreated_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdMemberIsActivated">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberIsActivated" message="tns:HouseholdDataService_HouseholdMemberIsActivated_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberIsActivatedResponse" message="tns:HouseholdDataService_HouseholdMemberIsActivated_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberIsActivatedFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdMemberIsActivated_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdMemberHasAcceptedPrivacyPolicy">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberHasAcceptedPrivacyPolicy" message="tns:HouseholdDataService_HouseholdMemberHasAcceptedPrivacyPolicy_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberHasAcceptedPrivacyPolicyResponse" message="tns:HouseholdDataService_HouseholdMemberHasAcceptedPrivacyPolicy_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberHasAcceptedPrivacyPolicyFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdMemberHasAcceptedPrivacyPolicy_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdMemberDataGet">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberDataGet" message="tns:HouseholdDataService_HouseholdMemberDataGet_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberDataGetResponse" message="tns:HouseholdDataService_HouseholdMemberDataGet_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberDataGetFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdMemberDataGet_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdMemberActivate">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberActivate" message="tns:HouseholdDataService_HouseholdMemberActivate_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberActivateResponse" message="tns:HouseholdDataService_HouseholdMemberActivate_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberActivateFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdMemberActivate_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdMemberAcceptPrivacyPolicy">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberAcceptPrivacyPolicy" message="tns:HouseholdDataService_HouseholdMemberAcceptPrivacyPolicy_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberAcceptPrivacyPolicyResponse" message="tns:HouseholdDataService_HouseholdMemberAcceptPrivacyPolicy_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberAcceptPrivacyPolicyFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdMemberAcceptPrivacyPolicy_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HouseholdMemberUpgradeMembership">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberUpgradeMembership" message="tns:HouseholdDataService_HouseholdMemberUpgradeMembership_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberUpgradeMembershipResponse" message="tns:HouseholdDataService_HouseholdMemberUpgradeMembership_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdMemberUpgradeMembershipFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_HouseholdMemberUpgradeMembership_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FoodItemCollectionGet">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/FoodItemCollectionGet" message="tns:HouseholdDataService_FoodItemCollectionGet_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/FoodItemCollectionGetResponse" message="tns:HouseholdDataService_FoodItemCollectionGet_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/FoodItemCollectionGetFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_FoodItemCollectionGet_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FoodGroupTreeGet">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/FoodGroupTreeGet" message="tns:HouseholdDataService_FoodGroupTreeGet_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/FoodGroupTreeGetResponse" message="tns:HouseholdDataService_FoodGroupTreeGet_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/FoodGroupTreeGetFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_FoodGroupTreeGet_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PrivacyPolicyGet">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/PrivacyPolicyGet" message="tns:HouseholdDataService_PrivacyPolicyGet_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/PrivacyPolicyGetResponse" message="tns:HouseholdDataService_PrivacyPolicyGet_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/PrivacyPolicyGetFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_PrivacyPolicyGet_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DataProviderWhoHandlesPaymentsCollectionGet">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/DataProviderWhoHandlesPaymentsCollectionGet" message="tns:HouseholdDataService_DataProviderWhoHandlesPaymentsCollectionGet_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/DataProviderWhoHandlesPaymentsCollectionGetResponse" message="tns:HouseholdDataService_DataProviderWhoHandlesPaymentsCollectionGet_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/DataProviderWhoHandlesPaymentsCollectionGetFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_DataProviderWhoHandlesPaymentsCollectionGet_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TranslationInfoGetAll">
+      <wsdl:input wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/TranslationInfoGetAll" message="tns:HouseholdDataService_TranslationInfoGetAll_InputMessage" />
+      <wsdl:output wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/TranslationInfoGetAllResponse" message="tns:HouseholdDataService_TranslationInfoGetAll_OutputMessage" />
+      <wsdl:fault wsaw:Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/TranslationInfoGetAllFoodWasteFaultFault" name="FoodWasteFaultFault" message="tns:HouseholdDataService_TranslationInfoGetAll_FoodWasteFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:service name="FoodWasteHouseholdDataService">
+    <wsdl:port name="WS2007FederationHttpBinding_HouseholdDataService" binding="i0:WS2007FederationHttpBinding_HouseholdDataService">
+      <soap12:address location="http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>http://visma-oso.udv.int.startest.dk/osintranetdev/foodwastehouseholddataservice.svc</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Dns>OSDevGrp.OSIntranet.Tokens</Dns>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

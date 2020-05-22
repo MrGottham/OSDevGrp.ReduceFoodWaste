@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Principal;
-using Microsoft.Practices.Unity;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
+using Unity;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
 {
@@ -23,7 +23,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Filters
         /// Creates an attribute which can insure that the user is a created household member.
         /// </summary>
         public IsCreatedHouseholdMemberAttribute()
-            : this(UnityConfig.GetConfiguredContainer().Resolve<IClaimValueProvider>())
+            : this(UnityConfig.Container.Resolve<IClaimValueProvider>())
         {
         }
 

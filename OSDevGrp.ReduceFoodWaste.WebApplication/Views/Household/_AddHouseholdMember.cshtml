@@ -1,7 +1,7 @@
 ﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model OSDevGrp.ReduceFoodWaste.WebApplication.Models.MemberOfHouseholdModel
 
-@using (Html.BeginForm("AddHouseholdMember", "Household", FormMethod.Post))
+@using (Html.BeginForm("AddHouseholdMember", "Household", FormMethod.Post, new {id = "addHouseholdMember"}))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.HouseholdIdentifier)
@@ -9,7 +9,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.MailAddress, Texts.MailAddress)
         @Html.TextBoxFor(m => m.MailAddress, null, new { @class = "form-control" })
-        <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.MailAddress)</div>
+        <div class="text-danger">@Html.ValidationMessageFor(m => m.MailAddress)</div>
     </div>
     <div class="btn-group">
         <input class="btn btn-primary" type="submit" value="@Texts.Add" title="@Texts.Add" />

@@ -1,7 +1,6 @@
 ﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Models
 @using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model IEnumerable<MembershipModel>
-
 @{
     ViewBag.Title = string.Format("{0} {1}", Texts.Upgrade, Texts.Membership.ToLower());
 }
@@ -10,19 +9,18 @@
     @Html.Partial("_Sidebar")
 }
 
-<div class="row">
-    <hgroup class="title">
-        <h2>@ViewBag.Title</h2>
-    </hgroup>
-    @if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
-    {
-        <p class="message-success">@ViewBag.StatusMessage</p>
-    }
-    @if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
-    {
-        <p class="message-error">@ViewBag.ErrorMessage</p>
-    }
-</div>
+<hgroup class="title">
+    <h2>@ViewBag.Title</h2>
+</hgroup>
+@if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
+{
+    <p class="message-success">@ViewBag.StatusMessage</p>
+}
+@if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
+{
+    <p class="message-error">@ViewBag.ErrorMessage</p>
+}
+<hr />
 @foreach (MembershipModel membershipModel in Model)
 {
     @Html.Partial("_MembershipInformation", membershipModel)

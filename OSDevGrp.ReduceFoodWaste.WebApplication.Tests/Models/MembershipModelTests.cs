@@ -1,9 +1,9 @@
-﻿using System.Globalization;
+﻿using AutoFixture;
 using NUnit.Framework;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Models.Enums;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
+using System.Globalization;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
 {

@@ -3,18 +3,18 @@
 
 @if (ViewBag.EditMode == null || ViewBag.EditMode == false)
 {
-    <table class="table table-sm">
+    <table class="table table-responsive">
         <tbody>
             <tr>
-                <td style="width: 15%" nowrap>@Texts.Name</td>
+                <td nowrap>@Texts.Name</td>
                 <td><strong>@Html.Raw(Model.Name)</strong></td>
             </tr>
             <tr>
-                <td style="width: 15%" nowrap>@Texts.Description</td>
+                <td nowrap>@Texts.Description</td>
                 <td><strong>@Html.Raw(Model.Description)</strong></td>
             </tr>
             <tr>
-                <td style="width: 15%" nowrap></td>
+                <td nowrap></td>
                 <td>
                     <div class="btn-group">
                         <a class="btn btn-primary" onclick="@string.Format("parent.editBasicInformation('{0}')", Model.Identifier)">@Texts.Edit</a>
@@ -29,12 +29,12 @@ else
     <div class="form-group">
         @Html.LabelFor(m => m.Name, Texts.Name)
         @Html.TextBoxFor(m => m.Name, null, new { @class = "form-control" })
-        <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.Name)</div>
+        <div class="text-danger">@Html.ValidationMessageFor(m => m.Name)</div>
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Description, Texts.Description)
         @Html.TextAreaFor(m => m.Description, 5, 1, new { @class = "form-control" })
-        <div class="form-control-feedback">@Html.ValidationMessageFor(m => m.Description)</div>
+        <div class="text-danger">@Html.ValidationMessageFor(m => m.Description)</div>
     </div>
     <div class="btn-group">
         <input class="btn btn-primary" type="submit" value="@Texts.Update" title="@Texts.Update" />

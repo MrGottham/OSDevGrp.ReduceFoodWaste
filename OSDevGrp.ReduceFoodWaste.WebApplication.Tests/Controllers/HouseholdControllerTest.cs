@@ -1,4 +1,11 @@
-﻿using System;
+﻿using AutoFixture;
+using NUnit.Framework;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
+using Rhino.Mocks;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,13 +14,6 @@ using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using NUnit.Framework;
-using Ploeh.AutoFixture;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Controllers;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Rhino.Mocks;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 {
@@ -524,7 +524,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         public void TestThatHouseholdInformationWithHouseholdIdentifierNotEqualToNullReturnsPartialViewResultWithHouseholdModel()
         {
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
@@ -654,7 +654,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         public void TestThatEditWithHouseholdIdentifierNotEqualToNullReturnsPartialViewResultWithHouseholdModel()
         {
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
@@ -711,7 +711,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             var invalidHouseholdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.Identifier, Guid.NewGuid())
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
             Action<object[]> householdGetterCallback = arguments =>
@@ -754,7 +754,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdController.ModelState.IsValid, Is.False);
 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
             householdController.Edit(householdModel);
@@ -793,7 +793,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdController.ModelState.IsValid, Is.False);
 
             var inhouseholdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(inhouseholdModel, Is.Not.Null);
             Assert.That(inhouseholdModel.HouseholdMembers, Is.Null);
@@ -831,7 +831,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdController, Is.Not.Null);
 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
             householdController.Edit(householdModel);
@@ -851,7 +851,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdController.User.Identity, Is.Not.Null);
 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
             householdController.Edit(householdModel);
@@ -868,7 +868,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             var updatedHouseholdIdentifier = Guid.NewGuid();
             var updatedHouseholdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.Identifier, updatedHouseholdIdentifier)
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(updatedHouseholdModel, Is.Not.Null);
             Assert.That(updatedHouseholdModel.Identifier, Is.Not.EqualTo(default(Guid)));
@@ -879,7 +879,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdController.User.Identity, Is.Not.Null);
 
             var householdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
             var result = householdController.Edit(householdModel);
@@ -1010,7 +1010,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             var invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
-                .With(m => m.MailAddress, null)
+                .With(m => m.MailAddress, (string) null)
                 .Create();
 
             Action<object[]> householdGetterCallback = arguments =>
@@ -1051,7 +1051,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
-                .With(m => m.MailAddress, null)
+                .With(m => m.MailAddress, (string) null)
                 .Create();
 
             householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
@@ -1069,7 +1069,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         public void TestThatAddHouseholdMemberWithInvalidMemberOfHouseholdModelViewResultWithHouseholdModel()
         {
             var reloadedHouseholdModel = Fixture.Build<HouseholdModel>()
-                .With(m => m.HouseholdMembers, null)
+                .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
             var householdController = CreateHouseholdController(household: reloadedHouseholdModel);
@@ -1080,7 +1080,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
-                .With(m => m.MailAddress, null)
+                .With(m => m.MailAddress, (string) null)
                 .Create();
 
             var result = householdController.AddHouseholdMember(invalidMemberOfHouseholdModel);
@@ -1117,7 +1117,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
-                .With(m => m.MailAddress, null)
+                .With(m => m.MailAddress, (string) null)
                 .Create();
 
             householdController.AddHouseholdMember(validMemberOfHouseholdModel);
@@ -1141,7 +1141,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
-                .With(m => m.MailAddress, null)
+                .With(m => m.MailAddress, (string) null)
                 .Create();
 
             householdController.AddHouseholdMember(validMemberOfHouseholdModel);
@@ -1157,7 +1157,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
-                .With(m => m.MailAddress, null)
+                .With(m => m.MailAddress, (string) null)
                 .Create();
 
             var householdController = CreateHouseholdController(addedMemberOfHousehold: validMemberOfHouseholdModel);
@@ -1226,7 +1226,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
-                .With(m => m.MailAddress, null)
+                .With(m => m.MailAddress, (string) null)
                 .Create();
 
             householdController.RemoveHouseholdMember(validMemberOfHouseholdModel);
@@ -1242,7 +1242,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         {
             var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
-                .With(m => m.MailAddress, null)
+                .With(m => m.MailAddress, (string) null)
                 .Create();
 
             var householdController = CreateHouseholdController(removedMemberOfHousehold: validMemberOfHouseholdModel);
@@ -1297,7 +1297,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                     return household;
                 }
                 return Fixture.Build<HouseholdModel>()
-                    .With(m => m.HouseholdMembers, null)
+                    .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                     .Create();
             };
             Func<HouseholdModel> householdUpdater = () =>
@@ -1307,7 +1307,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                     return updatedHousehold;
                 }
                 return Fixture.Build<HouseholdModel>()
-                    .With(m => m.HouseholdMembers, null)
+                    .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                     .Create();
             };
 

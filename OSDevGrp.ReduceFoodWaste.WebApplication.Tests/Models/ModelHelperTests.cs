@@ -1,12 +1,12 @@
-﻿using System;
+﻿using AutoFixture;
+using NUnit.Framework;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
+using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using NUnit.Framework;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Tests.TestUtilities;
-using Ploeh.AutoFixture;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Models
 {

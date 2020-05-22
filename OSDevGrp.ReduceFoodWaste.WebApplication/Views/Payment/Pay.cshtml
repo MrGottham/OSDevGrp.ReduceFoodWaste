@@ -1,7 +1,6 @@
 ﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Models
 @using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
 @model PayableModel
-
 @{
     ViewBag.Title = Texts.Payment;
 }
@@ -10,46 +9,44 @@
     @Html.Partial("_Sidebar")
 }
 
-<div class="row">
+<hgroup class="title">
+    <h2>@ViewBag.Title</h2>
+</hgroup>
+@if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
+{
+    <p class="message-success">@ViewBag.StatusMessage</p>
+}
+@if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
+{
+    <p class="message-error">@ViewBag.ErrorMessage</p>
+}
+<hgroup class="title">
+    <h3>@Texts.BillingInformations</h3>
+</hgroup>
+<p>@Html.Raw(Model.BillingInformation)</p>
+@if (Model.PaymentHandlers != null && Model.PaymentHandlers.Any(paymentHandler => string.IsNullOrWhiteSpace(paymentHandler.ActionName) == false && string.IsNullOrWhiteSpace(paymentHandler.ImagePath) == false))
+{
     <hgroup class="title">
-        <h2>@ViewBag.Title</h2>
+        <h3>@Texts.PayBy</h3>
     </hgroup>
-    @if (string.IsNullOrEmpty(ViewBag.StatusMessage) == false)
-    {
-        <p class="message-success">@ViewBag.StatusMessage</p>
-    }
-    @if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
-    {
-        <p class="message-error">@ViewBag.ErrorMessage</p>
-    }
-    <hgroup class="title">
-        <h3>@Texts.BillingInformations</h3>
-    </hgroup>
-    <p>@Html.Raw(Model.BillingInformation)</p>
-    @if (Model.PaymentHandlers != null && Model.PaymentHandlers.Any(paymentHandler => string.IsNullOrWhiteSpace(paymentHandler.ActionName) == false && string.IsNullOrWhiteSpace(paymentHandler.ImagePath) == false))
-    {
-        <hgroup class="title">
-            <h3>@Texts.PayBy</h3>
-        </hgroup>
-        <hr />
-        <section>
-            @foreach (PaymentHandlerModel paymentHandler in Model.PaymentHandlers.Where(paymentHandler => string.IsNullOrWhiteSpace(paymentHandler.ActionName) == false && string.IsNullOrWhiteSpace(paymentHandler.ImagePath) == false))
+    <hr />
+    <section>
+        @foreach (PaymentHandlerModel paymentHandler in Model.PaymentHandlers.Where(paymentHandler => string.IsNullOrWhiteSpace(paymentHandler.ActionName) == false && string.IsNullOrWhiteSpace(paymentHandler.ImagePath) == false))
+        {
+            using (Html.BeginForm(paymentHandler.ActionName, "Payment", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
             {
-                using (Html.BeginForm(paymentHandler.ActionName, "Payment", new {returnUrl = ViewBag.ReturnUrl}, FormMethod.Post))
+                @Html.AntiForgeryToken()
+                @Html.Hidden(Html.NameFor(m => m.BillingInformation).ToHtmlString(), (string)ViewBag.BillingInformationWithoutHTMLTags)
+                @Html.HiddenFor(m => m.Price)
+                @Html.HiddenFor(m => m.PriceCultureInfoName)
+                @Html.Hidden(Html.NameFor(m => m.PaymentHandlerIdentifier).ToHtmlString(), paymentHandler.Identifier)
+                @Html.HiddenFor(m => m.PaymentStatus)
+                if (string.IsNullOrWhiteSpace(Model.PaymentReceipt) == false)
                 {
-                    @Html.AntiForgeryToken()
-                    @Html.Hidden(Html.NameFor(m => m.BillingInformation).ToHtmlString(), (string) ViewBag.BillingInformationWithoutHTMLTags)
-                    @Html.HiddenFor(m => m.Price)
-                    @Html.HiddenFor(m => m.PriceCultureInfoName)
-                    @Html.Hidden(Html.NameFor(m => m.PaymentHandlerIdentifier).ToHtmlString(), paymentHandler.Identifier)
-                    @Html.HiddenFor(m => m.PaymentStatus)
-                    if (string.IsNullOrWhiteSpace(Model.PaymentReceipt) == false)
-                    {
-                        @Html.HiddenFor(m => m.PaymentReceipt)
-                    }
-                    <button style="cursor: pointer; color: transparent; border: none; background: url(@VirtualPathUtility.ToAbsolute(paymentHandler.ImagePath)); width: 200px; height: 53px; margin-right: 20px; margin-bottom: 30px" type="submit" name="paymentHandler" value="@paymentHandler.Name" title="@string.Format("{0} {1}", Texts.PayBy, paymentHandler.Name)">@paymentHandler.Name</button>
+                    @Html.HiddenFor(m => m.PaymentReceipt)
                 }
+                <button style="cursor: pointer; color: transparent; border: none; background: url(@VirtualPathUtility.ToAbsolute(paymentHandler.ImagePath)); width: 200px; height: 53px; margin-right: 20px; margin-bottom: 30px" type="submit" name="paymentHandler" value="@paymentHandler.Name" title="@string.Format("{0} {1}", Texts.PayBy, paymentHandler.Name)">@paymentHandler.Name</button>
             }
-        </section>
-    }
-</div>
+        }
+    </section>
+}

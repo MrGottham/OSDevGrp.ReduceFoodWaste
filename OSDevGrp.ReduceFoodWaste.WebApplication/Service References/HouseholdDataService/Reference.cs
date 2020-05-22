@@ -15,6 +15,385 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StorageTypeCollectionGetQuery", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
+    [System.SerializableAttribute()]
+    public partial class StorageTypeCollectionGetQuery : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private System.Guid TranslationInfoIdentifierField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public System.Guid TranslationInfoIdentifier {
+            get {
+                return this.TranslationInfoIdentifierField;
+            }
+            set {
+                if ((this.TranslationInfoIdentifierField.Equals(value) != true)) {
+                    this.TranslationInfoIdentifierField = value;
+                    this.RaisePropertyChanged("TranslationInfoIdentifier");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StorageTypeView", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
+    [System.SerializableAttribute()]
+    public partial class StorageTypeView : OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeIdentificationView {
+        
+        private bool CreatableField;
+        
+        private bool DeletableField;
+        
+        private bool EditableField;
+        
+        private int SortOrderField;
+        
+        private int TemperatureField;
+        
+        private OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.IntRangeView TemperatureRangeField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public bool Creatable {
+            get {
+                return this.CreatableField;
+            }
+            set {
+                if ((this.CreatableField.Equals(value) != true)) {
+                    this.CreatableField = value;
+                    this.RaisePropertyChanged("Creatable");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public bool Deletable {
+            get {
+                return this.DeletableField;
+            }
+            set {
+                if ((this.DeletableField.Equals(value) != true)) {
+                    this.DeletableField = value;
+                    this.RaisePropertyChanged("Deletable");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public bool Editable {
+            get {
+                return this.EditableField;
+            }
+            set {
+                if ((this.EditableField.Equals(value) != true)) {
+                    this.EditableField = value;
+                    this.RaisePropertyChanged("Editable");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int SortOrder {
+            get {
+                return this.SortOrderField;
+            }
+            set {
+                if ((this.SortOrderField.Equals(value) != true)) {
+                    this.SortOrderField = value;
+                    this.RaisePropertyChanged("SortOrder");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int Temperature {
+            get {
+                return this.TemperatureField;
+            }
+            set {
+                if ((this.TemperatureField.Equals(value) != true)) {
+                    this.TemperatureField = value;
+                    this.RaisePropertyChanged("Temperature");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.IntRangeView TemperatureRange {
+            get {
+                return this.TemperatureRangeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TemperatureRangeField, value) != true)) {
+                    this.TemperatureRangeField = value;
+                    this.RaisePropertyChanged("TemperatureRange");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StorageTypeIdentificationView", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeView))]
+    public partial class StorageTypeIdentificationView : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private string NameField;
+        
+        private System.Guid StorageTypeIdentifierField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public System.Guid StorageTypeIdentifier {
+            get {
+                return this.StorageTypeIdentifierField;
+            }
+            set {
+                if ((this.StorageTypeIdentifierField.Equals(value) != true)) {
+                    this.StorageTypeIdentifierField = value;
+                    this.RaisePropertyChanged("StorageTypeIdentifier");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="IntRangeView", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
+    [System.SerializableAttribute()]
+    public partial class IntRangeView : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private int EndValueField;
+        
+        private int StartValueField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int EndValue {
+            get {
+                return this.EndValueField;
+            }
+            set {
+                if ((this.EndValueField.Equals(value) != true)) {
+                    this.EndValueField = value;
+                    this.RaisePropertyChanged("EndValue");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int StartValue {
+            get {
+                return this.StartValueField;
+            }
+            set {
+                if ((this.StartValueField.Equals(value) != true)) {
+                    this.StartValueField = value;
+                    this.RaisePropertyChanged("StartValue");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Fault", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
+    [System.SerializableAttribute()]
+    public partial class Fault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private string ErrorMessageField;
+        
+        private OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.FaultType FaultTypeField;
+        
+        private string ServiceMethodField;
+        
+        private string ServiceNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string StackTraceField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public string ErrorMessage {
+            get {
+                return this.ErrorMessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorMessageField, value) != true)) {
+                    this.ErrorMessageField = value;
+                    this.RaisePropertyChanged("ErrorMessage");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.FaultType FaultType {
+            get {
+                return this.FaultTypeField;
+            }
+            set {
+                if ((this.FaultTypeField.Equals(value) != true)) {
+                    this.FaultTypeField = value;
+                    this.RaisePropertyChanged("FaultType");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public string ServiceMethod {
+            get {
+                return this.ServiceMethodField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ServiceMethodField, value) != true)) {
+                    this.ServiceMethodField = value;
+                    this.RaisePropertyChanged("ServiceMethod");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public string ServiceName {
+            get {
+                return this.ServiceNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ServiceNameField, value) != true)) {
+                    this.ServiceNameField = value;
+                    this.RaisePropertyChanged("ServiceName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string StackTrace {
+            get {
+                return this.StackTraceField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StackTraceField, value) != true)) {
+                    this.StackTraceField = value;
+                    this.RaisePropertyChanged("StackTrace");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FaultType", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
+    public enum FaultType : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        RepositoryFault = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SystemFault = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        BusinessFault = 2,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="HouseholdMemberDataGetQueryBase", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.HouseholdMemberIsCreatedQuery))]
@@ -195,6 +574,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
         
         private OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.HouseholdMemberIdentificationView[] HouseholdMembersField;
         
+        private OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageView[] StoragesField;
+        
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public System.DateTime CreationTime {
             get {
@@ -230,6 +611,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
                 if ((object.ReferenceEquals(this.HouseholdMembersField, value) != true)) {
                     this.HouseholdMembersField = value;
                     this.RaisePropertyChanged("HouseholdMembers");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageView[] Storages {
+            get {
+                return this.StoragesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StoragesField, value) != true)) {
+                    this.StoragesField = value;
+                    this.RaisePropertyChanged("Storages");
                 }
             }
         }
@@ -297,6 +691,89 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StorageView", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
+    [System.SerializableAttribute()]
+    public partial class StorageView : OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageIdentificationView {
+        
+        private System.DateTime CreationTimeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DescriptionField;
+        
+        private OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.HouseholdIdentificationView HouseholdField;
+        
+        private OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeIdentificationView StorageTypeField;
+        
+        private int TemperatureField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public System.DateTime CreationTime {
+            get {
+                return this.CreationTimeField;
+            }
+            set {
+                if ((this.CreationTimeField.Equals(value) != true)) {
+                    this.CreationTimeField = value;
+                    this.RaisePropertyChanged("CreationTime");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Description {
+            get {
+                return this.DescriptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DescriptionField, value) != true)) {
+                    this.DescriptionField = value;
+                    this.RaisePropertyChanged("Description");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.HouseholdIdentificationView Household {
+            get {
+                return this.HouseholdField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HouseholdField, value) != true)) {
+                    this.HouseholdField = value;
+                    this.RaisePropertyChanged("Household");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeIdentificationView StorageType {
+            get {
+                return this.StorageTypeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StorageTypeField, value) != true)) {
+                    this.StorageTypeField = value;
+                    this.RaisePropertyChanged("StorageType");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int Temperature {
+            get {
+                return this.TemperatureField;
+            }
+            set {
+                if ((this.TemperatureField.Equals(value) != true)) {
+                    this.TemperatureField = value;
+                    this.RaisePropertyChanged("Temperature");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="HouseholdMemberView", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
     [System.SerializableAttribute()]
     public partial class HouseholdMemberView : OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.HouseholdMemberIdentificationView {
@@ -304,7 +781,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<System.DateTime> ActivationTimeField;
         
+        private bool CanCreateStorageField;
+        
+        private bool CanDeleteStorageField;
+        
         private bool CanRenewMembershipField;
+        
+        private bool CanUpdateStorageField;
         
         private bool CanUpgradeMembershipField;
         
@@ -316,7 +799,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
         
         private bool IsActivatedField;
         
-        private bool IsPrivacyPolictyAcceptedField;
+        private bool IsPrivacyPolicyAcceptedField;
         
         private string MembershipField;
         
@@ -344,6 +827,32 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public bool CanCreateStorage {
+            get {
+                return this.CanCreateStorageField;
+            }
+            set {
+                if ((this.CanCreateStorageField.Equals(value) != true)) {
+                    this.CanCreateStorageField = value;
+                    this.RaisePropertyChanged("CanCreateStorage");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public bool CanDeleteStorage {
+            get {
+                return this.CanDeleteStorageField;
+            }
+            set {
+                if ((this.CanDeleteStorageField.Equals(value) != true)) {
+                    this.CanDeleteStorageField = value;
+                    this.RaisePropertyChanged("CanDeleteStorage");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public bool CanRenewMembership {
             get {
                 return this.CanRenewMembershipField;
@@ -352,6 +861,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
                 if ((this.CanRenewMembershipField.Equals(value) != true)) {
                     this.CanRenewMembershipField = value;
                     this.RaisePropertyChanged("CanRenewMembership");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public bool CanUpdateStorage {
+            get {
+                return this.CanUpdateStorageField;
+            }
+            set {
+                if ((this.CanUpdateStorageField.Equals(value) != true)) {
+                    this.CanUpdateStorageField = value;
+                    this.RaisePropertyChanged("CanUpdateStorage");
                 }
             }
         }
@@ -422,14 +944,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public bool IsPrivacyPolictyAccepted {
+        public bool IsPrivacyPolicyAccepted {
             get {
-                return this.IsPrivacyPolictyAcceptedField;
+                return this.IsPrivacyPolicyAcceptedField;
             }
             set {
-                if ((this.IsPrivacyPolictyAcceptedField.Equals(value) != true)) {
-                    this.IsPrivacyPolictyAcceptedField = value;
-                    this.RaisePropertyChanged("IsPrivacyPolictyAccepted");
+                if ((this.IsPrivacyPolicyAcceptedField.Equals(value) != true)) {
+                    this.IsPrivacyPolicyAcceptedField = value;
+                    this.RaisePropertyChanged("IsPrivacyPolicyAccepted");
                 }
             }
         }
@@ -785,23 +1307,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Fault", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StorageIdentificationView", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
     [System.SerializableAttribute()]
-    public partial class Fault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageView))]
+    public partial class StorageIdentificationView : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        private string ErrorMessageField;
+        private int SortOrderField;
         
-        private OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.FaultType FaultTypeField;
-        
-        private string ServiceMethodField;
-        
-        private string ServiceNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string StackTraceField;
+        private System.Guid StorageIdentifierField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -814,66 +1330,27 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public string ErrorMessage {
+        public int SortOrder {
             get {
-                return this.ErrorMessageField;
+                return this.SortOrderField;
             }
             set {
-                if ((object.ReferenceEquals(this.ErrorMessageField, value) != true)) {
-                    this.ErrorMessageField = value;
-                    this.RaisePropertyChanged("ErrorMessage");
+                if ((this.SortOrderField.Equals(value) != true)) {
+                    this.SortOrderField = value;
+                    this.RaisePropertyChanged("SortOrder");
                 }
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.FaultType FaultType {
+        public System.Guid StorageIdentifier {
             get {
-                return this.FaultTypeField;
+                return this.StorageIdentifierField;
             }
             set {
-                if ((this.FaultTypeField.Equals(value) != true)) {
-                    this.FaultTypeField = value;
-                    this.RaisePropertyChanged("FaultType");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public string ServiceMethod {
-            get {
-                return this.ServiceMethodField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ServiceMethodField, value) != true)) {
-                    this.ServiceMethodField = value;
-                    this.RaisePropertyChanged("ServiceMethod");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public string ServiceName {
-            get {
-                return this.ServiceNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ServiceNameField, value) != true)) {
-                    this.ServiceNameField = value;
-                    this.RaisePropertyChanged("ServiceName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string StackTrace {
-            get {
-                return this.StackTraceField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.StackTraceField, value) != true)) {
-                    this.StackTraceField = value;
-                    this.RaisePropertyChanged("StackTrace");
+                if ((this.StorageIdentifierField.Equals(value) != true)) {
+                    this.StorageIdentifierField = value;
+                    this.RaisePropertyChanged("StorageIdentifier");
                 }
             }
         }
@@ -886,20 +1363,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FaultType", Namespace="urn:osdevgrp:foodwaste:1.0.0")]
-    public enum FaultType : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        RepositoryFault = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        SystemFault = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        BusinessFault = 2,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -2100,6 +2563,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
     [System.ServiceModel.ServiceContractAttribute(Namespace="urn:osdevgrp:foodwaste:1.0.0", ConfigurationName="HouseholdDataService.HouseholdDataService")]
     public interface HouseholdDataService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/StorageTypeGetAll", ReplyAction="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/StorageTypeGetAllResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.Fault), Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/StorageTypeGetAllFoodWasteFault" +
+            "Fault", Name="Fault")]
+        [System.ServiceModel.TransactionFlowAttribute(System.ServiceModel.TransactionFlowOption.Allowed)]
+        OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeView[] StorageTypeGetAll(OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeCollectionGetQuery query);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/StorageTypeGetAll", ReplyAction="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/StorageTypeGetAllResponse")]
+        System.Threading.Tasks.Task<OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeView[]> StorageTypeGetAllAsync(OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeCollectionGetQuery query);
+        
         [System.ServiceModel.OperationContractAttribute(Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdDataGet", ReplyAction="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdDataGetResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.Fault), Action="urn:osdevgrp:foodwaste:1.0.0/HouseholdDataService/HouseholdDataGetFoodWasteFaultF" +
             "ault", Name="Fault")]
@@ -2305,6 +2777,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService {
         
         public HouseholdDataServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeView[] StorageTypeGetAll(OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeCollectionGetQuery query) {
+            return base.Channel.StorageTypeGetAll(query);
+        }
+        
+        public System.Threading.Tasks.Task<OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeView[]> StorageTypeGetAllAsync(OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.StorageTypeCollectionGetQuery query) {
+            return base.Channel.StorageTypeGetAllAsync(query);
         }
         
         public OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.HouseholdView HouseholdDataGet(OSDevGrp.ReduceFoodWaste.WebApplication.HouseholdDataService.HouseholdDataGetQuery query) {
