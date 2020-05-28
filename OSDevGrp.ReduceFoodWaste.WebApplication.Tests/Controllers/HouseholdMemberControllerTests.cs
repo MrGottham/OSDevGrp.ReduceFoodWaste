@@ -57,7 +57,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorInitializeHouseholdMemberController()
         {
-            var householdMemberController = new WebApplication.Controllers.HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock, _modelHelperMock, _utilitiesMock);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = new WebApplication.Controllers.HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock, _modelHelperMock, _utilitiesMock);
             Assert.That(householdMemberController, Is.Not.Null);
         }
 
@@ -67,7 +67,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenHouseholdDataRepositoryIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new WebApplication.Controllers.HouseholdMemberController(null, _claimValueProviderMock, _localClaimProviderMock, _modelHelperMock, _utilitiesMock));
+            // ReSharper disable ObjectCreationAsStatement
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new WebApplication.Controllers.HouseholdMemberController(null, _claimValueProviderMock, _localClaimProviderMock, _modelHelperMock, _utilitiesMock));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -81,7 +83,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenClaimValueProviderIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new WebApplication.Controllers.HouseholdMemberController(_householdDataRepositoryMock, null, _localClaimProviderMock, _modelHelperMock, _utilitiesMock));
+            // ReSharper disable ObjectCreationAsStatement
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new WebApplication.Controllers.HouseholdMemberController(_householdDataRepositoryMock, null, _localClaimProviderMock, _modelHelperMock, _utilitiesMock));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -95,7 +99,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenLocalClaimProviderIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new WebApplication.Controllers.HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, null, _modelHelperMock, _utilitiesMock));
+            // ReSharper disable ObjectCreationAsStatement
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new WebApplication.Controllers.HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, null, _modelHelperMock, _utilitiesMock));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -109,7 +115,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenModelHelperIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new WebApplication.Controllers.HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock, null, _utilitiesMock));
+            // ReSharper disable ObjectCreationAsStatement
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new WebApplication.Controllers.HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock, null, _utilitiesMock));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -123,7 +131,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenUtilitiesIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new WebApplication.Controllers.HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock, _modelHelperMock, null));
+            // ReSharper disable ObjectCreationAsStatement
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new WebApplication.Controllers.HouseholdMemberController(_householdDataRepositoryMock, _claimValueProviderMock, _localClaimProviderMock, _modelHelperMock, null));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -137,7 +147,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithoutModelCallsGetPrivacyPoliciesAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -156,7 +166,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithoutModelCallsIsPrivacyPoliciesAcceptedOnClaimValueProvider()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -177,16 +187,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase(false)]
         public void TestThatCreateWithoutModelReturnsViewResultWithModelForCreatingHouseholdMember(bool isPrivacyPoliciesAccepted)
         {
-            var privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
 
-            var householdMemberController = CreateHouseholdMemberController(privacyPolicyModel, isPrivacyPoliciesAccepted: isPrivacyPoliciesAccepted);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(privacyPolicyModel, isPrivacyPoliciesAccepted: isPrivacyPoliciesAccepted);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var result = householdMemberController.Create();
+            ActionResult result = householdMemberController.Create();
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -196,7 +206,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Empty);
 
-            var model = (HouseholdModel) viewResult.Model;
+            HouseholdModel model = (HouseholdModel) viewResult.Model;
             Assert.That(model, Is.Not.Null);
             Assert.That(model.Identifier, Is.EqualTo(default(Guid)));
             Assert.That(model.Name, Is.Null);
@@ -208,7 +218,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             {
                 Assert.That(model.PrivacyPolicy.AcceptedTime, Is.Not.Null);
                 Assert.That(model.PrivacyPolicy.AcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-                Assert.That(model.PrivacyPolicy.AcceptedTime.HasValue, Is.True);
             }
             else
             {
@@ -223,10 +232,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithModelThrowsArgumentNullExceptionWhenModelIsNull()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.Create(null));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.Create(null));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -240,7 +249,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithModelCallsGetPrivacyPoliciesAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -248,7 +257,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.Identifier, Guid.NewGuid())
                 .With(m => m.Header, (string) null)
                 .With(m => m.Body, (string) null)
@@ -256,7 +265,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Description, Fixture.Create<string>())
@@ -277,7 +286,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase(false)]
         public void TestThatCreateWithModelUpdatesValuesInPrivacyPolicyModelWithValuesFromReloadedPrivacyPolicyModel(bool isPrivacyPoliciesAccepted)
         {
-            var reloadedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel reloadedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.Identifier, Guid.NewGuid())
                 .With(m => m.Header, Fixture.Create<string>())
                 .With(m => m.Body, Fixture.Create<string>())
@@ -289,10 +298,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(reloadedPrivacyPolicyModel.Body, Is.Not.Null);
             Assert.That(reloadedPrivacyPolicyModel.Body, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(privacyPolicyModel: reloadedPrivacyPolicyModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(privacyPolicyModel: reloadedPrivacyPolicyModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.Identifier, Guid.NewGuid())
                 .With(m => m.Header, (string) null)
                 .With(m => m.Body, (string) null)
@@ -308,7 +317,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             if (isPrivacyPoliciesAccepted)
             {
                 Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
-                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
             }
             else
             {
@@ -316,7 +324,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
             }
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -337,7 +345,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             if (isPrivacyPoliciesAccepted)
             {
                 Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
-                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
             }
             else
             {
@@ -354,16 +361,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase(false)]
         public void TestThatCreateWithInvalidModelReturnsViewResultWithModelForCreatingHouseholdMember(bool isPrivacyPoliciesAccepted)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.ModelState, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, isPrivacyPoliciesAccepted)
                 .With(m => m.AcceptedTime, isPrivacyPoliciesAccepted ? DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .Create();
                 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -371,11 +378,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             householdMemberController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
             Assert.That(householdMemberController.ModelState.IsValid, Is.False);
 
-            var result = householdMemberController.Create(householdModel);
+            ActionResult result = householdMemberController.Create(householdModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -385,7 +392,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Empty);
 
-            var model = (HouseholdModel) viewResult.Model;
+            HouseholdModel model = (HouseholdModel) viewResult.Model;
             Assert.That(model.PrivacyPolicy, Is.Not.Null);
             Assert.That(model.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
             Assert.That(model.PrivacyPolicy.IsAccepted, Is.False);
@@ -399,7 +406,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelCallsCreateHouseholdAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
@@ -408,9 +415,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -427,12 +434,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelCallsGenerateCreatedHouseholdMemberClaimOnLocalClaimProvider()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -448,20 +455,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelCallsAddLocalClaimAsyncWithCreatedHouseholdMemberClaimOnLocalClaimProvider()
         {
-            var claimsIdentity = new ClaimsIdentity();
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-            var createdHouseholdMemberClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            Claim createdHouseholdMemberClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
 
-            var householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, createdHouseholdMemberClaim: createdHouseholdMemberClaim);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, createdHouseholdMemberClaim: createdHouseholdMemberClaim);
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.EqualTo(claimsPrincipal));
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.EqualTo(claimsIdentity));
 
-            var privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Create<PrivacyPolicyModel>();
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -477,17 +484,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelWherePrivacyPoliciesHasNotBeenAcceptedDoesNotCallAcceptPrivacyPolicyAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.False);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -506,17 +513,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelWherePrivacyPoliciesHasNotBeenAcceptedDoesNotCallGeneratePrivacyPoliciesAcceptedClaimOnLocalClaimProvider()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.False);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -535,20 +542,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelWherePrivacyPoliciesHasNotBeenAcceptedCallsAddLocalClaimAsyncOnLocalClaimProviderOneTime()
         {
-            var claimsIdentity = new ClaimsIdentity();
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-            var householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.False);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -567,17 +574,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelWherePrivacyPoliciesHasNotBeenAcceptedReturnsRedirectToRouteResultForPreparingCreatedHouseholdMember()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.False);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -585,11 +592,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
 
-            var result = householdMemberController.Create(householdModel);
+            ActionResult result = householdMemberController.Create(householdModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult) result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
@@ -609,20 +616,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelWherePrivacyPoliciesHasBeenAcceptedCallsAcceptPrivacyPolicyAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -641,17 +648,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelWherePrivacyPoliciesHasBeenAcceptedCallsGeneratePrivacyPoliciesAcceptedClaimOnLocalClaimProvider()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -670,21 +677,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelWherePrivacyPoliciesHasBeenAcceptedCallsAddLocalClaimAsyncWithPrivacyPoliciesAcceptedClaimOnLocalClaimProvider()
         {
-            var claimsIdentity = new ClaimsIdentity();
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-            var privacyPoliciesAcceptedClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            Claim privacyPoliciesAcceptedClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
 
-            var householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, privacyPoliciesAcceptedClaim: privacyPoliciesAcceptedClaim);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, privacyPoliciesAcceptedClaim: privacyPoliciesAcceptedClaim);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -703,20 +710,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelWherePrivacyPoliciesHasBeenAcceptedCallsAddLocalClaimAsyncOnLocalClaimProviderTwoTime()
         {
-            var claimsIdentity = new ClaimsIdentity();
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-            var householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -735,17 +742,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatCreateWithValidModelWherePrivacyPoliciesHasBeenAcceptedReturnsRedirectToRouteResultForPreparingCreatedHouseholdMember()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
@@ -753,11 +760,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdModel.PrivacyPolicy, Is.Not.Null);
             Assert.That(householdModel.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
 
-            var result = householdMemberController.Create(householdModel);
+            ActionResult result = householdMemberController.Create(householdModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult)result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
@@ -777,7 +784,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithoutModelCallsIsActivatedHouseholdMemberOnClaimValueProvider()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -793,7 +800,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithoutModelCallsIsPrivacyPoliciesAcceptedOnClaimValueProvider()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -809,7 +816,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithoutModelCallsCallsGetPrivacyPoliciesAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -832,21 +839,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase(false, false)]
         public void TestThatPrepareWithoutModelReturnsViewResultWithModelForPreparingHouseholdMember(bool isActivatedHouseholdMember, bool isPrivacyPoliciesAccepted)
         {
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, !isPrivacyPoliciesAccepted)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel, Is.Not.EqualTo(isPrivacyPoliciesAccepted));
 
-            var householdMemberController = CreateHouseholdMemberController(privacyPolicyModel: privacyPolicyModel, isActivatedHouseholdMember: isActivatedHouseholdMember, isPrivacyPoliciesAccepted: isPrivacyPoliciesAccepted);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(privacyPolicyModel: privacyPolicyModel, isActivatedHouseholdMember: isActivatedHouseholdMember, isPrivacyPoliciesAccepted: isPrivacyPoliciesAccepted);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var result = householdMemberController.Prepare();
+            ActionResult result = householdMemberController.Prepare();
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -856,7 +863,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Empty);
 
-            var householdMemberModel = (HouseholdMemberModel) viewResult.Model;
+            HouseholdMemberModel householdMemberModel = (HouseholdMemberModel) viewResult.Model;
             Assert.That(householdMemberModel.Identifier, Is.EqualTo(default(Guid)));
             Assert.That(householdMemberModel.ActivationCode, Is.Null);
             if (isActivatedHouseholdMember)
@@ -864,7 +871,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 Assert.That(householdMemberModel.IsActivated, Is.True);
                 Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
                 Assert.That(householdMemberModel.ActivatedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-                Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
             }
             else
             {
@@ -880,7 +886,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 Assert.That(householdMemberModel.HasAcceptedPrivacyPolicy, Is.True);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
             }
             else
             {
@@ -896,10 +901,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithModelThrowsArgumentNullExceptionWhenModelIsNull()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.Prepare((HouseholdMemberModel) null));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.Prepare((HouseholdMemberModel) null));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -913,7 +918,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithModelCallsGetPrivacyPoliciesAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -921,7 +926,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.Identifier, Guid.NewGuid())
                 .With(m => m.Header, (string) null)
                 .With(m => m.Body, (string) null)
@@ -929,7 +934,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -951,7 +956,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase(false)]
         public void TestThatPrepareWithModelUpdatesValuesInPrivacyPolicyModelWithValuesFromReloadedPrivacyPolicyModel(bool isPrivacyPoliciesAccepted)
         {
-            var reloadedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel reloadedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.Identifier, Guid.NewGuid())
                 .With(m => m.Header, Fixture.Create<string>())
                 .With(m => m.Body, Fixture.Create<string>())
@@ -963,10 +968,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(reloadedPrivacyPolicyModel.Body, Is.Not.Null);
             Assert.That(reloadedPrivacyPolicyModel.Body, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(privacyPolicyModel: reloadedPrivacyPolicyModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(privacyPolicyModel: reloadedPrivacyPolicyModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.Identifier, Guid.NewGuid())
                 .With(m => m.Header, (string) null)
                 .With(m => m.Body, (string) null)
@@ -982,7 +987,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             if (isPrivacyPoliciesAccepted)
             {
                 Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
-                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
             }
             else
             {
@@ -990,7 +994,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
             }
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1015,7 +1019,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             if (isPrivacyPoliciesAccepted)
             {
                 Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
-                Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
             }
             else
             {
@@ -1030,7 +1033,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithInvalidModelCallsIsPrivacyPoliciesAcceptedOnClaimValueProvider()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -1039,12 +1042,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1071,16 +1074,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase(false, false)]
         public void TestThatPrepareWithInvalidModelReturnsViewResultWithModelForPreparingHouseholdMember(bool isPrivacyPoliciesAccepted, bool privacyPoliciesHasAlreadyBeenAccepted)
         {
-            var householdMemberController = CreateHouseholdMemberController(isPrivacyPoliciesAccepted: privacyPoliciesHasAlreadyBeenAccepted);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(isPrivacyPoliciesAccepted: privacyPoliciesHasAlreadyBeenAccepted);
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.ModelState, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, isPrivacyPoliciesAccepted)
                 .With(m => m.AcceptedTime, privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now.AddDays(Random.Next(7, 14)*-1).AddMinutes(Random.Next(-120, 120)) : (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1093,10 +1096,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             {
                 Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime, Is.Not.Null);
                 Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime, Is.Not.EqualTo(DateTime.Now).Within(3).Seconds);
-                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime.HasValue, Is.True);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.EqualTo(DateTime.Now).Within(3).Seconds);
-                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
             }
             else
             {
@@ -1109,11 +1110,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             householdMemberController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
             Assert.That(householdMemberController.ModelState.IsValid, Is.False);
 
-            var result = householdMemberController.Prepare(householdMemberModel);
+            ActionResult result = householdMemberController.Prepare(householdMemberModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -1123,7 +1124,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Empty);
 
-            var model = (HouseholdMemberModel) viewResult.Model;
+            HouseholdMemberModel model = (HouseholdMemberModel) viewResult.Model;
             Assert.That(model.PrivacyPolicy, Is.Not.Null);
             Assert.That(model.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
             Assert.That(model.PrivacyPolicy.IsAccepted, Is.EqualTo(privacyPoliciesHasAlreadyBeenAccepted));
@@ -1131,10 +1132,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             {
                 Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime, Is.Not.Null);
                 Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-                Assert.That(householdMemberModel.PrivacyPolicy.AcceptedTime.HasValue, Is.True);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
                 Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-                Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
             }
             else
             {
@@ -1151,15 +1150,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelDoesNotCallActivateHouseholdMemberAsyncOnHouseholdDataRepositoryWhenHouseholdMemberHasBeenActivated()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)))
@@ -1171,7 +1170,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Empty);
             Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
-            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
 
             householdMemberController.Prepare(householdMemberModel);
 
@@ -1184,15 +1182,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelDoesNotCallGenerateActivatedHouseholdMemberClaimOnLocalClaimProviderWhenHouseholdMemberHasBeenActivated()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, DateTime.Now.AddDays(Random.Next(1, 7) * -1).AddMinutes(Random.Next(-120, 120)))
@@ -1204,7 +1202,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Empty);
             Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
-            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
 
             householdMemberController.Prepare(householdMemberModel);
 
@@ -1217,16 +1214,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelDoesNotUpdateActivatedTimeOnHouseholdMemberWhenHouseholdMemberHasBeenActivated()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var activationTime = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120));
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            DateTime activationTime = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120));
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, activationTime)
@@ -1238,13 +1235,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Null);
             Assert.That(householdMemberModel.ActivationCode, Is.Not.Empty);
             Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
-            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
 
             householdMemberController.Prepare(householdMemberModel);
 
             Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
             Assert.That(householdMemberModel.ActivatedTime, Is.EqualTo(activationTime));
-            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
         }
 
         /// <summary>
@@ -1256,26 +1251,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase(" ")]
         [TestCase("  ")]
         [TestCase("   ")]
-        public void TestThatPrepareWithValidModelWithoutActivationCodeDoesNotCallActivateHouseholdMemberAsyncOnHouseholdDataRepositoryWhenHouseholdMemberHasNotBeenActivated(string noActicationCode)
+        public void TestThatPrepareWithValidModelWithoutActivationCodeDoesNotCallActivateHouseholdMemberAsyncOnHouseholdDataRepositoryWhenHouseholdMemberHasNotBeenActivated(string noActivationCode)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
-                .With(m => m.ActivationCode, noActicationCode)
+                .With(m => m.ActivationCode, noActivationCode)
                 .With(m => m.ActivatedTime, (DateTime?) null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, (DateTime?) null)
                 .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
-            Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActicationCode));
+            Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActivationCode));
             Assert.That(householdMemberModel.ActivatedTime, Is.Null);
             Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
 
@@ -1293,26 +1288,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase(" ")]
         [TestCase("  ")]
         [TestCase("   ")]
-        public void TestThatPrepareWithValidModelWithoutActivationCodeDoesNotCallGenerateActivatedHouseholdMemberClaimOnLocalClaimProviderWhenHouseholdMemberHasNotBeenActivated(string noActicationCode)
+        public void TestThatPrepareWithValidModelWithoutActivationCodeDoesNotCallGenerateActivatedHouseholdMemberClaimOnLocalClaimProviderWhenHouseholdMemberHasNotBeenActivated(string noActivationCode)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
-                .With(m => m.ActivationCode, noActicationCode)
+                .With(m => m.ActivationCode, noActivationCode)
                 .With(m => m.ActivatedTime, (DateTime?) null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, (DateTime?) null)
                 .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
-            Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActicationCode));
+            Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActivationCode));
             Assert.That(householdMemberModel.ActivatedTime, Is.Null);
             Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
 
@@ -1330,26 +1325,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase(" ")]
         [TestCase("  ")]
         [TestCase("   ")]
-        public void TestThatPrepareWithValidModelWithoutActivationCodeDoesNotUpdateActivatedTimeOnHouseholdMemberWhenHouseholdMemberHasNotBeenActivated(string noActicationCode)
+        public void TestThatPrepareWithValidModelWithoutActivationCodeDoesNotUpdateActivatedTimeOnHouseholdMemberWhenHouseholdMemberHasNotBeenActivated(string noActivationCode)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
-                .With(m => m.ActivationCode, noActicationCode)
+                .With(m => m.ActivationCode, noActivationCode)
                 .With(m => m.ActivatedTime, (DateTime?) null)
                 .With(m => m.PrivacyPolicy, privacyPolicyModel)
                 .With(m => m.PrivacyPolicyAcceptedTime, (DateTime?) null)
                 .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(householdMemberModel, Is.Not.Null);
-            Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActicationCode));
+            Assert.That(householdMemberModel.ActivationCode, Is.EqualTo(noActivationCode));
             Assert.That(householdMemberModel.ActivatedTime, Is.Null);
             Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.False);
 
@@ -1367,17 +1362,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithActivationCodeCallsActivateHouseholdMemberAsyncOnHouseholdDataRepositoryWhenHouseholdMemberHasNotBeenActivated()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1402,15 +1397,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithActivationCodeCallsGenerateActivatedHouseholdMemberClaimOnLocalClaimProviderWhenHouseholdMemberHasNotBeenActivated()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1435,19 +1430,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithActivationCodeCallsAddLocalClaimAsyncWithActivatedHouseholdMemberClaimOnLocalClaimProviderWhenHouseholdMemberHasNotBeenActivated()
         {
-            var claimsIdentity = new ClaimsIdentity();
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-            var activatedHouseholdMemberClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            Claim activatedHouseholdMemberClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
 
-            var householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, activatedHouseholdMemberClaim: activatedHouseholdMemberClaim);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, activatedHouseholdMemberClaim: activatedHouseholdMemberClaim);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1472,24 +1467,23 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithActivationCodeUpdatesActivatedTimeOnHouseholdMemberWhenHouseholdMemberHasNotBeenActivated()
         {
-            var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
                 .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(activatedHouseholdMemberModel.ActivatedTime.HasValue, Is.True);
                 
-            var householdMemberController = CreateHouseholdMemberController(activatedHouseholdMemberModel: activatedHouseholdMemberModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(activatedHouseholdMemberModel: activatedHouseholdMemberModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, Fixture.Create<bool>())
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1507,7 +1501,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(householdMemberModel.ActivatedTime, Is.Not.Null);
             Assert.That(householdMemberModel.ActivatedTime, Is.EqualTo(activatedHouseholdMemberModel.ActivatedTime));
-            Assert.That(householdMemberModel.ActivatedTime.HasValue, Is.True);
         }
 
         /// <summary>
@@ -1516,19 +1509,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelDoesNotCallAcceptPrivacyPolicyAsyncOnHouseholdDataRepositoryWhenHouseholdMemberHasAcceptedPrivacyPolicies()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)))
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
-            Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1540,7 +1532,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
-            Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
 
             householdMemberController.Prepare(householdMemberModel);
 
@@ -1553,19 +1544,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelDoesNotCallGeneratePrivacyPoliciesAcceptedClaimOnLocalClaimProviderWhenHouseholdMemberHasAcceptedPrivacyPolicies()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120)))
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
-            Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1577,7 +1567,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
-            Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
 
             householdMemberController.Prepare(householdMemberModel);
 
@@ -1590,20 +1579,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelDoesNotUpdatePrivacyPolicyAcceptedTimeOnHouseholdMemberWhenHouseholdMemberHasAcceptedPrivacyPolicies()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyAcceptedTime = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120));
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            DateTime privacyPolicyAcceptedTime = DateTime.Now.AddDays(Random.Next(1, 7)*-1).AddMinutes(Random.Next(-120, 120));
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, privacyPolicyAcceptedTime)
                 .Create();
             Assert.That(privacyPolicyModel, Is.Not.Null);
             Assert.That(privacyPolicyModel.IsAccepted, Is.True);
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Not.Null);
-            Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.True);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1615,13 +1603,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.PrivacyPolicy, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicy, Is.EqualTo(privacyPolicyModel));
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
-            Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
 
             householdMemberController.Prepare(householdMemberModel);
 
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.EqualTo(privacyPolicyAcceptedTime));
-            Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
         }
 
         /// <summary>
@@ -1630,10 +1616,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithoutAcceptOfPrivacyPoliciesDoesNotCallAcceptPrivacyPolicyAsyncOnHouseholdDataRepositoryWhenHouseholdMemberHasNotAcceptedPrivacyPolicies()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -1642,7 +1628,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1667,10 +1653,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithoutAcceptOfPrivacyPoliciesDoesNotCallGeneratePrivacyPoliciesAcceptedClaimOnLocalClaimProviderWhenHouseholdMemberHasNotAcceptedPrivacyPolicies()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -1679,7 +1665,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1704,10 +1690,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithoutAcceptOfPrivacyPoliciesDoesNotUpdatePrivacyPolicyAcceptedTimeOnHouseholdMemberWhenHouseholdMemberHasNotAcceptedPrivacyPolicies()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -1716,7 +1702,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1742,12 +1728,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithAcceptOfPrivacyPoliciesCallsAcceptPrivacyPolicyAsyncOnHouseholdDataRepositoryWhenHouseholdMemberHasNotAcceptedPrivacyPolicies()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -1756,7 +1742,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1781,10 +1767,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithAcceptOfPrivacyPoliciesCallsGeneratePrivacyPoliciesAcceptedClaimOnLocalClaimProviderWhenHouseholdMemberHasNotAcceptedPrivacyPolicies()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -1793,7 +1779,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1818,14 +1804,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithAcceptOfPrivacyPoliciesCallsAddLocalClaimAsyncWithPrivacyPoliciesAcceptedClaimOnLocalClaimProviderWhenHouseholdMemberHasNotAcceptedPrivacyPolicies()
         {
-            var claimsIdentity = new ClaimsIdentity();
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-            var privacyPoliciesAcceptedClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            Claim privacyPoliciesAcceptedClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
 
-            var householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, privacyPoliciesAcceptedClaim: privacyPoliciesAcceptedClaim);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, privacyPoliciesAcceptedClaim: privacyPoliciesAcceptedClaim);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -1834,7 +1820,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1859,18 +1845,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithAcceptOfPrivacyPoliciesUpdatesPrivacyPolicyAcceptedTimeOnHouseholdMemberWhenHouseholdMemberHasNotAcceptedPrivacyPolicies()
         {
-            var acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.AcceptedTime, DateTime.Now)
                 .Create();
             Assert.That(acceptedPrivacyPolicyModel, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(acceptedPrivacyPolicyModel.AcceptedTime.HasValue, Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -1879,7 +1864,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1897,7 +1882,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Not.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.EqualTo(acceptedPrivacyPolicyModel.AcceptedTime));
-            Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.True);
         }
 
         /// <summary>
@@ -1906,10 +1890,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithoutActivationAndWithoutAcceptOfPrivacyPolicyDoesNotCallGenerateValidatedHouseholdMemberClaimOnLocalClaimProvider()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -1918,7 +1902,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1946,10 +1930,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithoutActivationAndWithoutAcceptOfPrivacyPolicyReturnsViewResultWithModelForPreparingHouseholdMember()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -1958,7 +1942,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -1975,11 +1959,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
 
-            var result = householdMemberController.Prepare(householdMemberModel);
+            ActionResult result = householdMemberController.Prepare(householdMemberModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -1996,18 +1980,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithoutActivationAndWithAcceptOfPrivacyPolicyDoesNotCallGenerateValidatedHouseholdMemberClaimOnLocalClaimProvider()
         {
-            var acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.AcceptedTime, DateTime.Now)
                 .Create();
             Assert.That(acceptedPrivacyPolicyModel, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(acceptedPrivacyPolicyModel.AcceptedTime.HasValue, Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -2016,7 +1999,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -2044,18 +2027,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithoutActivationAndWithAcceptOfPrivacyPolicyReturnsViewResultWithModelForPreparingHouseholdMember()
         {
-            var acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.AcceptedTime, DateTime.Now)
                 .Create();
             Assert.That(acceptedPrivacyPolicyModel, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(acceptedPrivacyPolicyModel.AcceptedTime.HasValue, Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -2064,7 +2046,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, (string) null)
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -2081,11 +2063,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
 
-            var result = householdMemberController.Prepare(householdMemberModel);
+            ActionResult result = householdMemberController.Prepare(householdMemberModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -2102,19 +2084,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithActivationAndWithoutAcceptOfPrivacyPolicyDoesNotCallGenerateValidatedHouseholdMemberClaimOnLocalClaimProvider()
         {
-            var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
                 .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(activatedHouseholdMemberModel.ActivatedTime.HasValue, Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(activatedHouseholdMemberModel: activatedHouseholdMemberModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(activatedHouseholdMemberModel: activatedHouseholdMemberModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -2123,7 +2104,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -2152,19 +2133,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithActivationAndWithoutAcceptOfPrivacyPolicyReturnsViewResultWithModelForPreparingHouseholdMember()
         {
-            var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
                 .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(activatedHouseholdMemberModel.ActivatedTime.HasValue, Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(activatedHouseholdMemberModel: activatedHouseholdMemberModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(activatedHouseholdMemberModel: activatedHouseholdMemberModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, false)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -2173,7 +2153,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -2191,11 +2171,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
 
-            var result = householdMemberController.Prepare(householdMemberModel);
+            ActionResult result = householdMemberController.Prepare(householdMemberModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -2212,27 +2192,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithActivationAndWithAcceptOfPrivacyPolicyCallsGenerateValidatedHouseholdMemberClaimOnLocalClaimProvider()
         {
-            var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
                 .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(activatedHouseholdMemberModel.ActivatedTime.HasValue, Is.True);
 
-            var acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.AcceptedTime, DateTime.Now)
                 .Create();
             Assert.That(acceptedPrivacyPolicyModel, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(acceptedPrivacyPolicyModel.AcceptedTime.HasValue, Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(activatedHouseholdMemberModel: activatedHouseholdMemberModel, acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(activatedHouseholdMemberModel: activatedHouseholdMemberModel, acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -2241,7 +2219,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -2270,31 +2248,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithActivationAndWithAcceptOfPrivacyPolicyCallsAddLocalClaimAsyncWithValidatedHouseholdMemberClaimOnLocalClaimProvider()
         {
-            var claimsIdentity = new ClaimsIdentity();
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-            var validatedHouseholdMemberClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            Claim validatedHouseholdMemberClaim = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
 
-            var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
                 .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(activatedHouseholdMemberModel.ActivatedTime.HasValue, Is.True);
 
-            var acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.AcceptedTime, DateTime.Now)
                 .Create();
             Assert.That(acceptedPrivacyPolicyModel, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(acceptedPrivacyPolicyModel.AcceptedTime.HasValue, Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, validatedHouseholdMemberClaim: validatedHouseholdMemberClaim, activatedHouseholdMemberModel: activatedHouseholdMemberModel, acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(principal: claimsPrincipal, validatedHouseholdMemberClaim: validatedHouseholdMemberClaim, activatedHouseholdMemberModel: activatedHouseholdMemberModel, acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -2303,7 +2279,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -2332,27 +2308,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatPrepareWithValidModelWithActivationAndWithAcceptOfPrivacyPolicyReturnsRedirectToRouteResultForDashboard()
         {
-            var activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel activatedHouseholdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.ActivatedTime, DateTime.Now)
                 .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
                 .Create();
             Assert.That(activatedHouseholdMemberModel, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.Not.Null);
             Assert.That(activatedHouseholdMemberModel.ActivatedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(activatedHouseholdMemberModel.ActivatedTime.HasValue, Is.True);
 
-            var acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel acceptedPrivacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.AcceptedTime, DateTime.Now)
                 .Create();
             Assert.That(acceptedPrivacyPolicyModel, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.Not.Null);
             Assert.That(acceptedPrivacyPolicyModel.AcceptedTime, Is.EqualTo(DateTime.Now).Within(3).Seconds);
-            Assert.That(acceptedPrivacyPolicyModel.AcceptedTime.HasValue, Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(activatedHouseholdMemberModel: activatedHouseholdMemberModel, acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(activatedHouseholdMemberModel: activatedHouseholdMemberModel, acceptedPrivacyPolicyModel: acceptedPrivacyPolicyModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
+            PrivacyPolicyModel privacyPolicyModel = Fixture.Build<PrivacyPolicyModel>()
                 .With(m => m.IsAccepted, true)
                 .With(m => m.AcceptedTime, (DateTime?) null)
                 .Create();
@@ -2361,7 +2335,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(privacyPolicyModel.AcceptedTime, Is.Null);
             Assert.That(privacyPolicyModel.AcceptedTime.HasValue, Is.False);
 
-            var householdMemberModel = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMemberModel = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Identifier, default(Guid))
                 .With(m => m.ActivationCode, Fixture.Create<string>())
                 .With(m => m.ActivatedTime, (DateTime?) null)
@@ -2379,11 +2353,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime, Is.Null);
             Assert.That(householdMemberModel.PrivacyPolicyAcceptedTime.HasValue, Is.False);
 
-            var result = householdMemberController.Prepare(householdMemberModel);
+            ActionResult result = householdMemberController.Prepare(householdMemberModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult) result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
@@ -2415,7 +2389,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatManageWithoutStatusMessageCallsGetHouseholdMemberAsyncOnHouseholdDataRepository(string statusMessage)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -2436,7 +2410,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatManageWithStatusMessageCallsGetHouseholdMemberAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -2444,7 +2418,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            var statusMessage = Fixture.Create<string>();
+            string statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
             householdMemberController.Manage(statusMessage: statusMessage);
@@ -2463,7 +2437,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatManageWithoutErrorMessageCallsGetHouseholdMemberAsyncOnHouseholdDataRepository(string errorMessage)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -2484,7 +2458,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatManageWithErrorMessageCallsGetHouseholdMemberAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -2492,7 +2466,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            var errorMessage = Fixture.Create<string>();
+            string errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
             householdMemberController.Manage(errorMessage: errorMessage);
@@ -2511,19 +2485,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatManageWithoutStatusMessageReturnsViewResultWithModelForManageHouseholdMember(string statusMessage)
         {
-            var householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
+            HouseholdMemberModel householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
             Assert.That(householdMemberModel, Is.Not.Null);
 
-            var householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            var result = householdMemberController.Manage(statusMessage: statusMessage);
+            ActionResult result = householdMemberController.Manage(statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult)result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -2540,20 +2514,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatManageWithStatusMessageReturnsViewResultWithModelForManageHouseholdMember()
         {
-            var householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
+            HouseholdMemberModel householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
             Assert.That(householdMemberModel, Is.Not.Null);
 
-            var householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var statusMessage = Fixture.Create<string>();
+            string statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            var result = householdMemberController.Manage(statusMessage: statusMessage);
+            ActionResult result = householdMemberController.Manage(statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult)result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -2578,19 +2552,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatManageWithoutErrorMessageReturnsViewResultWithModelForManageHouseholdMember(string errorMessage)
         {
-            var householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
+            HouseholdMemberModel householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
             Assert.That(householdMemberModel, Is.Not.Null);
 
-            var householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            var result = householdMemberController.Manage(errorMessage: errorMessage);
+            ActionResult result = householdMemberController.Manage(errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -2607,20 +2581,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatManageWithErrorMessageReturnsViewResultWithModelForManageHouseholdMember()
         {
-            var householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
+            HouseholdMemberModel householdMemberModel = MockRepository.GenerateMock<HouseholdMemberModel>();
             Assert.That(householdMemberModel, Is.Not.Null);
 
-            var householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(householdMemberModel: householdMemberModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var errorMessage = Fixture.Create<string>();
+            string errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            var result = householdMemberController.Manage(errorMessage: errorMessage);
+            ActionResult result = householdMemberController.Manage(errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult)result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -2642,10 +2616,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("")]
         public void TestThatUpgradeMembershipThrowsArgumentNullExceptionWhenReturnUrlIsNullOrEmpty(string returnUrl)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeMembership(returnUrl));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeMembership(returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -2664,7 +2638,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatUpgradeMembershipWithoutStatusMessageCallsGetMembershipsAsyncOnHouseholdDataRepository(string statusMessage)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -2685,7 +2659,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatUpgradeMembershipWithStatusMessageCallsGetMembershipsAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -2693,7 +2667,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            var statusMessage = Fixture.Create<string>();
+            string statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
             householdMemberController.UpgradeMembership(Fixture.Create<string>(), statusMessage: statusMessage);
@@ -2712,7 +2686,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatUpgradeMembershipWithoutErrorMessageCallsGetMembershipsAsyncOnHouseholdDataRepository(string errorMessage)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -2733,7 +2707,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatUpgradeMembershipWithErrorMessageCallsGetMembershipsAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -2741,7 +2715,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            var errorMessage = Fixture.Create<string>();
+            string errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
             householdMemberController.UpgradeMembership(Fixture.Create<string>(), errorMessage: errorMessage);
@@ -2760,17 +2734,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatUpgradeMembershipWithoutStatusMessageThrowsReduceFoodWasteSystemExceptionWhenUpgradeIsNotPossible(string statusMessage)
         {
-            var membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.False);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), statusMessage: statusMessage));
+            ReduceFoodWasteSystemException exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), statusMessage: statusMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -2784,18 +2758,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatUpgradeMembershipWithStatusMessageThrowsReduceFoodWasteSystemExceptionWhenUpgradeIsNotPossible()
         {
-            var membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.False);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var statusMessage = Fixture.Create<string>();
+            string statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), statusMessage: statusMessage));
+            ReduceFoodWasteSystemException exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), statusMessage: statusMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -2814,17 +2788,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatUpgradeMembershipWithoutErrorMessageThrowsReduceFoodWasteSystemExceptionWhenUpgradeIsNotPossible(string errorMessage)
         {
-            var membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.False);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), errorMessage: errorMessage));
+            ReduceFoodWasteSystemException exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), errorMessage: errorMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -2838,18 +2812,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatUpgradeMembershipWithErrorMessageThrowsReduceFoodWasteSystemExceptionWhenUpgradeIsNotPossible()
         {
-            var membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection(canUpgrade: false);
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.False);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var errorMessage = Fixture.Create<string>();
+            string errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), errorMessage: errorMessage));
+            ReduceFoodWasteSystemException exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.UpgradeMembership(Fixture.Create<string>(), errorMessage: errorMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -2868,25 +2842,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatUpgradeMembershipWithoutStatusMessageReturnsViewResultWithModelsForUpgrade(string statusMessage)
         {
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            var result = householdMemberController.UpgradeMembership(returnUrl, statusMessage: statusMessage);
+            ActionResult result = householdMemberController.UpgradeMembership(returnUrl, statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult)result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -2906,26 +2880,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatUpgradeMembershipWithStatusMessageReturnsViewResultWithModelsForUpgrade()
         {
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var statusMessage = Fixture.Create<string>();
+            string statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            var result = householdMemberController.UpgradeMembership(returnUrl, statusMessage: statusMessage);
+            ActionResult result = householdMemberController.UpgradeMembership(returnUrl, statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult)result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -2953,25 +2927,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatUpgradeMembershipWithoutErrorMessageReturnsViewResultWithModelsForUpgrade(string errorMessage)
         {
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            var result = householdMemberController.UpgradeMembership(returnUrl, errorMessage: errorMessage);
+            ActionResult result = householdMemberController.UpgradeMembership(returnUrl, errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult)result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -2991,26 +2965,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatUpgradeMembershipWithErrorMessageReturnsViewResultWithWithModelsForUpgrade()
         {
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanUpgrade), Is.True);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var errorMessage = Fixture.Create<string>();
+            string errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            var result = householdMemberController.UpgradeMembership(returnUrl, errorMessage: errorMessage);
+            ActionResult result = householdMemberController.UpgradeMembership(returnUrl, errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult)result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -3035,10 +3009,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("")]
         public void TestThatRenewMembershipThrowsArgumentNullExceptionWhenReturnUrlIsNullOrEmpty(string returnUrl)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.RenewMembership(returnUrl));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.RenewMembership(returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -3057,7 +3031,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatRenewMembershipWithoutStatusMessageCallsGetMembershipsAsyncOnHouseholdDataRepository(string statusMessage)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -3078,7 +3052,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatRenewMembershipWithStatusMessageCallsGetMembershipsAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -3086,7 +3060,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            var statusMessage = Fixture.Create<string>();
+            string statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
             householdMemberController.RenewMembership(Fixture.Create<string>(), statusMessage: statusMessage);
@@ -3105,7 +3079,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatRenewMembershipWithoutErrorMessageCallsGetMembershipsAsyncOnHouseholdDataRepository(string errorMessage)
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -3126,7 +3100,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatRenewMembershipWithErrorMessageCallsGetMembershipsAsyncOnHouseholdDataRepository()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -3134,7 +3108,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            var errorMessage = Fixture.Create<string>();
+            string errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
             householdMemberController.RenewMembership(Fixture.Create<string>(), errorMessage: errorMessage);
@@ -3153,17 +3127,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatRenewMembershipWithoutStatusMessageThrowsReduceFoodWasteSystemExceptionWhenRenewIsNotPossible(string statusMessage)
         {
-            var membershipModelCollection = CreateMembershipModelCollection(canReview: false);
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection(canReview: false);
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.False);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), statusMessage: statusMessage));
+            ReduceFoodWasteSystemException exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), statusMessage: statusMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -3177,18 +3151,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatRenewMembershipWithStatusMessageThrowsReduceFoodWasteSystemExceptionWhenRenewIsNotPossible()
         {
-            var membershipModelCollection = CreateMembershipModelCollection(canReview: false);
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection(canReview: false);
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.False);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var statusMessage = Fixture.Create<string>();
+            string statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), statusMessage: statusMessage));
+            ReduceFoodWasteSystemException exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), statusMessage: statusMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -3207,17 +3181,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatRenewMembershipWithoutErrorMessageThrowsReduceFoodWasteSystemExceptionWhenRenewIsNotPossible(string errorMessage)
         {
-            var membershipModelCollection = CreateMembershipModelCollection(canReview: false);
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection(canReview: false);
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.False);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), errorMessage: errorMessage));
+            ReduceFoodWasteSystemException exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), errorMessage: errorMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -3231,18 +3205,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatRenewMembershipWithErrorMessageThrowsReduceFoodWasteSystemExceptionWhenRenewIsNotPossible()
         {
-            var membershipModelCollection = CreateMembershipModelCollection(canReview: false);
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection(canReview: false);
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.False);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var errorMessage = Fixture.Create<string>();
+            string errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            var exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), errorMessage: errorMessage));
+            ReduceFoodWasteSystemException exception = Assert.Throws<ReduceFoodWasteSystemException>(() => householdMemberController.RenewMembership(Fixture.Create<string>(), errorMessage: errorMessage));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Null);
             Assert.That(exception.Message, Is.Not.Empty);
@@ -3261,28 +3235,28 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatRenewMembershipWithoutStatusMessageReturnsViewResultWithWithModelForRenew(string statusMessage)
         {
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.True);
 
-            var membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
+            MembershipModel membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
             Assert.That(membershipModel, Is.Not.Null);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            var result = householdMemberController.RenewMembership(returnUrl, statusMessage: statusMessage);
+            ActionResult result = householdMemberController.RenewMembership(returnUrl, statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -3302,29 +3276,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatRenewMembershipWithStatusMessageReturnsViewResultWithWithModelForRenew()
         {
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.True);
 
-            var membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
+            MembershipModel membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
             Assert.That(membershipModel, Is.Not.Null);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var statusMessage = Fixture.Create<string>();
+            string statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            var result = householdMemberController.RenewMembership(returnUrl, statusMessage: statusMessage);
+            ActionResult result = householdMemberController.RenewMembership(returnUrl, statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -3352,28 +3326,28 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatRenewMembershipWithoutErrorMessageReturnsViewResultWithWithModelForRenew(string errorMessage)
         {
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.True);
 
-            var membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
+            MembershipModel membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
             Assert.That(membershipModel, Is.Not.Null);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            var result = householdMemberController.RenewMembership(returnUrl, errorMessage: errorMessage);
+            ActionResult result = householdMemberController.RenewMembership(returnUrl, errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -3393,29 +3367,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatRenewMembershipWithErrorMessageReturnsViewResultWithWithModelForRenew()
         {
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => m.CanRenew), Is.True);
 
-            var membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
+            MembershipModel membershipModel = membershipModelCollection.SingleOrDefault(m => m.CanRenew);
             Assert.That(membershipModel, Is.Not.Null);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var errorMessage = Fixture.Create<string>();
+            string errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            var result = householdMemberController.RenewMembership(returnUrl, errorMessage: errorMessage);
+            ActionResult result = householdMemberController.RenewMembership(returnUrl, errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -3438,10 +3412,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatUpgradeOrRenewMembershipWithModelThrowsArgumentNullExceptionWhenModelIsNull()
         {
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception =Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembership(null, Fixture.Create<string>()));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembership(null, Fixture.Create<string>()));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -3457,13 +3431,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("")]
         public void TestThatUpgradeOrRenewMembershipWithModelThrowsArgumentNullExceptionWhenReturnUrlIsNull(string returnUrl)
         {
-            var membershipModel = Fixture.Create<MembershipModel>();
+            MembershipModel membershipModel = Fixture.Create<MembershipModel>();
             Assert.That(membershipModel, Is.Not.Null);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -3480,7 +3454,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium")]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsFreeOfCostDoesNotCallGetMembershipsAsyncOnHouseholdDataRepository(string membershipName)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, 0M)
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3498,11 +3472,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.True);
             Assert.That(membershipModel.CanUpgrade, Is.True);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
@@ -3519,7 +3493,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium")]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsFreeOfCostDoesNotCallToBase64WithMembershipModelOnModelHelper(string membershipName)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, 0M)
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3537,11 +3511,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.True);
             Assert.That(membershipModel.CanUpgrade, Is.True);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
@@ -3558,7 +3532,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium")]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsFreeOfCostDoesNotCallActionToUrlOnUtilities(string membershipName)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, 0M)
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3576,11 +3550,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.True);
             Assert.That(membershipModel.CanUpgrade, Is.True);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
@@ -3597,7 +3571,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium")]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsFreeOfCostReturnsRedirectResultToReturnUrl(string membershipName)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, 0M)
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3615,18 +3589,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.True);
             Assert.That(membershipModel.CanUpgrade, Is.True);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var result = householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
+            ActionResult result = householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectResult>());
 
-            var redirectResult = (RedirectResult) result;
+            RedirectResult redirectResult = (RedirectResult) result;
             Assert.That(redirectResult, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Empty);
@@ -3634,7 +3608,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradebale does not call GetMembershipsAsync on the repository which can access household data.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradeable does not call GetMembershipsAsync on the repository which can access household data.
         /// </summary>
         [Test]
         [TestCase("Basic")]
@@ -3642,7 +3616,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium")]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostNotRenewableAndNotUpgradeableDoesNotCallGetMembershipsAsyncOnHouseholdDataRepository(string membershipName)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3660,11 +3634,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.False);
             Assert.That(membershipModel.CanUpgrade, Is.False);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
@@ -3673,7 +3647,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradebale does not call ToBase64 with the model for the membership on the model helper.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradeable does not call ToBase64 with the model for the membership on the model helper.
         /// </summary>
         [Test]
         [TestCase("Basic")]
@@ -3681,7 +3655,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium")]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostNotRenewableAndNotUpgradeableDoesNotCallToBase64WithMembershipModelOnModelHelper(string membershipName)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3699,11 +3673,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.False);
             Assert.That(membershipModel.CanUpgrade, Is.False);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
@@ -3712,7 +3686,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradebale does not call ActionToUrl on the utilities which support the infrastructure.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradeable does not call ActionToUrl on the utilities which support the infrastructure.
         /// </summary>
         [Test]
         [TestCase("Basic")]
@@ -3720,7 +3694,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium")]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostNotRenewableAndNotUpgradeableDoesNotCallActionToUrlOnUtilities(string membershipName)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3738,11 +3712,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.False);
             Assert.That(membershipModel.CanUpgrade, Is.False);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
@@ -3751,7 +3725,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradebale returns a RedirectResult to the url on which to return when the membership upgrade or renew process has finished.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but not renewable or upgradeable returns a RedirectResult to the url on which to return when the membership upgrade or renew process has finished.
         /// </summary>
         [Test]
         [TestCase("Basic")]
@@ -3759,7 +3733,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium")]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostNotRenewableAndNotUpgradeableReturnsRedirectResultToReturnUrl(string membershipName)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3777,18 +3751,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.False);
             Assert.That(membershipModel.CanUpgrade, Is.False);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var result = householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
+            ActionResult result = householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectResult>());
 
-            var redirectResult = (RedirectResult) result;
+            RedirectResult redirectResult = (RedirectResult) result;
             Assert.That(redirectResult, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Empty);
@@ -3796,7 +3770,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale calls GetMembershipsAsync on the repository which can access household data.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradeable calls GetMembershipsAsync on the repository which can access household data.
         /// </summary>
         [Test]
         [TestCase("Basic", true, true)]
@@ -3810,7 +3784,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium", false, true)]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableCallsGetMembershipsAsyncOnHouseholdDataRepository(string membershipName, bool canRenew, bool canUpgrade)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3828,11 +3802,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
             Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -3846,7 +3820,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale does not call ToBase64 with the model for the membership on the model helper when the name of the membership is unknown.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradeable does not call ToBase64 with the model for the membership on the model helper when the name of the membership is unknown.
         /// </summary>
         [Test]
         [TestCase("XXX", true, true)]
@@ -3860,7 +3834,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("ZZZ", false, true)]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableDoesNotCallToBase64WithMembershipModelOnModelHelperWhenNameOfMembershipIsUnknown(string membershipName, bool canRenew, bool canUpgrade)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3878,16 +3852,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
             Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => string.Compare(m.Name, membershipName, StringComparison.Ordinal) == 0), Is.False);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
@@ -3896,7 +3870,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale does not call ActionToUrl on the utilities which support the infrastructure when the name of the membership is unknown.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradeable does not call ActionToUrl on the utilities which support the infrastructure when the name of the membership is unknown.
         /// </summary>
         [Test]
         [TestCase("XXX", true, true)]
@@ -3910,7 +3884,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("ZZZ", false, true)]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableDoesNotCallActionToUrlOnUtilitiesWhenNameOfMembershipIsUnknown(string membershipName, bool canRenew, bool canUpgrade)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3928,16 +3902,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
             Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => string.Compare(m.Name, membershipName, StringComparison.Ordinal) == 0), Is.False);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
@@ -3946,7 +3920,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale returns a RedirectResult to the url on which to return when the membership upgrade or renew process has finished when the name of the membership is unknown.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradeable returns a RedirectResult to the url on which to return when the membership upgrade or renew process has finished when the name of the membership is unknown.
         /// </summary>
         [Test]
         [TestCase("XXX", true, true)]
@@ -3960,7 +3934,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("ZZZ", false, true)]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableReturnsRedirectResultToReturnUrlWhenNameOfMembershipIsUnknown(string membershipName, bool canRenew, bool canUpgrade)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -3978,23 +3952,23 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
             Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => string.Compare(m.Name, membershipName, StringComparison.Ordinal) == 0), Is.False);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var result = householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
+            ActionResult result = householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectResult>());
 
-            var redirectResult = (RedirectResult) result;
+            RedirectResult redirectResult = (RedirectResult) result;
             Assert.That(redirectResult, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Empty);
@@ -4002,7 +3976,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale calls ToBase64 with the model for the membership on the model helper when name of membership is known.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradeable calls ToBase64 with the model for the membership on the model helper when name of membership is known.
         /// </summary>
         [Test]
         [TestCase("Basic", true, true)]
@@ -4016,7 +3990,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium", false, true)]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableCallsToBase64WithMembershipModelOnModelHelperWhenNameOfMembershipIsKnown(string membershipName, bool canRenew, bool canUpgrade)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -4034,16 +4008,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
             Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => string.Compare(m.Name, membershipName, StringComparison.Ordinal) == 0), Is.True);
 
-            Action<MembershipModel> toBase64ForMembershipModelCallback = m =>
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection, toBase64ForMembershipModelCallback: m =>
             {
                 Assert.That(m, Is.Not.Null);
                 Assert.That(m, Is.EqualTo(membershipModel));
@@ -4053,9 +4027,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 Assert.That(m.Description, Is.Not.Null);
                 Assert.That(m.Description, Is.Not.Empty);
                 Assert.That(m.Description, Is.EqualTo(membershipModelCollection.Single(n => string.Compare(n.Name, membershipName, StringComparison.Ordinal) == 0).Description));
-            };
-
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection, toBase64ForMembershipModelCallback: toBase64ForMembershipModelCallback);
+            });
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
@@ -4064,7 +4036,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale calls ActionToUrl on the utilities which support the infrastructure when name of membership is known.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradeable calls ActionToUrl on the utilities which support the infrastructure when name of membership is known.
         /// </summary>
         [Test]
         [TestCase("Basic", true, true)]
@@ -4078,7 +4050,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium", false, true)]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableCallsActionToUrlOnUtilitiesWhenNameOfMembershipIsKnown(string membershipName, bool canRenew, bool canUpgrade)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -4096,20 +4068,20 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
             Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => string.Compare(m.Name, membershipName, StringComparison.Ordinal) == 0), Is.True);
 
-            var toBase64ForMembershipModel = Fixture.Create<string>();
+            string toBase64ForMembershipModel = Fixture.Create<string>();
             Assert.That(toBase64ForMembershipModel, Is.Not.Null);
             Assert.That(toBase64ForMembershipModel, Is.Not.Empty);
 
-            Action<RouteValueDictionary> actionToUrlCallback = routeValueDictionary =>
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection, toBase64ForMembershipModel: toBase64ForMembershipModel, actionToUrlCallback: routeValueDictionary =>
             {
                 Assert.That(routeValueDictionary, Is.Not.Null);
                 Assert.That(routeValueDictionary, Is.Not.Empty);
@@ -4125,9 +4097,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 Assert.That(routeValueDictionary["returnUrl"], Is.Not.Null);
                 Assert.That(routeValueDictionary["returnUrl"], Is.Not.Empty);
                 Assert.That(routeValueDictionary["returnUrl"], Is.EqualTo(returnUrl));
-            };
-
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection, toBase64ForMembershipModel: toBase64ForMembershipModel, actionToUrlCallback: actionToUrlCallback);
+            });
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.Url, Is.Null);
 
@@ -4137,7 +4107,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         }
 
         /// <summary>
-        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradebale returns a RedirectToRouteResult to the payment when name of membership is known.
+        /// Tests that UpgradeOrRenewMembership with a model where the membership is not free of cost but renewable or upgradeable returns a RedirectToRouteResult to the payment when name of membership is known.
         /// </summary>
         [Test]
         [TestCase("Basic", true, true)]
@@ -4151,7 +4121,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("Premium", false, true)]
         public void TestThatUpgradeOrRenewMembershipWithModelWhereMembershipIsNotFreeOfCostAndRenewableOrUpgradeableReturnsRedirectToRouteResultToPayWhenNameOfMembershipIsKnown(string membershipName, bool canRenew, bool canUpgrade)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, membershipName)
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -4169,31 +4139,31 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.CanRenew, Is.EqualTo(canRenew));
             Assert.That(membershipModel.CanUpgrade, Is.EqualTo(canUpgrade));
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var membershipModelCollection = CreateMembershipModelCollection();
+            IList<MembershipModel> membershipModelCollection = CreateMembershipModelCollection();
             Assert.That(membershipModelCollection, Is.Not.Null);
             Assert.That(membershipModelCollection, Is.Not.Empty);
             Assert.That(membershipModelCollection.Any(m => string.Compare(m.Name, membershipName, StringComparison.Ordinal) == 0), Is.True);
 
-            var toBase64ForMembershipModel = Fixture.Create<string>();
+            string toBase64ForMembershipModel = Fixture.Create<string>();
             Assert.That(toBase64ForMembershipModel, Is.Not.Null);
             Assert.That(toBase64ForMembershipModel, Is.Not.Empty);
 
-            var actionToUrl = Fixture.Create<string>();
+            string actionToUrl = Fixture.Create<string>();
             Assert.That(actionToUrl, Is.Not.Null);
             Assert.That(actionToUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection, toBase64ForMembershipModel: toBase64ForMembershipModel, actionToUrl: actionToUrl);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(membershipModelCollection: membershipModelCollection, toBase64ForMembershipModel: toBase64ForMembershipModel, actionToUrl: actionToUrl);
             Assert.That(householdMemberController, Is.Not.Null);
 
             var result = householdMemberController.UpgradeOrRenewMembership(membershipModel, returnUrl);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult) result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
@@ -4223,18 +4193,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("")]
         public void TestThatUpgradeOrRenewMembershipCallbackThrowsArgumentNullExceptionWhenMembershipModelAsBase64IsNullOrEmpty(string membershipModelAsBase64)
         {
-            var paymentModelAsBase64 = Fixture.Create<string>();
+            string paymentModelAsBase64 = Fixture.Create<string>();
             Assert.That(paymentModelAsBase64, Is.Not.Null);
             Assert.That(paymentModelAsBase64, Is.Not.Empty);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -4250,18 +4220,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("")]
         public void TestThatUpgradeOrRenewMembershipCallbackThrowsArgumentNullExceptionWhenPaymentModelAsBase64IsNullOrEmpty(string paymentModelAsBase64)
         {
-            var membershipModelAsBase64 = Fixture.Create<string>();
+            string membershipModelAsBase64 = Fixture.Create<string>();
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -4277,18 +4247,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("")]
         public void TestThatUpgradeOrRenewMembershipCallbackThrowsArgumentNullExceptionWhenReturnUrlIsNullOrEmpty(string returnUrl)
         {
-            var membershipModelAsBase64 = Fixture.Create<string>();
+            string membershipModelAsBase64 = Fixture.Create<string>();
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
-            var paymentModelAsBase64 = Fixture.Create<string>();
+            string paymentModelAsBase64 = Fixture.Create<string>();
             Assert.That(paymentModelAsBase64, Is.Not.Null);
             Assert.That(paymentModelAsBase64, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController();
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -4302,7 +4272,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatUpgradeOrRenewMembershipCallbackCallsToModelWithMembershipModelAsBase64OnModelHelper()
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -4329,11 +4299,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.PaymentReference, Is.Null);
             Assert.That(membershipModel.PaymentReceipt, Is.Null);
 
-            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
+            string membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
-            var paymentModel = Fixture.Build<PayableModel>()
+            PayableModel paymentModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
@@ -4357,15 +4327,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(paymentModel.PaymentReceipt, Is.Not.Null);
             Assert.That(paymentModel.PaymentReceipt, Is.Not.Empty);
 
-            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
+            string paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
             Assert.That(paymentModelAsBase64, Is.Not.Null);
             Assert.That(paymentModelAsBase64, Is.Not.Empty);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
@@ -4379,7 +4349,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatUpgradeOrRenewMembershipCallbackCallsToModelWithPaymentModelAsBase64OnModelHelper()
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -4406,11 +4376,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.PaymentReference, Is.Null);
             Assert.That(membershipModel.PaymentReceipt, Is.Null);
 
-            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
+            string membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
-            var paymentModel = Fixture.Build<PayableModel>()
+            PayableModel paymentModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
@@ -4434,15 +4404,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(paymentModel.PaymentReceipt, Is.Not.Null);
             Assert.That(paymentModel.PaymentReceipt, Is.Not.Empty);
 
-            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
+            string paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
             Assert.That(paymentModelAsBase64, Is.Not.Null);
             Assert.That(paymentModelAsBase64, Is.Not.Empty);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
@@ -4458,7 +4428,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase(PaymentStatus.Cancelled)]
         public void TestThatUpgradeOrRenewMembershipCallbackDoesNotCallUpgradeMembershipAsyncOnHouseholdDataRepositoryWhenPaymentModelHasNotBeenPaid(PaymentStatus paymentStatus)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -4485,11 +4455,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.PaymentReference, Is.Null);
             Assert.That(membershipModel.PaymentReceipt, Is.Null);
 
-            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
+            string membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
-            var paymentModel = Fixture.Build<PayableModel>()
+            PayableModel paymentModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
@@ -4511,15 +4481,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(paymentModel.PaymentReference, Is.Null);
             Assert.That(paymentModel.PaymentReceipt, Is.Null);
 
-            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
+            string paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
             Assert.That(paymentModelAsBase64, Is.Not.Null);
             Assert.That(paymentModelAsBase64, Is.Not.Empty);
 
-            var returnUrl = Fixture.Create<string>();
+            string  returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
             householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
@@ -4535,7 +4505,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase(PaymentStatus.Cancelled)]
         public void TestThatUpgradeOrRenewMembershipCallbackReturnsRedirectResultToReturnUrlWhenPaymentModelHasNotBeenPaid(PaymentStatus paymentStatus)
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -4562,11 +4532,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.PaymentReference, Is.Null);
             Assert.That(membershipModel.PaymentReceipt, Is.Null);
 
-            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
+            string membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
-            var paymentModel = Fixture.Build<PayableModel>()
+            PayableModel paymentModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
@@ -4588,22 +4558,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(paymentModel.PaymentReference, Is.Null);
             Assert.That(paymentModel.PaymentReceipt, Is.Null);
 
-            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
+            string paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
             Assert.That(paymentModelAsBase64, Is.Not.Null);
             Assert.That(paymentModelAsBase64, Is.Not.Empty);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var result = householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
+            ActionResult result = householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectResult>());
 
-            var redirectResult = (RedirectResult) result;
+            RedirectResult redirectResult = (RedirectResult) result;
             Assert.That(redirectResult, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Empty);
@@ -4616,7 +4586,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatUpgradeOrRenewMembershipCallbackCallsUpgradeMembershipAsyncOnHouseholdDataRepositoryWhenPaymentModelHasBeenPaid()
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -4643,11 +4613,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.PaymentReference, Is.Null);
             Assert.That(membershipModel.PaymentReceipt, Is.Null);
 
-            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
+            string membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
-            var paymentModel = Fixture.Build<PayableModel>()
+            PayableModel paymentModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
@@ -4671,15 +4641,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(paymentModel.PaymentReceipt, Is.Not.Null);
             Assert.That(paymentModel.PaymentReceipt, Is.Not.Empty);
 
-            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
+            string paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
             Assert.That(paymentModelAsBase64, Is.Not.Null);
             Assert.That(paymentModelAsBase64, Is.Not.Empty);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
             Assert.That(householdMemberController, Is.Not.Null);
             Assert.That(householdMemberController.User, Is.Not.Null);
             Assert.That(householdMemberController.User.Identity, Is.Not.Null);
@@ -4692,11 +4662,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                         model != null &&
                         model == membershipModel &&
                         model.PaymentHandlerIdentifier != null &&
-                        model.PaymentHandlerIdentifier.HasValue &&
                         model.PaymentHandlerIdentifier.Value == paymentModel.PaymentHandlerIdentifier.Value &&
                         model.PaymentStatus == PaymentStatus.Paid &&
                         model.PaymentTime != null &&
-                        model.PaymentTime.HasValue &&
                         model.PaymentTime.Value == paymentModel.PaymentTime.Value &&
                         string.IsNullOrWhiteSpace(model.PaymentReference) == false &&
                         string.Compare(model.PaymentReference, paymentModel.PaymentReference, StringComparison.Ordinal) == 0 &&
@@ -4712,7 +4680,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatUpgradeOrRenewMembershipCallbackReturnsRedirectResultToReturnUrlWhenPaymentModelHasBeenPaid()
         {
-            var membershipModel = Fixture.Build<MembershipModel>()
+            MembershipModel membershipModel = Fixture.Build<MembershipModel>()
                 .With(m => m.Name, Fixture.Create<string>())
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
@@ -4739,11 +4707,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(membershipModel.PaymentReference, Is.Null);
             Assert.That(membershipModel.PaymentReceipt, Is.Null);
 
-            var membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
+            string membershipModelAsBase64 = Convert.ToString(membershipModel.GetHashCode());
             Assert.That(membershipModelAsBase64, Is.Not.Null);
             Assert.That(membershipModelAsBase64, Is.Not.Empty);
 
-            var paymentModel = Fixture.Build<PayableModel>()
+            PayableModel paymentModel = Fixture.Build<PayableModel>()
                 .With(m => m.Price, Math.Abs(Fixture.Create<decimal>()))
                 .With(m => m.PriceCultureInfoName, CultureInfo.CurrentUICulture.Name)
                 .With(m => m.PaymentHandlerIdentifier, Guid.NewGuid())
@@ -4767,22 +4735,22 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(paymentModel.PaymentReceipt, Is.Not.Null);
             Assert.That(paymentModel.PaymentReceipt, Is.Not.Empty);
 
-            var paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
+            string paymentModelAsBase64 = Convert.ToString(paymentModel.GetHashCode());
             Assert.That(paymentModelAsBase64, Is.Not.Null);
             Assert.That(paymentModelAsBase64, Is.Not.Empty);
 
-            var returnUrl = Fixture.Create<string>();
+            string returnUrl = Fixture.Create<string>();
             Assert.That(returnUrl, Is.Not.Null);
             Assert.That(returnUrl, Is.Not.Empty);
 
-            var householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
+            WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController(toMembershipModel: membershipModel, toPaymentModel: paymentModel);
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var result = householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
+            ActionResult result = householdMemberController.UpgradeOrRenewMembershipCallback(membershipModelAsBase64, paymentModelAsBase64, returnUrl);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectResult>());
 
-            var redirectResult = (RedirectResult) result;
+            RedirectResult redirectResult = (RedirectResult) result;
             Assert.That(redirectResult, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Empty);
@@ -4813,50 +4781,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <returns>Controller for a household member for unit testing.</returns>
         private WebApplication.Controllers.HouseholdMemberController CreateHouseholdMemberController(PrivacyPolicyModel privacyPolicyModel = null, bool isActivatedHouseholdMember = false, bool isPrivacyPoliciesAccepted = false, IPrincipal principal = null, Claim createdHouseholdMemberClaim = null, Claim activatedHouseholdMemberClaim = null, Claim privacyPoliciesAcceptedClaim = null, Claim validatedHouseholdMemberClaim = null, HouseholdMemberModel activatedHouseholdMemberModel = null, PrivacyPolicyModel acceptedPrivacyPolicyModel = null, HouseholdMemberModel householdMemberModel = null, IEnumerable<MembershipModel> membershipModelCollection = null, string toBase64ForMembershipModel = null, Action<MembershipModel> toBase64ForMembershipModelCallback = null, MembershipModel toMembershipModel = null, PayableModel toPaymentModel = null, string actionToUrl = null, Action<RouteValueDictionary> actionToUrlCallback = null)
         {
-            Func<HouseholdModel> householdCreator = () =>
-            {
-                return Fixture.Build<HouseholdModel>()
-                    .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
-                    .Create();
-            };
-            Func<HouseholdMemberModel> householdMemberActivator = () =>
-            {
-                if (activatedHouseholdMemberModel != null)
-                {
-                    return activatedHouseholdMemberModel;
-                }
-                return Fixture.Build<HouseholdMemberModel>()
-                    .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
-                    .Create();
-            };
-            Func<HouseholdMemberModel> householdMemberGetter = () =>
-            {
-                if (householdMemberModel != null)
-                {
-                    return householdMemberModel;
-                }
-                return Fixture.Build<HouseholdMemberModel>()
-                    .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
-                    .Create();
-            };
-            Func<IEnumerable<MembershipModel>> membershipModelsGetter = () => membershipModelCollection ?? CreateMembershipModelCollection();
             _householdDataRepositoryMock.Stub(m => m.GetPrivacyPoliciesAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => privacyPolicyModel ?? Fixture.Create<PrivacyPolicyModel>()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.CreateHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything))
-                .Return(Task.Run(householdCreator))
+                .Return(Task.FromResult(Fixture.Build<HouseholdModel>()
+                    .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
+                    .Create()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.ActivateHouseholdMemberAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdMemberModel>.Is.Anything))
-                .Return(Task.Run(householdMemberActivator))
+                .Return(Task.FromResult(activatedHouseholdMemberModel ?? Fixture.Build<HouseholdMemberModel>()
+                    .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
+                    .Create()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.AcceptPrivacyPolicyAsync(Arg<IIdentity>.Is.Anything, Arg<PrivacyPolicyModel>.Is.Anything))
                 .Return(Task.Run(() => acceptedPrivacyPolicyModel ?? Fixture.Create<PrivacyPolicyModel>()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.GetHouseholdMemberAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
-                .Return(Task.Run(householdMemberGetter))
+                .Return(Task.FromResult(householdMemberModel ?? Fixture.Build<HouseholdMemberModel>()
+                    .With(m => m.Households, (IEnumerable<HouseholdModel>) null)
+                    .Create()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.GetMembershipsAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
-                .Return(Task.Run(membershipModelsGetter))
+                .Return(Task.FromResult(membershipModelCollection ?? CreateMembershipModelCollection()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.UpgradeMembershipAsync(Arg<IIdentity>.Is.Anything, Arg<MembershipModel>.Is.Anything))
                 .Return(Task.Run(() => Fixture.Create<MembershipModel>()))

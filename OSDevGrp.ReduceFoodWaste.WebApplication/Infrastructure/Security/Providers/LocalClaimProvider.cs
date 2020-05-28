@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.Owin.Security;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
@@ -33,11 +34,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
         /// <param name="householdDataRepository">Implementation of a repository which can access household data.</param>
         public LocalClaimProvider(IHouseholdDataRepository householdDataRepository)
         {
-            if (householdDataRepository == null)
-            {
-                throw new ArgumentNullException("householdDataRepository");
-            }
-            _householdDataRepository = householdDataRepository;
+            _householdDataRepository = householdDataRepository ?? throw new ArgumentNullException(nameof(householdDataRepository));
         }
 
         #endregion
@@ -53,28 +50,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
         {
             if (claimsIdentity == null)
             {
-                throw new ArgumentNullException("claimsIdentity");
+                throw new ArgumentNullException(nameof(claimsIdentity));
             }
 
-            Action action = () =>
+            return Task.Run(() =>
             {
                 try
                 {
-                    var isHouseholdMemberCreatedTask = _householdDataRepository.IsHouseholdMemberCreatedAsync(claimsIdentity);
-                    isHouseholdMemberCreatedTask.Wait();
-                    if (isHouseholdMemberCreatedTask.Result == false)
+                    if (_householdDataRepository.IsHouseholdMemberCreatedAsync(claimsIdentity).GetAwaiter().GetResult() == false)
                     {
                         return;
                     }
+
                     claimsIdentity.AddClaim(GenerateCreatedHouseholdMemberClaim());
 
-                    var isHouseholdMemberActivatedTask = _householdDataRepository.IsHouseholdMemberActivatedAsync(claimsIdentity);
-                    var hasHouseholdMemberAcceptedPrivacyPolicyTask = _householdDataRepository.HasHouseholdMemberAcceptedPrivacyPolicyAsync(claimsIdentity);
-                    Task.WaitAll(isHouseholdMemberActivatedTask, hasHouseholdMemberAcceptedPrivacyPolicyTask);
+                    Task<bool> isHouseholdMemberActivatedTask = _householdDataRepository.IsHouseholdMemberActivatedAsync(claimsIdentity);
+                    Task<bool> hasHouseholdMemberAcceptedPrivacyPolicyTask = _householdDataRepository.HasHouseholdMemberAcceptedPrivacyPolicyAsync(claimsIdentity);
+                    Task.WhenAll(isHouseholdMemberActivatedTask, hasHouseholdMemberAcceptedPrivacyPolicyTask).GetAwaiter().GetResult();
+                
                     if (isHouseholdMemberActivatedTask.Result)
                     {
                         claimsIdentity.AddClaim(GenerateActivatedHouseholdMemberClaim());
                     }
+
                     if (hasHouseholdMemberAcceptedPrivacyPolicyTask.Result)
                     {
                         claimsIdentity.AddClaim(GeneratePrivacyPoliciesAcceptedClaim());
@@ -84,6 +82,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
                     {
                         return;
                     }
+
                     claimsIdentity.AddClaim(GenerateValidatedHouseholdMemberClaim());
                 }
                 catch (ReduceFoodWasteExceptionBase)
@@ -98,9 +97,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
                 {
                     throw new ReduceFoodWasteSystemException(ex.Message, ex);
                 }
-            };
-
-            return Task.Run(action);
+            });
         }
 
         /// <summary>
@@ -114,32 +111,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
         {
             if (claimsIdentity == null)
             {
-                throw new ArgumentNullException("claimsIdentity");
+                throw new ArgumentNullException(nameof(claimsIdentity));
             }
             if (claimToAdd == null)
             {
-                throw new ArgumentNullException("claimToAdd");
+                throw new ArgumentNullException(nameof(claimToAdd));
             }
 
-            Action action = () =>
+            return Task.Run(() =>
             {
                 try
                 {
                     claimsIdentity.AddClaim(claimToAdd);
 
-                    if (httpContext == null)
+                    IAuthenticationManager authenticationManager = httpContext?.GetOwinContext().Authentication;
+                    if (authenticationManager == null)
                     {
                         return;
                     }
 
-                    var currentFormsAuthenticationTicket = httpContext.Request.ToFormsAuthenticationTicket();
-                    if (currentFormsAuthenticationTicket == null)
-                    {
-                        return;
-                    }
-
-                    var cookie = claimsIdentity.Claims.ToAuthenticationTicket(currentFormsAuthenticationTicket.Name, currentFormsAuthenticationTicket.Version + 1);
-                    httpContext.Response.Cookies.Add(cookie);
+                    claimsIdentity.RenewSignIn(authenticationManager);
                 }
                 catch (ReduceFoodWasteExceptionBase)
                 {
@@ -149,42 +140,40 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
                 {
                     throw new ReduceFoodWasteSystemException(ex.Message, ex);
                 }
-            };
-            
-            return Task.Run(action);
+            });
         }
 
         /// <summary>
-        /// Generates a claim which indicates that a cliam identity has been created as a household member.
+        /// Generates a claim which indicates that a claim identity has been created as a household member.
         /// </summary>
-        /// <returns>Claim which indicates that a cliam identity has been created as a household member.</returns>
+        /// <returns>Claim which indicates that a claim identity has been created as a household member.</returns>
         public Claim GenerateCreatedHouseholdMemberClaim()
         {
             return new Claim(LocalClaimTypes.CreatedHouseholdMember, Convert.ToString(true), ClaimValueTypes.Boolean, LocalClaimIssuer, LocalClaimIssuer);
         }
 
         /// <summary>
-        /// Generates a claim which indicates that a cliam identity is an activated household member.
+        /// Generates a claim which indicates that a claim identity is an activated household member.
         /// </summary>
-        /// <returns>Claim which indicates that a cliam identity is an activated household member.</returns>
+        /// <returns>Claim which indicates that a claim identity is an activated household member.</returns>
         public Claim GenerateActivatedHouseholdMemberClaim()
         {
             return new Claim(LocalClaimTypes.ActivatedHouseholdMember, Convert.ToString(true), ClaimValueTypes.Boolean, LocalClaimIssuer, LocalClaimIssuer);
         }
 
         /// <summary>
-        /// Generates a claim which indicates that a cliam identity has accepted the privacy policies.
+        /// Generates a claim which indicates that a claim identity has accepted the privacy policies.
         /// </summary>
-        /// <returns>Claim which indicates that a cliam identity has accepted the privacy policies.</returns>
+        /// <returns>Claim which indicates that a claim identity has accepted the privacy policies.</returns>
         public Claim GeneratePrivacyPoliciesAcceptedClaim()
         {
             return new Claim(LocalClaimTypes.PrivacyPoliciesAccepted, Convert.ToString(true), ClaimValueTypes.Boolean, LocalClaimIssuer, LocalClaimIssuer);
         }
 
         /// <summary>
-        /// Generates a claim which indicates that a cliam identity is a validated household member.
+        /// Generates a claim which indicates that a claim identity is a validated household member.
         /// </summary>
-        /// <returns>Claim which indicates that a cliam identity is a validated household member.</returns>
+        /// <returns>Claim which indicates that a claim identity is a validated household member.</returns>
         public Claim GenerateValidatedHouseholdMemberClaim()
         {
             return new Claim(LocalClaimTypes.ValidatedHouseholdMember, Convert.ToString(true), ClaimValueTypes.Boolean, LocalClaimIssuer, LocalClaimIssuer);

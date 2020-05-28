@@ -26,27 +26,27 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Provid
         Task AddLocalClaimAsync(ClaimsIdentity claimsIdentity, Claim claimToAdd, HttpContext httpContext = null);
 
         /// <summary>
-        /// Generates a claim which indicates that a cliam identity has been created as a household member.
+        /// Generates a claim which indicates that a claim identity has been created as a household member.
         /// </summary>
-        /// <returns>Claim which indicates that a cliam identity has been created as a household member.</returns>
+        /// <returns>Claim which indicates that a claim identity has been created as a household member.</returns>
         Claim GenerateCreatedHouseholdMemberClaim();
 
         /// <summary>
-        /// Generates a claim which indicates that a cliam identity is an activated household member.
+        /// Generates a claim which indicates that a claim identity is an activated household member.
         /// </summary>
-        /// <returns>Claim which indicates that a cliam identity is an activated household member.</returns>
+        /// <returns>Claim which indicates that a claim identity is an activated household member.</returns>
         Claim GenerateActivatedHouseholdMemberClaim();
 
         /// <summary>
-        /// Generates a claim which indicates that a cliam identity has accepted the privacy policies.
+        /// Generates a claim which indicates that a claim identity has accepted the privacy policies.
         /// </summary>
-        /// <returns>Claim which indicates that a cliam identity has accepted the privacy policies.</returns>
+        /// <returns>Claim which indicates that a claim identity has accepted the privacy policies.</returns>
         Claim GeneratePrivacyPoliciesAcceptedClaim();
 
         /// <summary>
-        /// Generates a claim which indicates that a cliam identity is a validated household member.
+        /// Generates a claim which indicates that a claim identity is a validated household member.
         /// </summary>
-        /// <returns>Claim which indicates that a cliam identity is a validated household member.</returns>
+        /// <returns>Claim which indicates that a claim identity is a validated household member.</returns>
         Claim GenerateValidatedHouseholdMemberClaim();
     }
 }

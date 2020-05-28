@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Security.Principal;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication
@@ -18,10 +21,57 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authen
         {
             if (identity == null)
             {
-                throw new ArgumentNullException("identity");
+                throw new ArgumentNullException(nameof(identity));
             }
+
             IClaimValueProvider claimValueProvider = new ClaimValueProvider();
             return claimValueProvider.IsValidatedHouseholdMember(identity);
+        }
+
+        /// <summary>
+        /// Sign in with the given claims identity.
+        /// </summary>
+        /// <param name="claimsIdentity">The claims identity to sign in.</param>
+        /// <param name="authenticationManager">The authentication manager used to sign in a claims identity.</param>
+        internal static void SignIn(this ClaimsIdentity claimsIdentity, IAuthenticationManager authenticationManager)
+        {
+            if (claimsIdentity == null)
+            {
+                throw new ArgumentNullException(nameof(claimsIdentity));
+            }
+            if (authenticationManager == null)
+            {
+                throw new ArgumentNullException(nameof(authenticationManager));
+            }
+
+            AuthenticationProperties authenticationProperties = new AuthenticationProperties
+            {
+                IsPersistent = false,
+                AllowRefresh = false,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60),
+                IssuedUtc = DateTimeOffset.UtcNow
+            };
+            authenticationManager.SignIn(authenticationProperties, claimsIdentity);
+        }
+
+        /// <summary>
+        /// Renew the sign in for the given claims identity.
+        /// </summary>
+        /// <param name="claimsIdentity">The claims identity to renew the sign in.</param>
+        /// <param name="authenticationManager">The authentication manager used to sign in the claims identity.</param>
+        internal static void RenewSignIn(this ClaimsIdentity claimsIdentity, IAuthenticationManager authenticationManager)
+        {
+            if (claimsIdentity == null)
+            {
+                throw new ArgumentNullException(nameof(claimsIdentity));
+            }
+            if (authenticationManager == null)
+            {
+                throw new ArgumentNullException(nameof(authenticationManager));
+            }
+
+            authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            claimsIdentity.SignIn(authenticationManager);
         }
     }
 }

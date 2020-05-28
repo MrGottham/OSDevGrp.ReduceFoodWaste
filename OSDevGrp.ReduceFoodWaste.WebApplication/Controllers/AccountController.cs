@@ -2,23 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Transactions;
+using System.Web;
 using System.Web.Mvc;
-using DotNetOpenAuth.AspNet;
-using Microsoft.Web.WebPages.OAuth;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Authentication;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Security.Providers;
-using OSDevGrp.ReduceFoodWaste.WebApplication.Models;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Repositories;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Resources;
-using WebMatrix.WebData;
 
 namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
     public class AccountController : Controller
     {
         #region Private variables
@@ -33,103 +29,33 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
         public AccountController(IConfigurationProvider configurationProvider, IClaimValueProvider claimValueProvider, ILocalClaimProvider localClaimProvider)
         {
-            if (configurationProvider == null)
-            {
-                throw new ArgumentNullException(nameof(configurationProvider));
-            }
-            if (claimValueProvider == null)
-            {
-                throw new ArgumentNullException(nameof(claimValueProvider));
-            }
-            if (localClaimProvider == null)
-            {
-                throw new ArgumentNullException(nameof(localClaimProvider));
-            }
-            _configurationProvider = configurationProvider;
-            _claimValueProvider = claimValueProvider;
-            _localClaimProvider = localClaimProvider;
+            _configurationProvider = configurationProvider ?? throw new ArgumentNullException(nameof(configurationProvider));
+            _claimValueProvider = claimValueProvider ?? throw new ArgumentNullException(nameof(claimValueProvider));
+            _localClaimProvider = localClaimProvider ?? throw new ArgumentNullException(nameof(localClaimProvider));
         }
 
         #endregion
 
-        //
-        // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+
             return View();
         }
 
-        //
-        // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            WebSecurity.Logout();
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie);
 
             return RedirectToAction("Index", "Home");
         }
 
-        //
-        // POST: /Account/Disassociate
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Disassociate(string provider, string providerUserId)
-        {
-            if (string.IsNullOrEmpty(provider))
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
-            if (string.IsNullOrEmpty(providerUserId))
-            {
-                throw new ArgumentNullException(nameof(providerUserId));
-            }
-
-            var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
-            if (string.IsNullOrWhiteSpace(mailAddress))
-            {
-                return RedirectToAction("Manage", "Account");
-            }
-
-            var accountOwner = OAuthWebSecurity.GetUserName(provider, providerUserId);
-            if (string.Compare(accountOwner, mailAddress, StringComparison.OrdinalIgnoreCase) != 0)
-            {
-                return RedirectToAction("Manage", "Account");
-            }
-
-            var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
-            if (string.IsNullOrWhiteSpace(userNameIdentifier) || string.Compare(providerUserId, userNameIdentifier, StringComparison.Ordinal) == 0)
-            {
-                return RedirectToAction("Manage", "Account");
-            }
-
-            try
-            {
-                using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
-                {
-                    var hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(mailAddress));
-                    if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(mailAddress).Count > 1)
-                    {
-                        OAuthWebSecurity.DeleteAccount(provider, providerUserId);
-                        scope.Complete();
-                    }
-                }
-
-                return RedirectToAction("Manage", "Account");
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction("Manage", "Account", new {errorMessage = ex.Message});
-            }
-        }
-
-        //
-        // GET: /Account/Manage
         public ActionResult Manage()
         {
-            if (User == null || User.Identity == null || User.Identity.IsAuthenticated == false)
+            if (User?.Identity == null || User.Identity.IsAuthenticated == false)
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -142,78 +68,54 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             return RedirectToAction("Manage", "HouseholdMember");
         }
 
-        //
-        // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            return new ExternalLoginResult(provider, GetReturnUrlForExternalLogin(returnUrl));
+            if (string.IsNullOrWhiteSpace(provider))
+            {
+                throw new ArgumentNullException(nameof(provider));
+            }
+
+            return new ChallengeResult(AuthenticationManager, provider, GetReturnUrlForExternalLogin(returnUrl));
         }
 
-        //
-        // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
         public ActionResult ExternalLoginCallback(string returnUrl)
         {
-            GooglePlusScopedClient.RewriteRequest(HttpContext);
-
-            AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(GetReturnUrlForExternalLogin(returnUrl));
-            if (!result.IsSuccessful)
+            ExternalLoginInfo externalLoginInfo = AuthenticationManager.GetExternalLoginInfo();
+            if (externalLoginInfo == null)
             {
-                return RedirectToAction("ExternalLoginFailure", new { reason = Texts.UnsuccessfulLoginWithService });
+                return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnsuccessfulLoginWithService});
             }
 
-            var claimsIdentity = result.ToClaimsIdentity();
-
-            string mailAddress = _claimValueProvider.GetMailAddress(claimsIdentity);
-            if (string.IsNullOrWhiteSpace(mailAddress))
+            try
             {
-                return RedirectToAction("ExternalLoginFailure", new { reason = Texts.UnableToObtainEmailAddressFromService });
-            }
-
-            if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
-            {
-                AddLocalClaims(claimsIdentity);
-                Response.Cookies.Add(claimsIdentity.Claims.ToAuthenticationTicket(mailAddress));
-                return RedirectToLocal(returnUrl);
-            }
-
-            if (User.Identity.IsAuthenticated)
-            {
-                // If the current user is logged in then add the new account.
-                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, mailAddress);
-                AddLocalClaims(claimsIdentity);
-                Response.Cookies.Add(claimsIdentity.Claims.ToAuthenticationTicket(mailAddress));
-                return RedirectToLocal(returnUrl);
-            }
-
-            using (var context = new UsersContext())
-            {
-                var userProfile = context.UserProfiles.FirstOrDefault(up => string.Compare(mailAddress, up.UserName, StringComparison.OrdinalIgnoreCase) == 0);
-                if (userProfile == null)
+                string mailAddress = _claimValueProvider.GetMailAddress(externalLoginInfo.ExternalIdentity);
+                if (string.IsNullOrWhiteSpace(mailAddress))
                 {
-                    context.UserProfiles.Add(new UserProfile { UserName = mailAddress });
-                    context.SaveChanges();
+                    return RedirectToAction("ExternalLoginFailure", new {reason = Texts.UnableToObtainEmailAddressFromService});
                 }
 
-                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, mailAddress);
-                if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
-                {
-                    AddLocalClaims(claimsIdentity);
-                    Response.Cookies.Add(claimsIdentity.Claims.ToAuthenticationTicket(mailAddress));
-                }
+                ClaimsIdentity identity = new ClaimsIdentity(externalLoginInfo.ExternalIdentity.Claims, DefaultAuthenticationTypes.ApplicationCookie);
+                AddLocalClaims(identity);
+
+                identity.SignIn(AuthenticationManager);
+
+                return RedirectToLocal(returnUrl);
             }
-            return RedirectToLocal(returnUrl);
+            finally
+            {
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            }
         }
 
-        //
-        // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure(string reason)
         {
             ViewBag.Message = reason;
+
             return View();
         }
 
@@ -221,55 +123,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         [ChildActionOnly]
         public ActionResult ExternalLoginsList(string returnUrl)
         {
+            IEnumerable<AuthenticationDescription> loginProviders = AuthenticationManager.GetExternalAuthenticationTypes().OrderBy(loginProvider => (int) loginProvider.Properties["Priority"]);
+
             ViewBag.ReturnUrl = returnUrl;
-            return PartialView("_ExternalLoginsListPartial", OAuthWebSecurity.RegisteredClientData);
-        }
 
-        public ActionResult RemoveExternalLogins()
-        {
-            try
-            {
-                var mailAddress = _claimValueProvider.GetMailAddress(User.Identity);
-                if (string.IsNullOrWhiteSpace(mailAddress))
-                {
-                    return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
-                }
-
-                var userNameIdentifier = _claimValueProvider.GetUserNameIdentifier(User.Identity);
-                if (string.IsNullOrWhiteSpace(userNameIdentifier))
-                {
-                    return PartialView("_RemoveExternalLoginsPartial", new List<ExternalLogin>(0));
-                }
-
-                var externalLogins = OAuthWebSecurity.GetAccountsFromUserName(mailAddress)
-                    .Select(account =>
-                    {
-                        var clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
-                        return new ExternalLogin
-                        {
-                            Provider = account.Provider,
-                            ProviderDisplayName = clientData.DisplayName,
-                            ProviderUserId = account.ProviderUserId,
-                            Removable = string.Compare(account.ProviderUserId, userNameIdentifier, StringComparison.Ordinal) != 0
-                        };
-                    })
-                    .ToArray();
-
-                return PartialView("_RemoveExternalLoginsPartial", externalLogins);
-            }
-            catch (ReduceFoodWasteExceptionBase ex)
-            {
-                ViewBag.ErrorMessage = ex.Message;
-                return PartialView("_Empty");
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = ex.Message;
-                return PartialView("_Empty");
-            }
+            return PartialView("_ExternalLoginsListPartial", loginProviders);
         }
 
         #region Helpers
+
+        private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
 
         private string GetReturnUrlForExternalLogin(string returnUrl)
         {
@@ -301,15 +164,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 throw new ArgumentNullException(nameof(claimsIdentity));
             }
-            try
-            {
-                var addLocalClaimsTask = _localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-                addLocalClaimsTask.Wait();
-            }
-            catch (AggregateException ex)
-            {
-                throw ex.ToReduceFoodWasteException();
-            }
+
+            _localClaimProvider.AddLocalClaimsAsync(claimsIdentity)
+                .GetAwaiter()
+                .GetResult();
         }
 
         private ActionResult RedirectToLocal(string returnUrl)
@@ -318,23 +176,37 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             {
                 return Redirect(returnUrl);
             }
+
             return RedirectToAction("Index", "Home", new { redirectToDashboard = true });
         }
 
-        private class ExternalLoginResult : ActionResult
+        private class ChallengeResult : HttpUnauthorizedResult
         {
-            public ExternalLoginResult(string provider, string returnUrl)
+            public ChallengeResult(IAuthenticationManager authenticationManager, string provider, string returnUrl)
             {
+                if (string.IsNullOrWhiteSpace(provider))
+                {
+                    throw new ArgumentNullException(nameof(provider));
+                }
+
+                AuthenticationManager = authenticationManager ?? throw new ArgumentNullException(nameof(authenticationManager));
                 Provider = provider;
                 ReturnUrl = returnUrl;
             }
 
+            private IAuthenticationManager AuthenticationManager { get; }
+            
             private string Provider { get; }
+            
             private string ReturnUrl { get; }
 
             public override void ExecuteResult(ControllerContext context)
             {
-                OAuthWebSecurity.RequestAuthentication(Provider, ReturnUrl);
+                AuthenticationProperties authenticationProperties = new AuthenticationProperties
+                {
+                    RedirectUri = ReturnUrl
+                };
+                AuthenticationManager.Challenge(authenticationProperties, Provider);
             }
         }
 

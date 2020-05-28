@@ -8,9 +8,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
             filters.Add(new CultureAttribute());
             filters.Add(new CookieConsentAttribute());
+            filters.Add(new HandleErrorAttribute());
         }
     }
 }

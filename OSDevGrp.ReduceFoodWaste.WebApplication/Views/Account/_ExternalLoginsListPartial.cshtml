@@ -1,26 +1,17 @@
-﻿@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
-@model ICollection<AuthenticationClientData>
+﻿@using Microsoft.Owin.Security;
+@using OSDevGrp.ReduceFoodWaste.WebApplication.Resources
+@model IEnumerable<AuthenticationDescription>
 
-@if (Model.Count == 0)
+@using (Html.BeginForm("ExternalLogin", "Account", new {ViewBag.ReturnUrl}))
 {
-    <div class="message-info">
-        <p>There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=252166">this article</a>
-        for details on setting up this ASP.NET application to support logging in via external services.</p>
-    </div>
-}
-else
-{
-    using (Html.BeginForm("ExternalLogin", "Account", new {ViewBag.ReturnUrl}))
-    {
-        @Html.AntiForgeryToken()
-        <fieldset id="socialLoginList">
-            <legend>@Texts.LogInUsingAnotherService</legend>
-            <p>
-                @foreach (AuthenticationClientData p in Model)
-                {
-                    <button style="cursor: pointer; color: transparent; border: none; background: url(@p.ExtraData["Icon"]); width: 200px; height: 48px; margin-right: 20px; margin-bottom: 30px" type="submit" name="provider" value="@p.AuthenticationClient.ProviderName" title="@string.Format(Texts.LogInUsingYourAccount, p.DisplayName)">@p.DisplayName</button>
-                }
-            </p>
-        </fieldset>
-    }
+@Html.AntiForgeryToken()
+<fieldset id="socialLoginList">
+    <legend>@Texts.LogInUsingAnotherService</legend>
+    <p>
+        @foreach (AuthenticationDescription loginProvider in Model)
+        {
+            <button style="cursor: pointer; color: transparent; border: none; background: url(@loginProvider.Properties["Icon"]); width: 200px; height: 48px; margin-right: 20px; margin-bottom: 30px" type="submit" name="provider" value="@loginProvider.AuthenticationType" title="@string.Format(Texts.LogInUsingYourAccount, loginProvider.Caption)">@loginProvider.Caption</button>
+        }
+    </p>
+</fieldset>
 }

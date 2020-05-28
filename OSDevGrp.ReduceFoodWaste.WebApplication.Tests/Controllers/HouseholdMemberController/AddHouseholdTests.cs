@@ -75,7 +75,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers.HouseholdMem
             WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var statusMessage = Fixture.Create<string>();
+            string statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
             ActionResult result = householdMemberController.AddHousehold(statusMessage: statusMessage);
@@ -113,7 +113,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers.HouseholdMem
             WebApplication.Controllers.HouseholdMemberController householdMemberController = CreateHouseholdMemberController();
             Assert.That(householdMemberController, Is.Not.Null);
 
-            var errorMessage = Fixture.Create<string>();
+            string errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
             ActionResult result = householdMemberController.AddHousehold(errorMessage: errorMessage);
@@ -204,7 +204,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers.HouseholdMem
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult) result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);

@@ -174,9 +174,6 @@
   <data name="Manage" xml:space="preserve">
     <value>Administrér</value>
   </data>
-  <data name="RemoveCredentialFromYourAccount" xml:space="preserve">
-    <value>Fjern {0} log ind oplysninger fra din konto.</value>
-  </data>
   <data name="BusinessException" xml:space="preserve">
     <value>Forretningsmæssig fejl.</value>
   </data>
@@ -257,12 +254,6 @@
   </data>
   <data name="Membership" xml:space="preserve">
     <value>Medlemsskab</value>
-  </data>
-  <data name="ExternalLoginProviders" xml:space="preserve">
-    <value>Eksterne tjenester til login</value>
-  </data>
-  <data name="Providers" xml:space="preserve">
-    <value>Tjeneste udbydere</value>
   </data>
   <data name="Household" xml:space="preserve">
     <value>Husholdning</value>

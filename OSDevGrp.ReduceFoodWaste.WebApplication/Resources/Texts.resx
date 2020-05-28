@@ -174,9 +174,6 @@
   <data name="Manage" xml:space="preserve">
     <value>Manage</value>
   </data>
-  <data name="RemoveCredentialFromYourAccount" xml:space="preserve">
-    <value>Remove this {0} credential from your account.</value>
-  </data>
   <data name="BusinessException" xml:space="preserve">
     <value>Business related error.</value>
   </data>
@@ -257,12 +254,6 @@
   </data>
   <data name="Membership" xml:space="preserve">
     <value>Membership</value>
-  </data>
-  <data name="ExternalLoginProviders" xml:space="preserve">
-    <value>External login providers</value>
-  </data>
-  <data name="Providers" xml:space="preserve">
-    <value>Providers</value>
   </data>
   <data name="Household" xml:space="preserve">
     <value>Household</value>

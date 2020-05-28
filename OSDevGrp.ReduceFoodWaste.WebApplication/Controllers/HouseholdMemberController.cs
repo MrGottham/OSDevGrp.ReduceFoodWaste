@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
@@ -47,31 +46,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <param name="utilities">Implementation of the utilities which support the infrastructure.</param>
         public HouseholdMemberController(IHouseholdDataRepository householdDataRepository, IClaimValueProvider claimValueProvider, ILocalClaimProvider localClaimProvider, IModelHelper modelHelper, IUtilities utilities)
         {
-            if (householdDataRepository == null)
-            {
-                throw new ArgumentNullException(nameof(householdDataRepository));
-            }
-            if (claimValueProvider == null)
-            {
-                throw new ArgumentNullException(nameof(claimValueProvider));
-            }
-            if (localClaimProvider == null)
-            {
-                throw new ArgumentNullException(nameof(localClaimProvider));
-            }
-            if (modelHelper == null)
-            {
-                throw new ArgumentNullException(nameof(modelHelper));
-            }
-            if (utilities == null)
-            {
-                throw new ArgumentNullException(nameof(utilities));
-            }
-            _householdDataRepository = householdDataRepository;
-            _claimValueProvider = claimValueProvider;
-            _localClaimProvider = localClaimProvider;
-            _modelHelper = modelHelper;
-            _utilities = utilities;
+            _householdDataRepository = householdDataRepository ?? throw new ArgumentNullException(nameof(householdDataRepository));
+            _claimValueProvider = claimValueProvider ?? throw new ArgumentNullException(nameof(claimValueProvider));
+            _localClaimProvider = localClaimProvider ?? throw new ArgumentNullException(nameof(localClaimProvider));
+            _modelHelper = modelHelper ?? throw new ArgumentNullException(nameof(modelHelper));
+            _utilities = utilities ?? throw new ArgumentNullException(nameof(utilities));
         }
 
         #endregion
@@ -86,16 +65,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             try
             {
-                var task = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
-                task.Wait();
+                PrivacyPolicyModel privacyPolicyModel = _householdDataRepository
+                    .GetPrivacyPoliciesAsync(User.Identity, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult();
 
-                var isPrivacyPoliciesAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
+                bool isPrivacyPoliciesAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
 
-                var privacyPolicyModel = task.Result;
                 privacyPolicyModel.IsAccepted = isPrivacyPoliciesAccepted;
                 privacyPolicyModel.AcceptedTime = isPrivacyPoliciesAccepted ? DateTime.Now : (DateTime?) null;
 
-                var householdModel = new HouseholdModel
+                HouseholdModel householdModel = new HouseholdModel
                 {
                     PrivacyPolicy = privacyPolicyModel
                 };
@@ -123,10 +103,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
             try
             {
-                var privacyPolicyGetTask = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
-                privacyPolicyGetTask.Wait();
+                PrivacyPolicyModel reloadedPrivacyPolicyModel = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult();
 
-                var reloadedPrivacyPolicyModel = privacyPolicyGetTask.Result;
                 if (householdModel.PrivacyPolicy == null)
                 {
                     householdModel.PrivacyPolicy = reloadedPrivacyPolicyModel;
@@ -147,8 +127,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return View("Create", householdModel);
                 }
 
-                var createHouseholdTask = _householdDataRepository.CreateHouseholdAsync(User.Identity, householdModel, CultureInfo.CurrentUICulture);
-                createHouseholdTask.Wait();
+                _householdDataRepository.CreateHouseholdAsync(User.Identity, householdModel, CultureInfo.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult();
 
                 AddClaim(_localClaimProvider.GenerateCreatedHouseholdMemberClaim());
 
@@ -159,8 +140,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
                 try
                 {
-                    var acceptPrivacyPolicyTask = _householdDataRepository.AcceptPrivacyPolicyAsync(User.Identity, householdModel.PrivacyPolicy);
-                    acceptPrivacyPolicyTask.Wait();
+                    _householdDataRepository.AcceptPrivacyPolicyAsync(User.Identity, householdModel.PrivacyPolicy)
+                        .GetAwaiter()
+                        .GetResult();
 
                     AddClaim(_localClaimProvider.GeneratePrivacyPoliciesAcceptedClaim());
 
@@ -201,17 +183,17 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     ViewBag.ErrorMessage = errorMessage;
                 }
 
-                var isActivatedHouseholdMember = _claimValueProvider.IsActivatedHouseholdMember(User.Identity);
-                var isPrivacyPoliciesAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
+                bool isActivatedHouseholdMember = _claimValueProvider.IsActivatedHouseholdMember(User.Identity);
+                bool isPrivacyPoliciesAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
 
-                var task = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, CultureInfo.CurrentUICulture);
-                task.Wait();
+                PrivacyPolicyModel privacyPolicyModel = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, CultureInfo.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult();
 
-                var privacyPolicyModel = task.Result;
                 privacyPolicyModel.IsAccepted = isPrivacyPoliciesAccepted;
                 privacyPolicyModel.AcceptedTime = isPrivacyPoliciesAccepted ? DateTime.Now : (DateTime?) null;
 
-                var householdMemberModel = new HouseholdMemberModel
+                HouseholdMemberModel householdMemberModel = new HouseholdMemberModel
                 {
                     ActivatedTime = isActivatedHouseholdMember ? DateTime.Now : (DateTime?) null,
                     PrivacyPolicy = privacyPolicyModel,
@@ -242,13 +224,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
             try
             {
-                var privacyPolicyGetTask = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
-                privacyPolicyGetTask.Wait();
+                PrivacyPolicyModel reloadedPrivacyPolicyModel = _householdDataRepository.GetPrivacyPoliciesAsync(User.Identity, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult();
 
-                var reloadedPrivacyPolicyModel = privacyPolicyGetTask.Result;
                 if (householdMemberModel.PrivacyPolicy == null)
                 {
-                    var privacyPoliciesHasAlreadyBeenAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
+                    bool privacyPoliciesHasAlreadyBeenAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
                     householdMemberModel.PrivacyPolicy = reloadedPrivacyPolicyModel;
                     householdMemberModel.PrivacyPolicy.IsAccepted = privacyPoliciesHasAlreadyBeenAccepted;
                     householdMemberModel.PrivacyPolicy.AcceptedTime = privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now : (DateTime?) null;
@@ -263,7 +245,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
                 if (ModelState.IsValid == false)
                 {
-                    var privacyPoliciesHasAlreadyBeenAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
+                    bool privacyPoliciesHasAlreadyBeenAccepted = _claimValueProvider.IsPrivacyPoliciesAccepted(User.Identity);
                     householdMemberModel.PrivacyPolicy.IsAccepted = privacyPoliciesHasAlreadyBeenAccepted;
                     householdMemberModel.PrivacyPolicy.AcceptedTime = privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now : (DateTime?) null;
                     householdMemberModel.PrivacyPolicyAcceptedTime = privacyPoliciesHasAlreadyBeenAccepted ? DateTime.Now : (DateTime?) null;
@@ -272,10 +254,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
                 if (householdMemberModel.IsActivated == false && string.IsNullOrWhiteSpace(householdMemberModel.ActivationCode) == false)
                 {
-                    var activateHouseholdMemberTask = _householdDataRepository.ActivateHouseholdMemberAsync(User.Identity, householdMemberModel);
-                    activateHouseholdMemberTask.Wait();
-
-                    var activatedHouseholdMemberModel = activateHouseholdMemberTask.Result;
+                    HouseholdMemberModel activatedHouseholdMemberModel = _householdDataRepository.ActivateHouseholdMemberAsync(User.Identity, householdMemberModel)
+                        .GetAwaiter()
+                        .GetResult();
 
                     AddClaim(_localClaimProvider.GenerateActivatedHouseholdMemberClaim());
 
@@ -284,10 +265,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
                 if (householdMemberModel.HasAcceptedPrivacyPolicy == false && householdMemberModel.PrivacyPolicy != null && householdMemberModel.PrivacyPolicy.IsAccepted)
                 {
-                    var acceptPrivacyPolicyTask = _householdDataRepository.AcceptPrivacyPolicyAsync(User.Identity, householdMemberModel.PrivacyPolicy);
-                    acceptPrivacyPolicyTask.Wait();
-
-                    var acceptedPrivacyPolicy = acceptPrivacyPolicyTask.Result;
+                    PrivacyPolicyModel acceptedPrivacyPolicy = _householdDataRepository.AcceptPrivacyPolicyAsync(User.Identity, householdMemberModel.PrivacyPolicy)
+                        .GetAwaiter()
+                        .GetResult();
 
                     AddClaim(_localClaimProvider.GeneratePrivacyPoliciesAcceptedClaim());
 
@@ -326,8 +306,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             try
             {
-                var task = _householdDataRepository.GetHouseholdMemberAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
-                task.Wait();
+                HouseholdMemberModel householdMemberModel = _householdDataRepository.GetHouseholdMemberAsync(User.Identity, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult();
 
                 if (string.IsNullOrWhiteSpace(statusMessage) == false)
                 {
@@ -338,7 +319,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     ViewBag.ErrorMessage = errorMessage;
                 }
 
-                return View("Manage", task.Result);
+                return View("Manage", householdMemberModel);
             }
             catch (AggregateException ex)
             {
@@ -362,10 +343,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
             try
             {
-                Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
-                task.Wait();
+                IList<MembershipModel> membershipModelCollection = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult()
+                    .ToList();
 
-                IList<MembershipModel> membershipModelCollection = task.Result.ToList();
                 if (membershipModelCollection.Any(m => m.CanUpgrade) == false)
                 {
                     throw new ReduceFoodWasteSystemException(Texts.MembershipUpgradeNotPossible);
@@ -406,10 +388,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
             }
             try
             {
-                Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
-                task.Wait();
+                MembershipModel membershipModel = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult()
+                    .SingleOrDefault(m => m.CanRenew);
 
-                MembershipModel membershipModel = task.Result.SingleOrDefault(m => m.CanRenew);
                 if (membershipModel == null)
                 {
                     throw new ReduceFoodWasteSystemException(Texts.MembershipRenewNotPossible);
@@ -461,15 +444,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return Redirect(returnUrl);
                 }
 
-                Task<IEnumerable<MembershipModel>> task = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
-                task.Wait();
+                MembershipModel reloadedMembershipModel = _householdDataRepository.GetMembershipsAsync(User.Identity, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult()
+                    .SingleOrDefault(m => string.Compare(m.Name, membershipModel.Name, StringComparison.Ordinal) == 0);
 
-                IEnumerable<MembershipModel> membershipModelCollection = task.Result;
-                MembershipModel reloadedMembershipModel = membershipModelCollection.SingleOrDefault(m => string.Compare(m.Name, membershipModel.Name, StringComparison.Ordinal) == 0);
                 if (reloadedMembershipModel == null)
                 {
                     return Redirect(returnUrl);
                 }
+
                 membershipModel.BillingInformation = reloadedMembershipModel.BillingInformation;
                 membershipModel.Description = reloadedMembershipModel.Description;
 
@@ -534,8 +518,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 membershipModel.PaymentReference = paymentModel.PaymentReference;
                 membershipModel.PaymentReceipt = paymentModel.PaymentReceipt;
 
-                Task<MembershipModel> task = _householdDataRepository.UpgradeMembershipAsync(User.Identity, membershipModel);
-                task.Wait();
+                _householdDataRepository.UpgradeMembershipAsync(User.Identity, membershipModel)
+                    .GetAwaiter()
+                    .GetResult();
 
                 return Redirect(returnUrl);
             }
@@ -589,8 +574,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return View("AddHousehold", householdModel);
                 }
 
-                Task task = _householdDataRepository.CreateHouseholdAsync(User.Identity, householdModel, CultureInfo.CurrentUICulture);
-                task.Wait();
+                _householdDataRepository.CreateHouseholdAsync(User.Identity, householdModel, CultureInfo.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult();
 
                 return RedirectToAction("Dashboard", "Dashboard");
             }
@@ -624,8 +610,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
 
             try
             {
-                var task = _localClaimProvider.AddLocalClaimAsync((ClaimsIdentity) User.Identity, claim, System.Web.HttpContext.Current);
-                task.Wait();
+                _localClaimProvider.AddLocalClaimAsync((ClaimsIdentity) User.Identity, claim, System.Web.HttpContext.Current)
+                    .GetAwaiter()
+                    .GetResult();
             }
             catch (AggregateException ex)
             {

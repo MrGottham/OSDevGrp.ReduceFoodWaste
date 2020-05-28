@@ -39,7 +39,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [Test]
         public void TestThatConstructorInitializeLocalClaimProvider()
         {
-            var localClaimProvider = new LocalClaimProvider(_householdDataRepositoryMock);
+            ILocalClaimProvider localClaimProvider = new LocalClaimProvider(_householdDataRepositoryMock);
             Assert.That(localClaimProvider, Is.Not.Null);
         }
 
@@ -49,7 +49,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenCredentialsProviderIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new LocalClaimProvider(null));
+            // ReSharper disable ObjectCreationAsStatement
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new LocalClaimProvider(null));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -63,10 +65,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [Test]
         public void TestThatAddLocalClaimsAsyncThrowsArgumentNullExceptionWhenClaimsIdentityIsNull()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => localClaimProvider.AddLocalClaimsAsync(null));
+            ArgumentNullException exception = Assert.ThrowsAsync<ArgumentNullException>(async () => await localClaimProvider.AddLocalClaimsAsync(null));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -78,96 +80,80 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync calls IsHouseholdMemberCreatedAsync on the repository which can access household data.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncCallsIsHouseholdMemberCreatedAsyncOnHouseholdDataRepository()
+        public async Task TestThatAddLocalClaimsAsyncCallsIsHouseholdMemberCreatedAsyncOnHouseholdDataRepository()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
-            
-            task.Wait();
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.IsHouseholdMemberCreatedAsync(Arg<IIdentity>.Is.Equal(claimsIdentity)));
         }
 
         /// <summary>
-        /// Tests that AddLocalClaimsAsync fails when IsHouseholdMemberCreatedAsync on the repository which can access household data thows an ReduceFoodWasteExceptionBase.
+        /// Tests that AddLocalClaimsAsync fails when IsHouseholdMemberCreatedAsync on the repository which can access household data throws an ReduceFoodWasteExceptionBase.
         /// </summary>
         [Test]
         public void TestThatAddLocalClaimsAsyncFailsWhenIsHouseholdMemberCreatedAsyncOnHouseholdDataRepositoryThrowsReduceFoodWasteExceptionBase()
         {
-            var exceptionToThrow = Fixture.Create<ReduceFoodWasteBusinessException>();
+            ReduceFoodWasteBusinessException exceptionToThrow = Fixture.Create<ReduceFoodWasteBusinessException>();
 
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreatedAsyncException: exceptionToThrow);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreatedAsyncException: exceptionToThrow);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            ReduceFoodWasteBusinessException result = Assert.ThrowsAsync<ReduceFoodWasteBusinessException>(async () => await localClaimProvider.AddLocalClaimsAsync(claimsIdentity));
 
-            Assert.Throws<AggregateException>(task.Wait).Handle(exception =>
-            {
-                Assert.That(exception, Is.Not.Null);
-                Assert.That(exception, Is.EqualTo(exceptionToThrow));
-                return true;
-            });
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.EqualTo(exceptionToThrow));
         }
 
         /// <summary>
-        /// Tests that AddLocalClaimsAsync fails when IsHouseholdMemberCreatedAsync on the repository which can access household data thows an Exception.
+        /// Tests that AddLocalClaimsAsync fails when IsHouseholdMemberCreatedAsync on the repository which can access household data throws an Exception.
         /// </summary>
         [Test]
         public void TestThatAddLocalClaimsAsyncFailsWhenIsHouseholdMemberCreatedAsyncOnHouseholdDataRepositoryThrowsException()
         {
-            var exceptionToThrow = Fixture.Create<Exception>();
+            Exception exceptionToThrow = Fixture.Create<Exception>();
 
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreatedAsyncException: exceptionToThrow);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreatedAsyncException: exceptionToThrow);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            ReduceFoodWasteSystemException result = Assert.ThrowsAsync<ReduceFoodWasteSystemException>(async () => await localClaimProvider.AddLocalClaimsAsync(claimsIdentity));
 
-            Assert.Throws<AggregateException>(task.Wait).Handle(exception =>
-            {
-                Assert.That(exception, Is.Not.Null);
-                Assert.That(exception, Is.TypeOf<ReduceFoodWasteSystemException>());
-                Assert.That(exception.Message, Is.Not.Null);
-                Assert.That(exception.Message, Is.Not.Empty);
-                Assert.That(exception.Message, Is.EqualTo(exceptionToThrow.Message));
-                Assert.That(exception.InnerException, Is.Not.Null);
-                Assert.That(exception.InnerException, Is.EqualTo(exceptionToThrow));
-                return true;
-            });
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ReduceFoodWasteSystemException>());
+            Assert.That(result.Message, Is.Not.Null);
+            Assert.That(result.Message, Is.Not.Empty);
+            Assert.That(result.Message, Is.EqualTo(exceptionToThrow.Message));
+            Assert.That(result.InnerException, Is.Not.Null);
+            Assert.That(result.InnerException, Is.EqualTo(exceptionToThrow));
         }
 
         /// <summary>
         /// Tests that AddLocalClaimsAsync adds claim for the household member has been created when a household member has been created for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncAddsClaimForCreatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreated()
+        public async Task TestThatAddLocalClaimsAsyncAddsClaimForCreatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreated()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.CreatedHouseholdMember), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.CreatedHouseholdMember);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.CreatedHouseholdMember);
             Assert.That(claim, Is.Not.Null);
             Assert.That(claim.Value, Is.Not.Null);
             Assert.That(claim.Value, Is.Not.Empty);
@@ -187,21 +173,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync does not add claim for the household member has been created when a household member has not been created for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncDoesNotAddClaimForCreatedHouseholdMemberWhenHouseholdMemberForIdentityHasNotBeenCreated()
+        public async Task TestThatAddLocalClaimsAsyncDoesNotAddClaimForCreatedHouseholdMemberWhenHouseholdMemberForIdentityHasNotBeenCreated()
         {
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.CreatedHouseholdMember), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.CreatedHouseholdMember);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.CreatedHouseholdMember);
             Assert.That(claim, Is.Null);
         }
 
@@ -209,21 +192,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync does not add claim for the household member has been activated when a household member has not been created for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncDoesNotAddClaimForActivatedHouseholdMemberWhenHouseholdMemberForIdentityHasNotBeenCreated()
+        public async Task TestThatAddLocalClaimsAsyncDoesNotAddClaimForActivatedHouseholdMemberWhenHouseholdMemberForIdentityHasNotBeenCreated()
         {
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.ActivatedHouseholdMember), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.ActivatedHouseholdMember);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.ActivatedHouseholdMember);
             Assert.That(claim, Is.Null);
         }
 
@@ -231,21 +211,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync does not add claim for the household member has accepted privacy policies when a household member has not been created for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncDoesNotAddClaimForPrivacyPoliciesAcceptedWhenHouseholdMemberForIdentityHasNotBeenCreated()
+        public async Task TestThatAddLocalClaimsAsyncDoesNotAddClaimForPrivacyPoliciesAcceptedWhenHouseholdMemberForIdentityHasNotBeenCreated()
         {
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.PrivacyPoliciesAccepted), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.PrivacyPoliciesAccepted);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.PrivacyPoliciesAccepted);
             Assert.That(claim, Is.Null);
         }
 
@@ -253,21 +230,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync does not add claim for the household member has been validated when a household member has not been created for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncDoesNotAddClaimForValidatedHouseholdMemberWhenHouseholdMemberForIdentityHasNotBeenCreated()
+        public async Task TestThatAddLocalClaimsAsyncDoesNotAddClaimForValidatedHouseholdMemberWhenHouseholdMemberForIdentityHasNotBeenCreated()
         {
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
             Assert.That(claim, Is.Null);
         }
 
@@ -275,18 +249,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync does not call IsHouseholdMemberActivatedAsync on the repository which can access household data when a household member has not been created for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncDoesNotCallIsHouseholdMemberActivatedAsyncOnHouseholdDataRepositoryWhenHouseholdMemberForIdentityHasNotBeenCreated()
+        public async Task TestThatAddLocalClaimsAsyncDoesNotCallIsHouseholdMemberActivatedAsyncOnHouseholdDataRepositoryWhenHouseholdMemberForIdentityHasNotBeenCreated()
         {
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
-
-            task.Wait();
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
             _householdDataRepositoryMock.AssertWasNotCalled(m => m.IsHouseholdMemberActivatedAsync(Arg<IIdentity>.Is.Anything));
         }
@@ -295,18 +266,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync does not call HasHouseholdMemberAcceptedPrivacyPolicyAsync on the repository which can access household data when a household member has not been created for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncDoesNotCallHasHouseholdMemberAcceptedPrivacyPolicyAsyncOnHouseholdDataRepositoryWhenHouseholdMemberForIdentityHasNotBeenCreated()
+        public async Task TestThatAddLocalClaimsAsyncDoesNotCallHasHouseholdMemberAcceptedPrivacyPolicyAsyncOnHouseholdDataRepositoryWhenHouseholdMemberForIdentityHasNotBeenCreated()
         {
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberCreated: false);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
-
-            task.Wait();
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
             _householdDataRepositoryMock.AssertWasNotCalled(m => m.HasHouseholdMemberAcceptedPrivacyPolicyAsync(Arg<IIdentity>.Is.Anything));
         }
@@ -315,171 +283,142 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync calls IsHouseholdMemberActivatedAsync on the repository which can access household data when a household member has been created for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncCallsIsHouseholdMemberActivatedAsyncOnHouseholdDataRepositoryWhenHouseholdMemberForIdentityHasBeenCreated()
+        public async Task TestThatAddLocalClaimsAsyncCallsIsHouseholdMemberActivatedAsyncOnHouseholdDataRepositoryWhenHouseholdMemberForIdentityHasBeenCreated()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
-
-            task.Wait();
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.IsHouseholdMemberActivatedAsync(Arg<IIdentity>.Is.Equal(claimsIdentity)));
         }
 
         /// <summary>
-        /// Tests that AddLocalClaimsAsync fails when IsHouseholdMemberActivatedAsync on the repository which can access household data thows an ReduceFoodWasteExceptionBase.
+        /// Tests that AddLocalClaimsAsync fails when IsHouseholdMemberActivatedAsync on the repository which can access household data throws an ReduceFoodWasteExceptionBase.
         /// </summary>
         [Test]
         public void TestThatAddLocalClaimsAsyncFailsWhenIsHouseholdMemberActivatedAsyncOnHouseholdDataRepositoryThrowsReduceFoodWasteExceptionBase()
         {
-            var exceptionToThrow = Fixture.Create<ReduceFoodWasteBusinessException>();
+            ReduceFoodWasteBusinessException exceptionToThrow = Fixture.Create<ReduceFoodWasteBusinessException>();
 
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberActivatedAsyncException: exceptionToThrow);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberActivatedAsyncException: exceptionToThrow);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            ReduceFoodWasteBusinessException result = Assert.ThrowsAsync<ReduceFoodWasteBusinessException>(async () => await localClaimProvider.AddLocalClaimsAsync(claimsIdentity));
 
-            Assert.Throws<AggregateException>(task.Wait).Handle(exception =>
-            {
-                Assert.That(exception, Is.Not.Null);
-                Assert.That(exception, Is.EqualTo(exceptionToThrow));
-                return true;
-            });
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.EqualTo(exceptionToThrow));
         }
 
         /// <summary>
-        /// Tests that AddLocalClaimsAsync fails when IsHouseholdMemberActivatedAsync on the repository which can access household data thows an Exception.
+        /// Tests that AddLocalClaimsAsync fails when IsHouseholdMemberActivatedAsync on the repository which can access household data throws an Exception.
         /// </summary>
         [Test]
         public void TestThatAddLocalClaimsAsyncFailsWhenIsHouseholdMemberActivatedAsyncOnHouseholdDataRepositoryThrowsException()
         {
-            var exceptionToThrow = Fixture.Create<Exception>();
+            Exception exceptionToThrow = Fixture.Create<Exception>();
 
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberActivatedAsyncException: exceptionToThrow);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberActivatedAsyncException: exceptionToThrow);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            ReduceFoodWasteSystemException result = Assert.ThrowsAsync<ReduceFoodWasteSystemException>(async () => await localClaimProvider.AddLocalClaimsAsync(claimsIdentity));
 
-            Assert.Throws<AggregateException>(task.Wait).Handle(exception =>
-            {
-                Assert.That(exception, Is.Not.Null);
-                Assert.That(exception, Is.TypeOf<ReduceFoodWasteSystemException>());
-                Assert.That(exception.Message, Is.Not.Null);
-                Assert.That(exception.Message, Is.Not.Empty);
-                Assert.That(exception.Message, Is.EqualTo(exceptionToThrow.Message));
-                Assert.That(exception.InnerException, Is.Not.Null);
-                Assert.That(exception.InnerException, Is.EqualTo(exceptionToThrow));
-                return true;
-            });
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ReduceFoodWasteSystemException>());
+            Assert.That(result.Message, Is.Not.Null);
+            Assert.That(result.Message, Is.Not.Empty);
+            Assert.That(result.Message, Is.EqualTo(exceptionToThrow.Message));
+            Assert.That(result.InnerException, Is.Not.Null);
+            Assert.That(result.InnerException, Is.EqualTo(exceptionToThrow));
         }
 
         /// <summary>
         /// Tests that AddLocalClaimsAsync calls HasHouseholdMemberAcceptedPrivacyPolicyAsync on the repository which can access household data when a household member has been created for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncCallsHasHouseholdMemberAcceptedPrivacyPolicyAsyncOnHouseholdDataRepositoryWhenHouseholdMemberForIdentityHasBeenCreated()
+        public async Task TestThatAddLocalClaimsAsyncCallsHasHouseholdMemberAcceptedPrivacyPolicyAsyncOnHouseholdDataRepositoryWhenHouseholdMemberForIdentityHasBeenCreated()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
-
-            task.Wait();
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
             _householdDataRepositoryMock.AssertWasCalled(m => m.HasHouseholdMemberAcceptedPrivacyPolicyAsync(Arg<IIdentity>.Is.Equal(claimsIdentity)));
         }
 
         /// <summary>
-        /// Tests that AddLocalClaimsAsync fails when HasHouseholdMemberAcceptedPrivacyPolicyAsync on the repository which can access household data thows an ReduceFoodWasteExceptionBase.
+        /// Tests that AddLocalClaimsAsync fails when HasHouseholdMemberAcceptedPrivacyPolicyAsync on the repository which can access household data throws an ReduceFoodWasteExceptionBase.
         /// </summary>
         [Test]
         public void TestThatAddLocalClaimsAsyncFailsWhenHasHouseholdMemberAcceptedPrivacyPolicyAsyncOnHouseholdDataRepositoryThrowsReduceFoodWasteExceptionBase()
         {
-            var exceptionToThrow = Fixture.Create<ReduceFoodWasteBusinessException>();
+            ReduceFoodWasteBusinessException exceptionToThrow = Fixture.Create<ReduceFoodWasteBusinessException>();
 
-            var localClaimProvider = CreateLocalClaimProvider(hasHouseholdMemberAcceptedPrivacyPolicyAsyncException: exceptionToThrow);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(hasHouseholdMemberAcceptedPrivacyPolicyAsyncException: exceptionToThrow);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            ReduceFoodWasteBusinessException result = Assert.ThrowsAsync<ReduceFoodWasteBusinessException>(async () => await localClaimProvider.AddLocalClaimsAsync(claimsIdentity));
 
-            Assert.Throws<AggregateException>(task.Wait).Handle(exception =>
-            {
-                Assert.That(exception, Is.Not.Null);
-                Assert.That(exception, Is.EqualTo(exceptionToThrow));
-                return true;
-            });
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.EqualTo(exceptionToThrow));
         }
 
         /// <summary>
-        /// Tests that AddLocalClaimsAsync fails when HasHouseholdMemberAcceptedPrivacyPolicyAsync on the repository which can access household data thows an Exception.
+        /// Tests that AddLocalClaimsAsync fails when HasHouseholdMemberAcceptedPrivacyPolicyAsync on the repository which can access household data throws an Exception.
         /// </summary>
         [Test]
         public void TestThatAddLocalClaimsAsyncFailsWhenHasHouseholdMemberAcceptedPrivacyPolicyAsyncOnHouseholdDataRepositoryThrowsException()
         {
-            var exceptionToThrow = Fixture.Create<Exception>();
+            Exception exceptionToThrow = Fixture.Create<Exception>();
 
-            var localClaimProvider = CreateLocalClaimProvider(hasHouseholdMemberAcceptedPrivacyPolicyAsyncException: exceptionToThrow);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(hasHouseholdMemberAcceptedPrivacyPolicyAsyncException: exceptionToThrow);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            ReduceFoodWasteSystemException result = Assert.ThrowsAsync<ReduceFoodWasteSystemException>(async () => await localClaimProvider.AddLocalClaimsAsync(claimsIdentity));
 
-            Assert.Throws<AggregateException>(task.Wait).Handle(exception =>
-            {
-                Assert.That(exception, Is.Not.Null);
-                Assert.That(exception, Is.TypeOf<ReduceFoodWasteSystemException>());
-                Assert.That(exception.Message, Is.Not.Null);
-                Assert.That(exception.Message, Is.Not.Empty);
-                Assert.That(exception.Message, Is.EqualTo(exceptionToThrow.Message));
-                Assert.That(exception.InnerException, Is.Not.Null);
-                Assert.That(exception.InnerException, Is.EqualTo(exceptionToThrow));
-                return true;
-            });
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<ReduceFoodWasteSystemException>());
+            Assert.That(result.Message, Is.Not.Null);
+            Assert.That(result.Message, Is.Not.Empty);
+            Assert.That(result.Message, Is.EqualTo(exceptionToThrow.Message));
+            Assert.That(result.InnerException, Is.Not.Null);
+            Assert.That(result.InnerException, Is.EqualTo(exceptionToThrow));
         }
 
         /// <summary>
         /// Tests that AddLocalClaimsAsync adds claim for the household member has been activated when a household member has been created and activated for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncAddsClaimForActivatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedAndActivated()
+        public async Task TestThatAddLocalClaimsAsyncAddsClaimForActivatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedAndActivated()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.ActivatedHouseholdMember), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.ActivatedHouseholdMember);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.ActivatedHouseholdMember);
             Assert.That(claim, Is.Not.Null);
             Assert.That(claim.Value, Is.Not.Null);
             Assert.That(claim.Value, Is.Not.Empty);
@@ -499,21 +438,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync does not add claim for the household member has been activated when a household member has been created but not activated for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncDoesNotAddClaimForActivatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedButNotActivated()
+        public async Task TestThatAddLocalClaimsAsyncDoesNotAddClaimForActivatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedButNotActivated()
         {
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberActivated: false);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberActivated: false);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.ActivatedHouseholdMember), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.ActivatedHouseholdMember);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.ActivatedHouseholdMember);
             Assert.That(claim, Is.Null);
         }
 
@@ -521,21 +457,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync adds claim for the household member has accepted privacy policies when a household member has been created and accepted privacy policies for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncAddsClaimForPrivacyPoliciesAcceptedWhenHouseholdMemberForIdentityHasBeenCreatedAndAcceptedPrivacyPolicies()
+        public async Task TestThatAddLocalClaimsAsyncAddsClaimForPrivacyPoliciesAcceptedWhenHouseholdMemberForIdentityHasBeenCreatedAndAcceptedPrivacyPolicies()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.PrivacyPoliciesAccepted), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.PrivacyPoliciesAccepted);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.PrivacyPoliciesAccepted);
             Assert.That(claim, Is.Not.Null);
             Assert.That(claim.Value, Is.Not.Null);
             Assert.That(claim.Value, Is.Not.Empty);
@@ -555,20 +488,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync does not add claim for the household member has accepted privacy policies when a household member has been created but not accepted privacy policies for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncDoesNotAddClaimForPrivacyPoliciesAcceptedWhenHouseholdMemberForIdentityHasBeenCreatedButNotAcceptedPrivacyPolicies()
+        public async Task TestThatAddLocalClaimsAsyncDoesNotAddClaimForPrivacyPoliciesAcceptedWhenHouseholdMemberForIdentityHasBeenCreatedButNotAcceptedPrivacyPolicies()
         {
-            var localClaimProvider = CreateLocalClaimProvider(hasHouseholdMemberAcceptedPrivacyPolicy: false);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(hasHouseholdMemberAcceptedPrivacyPolicy: false);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.PrivacyPoliciesAccepted), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.PrivacyPoliciesAccepted);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.PrivacyPoliciesAccepted);
             Assert.That(claim, Is.Null);
         }
 
@@ -576,21 +507,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync adds claim for the household member has been validated when a household member has been created, has been activated and accepted privacy policies for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncAddsClaimForValidatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedHasBeenActivatedAndAcceptedPrivacyPolicies()
+        public async Task TestThatAddLocalClaimsAsyncAddsClaimForValidatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedHasBeenActivatedAndAcceptedPrivacyPolicies()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
             Assert.That(claim, Is.Not.Null);
             Assert.That(claim.Value, Is.Not.Null);
             Assert.That(claim.Value, Is.Not.Empty);
@@ -610,21 +538,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync does not add claim for the household member has been validated when a household member has been created but not activated and not accepted privacy policies for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncDoesNotAddClaimForValidatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedButNotActivatedAndNotAcceptedPrivacyPolicies()
+        public async Task TestThatAddLocalClaimsAsyncDoesNotAddClaimForValidatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedButNotActivatedAndNotAcceptedPrivacyPolicies()
         {
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberActivated: false, hasHouseholdMemberAcceptedPrivacyPolicy: false);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberActivated: false, hasHouseholdMemberAcceptedPrivacyPolicy: false);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
             Assert.That(claim, Is.Null);
         }
 
@@ -632,21 +557,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync does not add claim for the household member has been validated when a household member has been created and accepted privacy policies but not activated for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncDoesNotAddClaimForValidatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedHasAcceptedPrivacyPoliciesButNotActivated()
+        public async Task TestThatAddLocalClaimsAsyncDoesNotAddClaimForValidatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedHasAcceptedPrivacyPoliciesButNotActivated()
         {
-            var localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberActivated: false);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(isHouseholdMemberActivated: false);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
             Assert.That(claim, Is.Null);
         }
 
@@ -654,21 +576,18 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimsAsync does not add claim for the household member has been validated when a household member has been created have been activated but not accepted privacy policies for the identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimsAsyncDoesNotAddClaimForValidatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedHaveBeenActivatedButNotAcceptedPrivacyPolicies()
+        public async Task TestThatAddLocalClaimsAsyncDoesNotAddClaimForValidatedHouseholdMemberWhenHouseholdMemberForIdentityHasBeenCreatedHaveBeenActivatedButNotAcceptedPrivacyPolicies()
         {
-            var localClaimProvider = CreateLocalClaimProvider(hasHouseholdMemberAcceptedPrivacyPolicy: false);
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider(hasHouseholdMemberAcceptedPrivacyPolicy: false);
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimsAsync(claimsIdentity);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
+            Claim claim = claimsIdentity.FindFirst(LocalClaimTypes.ValidatedHouseholdMember);
             Assert.That(claim, Is.Null);
         }
 
@@ -678,10 +597,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [Test]
         public void TestThatAddLocalClaimAsyncThrowsArgumentNullExceptionWhenClaimsIdentityIsNull()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => localClaimProvider.AddLocalClaimAsync(null, new Claim(Fixture.Create<string>(), Fixture.Create<string>())));
+            ArgumentNullException exception = Assert.ThrowsAsync<ArgumentNullException>(async () => await localClaimProvider.AddLocalClaimAsync(null, new Claim(Fixture.Create<string>(), Fixture.Create<string>())));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -695,10 +614,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         [Test]
         public void TestThatAddLocalClaimAsyncThrowsArgumentNullExceptionWhenClaimToAddIsNull()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => localClaimProvider.AddLocalClaimAsync(new ClaimsIdentity(), null));
+            ArgumentNullException exception = Assert.ThrowsAsync<ArgumentNullException>(async () => await localClaimProvider.AddLocalClaimAsync(new ClaimsIdentity(), null));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -710,28 +629,25 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// Tests that AddLocalClaimAsync adds a local claim to the claims identity.
         /// </summary>
         [Test]
-        public void TestThatAddLocalClaimAsyncAddsLocalClaimToClaimsIdentity()
+        public async Task TestThatAddLocalClaimAsyncAddsLocalClaimToClaimsIdentity()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claimToAdd = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
+            Claim claimToAdd = new Claim(Fixture.Create<string>(), Fixture.Create<string>());
             Assert.That(claimToAdd, Is.Not.Null);
             Assert.That(claimToAdd.Type, Is.Not.Null);
             Assert.That(claimToAdd.Type, Is.Not.Empty);
             Assert.That(claimToAdd.Value, Is.Not.Null);
             Assert.That(claimToAdd.Value, Is.Not.Empty);
 
-            var claimsIdentity = new ClaimsIdentity();
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity();
             Assert.That(claimsIdentity, Is.Not.Null);
             Assert.That(claimsIdentity.FindFirst(claimToAdd.Type), Is.Null);
 
-            var task = localClaimProvider.AddLocalClaimAsync(claimsIdentity, claimToAdd);
-            Assert.That(task, Is.Not.Null);
+            await localClaimProvider.AddLocalClaimAsync(claimsIdentity, claimToAdd);
 
-            task.Wait();
-
-            var claim = claimsIdentity.FindFirst(claimToAdd.Type);
+            Claim claim = claimsIdentity.FindFirst(claimToAdd.Type);
             Assert.That(claim, Is.Not.Null);
             Assert.That(claim.Type, Is.Not.Null);
             Assert.That(claim.Type, Is.Not.Empty);
@@ -742,15 +658,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         }
 
         /// <summary>
-        /// Tests that GenerateCreatedHouseholdMemberClaim generates a claim which indicates that a cliam identity has been created as a household member.
+        /// Tests that GenerateCreatedHouseholdMemberClaim generates a claim which indicates that a claim identity has been created as a household member.
         /// </summary>
         [Test]
         public void TestThatGenerateCreatedHouseholdMemberClaimGeneratesClaim()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claim = localClaimProvider.GenerateCreatedHouseholdMemberClaim();
+            Claim claim = localClaimProvider.GenerateCreatedHouseholdMemberClaim();
             Assert.That(claim, Is.Not.Null);
             Assert.That(claim.Type, Is.Not.Null);
             Assert.That(claim.Type, Is.Not.Empty);
@@ -770,15 +686,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         }
 
         /// <summary>
-        /// Tests that GenerateActivatedHouseholdMemberClaim generates a claim which indicates that a cliam identity is an activated household member.
+        /// Tests that GenerateActivatedHouseholdMemberClaim generates a claim which indicates that a claim identity is an activated household member.
         /// </summary>
         [Test]
         public void TestThatGenerateActivatedHouseholdMemberClaimGeneratesClaim()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claim = localClaimProvider.GenerateActivatedHouseholdMemberClaim();
+            Claim claim = localClaimProvider.GenerateActivatedHouseholdMemberClaim();
             Assert.That(claim, Is.Not.Null);
             Assert.That(claim.Type, Is.Not.Null);
             Assert.That(claim.Type, Is.Not.Empty);
@@ -798,15 +714,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         }
 
         /// <summary>
-        /// Tests that GeneratePrivacyPoliciesAcceptedClaim generates a claim which indicates that a cliam identity has accepted the privacy policies.
+        /// Tests that GeneratePrivacyPoliciesAcceptedClaim generates a claim which indicates that a claim identity has accepted the privacy policies.
         /// </summary>
         [Test]
         public void TestThatGeneratePrivacyPoliciesAcceptedClaimGeneratesClaim()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claim = localClaimProvider.GeneratePrivacyPoliciesAcceptedClaim();
+            Claim claim = localClaimProvider.GeneratePrivacyPoliciesAcceptedClaim();
             Assert.That(claim, Is.Not.Null);
             Assert.That(claim.Type, Is.Not.Null);
             Assert.That(claim.Type, Is.Not.Empty);
@@ -826,15 +742,15 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         }
 
         /// <summary>
-        /// Tests that GeneratePrivacyPoliciesAcceptedClaim generates a claim which indicates that a cliam identity has accepted the privacy policies.
+        /// Tests that GeneratePrivacyPoliciesAcceptedClaim generates a claim which indicates that a claim identity has accepted the privacy policies.
         /// </summary>
         [Test]
         public void TestThatGenerateValidatedHouseholdMemberClaimGeneratesClaim()
         {
-            var localClaimProvider = CreateLocalClaimProvider();
+            ILocalClaimProvider localClaimProvider = CreateLocalClaimProvider();
             Assert.That(localClaimProvider, Is.Not.Null);
 
-            var claim = localClaimProvider.GenerateValidatedHouseholdMemberClaim();
+            Claim claim = localClaimProvider.GenerateValidatedHouseholdMemberClaim();
             Assert.That(claim, Is.Not.Null);
             Assert.That(claim.Type, Is.Not.Null);
             Assert.That(claim.Type, Is.Not.Empty);
@@ -859,46 +775,46 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Infrastructure.Security.
         /// <param name="isHouseholdMemberCreated">Sets whether a household member are created for the identity.</param>
         /// <param name="isHouseholdMemberActivated">Sets whether the household member for the given identity has been activated.</param>
         /// <param name="hasHouseholdMemberAcceptedPrivacyPolicy">Sets whether the household member for the given identity has accepted the privacy policies.</param>
-        /// <param name="isHouseholdMemberCreatedAsyncException">Sets the exception which should be throwed by IsHouseholdMemberCreatedAsync.</param>
-        /// <param name="isHouseholdMemberActivatedAsyncException">Sets the exception which should be throwed by IsHouseholdMemberActivatedAsync.</param>
-        /// <param name="hasHouseholdMemberAcceptedPrivacyPolicyAsyncException">Sets the exception which should be throwed by HasHouseholdMemberAcceptedPrivacyPolicyAsync.</param>
+        /// <param name="isHouseholdMemberCreatedAsyncException">Sets the exception which should be thrown by IsHouseholdMemberCreatedAsync.</param>
+        /// <param name="isHouseholdMemberActivatedAsyncException">Sets the exception which should be thrown by IsHouseholdMemberActivatedAsync.</param>
+        /// <param name="hasHouseholdMemberAcceptedPrivacyPolicyAsyncException">Sets the exception which should be thrown by HasHouseholdMemberAcceptedPrivacyPolicyAsync.</param>
         /// <returns>Provider which can append local claims to a claims identity for unit testing.</returns>
         private ILocalClaimProvider CreateLocalClaimProvider(bool isHouseholdMemberCreated = true, bool isHouseholdMemberActivated = true, bool hasHouseholdMemberAcceptedPrivacyPolicy = true, Exception isHouseholdMemberCreatedAsyncException = null, Exception isHouseholdMemberActivatedAsyncException = null, Exception hasHouseholdMemberAcceptedPrivacyPolicyAsyncException = null)
         {
-            Func<bool> isHouseholdMemberCreatedFunc = () =>
-            {
-                if (isHouseholdMemberCreatedAsyncException != null)
-                {
-                    throw isHouseholdMemberCreatedAsyncException;
-                }
-                return isHouseholdMemberCreated;
-            };
             _householdDataRepositoryMock.Stub(m => m.IsHouseholdMemberCreatedAsync(Arg<IIdentity>.Is.Anything))
-                .Return(Task.Run(isHouseholdMemberCreatedFunc))
+                .Return(Task.Run(() =>
+                {
+                    if (isHouseholdMemberCreatedAsyncException != null)
+                    {
+                        throw isHouseholdMemberCreatedAsyncException;
+                    }
+
+                    return isHouseholdMemberCreated;
+                }))
                 .Repeat.Any();
 
-            Func<bool> isHouseholdMemberActivatedFunc = () =>
-            {
-                if (isHouseholdMemberActivatedAsyncException != null)
-                {
-                    throw isHouseholdMemberActivatedAsyncException;
-                }
-                return isHouseholdMemberActivated;
-            };
             _householdDataRepositoryMock.Stub(m => m.IsHouseholdMemberActivatedAsync(Arg<IIdentity>.Is.Anything))
-                .Return(Task.Run(isHouseholdMemberActivatedFunc))
+                .Return(Task.Run(() =>
+                {
+                    if (isHouseholdMemberActivatedAsyncException != null)
+                    {
+                        throw isHouseholdMemberActivatedAsyncException;
+                    }
+
+                    return isHouseholdMemberActivated;
+                }))
                 .Repeat.Any();
 
-            Func<bool> hasHouseholdMemberAcceptedPrivacyPolicyFunc = () =>
-            {
-                if (hasHouseholdMemberAcceptedPrivacyPolicyAsyncException != null)
-                {
-                    throw hasHouseholdMemberAcceptedPrivacyPolicyAsyncException;
-                }
-                return hasHouseholdMemberAcceptedPrivacyPolicy;
-            };
             _householdDataRepositoryMock.Stub(m => m.HasHouseholdMemberAcceptedPrivacyPolicyAsync(Arg<IIdentity>.Is.Anything))
-                .Return(Task.Run(hasHouseholdMemberAcceptedPrivacyPolicyFunc))
+                .Return(Task.Run(() =>
+                {
+                    if (hasHouseholdMemberAcceptedPrivacyPolicyAsyncException != null)
+                    {
+                        throw hasHouseholdMemberAcceptedPrivacyPolicyAsyncException;
+                    }
+
+                    return hasHouseholdMemberAcceptedPrivacyPolicy;
+                }))
                 .Repeat.Any();
 
             return new LocalClaimProvider(_householdDataRepositoryMock);
