@@ -29,11 +29,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <param name="householdDataRepository">Implementation of a repository which can access household data.</param>
         public DashboardController(IHouseholdDataRepository householdDataRepository)
         {
-            if (householdDataRepository == null)
-            {
-                throw new ArgumentNullException("householdDataRepository");
-            }
-            _householdDataRepository = householdDataRepository;
+            _householdDataRepository = householdDataRepository ?? throw new ArgumentNullException(nameof(householdDataRepository));
         }
 
         #endregion
@@ -46,7 +42,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <returns>Dashboard view for the current household member.</returns>
         public ActionResult Dashboard()
         {
-            var dashboardModel = new DashboardModel();
+            DashboardModel dashboardModel = new DashboardModel();
+            
             return View(dashboardModel);
         }
 
@@ -58,12 +55,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             try
             {
-                var task = _householdDataRepository.GetHouseholdMemberAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
-                task.Wait();
+                HouseholdMemberModel householdMember = _householdDataRepository.GetHouseholdMemberAsync(User.Identity, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult();
 
                 var dashboardModel = new DashboardModel
                 {
-                    HouseholdMember = task.Result
+                    HouseholdMember = householdMember
                 };
 
                 return PartialView("_HouseholdMemberInformation", dashboardModel);

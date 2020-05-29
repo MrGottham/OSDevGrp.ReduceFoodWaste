@@ -28,11 +28,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <param name="householdDataRepository">Implementation of a repository which can access household data.</param>
         public SidebarController(IHouseholdDataRepository householdDataRepository)
         {
-            if (householdDataRepository == null)
-            {
-                throw new ArgumentNullException("householdDataRepository");
-            }
-            _householdDataRepository = householdDataRepository;
+            _householdDataRepository = householdDataRepository ?? throw new ArgumentNullException(nameof(householdDataRepository));
         }
 
         #endregion
@@ -47,10 +43,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             try
             {
-                var task = _householdDataRepository.GetHouseholdIdentificationCollectionAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
-                task.Wait();
+                Models.HouseholdIdentificationCollectionModel householdIdentificationCollection = _householdDataRepository.GetHouseholdIdentificationCollectionAsync(User.Identity, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult();
 
-                return PartialView("_HouseholdIdentificationCollection", task.Result);
+                return PartialView("_HouseholdIdentificationCollection", householdIdentificationCollection);
             }
             catch (AggregateException ex)
             {

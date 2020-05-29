@@ -52,7 +52,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorInitializePaymentController()
         {
-            var paymentController = new PaymentController(_householdDataRepositoryMock, _modelHelperMock, _utilitiesMock);
+            PaymentController paymentController = new PaymentController(_householdDataRepositoryMock, _modelHelperMock, _utilitiesMock);
             Assert.That(paymentController, Is.Not.Null);
         }
 
@@ -62,7 +62,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenHouseholdDataRepositoryIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new PaymentController(null, _modelHelperMock, _utilitiesMock));
+            // ReSharper disable ObjectCreationAsStatement
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new PaymentController(null, _modelHelperMock, _utilitiesMock));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -76,7 +78,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenModelHelperIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new PaymentController(_householdDataRepositoryMock, null, _utilitiesMock));
+            // ReSharper disable ObjectCreationAsStatement
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new PaymentController(_householdDataRepositoryMock, null, _utilitiesMock));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -90,7 +94,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenUtilitiesIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new PaymentController(_householdDataRepositoryMock, _modelHelperMock, null));
+            // ReSharper disable ObjectCreationAsStatement
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new PaymentController(_householdDataRepositoryMock, _modelHelperMock, null));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -113,7 +119,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PaymentController paymentController = CreatePaymentController();
             Assert.That(paymentController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.Pay(payableModelAsBase64, returnUrl));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => paymentController.Pay(payableModelAsBase64, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -136,7 +142,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PaymentController paymentController = CreatePaymentController();
             Assert.That(paymentController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.Pay(payableModelAsBase64, returnUrl));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => paymentController.Pay(payableModelAsBase64, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -307,11 +313,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PaymentController paymentController = CreatePaymentController(toModel: payableModel);
             Assert.That(paymentController, Is.Not.Null);
 
-            var result = paymentController.Pay(payableModelAsBase64, returnUrl);
+            ActionResult result = paymentController.Pay(payableModelAsBase64, returnUrl);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectResult>());
 
-            var redirectResult = (RedirectResult) result;
+            RedirectResult redirectResult = (RedirectResult) result;
             Assert.That(redirectResult, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Null);
             Assert.That(redirectResult.Url, Is.Not.Empty);
@@ -436,7 +442,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
             Assert.That(payableModel.IsFreeOfCost, Is.False);
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
-            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
             Assert.That(payableModel.PaymentHandlers, Is.Not.EqualTo(PaymentStatus.Unpaid));
             Assert.That(payableModel.PaymentReceipt, Is.Not.Null);
@@ -505,7 +510,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PaymentController paymentController = CreatePaymentController();
             Assert.That(paymentController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.PayWithPaypal(null, returnUrl));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => paymentController.PayWithPaypal(null, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -539,7 +544,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
             Assert.That(payableModel.IsFreeOfCost, Is.False);
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
-            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
             Assert.That(payableModel.PaymentHandlers, Is.Not.EqualTo(PaymentStatus.Unpaid));
             Assert.That(payableModel.PaymentReceipt, Is.Null);
@@ -548,7 +552,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             PaymentController paymentController = CreatePaymentController();
             Assert.That(paymentController, Is.Not.Null);
 
-            var exception = Assert.Throws<ArgumentNullException>(() => paymentController.PayWithPaypal(payableModel, returnUrl));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => paymentController.PayWithPaypal(payableModel, returnUrl));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -582,7 +586,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
             Assert.That(payableModel.IsFreeOfCost, Is.False);
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
-            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
             Assert.That(payableModel.PaymentHandlers, Is.Not.EqualTo(PaymentStatus.Unpaid));
             Assert.That(payableModel.PaymentTime, Is.Null);
@@ -649,7 +652,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
             Assert.That(payableModel.IsFreeOfCost, Is.False);
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
-            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
             Assert.That(payableModel.PaymentHandlers, Is.Not.EqualTo(PaymentStatus.Unpaid));
             Assert.That(payableModel.PaymentReceipt, Is.Null);
@@ -692,7 +694,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(payableModel.PriceCultureInfoName, Is.EqualTo(CultureInfo.CurrentUICulture.Name));
             Assert.That(payableModel.IsFreeOfCost, Is.False);
             Assert.That(payableModel.PaymentHandlerIdentifier, Is.Not.Null);
-            Assert.That(payableModel.PaymentHandlerIdentifier.HasValue, Is.True);
             Assert.That(payableModel.PaymentHandlers, Is.Null);
             Assert.That(payableModel.PaymentHandlers, Is.Not.EqualTo(PaymentStatus.Unpaid));
             Assert.That(payableModel.PaymentReceipt, Is.Not.Null);
@@ -722,8 +723,8 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <param name="paymentHandlerModelCollection">Sets the collection of models for the data providers who handles payments.</param>
         /// <param name="toModel">Sets the model which should be returned for a given base64 encoded model.</param>
         /// <param name="billingInformationWithoutHtmlTags">Sets the billing information where all the HTML tags has been removed.</param>
-        /// <param name="toBase64">Sets the base64 encoded value which sould be returned for a given model.</param>
-        /// <param name="urlReplace">Sets the value which sould be returned for all replacements on url strings.</param>
+        /// <param name="toBase64">Sets the base64 encoded value which should be returned for a given model.</param>
+        /// <param name="urlReplace">Sets the value which should be returned for all replacements on url strings.</param>
         /// <returns>Controller which can handle payments for unit testing.</returns>
         private PaymentController CreatePaymentController(IEnumerable<PaymentHandlerModel> paymentHandlerModelCollection = null, object toModel = null, string billingInformationWithoutHtmlTags = null, string toBase64 = null, string urlReplace = null)
         {
@@ -745,7 +746,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(urlReplace ?? Fixture.Create<string>())
                 .Repeat.Any();
 
-            var paymentController = new PaymentController(_householdDataRepositoryMock, _modelHelperMock, _utilitiesMock);
+            PaymentController paymentController = new PaymentController(_householdDataRepositoryMock, _modelHelperMock, _utilitiesMock);
             paymentController.ControllerContext = ControllerTestHelper.CreateControllerContext(paymentController);
             return paymentController;
         }

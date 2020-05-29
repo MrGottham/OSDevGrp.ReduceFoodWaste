@@ -43,7 +43,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorInitializeDashboardController()
         {
-            var dashboardController = new DashboardController(_householdDataRepositoryMock);
+            DashboardController dashboardController = new DashboardController(_householdDataRepositoryMock);
             Assert.That(dashboardController, Is.Not.Null);
         }
 
@@ -53,7 +53,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenHouseholdDataRepositoryIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new DashboardController(null));
+            // ReSharper disable ObjectCreationAsStatement
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new DashboardController(null));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -67,14 +69,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatDashboardReturnsViewResultWithDashboardModel()
         {
-            var dashboardController = CreateDashboardController();
+            DashboardController dashboardController = CreateDashboardController();
             Assert.That(dashboardController, Is.Not.Null);
 
-            var result = dashboardController.Dashboard();
+            ActionResult result = dashboardController.Dashboard();
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Empty);
@@ -83,7 +85,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.Model, Is.Not.Null);
             Assert.That(viewResult.Model, Is.TypeOf<DashboardModel>());
 
-            var dashboardModel = (DashboardModel) viewResult.Model;
+            DashboardModel dashboardModel = (DashboardModel) viewResult.Model;
             Assert.That(dashboardModel, Is.Not.Null);
             Assert.That(dashboardModel.HouseholdMember, Is.Null);
             Assert.That(dashboardModel.Households, Is.Null);
@@ -95,7 +97,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatHouseholdMemberInformationCallsGetHouseholdMemberAsyncOnHouseholdDataRepository()
         {
-            var dashboardController = CreateDashboardController();
+            DashboardController dashboardController = CreateDashboardController();
             Assert.That(dashboardController, Is.Not.Null);
             Assert.That(dashboardController.User, Is.Not.Null);
             Assert.That(dashboardController.User.Identity, Is.Not.Null);
@@ -114,29 +116,29 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatHouseholdMemberInformationReturnsPartialViewResultWithDashboardModel()
         {
-            var householdModelCollection = new List<HouseholdModel>(Random.Next(1, 5));
+            List<HouseholdModel> householdModelCollection = new List<HouseholdModel>(Random.Next(1, 5));
             while (householdModelCollection.Count < householdModelCollection.Capacity)
             {
-                var householdModel = Fixture.Build<HouseholdModel>()
+                HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                     .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                     .Create();
                 householdModelCollection.Add(householdModel);
             }
-            var householdMember = Fixture.Build<HouseholdMemberModel>()
+            HouseholdMemberModel householdMember = Fixture.Build<HouseholdMemberModel>()
                 .With(m => m.Households, householdModelCollection)
                 .Create();
             Assert.That(householdMember, Is.Not.Null);
             Assert.That(householdMember.Households, Is.Not.Null);
             Assert.That(householdMember.Households, Is.Not.Empty);
 
-            var dashboardController = CreateDashboardController(householdMember: householdMember);
+            DashboardController dashboardController = CreateDashboardController(householdMember: householdMember);
             Assert.That(dashboardController, Is.Not.Null);
 
-            var result = dashboardController.HouseholdMemberInformation();
+            ActionResult result = dashboardController.HouseholdMemberInformation();
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<PartialViewResult>());
 
-            var partialViewResult = (PartialViewResult) result;
+            PartialViewResult partialViewResult = (PartialViewResult) result;
             Assert.That(partialViewResult, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Empty);
@@ -146,7 +148,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(partialViewResult.Model, Is.Not.Null);
             Assert.That(partialViewResult.Model, Is.TypeOf<DashboardModel>());
 
-            var dashboardModel = (DashboardModel) partialViewResult.Model;
+            DashboardModel dashboardModel = (DashboardModel) partialViewResult.Model;
             Assert.That(dashboardModel, Is.Not.Null);
             Assert.That(dashboardModel.HouseholdMember, Is.Not.Null);
             Assert.That(dashboardModel.HouseholdMember, Is.EqualTo(householdMember));
@@ -162,24 +164,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <returns>Controller for a household members dashboard for unit testing.</returns>
         private DashboardController CreateDashboardController(HouseholdMemberModel householdMember = null)
         {
-            Func<HouseholdMemberModel> householdMemberGetter = () =>
-            {
-                if (householdMember != null)
+            _householdDataRepositoryMock.Stub(m => m.GetHouseholdMemberAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
+                .Return(Task.Run(() =>
                 {
-                    return householdMember;
-                }
-                return new HouseholdMemberModel
-                {
-                    Households = Fixture.CreateMany<HouseholdModel>(Random.Next(1, 5)).ToList()
-                };
-            };
-
-            _householdDataRepositoryMock.Stub(
-                m => m.GetHouseholdMemberAsync(Arg<IIdentity>.Is.Anything, Arg<CultureInfo>.Is.Anything))
-                .Return(Task.Run(householdMemberGetter))
+                    if (householdMember != null)
+                    {
+                        return householdMember;
+                    }
+                    return new HouseholdMemberModel
+                    {
+                        Households = Fixture.CreateMany<HouseholdModel>(Random.Next(1, 5)).ToList()
+                    };
+                }))
                 .Repeat.Any();
 
-            var dashboardController = new DashboardController(_householdDataRepositoryMock);
+            DashboardController dashboardController = new DashboardController(_householdDataRepositoryMock);
             dashboardController.ControllerContext = ControllerTestHelper.CreateControllerContext(dashboardController);
             return dashboardController;
         }

@@ -41,7 +41,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatHouseholdIdentificationCollectionCallsGetHouseholdIdentificationCollectionAsyncOnHouseholdDataRepository()
         {
-            var sidebarController = CreateSidebarController();
+            SidebarController sidebarController = CreateSidebarController();
             Assert.That(sidebarController, Is.Not.Null);
             Assert.That(sidebarController.User, Is.Not.Null);
             Assert.That(sidebarController.User.Identity, Is.Not.Null);
@@ -64,14 +64,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdIdentificationCollectionModel, Is.Not.Null);
             Assert.That(householdIdentificationCollectionModel, Is.Not.Empty);
 
-            var sidebarController = CreateSidebarController(householdIdentificationCollectionModel: householdIdentificationCollectionModel);
+            SidebarController sidebarController = CreateSidebarController(householdIdentificationCollectionModel: householdIdentificationCollectionModel);
             Assert.That(sidebarController, Is.Not.Null);
 
-            var result = sidebarController.HouseholdIdentificationCollection();
+            ActionResult result = sidebarController.HouseholdIdentificationCollection();
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<PartialViewResult>());
 
-            var partialViewResult = (PartialViewResult) result;
+            PartialViewResult partialViewResult = (PartialViewResult) result;
             Assert.That(partialViewResult, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Empty);
@@ -95,7 +95,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(Task.Run(() => householdIdentificationCollectionGetter))
                 .Repeat.Any();
 
-            var sidebarController = new SidebarController(_householdDataRepositoryMock);
+            SidebarController sidebarController = new SidebarController(_householdDataRepositoryMock);
             sidebarController.ControllerContext = ControllerTestHelper.CreateControllerContext(sidebarController);
             return sidebarController;
         }

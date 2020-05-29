@@ -44,7 +44,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorInitializeHouseholdController()
         {
-            var householdController = new HouseholdController(_householdDataRepositoryMock);
+            HouseholdController householdController = new HouseholdController(_householdDataRepositoryMock);
             Assert.That(householdController, Is.Not.Null);
         }
 
@@ -54,7 +54,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatConstructorThrowsArgumentNullExceptionWhenHouseholdDataRepositoryIsNull()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => new HouseholdController(null));
+            // ReSharper disable ObjectCreationAsStatement
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => new HouseholdController(null));
+            // ReSharper restore ObjectCreationAsStatement
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -73,7 +75,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatManageWithHouseholdIdentifierEqualToNullAndWithoutStatusMessageReturnsRedirectToRouteResultForDashboard(string statusMessage)
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = null;
@@ -87,12 +89,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
             // ReSharper disable ExpressionIsAlwaysNull
-            var result = householdController.Manage(householdIdentifier: householdIdentifier, statusMessage: statusMessage);
+            ActionResult result = householdController.Manage(householdIdentifier: householdIdentifier, statusMessage: statusMessage);
             // ReSharper restore ExpressionIsAlwaysNull
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult) result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
@@ -119,7 +121,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatManageWithHouseholdIdentifierEqualToNullAndWithStatusMessageReturnsRedirectToRouteResultForDashboard()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = null;
@@ -130,16 +132,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdIdentifier.HasValue, Is.False);
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
-            var statusMessage = Fixture.Create<string>();
+            string statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
             // ReSharper disable ExpressionIsAlwaysNull
-            var result = householdController.Manage(householdIdentifier: householdIdentifier, statusMessage: statusMessage);
+            ActionResult result = householdController.Manage(householdIdentifier: householdIdentifier, statusMessage: statusMessage);
             // ReSharper restore ExpressionIsAlwaysNull
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult) result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
@@ -171,7 +173,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatManageWithHouseholdIdentifierEqualToNullAndWithoutErrorMessageReturnsRedirectToRouteResultForDashboard(string errorMessage)
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = null;
@@ -185,12 +187,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
             // ReSharper disable ExpressionIsAlwaysNull
-            var result = householdController.Manage(householdIdentifier: householdIdentifier, errorMessage: errorMessage);
+            ActionResult result = householdController.Manage(householdIdentifier: householdIdentifier, errorMessage: errorMessage);
             // ReSharper restore ExpressionIsAlwaysNull
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult) result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
@@ -217,7 +219,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatManageWithHouseholdIdentifierEqualToNullAndWithErrorMessageReturnsRedirectToRouteResultForDashboard()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = null;
@@ -228,16 +230,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdIdentifier.HasValue, Is.False);
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
-            var errorMessage = Fixture.Create<string>();
+            string errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
             // ReSharper disable ExpressionIsAlwaysNull
-            var result = householdController.Manage(householdIdentifier: householdIdentifier, errorMessage: errorMessage);
+            ActionResult result = householdController.Manage(householdIdentifier: householdIdentifier, errorMessage: errorMessage);
             // ReSharper restore ExpressionIsAlwaysNull
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult) result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
@@ -269,7 +271,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatManageWithHouseholdIdentifierNotEqualToNullAndWithoutStatusMessageReturnsViewResultWithModelForManageHousehold(string statusMessage)
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = Guid.NewGuid();
@@ -280,11 +282,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.True);
 
-            var result = householdController.Manage(householdIdentifier: householdIdentifier, statusMessage: statusMessage);
+            ActionResult result = householdController.Manage(householdIdentifier: householdIdentifier, statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -294,7 +296,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Empty);
 
-            var householdModel = (HouseholdModel) viewResult.Model;
+            HouseholdModel householdModel = (HouseholdModel) viewResult.Model;
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier.Value));
         }
@@ -305,7 +307,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatManageWithHouseholdIdentifierNotEqualToNullAndWithStatusMessageReturnsViewResultWithModelForManageHousehold()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = Guid.NewGuid();
@@ -314,14 +316,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdIdentifier.HasValue, Is.True);
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
-            var statusMessage = Fixture.Create<string>();
+            string statusMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(statusMessage), Is.False);
 
-            var result = householdController.Manage(householdIdentifier: householdIdentifier, statusMessage: statusMessage);
+            ActionResult result = householdController.Manage(householdIdentifier: householdIdentifier, statusMessage: statusMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -336,7 +338,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData["EditMode"], Is.Null);
             Assert.That(viewResult.ViewData["AddingHouseholdMemberMode"], Is.Null);
 
-            var householdModel = (HouseholdModel) viewResult.Model;
+            HouseholdModel householdModel = (HouseholdModel) viewResult.Model;
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier.Value));
         }
@@ -352,7 +354,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [TestCase("   ")]
         public void TestThatManageWithHouseholdIdentifierNotEqualToNullAndWithoutErrorMessageReturnsViewResultWithModelForManageHousehold(string errorMessage)
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = Guid.NewGuid();
@@ -363,11 +365,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
 
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.True);
 
-            var result = householdController.Manage(householdIdentifier: householdIdentifier, errorMessage: errorMessage);
+            ActionResult result = householdController.Manage(householdIdentifier: householdIdentifier, errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -377,7 +379,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData, Is.Not.Null);
             Assert.That(viewResult.ViewData, Is.Empty);
 
-            var householdModel = (HouseholdModel) viewResult.Model;
+            HouseholdModel householdModel = (HouseholdModel) viewResult.Model;
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier.Value));
         }
@@ -388,7 +390,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatManageWithHouseholdIdentifierNotEqualToNullAndWithErrorMessageReturnsViewResultWithModelForManageHousehold()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = Guid.NewGuid();
@@ -397,14 +399,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdIdentifier.HasValue, Is.True);
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
-            var errorMessage = Fixture.Create<string>();
+            string errorMessage = Fixture.Create<string>();
             Assert.That(string.IsNullOrWhiteSpace(errorMessage), Is.False);
 
-            var result = householdController.Manage(householdIdentifier: householdIdentifier, errorMessage: errorMessage);
+            ActionResult result = householdController.Manage(householdIdentifier: householdIdentifier, errorMessage: errorMessage);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -419,7 +421,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData["EditMode"], Is.Null);
             Assert.That(viewResult.ViewData["AddingHouseholdMemberMode"], Is.Null);
 
-            var householdModel = (HouseholdModel) viewResult.Model;
+            HouseholdModel householdModel = (HouseholdModel) viewResult.Model;
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier.Value));
         }
@@ -430,7 +432,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatHouseholdInformationWithHouseholdIdentifierEqualToNullDoesNotCallGetHouseholdAsyncOnHouseholdDataRepository()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = null;
@@ -454,7 +456,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatHouseholdInformationWithHouseholdIdentifierEqualToNullReturnsPartialViewResultWithoutModel()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = null;
@@ -466,12 +468,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
             // ReSharper disable ExpressionIsAlwaysNull
-            var result = householdController.HouseholdInformation(householdIdentifier);
+            ActionResult result = householdController.HouseholdInformation(householdIdentifier);
             // ReSharper restore ExpressionIsAlwaysNull
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<PartialViewResult>());
 
-            var partialViewResult = (PartialViewResult) result;
+            PartialViewResult partialViewResult = (PartialViewResult) result;
             Assert.That(partialViewResult, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Empty);
@@ -493,18 +495,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdIdentifier.HasValue, Is.True);
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
-            Action<object[]> householdGetterCallback = arguments =>
+            HouseholdController householdController = CreateHouseholdController(householdGetterCallback: arguments =>
             {
                 Assert.That(arguments, Is.Not.Null);
                 Assert.That(arguments.ElementAt(1), Is.Not.Null);
                 Assert.That(arguments.ElementAt(1), Is.TypeOf<HouseholdModel>());
 
-                var householdModel = (HouseholdModel) arguments.ElementAt(1);
+                HouseholdModel householdModel = (HouseholdModel) arguments.ElementAt(1);
                 Assert.That(householdModel, Is.Not.Null);
                 Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier.Value));
-            };
-
-            var householdController = CreateHouseholdController(householdGetterCallback: householdGetterCallback);
+            });
             Assert.That(householdController, Is.Not.Null);
             Assert.That(householdController.User, Is.Not.Null);
             Assert.That(householdController.User.Identity, Is.Not.Null);
@@ -523,12 +523,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatHouseholdInformationWithHouseholdIdentifierNotEqualToNullReturnsPartialViewResultWithHouseholdModel()
         {
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
-            var householdController = CreateHouseholdController(household: householdModel);
+            HouseholdController householdController = CreateHouseholdController(household: householdModel);
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = Guid.NewGuid();
@@ -537,11 +537,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdIdentifier.HasValue, Is.True);
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
-            var result = householdController.HouseholdInformation(householdIdentifier);
+            ActionResult result = householdController.HouseholdInformation(householdIdentifier);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<PartialViewResult>());
 
-            var partialViewResult = (PartialViewResult) result;
+            PartialViewResult partialViewResult = (PartialViewResult) result;
             Assert.That(partialViewResult, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Empty);
@@ -560,7 +560,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatEditWithHouseholdIdentifierEqualToNullDoesNotCallGetHouseholdAsyncOnHouseholdDataRepository()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = null;
@@ -584,7 +584,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatEditWithHouseholdIdentifierEqualToNullReturnsPartialViewResultWithoutModel()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = null;
@@ -596,12 +596,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
             // ReSharper disable ExpressionIsAlwaysNull
-            var result = householdController.Edit(householdIdentifier);
+            ActionResult result = householdController.Edit(householdIdentifier);
             // ReSharper restore ExpressionIsAlwaysNull
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<PartialViewResult>());
 
-            var partialViewResult = (PartialViewResult) result;
+            PartialViewResult partialViewResult = (PartialViewResult) result;
             Assert.That(partialViewResult, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Empty);
@@ -623,18 +623,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdIdentifier.HasValue, Is.True);
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
-            Action<object[]> householdGetterCallback = arguments =>
+            HouseholdController householdController = CreateHouseholdController(householdGetterCallback: arguments =>
             {
                 Assert.That(arguments, Is.Not.Null);
                 Assert.That(arguments.ElementAt(1), Is.Not.Null);
                 Assert.That(arguments.ElementAt(1), Is.TypeOf<HouseholdModel>());
 
-                var householdModel = (HouseholdModel) arguments.ElementAt(1);
+                HouseholdModel householdModel = (HouseholdModel) arguments.ElementAt(1);
                 Assert.That(householdModel, Is.Not.Null);
                 Assert.That(householdModel.Identifier, Is.EqualTo(householdIdentifier.Value));
-            };
-
-            var householdController = CreateHouseholdController(householdGetterCallback: householdGetterCallback);
+            });
             Assert.That(householdController, Is.Not.Null);
             Assert.That(householdController.User, Is.Not.Null);
             Assert.That(householdController.User.Identity, Is.Not.Null);
@@ -653,12 +651,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatEditWithHouseholdIdentifierNotEqualToNullReturnsPartialViewResultWithHouseholdModel()
         {
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(householdModel, Is.Not.Null);
 
-            var householdController = CreateHouseholdController(household: householdModel);
+            HouseholdController householdController = CreateHouseholdController(household: householdModel);
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = Guid.NewGuid();
@@ -667,11 +665,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdIdentifier.HasValue, Is.True);
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
-            var result = householdController.Edit(householdIdentifier);
+            ActionResult result = householdController.Edit(householdIdentifier);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<PartialViewResult>());
 
-            var partialViewResult = (PartialViewResult) result;
+            PartialViewResult partialViewResult = (PartialViewResult) result;
             Assert.That(partialViewResult, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Empty);
@@ -690,12 +688,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatEditWithHouseholdModelThrowsArgumentNullExceptionWhenHouseholdModelIsNull()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             const HouseholdModel householdModel = null;
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdController.Edit(householdModel));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdController.Edit(householdModel));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -709,23 +707,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatEditWithInvalidHouseholdModelCallsGetHouseholdAsyncOnHouseholdDataRepository()
         {
-            var invalidHouseholdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel invalidHouseholdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.Identifier, Guid.NewGuid())
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
-            Action<object[]> householdGetterCallback = arguments =>
+            HouseholdController householdController = CreateHouseholdController(householdGetterCallback: arguments =>
             {
                 Assert.That(arguments, Is.Not.Null);
                 Assert.That(arguments.ElementAt(1), Is.Not.Null);
                 Assert.That(arguments.ElementAt(1), Is.TypeOf<HouseholdModel>());
 
-                var householdModel = (HouseholdModel) arguments.ElementAt(1);
+                HouseholdModel householdModel = (HouseholdModel) arguments.ElementAt(1);
                 Assert.That(householdModel, Is.Not.Null);
                 Assert.That(householdModel.Identifier, Is.EqualTo(invalidHouseholdModel.Identifier));
-            };
-
-            var householdController = CreateHouseholdController(householdGetterCallback: householdGetterCallback);
+            });
             Assert.That(householdController, Is.Not.Null);
             Assert.That(householdController.User, Is.Not.Null);
             Assert.That(householdController.User.Identity, Is.Not.Null);
@@ -747,13 +743,13 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatEditWithInvalidHouseholdModelDoesNotCallUpdateHouseholdAsyncOnHouseholdDataRepository()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
             Assert.That(householdController.ModelState.IsValid, Is.False);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
@@ -768,10 +764,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatEditWithInvalidHouseholdModelReturnsViewResultWithHouseholdModel()
         {
-            var householdMemberModelCollection = new List<MemberOfHouseholdModel>(Random.Next(5, 10));
+            List<MemberOfHouseholdModel> householdMemberModelCollection = new List<MemberOfHouseholdModel>(Random.Next(5, 10));
             while (householdMemberModelCollection.Count < householdMemberModelCollection.Capacity)
             {
-                var memberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+                MemberOfHouseholdModel memberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                     .With(m => m.HouseholdMemberIdentifier, Guid.NewGuid())
                     .With(m => m.HouseholdIdentifier, Guid.NewGuid())
                     .With(m => m.MailAddress, Fixture.Create<string>())
@@ -779,30 +775,30 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                     .Create();
                 householdMemberModelCollection.Add(memberOfHouseholdModel);
             }
-            var reloadedHouseholdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel reloadedHouseholdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.HouseholdMembers, householdMemberModelCollection)
                 .Create();
             Assert.That(reloadedHouseholdModel, Is.Not.Null);
             Assert.That(reloadedHouseholdModel.HouseholdMembers, Is.Not.Null);
             Assert.That(reloadedHouseholdModel.HouseholdMembers, Is.Not.Empty);
 
-            var householdController = CreateHouseholdController(household: reloadedHouseholdModel);
+            HouseholdController householdController = CreateHouseholdController(household: reloadedHouseholdModel);
             Assert.That(householdController, Is.Not.Null);
 
             householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
             Assert.That(householdController.ModelState.IsValid, Is.False);
 
-            var inhouseholdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel invalidHouseholdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
-            Assert.That(inhouseholdModel, Is.Not.Null);
-            Assert.That(inhouseholdModel.HouseholdMembers, Is.Null);
+            Assert.That(invalidHouseholdModel, Is.Not.Null);
+            Assert.That(invalidHouseholdModel.HouseholdMembers, Is.Null);
 
-            var result = householdController.Edit(inhouseholdModel);
+            ActionResult result = householdController.Edit(invalidHouseholdModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -812,9 +808,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.ViewData["EditMode"], Is.Not.Null);
             Assert.That(viewResult.ViewData["EditMode"], Is.True);
             Assert.That(viewResult.Model, Is.Not.Null);
-            Assert.That(viewResult.Model, Is.EqualTo(inhouseholdModel));
+            Assert.That(viewResult.Model, Is.EqualTo(invalidHouseholdModel));
 
-            var updatedInvalidHouseholdModel = (HouseholdModel) viewResult.Model;
+            HouseholdModel updatedInvalidHouseholdModel = (HouseholdModel) viewResult.Model;
             Assert.That(updatedInvalidHouseholdModel, Is.Not.Null);
             Assert.That(updatedInvalidHouseholdModel.HouseholdMembers, Is.Not.Null);
             Assert.That(updatedInvalidHouseholdModel.HouseholdMembers, Is.Not.Empty);
@@ -827,10 +823,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatEditWithValidHouseholdModelDoesNotCallGetHouseholdAsyncOnHouseholdDataRepository()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
@@ -845,12 +841,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatEditWithValidHouseholdModelCallsUpdateHouseholdAsyncOnHouseholdDataRepository()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
             Assert.That(householdController.User, Is.Not.Null);
             Assert.That(householdController.User.Identity, Is.Not.Null);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
@@ -865,28 +861,28 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatEditWithValidHouseholdModelReturnsRedirectToRouteResultToManage()
         {
-            var updatedHouseholdIdentifier = Guid.NewGuid();
-            var updatedHouseholdModel = Fixture.Build<HouseholdModel>()
+            Guid updatedHouseholdIdentifier = Guid.NewGuid();
+            HouseholdModel updatedHouseholdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.Identifier, updatedHouseholdIdentifier)
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
             Assert.That(updatedHouseholdModel, Is.Not.Null);
             Assert.That(updatedHouseholdModel.Identifier, Is.Not.EqualTo(default(Guid)));
 
-            var householdController = CreateHouseholdController(updatedHousehold: updatedHouseholdModel);
+            HouseholdController householdController = CreateHouseholdController(updatedHousehold: updatedHouseholdModel);
             Assert.That(householdController, Is.Not.Null);
             Assert.That(householdController.User, Is.Not.Null);
             Assert.That(householdController.User.Identity, Is.Not.Null);
 
-            var householdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel householdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
-            var result = householdController.Edit(householdModel);
+            ActionResult result = householdController.Edit(householdModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult) result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
@@ -919,7 +915,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatAddHouseholdMemberWithHouseholdIdentifierEqualToNullReturnsPartialViewResultWithoutModel()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = null;
@@ -931,12 +927,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
             // ReSharper disable ExpressionIsAlwaysNull
-            var result = householdController.AddHouseholdMember(householdIdentifier);
+            ActionResult result = householdController.AddHouseholdMember(householdIdentifier);
             // ReSharper restore ExpressionIsAlwaysNull
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<PartialViewResult>());
 
-            var partialViewResult = (PartialViewResult) result;
+            PartialViewResult partialViewResult = (PartialViewResult) result;
             Assert.That(partialViewResult, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Empty);
@@ -952,7 +948,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatAddHouseholdMemberWithHouseholdIdentifierNotEqualToNullReturnsPartialViewResultWithMemberOfHouseholdModel()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             Guid? householdIdentifier = Guid.NewGuid();
@@ -961,11 +957,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(householdIdentifier.HasValue, Is.True);
             // ReSharper restore ConditionIsAlwaysTrueOrFalse
 
-            var result = householdController.AddHouseholdMember(householdIdentifier);
+            ActionResult result = householdController.AddHouseholdMember(householdIdentifier);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<PartialViewResult>());
 
-            var partialViewResult = (PartialViewResult) result;
+            PartialViewResult partialViewResult = (PartialViewResult) result;
             Assert.That(partialViewResult, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Null);
             Assert.That(partialViewResult.ViewName, Is.Not.Empty);
@@ -975,7 +971,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(partialViewResult.Model, Is.Not.Null);
             Assert.That(partialViewResult.Model, Is.TypeOf<MemberOfHouseholdModel>());
 
-            var memberOfHouseholdModel = (MemberOfHouseholdModel) partialViewResult.Model;
+            MemberOfHouseholdModel memberOfHouseholdModel = (MemberOfHouseholdModel) partialViewResult.Model;
             Assert.That(memberOfHouseholdModel, Is.Not.Null);
             Assert.That(memberOfHouseholdModel.HouseholdMemberIdentifier, Is.EqualTo(default(Guid)));
             Assert.That(memberOfHouseholdModel.HouseholdIdentifier, Is.EqualTo(householdIdentifier));
@@ -989,12 +985,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatAddHouseholdMemberWithMemberOfHouseholdModelThrowsArgumentNullExceptionWhenMemberOfHouseholdModelIsNull()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             const MemberOfHouseholdModel memberOfHouseholdModel = null;
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdController.AddHouseholdMember(memberOfHouseholdModel));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdController.AddHouseholdMember(memberOfHouseholdModel));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -1008,23 +1004,21 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatAddHouseholdMemberWithInvalidMemberOfHouseholdModelCallsGetHouseholdAsyncOnHouseholdDataRepository()
         {
-            var invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+            MemberOfHouseholdModel invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
                 .With(m => m.MailAddress, (string) null)
                 .Create();
 
-            Action<object[]> householdGetterCallback = arguments =>
+            HouseholdController householdController = CreateHouseholdController(householdGetterCallback: arguments =>
             {
                 Assert.That(arguments, Is.Not.Null);
                 Assert.That(arguments.ElementAt(1), Is.Not.Null);
                 Assert.That(arguments.ElementAt(1), Is.TypeOf<HouseholdModel>());
 
-                var householdModel = (HouseholdModel) arguments.ElementAt(1);
+                HouseholdModel householdModel = (HouseholdModel) arguments.ElementAt(1);
                 Assert.That(householdModel, Is.Not.Null);
                 Assert.That(householdModel.Identifier, Is.EqualTo(invalidMemberOfHouseholdModel.HouseholdIdentifier));
-            };
-
-            var householdController = CreateHouseholdController(householdGetterCallback: householdGetterCallback);
+            });
             Assert.That(householdController, Is.Not.Null);
             Assert.That(householdController.User, Is.Not.Null);
             Assert.That(householdController.User.Identity, Is.Not.Null);
@@ -1046,10 +1040,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatAddHouseholdMemberWithInvalidMemberOfHouseholdModelDoesNotCallAddHouseholdMemberToHouseholdAsyncOnHouseholdDataRepository()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
-            var invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+            MemberOfHouseholdModel invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
                 .With(m => m.MailAddress, (string) null)
                 .Create();
@@ -1068,26 +1062,26 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatAddHouseholdMemberWithInvalidMemberOfHouseholdModelViewResultWithHouseholdModel()
         {
-            var reloadedHouseholdModel = Fixture.Build<HouseholdModel>()
+            HouseholdModel reloadedHouseholdModel = Fixture.Build<HouseholdModel>()
                 .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
                 .Create();
 
-            var householdController = CreateHouseholdController(household: reloadedHouseholdModel);
+            HouseholdController householdController = CreateHouseholdController(household: reloadedHouseholdModel);
             Assert.That(householdController, Is.Not.Null);
 
             householdController.ModelState.AddModelError(Fixture.Create<string>(), Fixture.Create<string>());
             Assert.That(householdController.ModelState.IsValid, Is.False);
 
-            var invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+            MemberOfHouseholdModel invalidMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
                 .With(m => m.MailAddress, (string) null)
                 .Create();
 
-            var result = householdController.AddHouseholdMember(invalidMemberOfHouseholdModel);
+            ActionResult result = householdController.AddHouseholdMember(invalidMemberOfHouseholdModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<ViewResult>());
 
-            var viewResult = (ViewResult) result;
+            ViewResult viewResult = (ViewResult) result;
             Assert.That(viewResult, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Null);
             Assert.That(viewResult.ViewName, Is.Not.Empty);
@@ -1099,7 +1093,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(viewResult.Model, Is.Not.Null);
             Assert.That(viewResult.Model, Is.EqualTo(reloadedHouseholdModel));
 
-            var householdModel = (HouseholdModel) viewResult.Model;
+            HouseholdModel householdModel = (HouseholdModel) viewResult.Model;
             Assert.That(householdModel, Is.Not.Null);
             Assert.That(householdModel.HouseholdMembers, Is.Not.Null);
             Assert.That(householdModel.HouseholdMembers, Is.Not.Empty);
@@ -1112,10 +1106,10 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatAddHouseholdMemberWithValidMemberOfHouseholdModelDoesNotCallGetHouseholdAsyncOnHouseholdDataRepository()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
-            var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+            MemberOfHouseholdModel validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
                 .With(m => m.MailAddress, (string) null)
                 .Create();
@@ -1131,7 +1125,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatAddHouseholdMemberWithValidMemberOfHouseholdModelCallsAddHouseholdMemberToHouseholdAsyncOnHouseholdDataRepository()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
             Assert.That(householdController.User, Is.Not.Null);
             Assert.That(householdController.User.Identity, Is.Not.Null);
@@ -1139,7 +1133,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
             Assert.That(Thread.CurrentThread, Is.Not.Null);
             Assert.That(Thread.CurrentThread.CurrentUICulture, Is.Not.Null);
 
-            var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+            MemberOfHouseholdModel validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
                 .With(m => m.MailAddress, (string) null)
                 .Create();
@@ -1155,19 +1149,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatAddHouseholdMemberWithValidMemberOfHouseholdModelReturnsRedirectToRouteResultToManage()
         {
-            var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+            MemberOfHouseholdModel validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
                 .With(m => m.MailAddress, (string) null)
                 .Create();
 
-            var householdController = CreateHouseholdController(addedMemberOfHousehold: validMemberOfHouseholdModel);
+            HouseholdController householdController = CreateHouseholdController(addedMemberOfHousehold: validMemberOfHouseholdModel);
             Assert.That(householdController, Is.Not.Null);
 
-            var result = householdController.AddHouseholdMember(validMemberOfHouseholdModel);
+            ActionResult result = householdController.AddHouseholdMember(validMemberOfHouseholdModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult) result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
@@ -1200,12 +1194,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatRemoveHouseholdMemberWithMemberOfHouseholdModelThrowsArgumentNullExceptionWhenMemberOfHouseholdModelIsNull()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
 
             const MemberOfHouseholdModel memberOfHouseholdModel = null;
 
-            var exception = Assert.Throws<ArgumentNullException>(() => householdController.RemoveHouseholdMember(memberOfHouseholdModel));
+            ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => householdController.RemoveHouseholdMember(memberOfHouseholdModel));
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Null);
             Assert.That(exception.ParamName, Is.Not.Empty);
@@ -1219,12 +1213,12 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatRemoveHouseholdMemberWithValidMemberOfHouseholdModelCallsRemoveHouseholdMemberFromHouseholdAsyncOnHouseholdDataRepository()
         {
-            var householdController = CreateHouseholdController();
+            HouseholdController householdController = CreateHouseholdController();
             Assert.That(householdController, Is.Not.Null);
             Assert.That(householdController.User, Is.Not.Null);
             Assert.That(householdController.User.Identity, Is.Not.Null);
 
-            var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+            MemberOfHouseholdModel validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
                 .With(m => m.MailAddress, (string) null)
                 .Create();
@@ -1240,19 +1234,19 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         [Test]
         public void TestThatRemoveHouseholdMemberWithValidMemberOfHouseholdModelReturnsRedirectToRouteResultToManage()
         {
-            var validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
+            MemberOfHouseholdModel validMemberOfHouseholdModel = Fixture.Build<MemberOfHouseholdModel>()
                 .With(m => m.HouseholdIdentifier, Guid.NewGuid())
                 .With(m => m.MailAddress, (string) null)
                 .Create();
 
-            var householdController = CreateHouseholdController(removedMemberOfHousehold: validMemberOfHouseholdModel);
+            HouseholdController householdController = CreateHouseholdController(removedMemberOfHousehold: validMemberOfHouseholdModel);
             Assert.That(householdController, Is.Not.Null);
 
-            var result = householdController.RemoveHouseholdMember(validMemberOfHouseholdModel);
+            ActionResult result = householdController.RemoveHouseholdMember(validMemberOfHouseholdModel);
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
 
-            var redirectToRouteResult = (RedirectToRouteResult) result;
+            RedirectToRouteResult redirectToRouteResult = (RedirectToRouteResult) result;
             Assert.That(redirectToRouteResult, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Null);
             Assert.That(redirectToRouteResult.RouteValues, Is.Not.Empty);
@@ -1290,27 +1284,6 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
         /// <returns>Controller for a household for unit testing.</returns>
         private HouseholdController CreateHouseholdController(HouseholdModel household = null, Action<object[]> householdGetterCallback = null, HouseholdModel updatedHousehold = null, MemberOfHouseholdModel addedMemberOfHousehold = null, MemberOfHouseholdModel removedMemberOfHousehold = null)
         {
-            Func<HouseholdModel> householdGetter = () =>
-            {
-                if (household != null)
-                {
-                    return household;
-                }
-                return Fixture.Build<HouseholdModel>()
-                    .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
-                    .Create();
-            };
-            Func<HouseholdModel> householdUpdater = () =>
-            {
-                if (updatedHousehold != null)
-                {
-                    return updatedHousehold;
-                }
-                return Fixture.Build<HouseholdModel>()
-                    .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
-                    .Create();
-            };
-
             _householdDataRepositoryMock.Stub(m => m.GetHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .WhenCalled(e =>
                 {
@@ -1331,10 +1304,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                         throw;
                     }
                 })
-                .Return(Task.Run(householdGetter))
+                .Return(Task.FromResult(household ?? Fixture.Build<HouseholdModel>()
+                    .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
+                    .Create()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.UpdateHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<HouseholdModel>.Is.Anything))
-                .Return(Task.Run(householdUpdater))
+                .Return(Task.FromResult(updatedHousehold ?? Fixture.Build<HouseholdModel>()
+                    .With(m => m.HouseholdMembers, (IEnumerable<MemberOfHouseholdModel>) null)
+                    .Create()))
                 .Repeat.Any();
             _householdDataRepositoryMock.Stub(m => m.AddHouseholdMemberToHouseholdAsync(Arg<IIdentity>.Is.Anything, Arg<MemberOfHouseholdModel>.Is.Anything, Arg<CultureInfo>.Is.Anything))
                 .Return(Task.Run(() => addedMemberOfHousehold ?? Fixture.Build<MemberOfHouseholdModel>().With(m => m.HouseholdIdentifier, Guid.NewGuid()).With(m => m.MailAddress, Fixture.Create<string>()).Create()))
@@ -1343,7 +1320,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Tests.Controllers
                 .Return(Task.Run(() => removedMemberOfHousehold ?? Fixture.Build<MemberOfHouseholdModel>().With(m => m.HouseholdIdentifier, Guid.NewGuid()).With(m => m.MailAddress, Fixture.Create<string>()).Create()))
                 .Repeat.Any();
 
-            var householdController = new HouseholdController(_householdDataRepositoryMock);
+            HouseholdController householdController = new HouseholdController(_householdDataRepositoryMock);
             householdController.ControllerContext = ControllerTestHelper.CreateControllerContext(householdController);
             return householdController;
         }

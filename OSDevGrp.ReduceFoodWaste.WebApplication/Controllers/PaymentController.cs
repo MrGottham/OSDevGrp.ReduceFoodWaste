@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Filters;
 using OSDevGrp.ReduceFoodWaste.WebApplication.Infrastructure.Exceptions;
@@ -40,21 +40,9 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <param name="utilities">Implementation of the utilities which support the infrastructure.</param>
         public PaymentController(IHouseholdDataRepository householdDataRepository, IModelHelper modelHelper, IUtilities utilities)
         {
-            if (householdDataRepository == null)
-            {
-                throw new ArgumentNullException(nameof(householdDataRepository));
-            }
-            if (modelHelper == null)
-            {
-                throw new ArgumentNullException(nameof(modelHelper));
-            }
-            if (utilities == null)
-            {
-                throw new ArgumentNullException(nameof(utilities));
-            }
-            _householdDataRepository = householdDataRepository;
-            _modelHelper = modelHelper;
-            _utilities = utilities;
+            _householdDataRepository = householdDataRepository ?? throw new ArgumentNullException(nameof(householdDataRepository));
+            _modelHelper = modelHelper ?? throw new ArgumentNullException(nameof(modelHelper));
+            _utilities = utilities ?? throw new ArgumentNullException(nameof(utilities));
         }
 
         #endregion
@@ -86,11 +74,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return Redirect(returnUrl);
                 }
 
-                Task<IEnumerable<PaymentHandlerModel>> task = _householdDataRepository.GetPaymentHandlersAsync(User.Identity, Thread.CurrentThread.CurrentUICulture);
-                task.Wait();
+                IEnumerable<PaymentHandlerModel> paymentHandlerModelCollection = _householdDataRepository
+                    .GetPaymentHandlersAsync(User.Identity, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult()
+                    .ToArray();
 
                 payableModel.PaymentHandlerIdentifier = null;
-                payableModel.PaymentHandlers = task.Result;
+                payableModel.PaymentHandlers = paymentHandlerModelCollection;
                 payableModel.PaymentStatus = PaymentStatus.Unpaid;
                 payableModel.PaymentReceipt = null;
 

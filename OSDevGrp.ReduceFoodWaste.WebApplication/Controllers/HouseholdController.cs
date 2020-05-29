@@ -31,11 +31,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         /// <param name="householdDataRepository">Implementation of a repository which can access household data.</param>
         public HouseholdController(IHouseholdDataRepository householdDataRepository)
         {
-            if (householdDataRepository == null)
-            {
-                throw new ArgumentNullException("householdDataRepository");
-            }
-            _householdDataRepository = householdDataRepository;
+            _householdDataRepository = householdDataRepository ?? throw new ArgumentNullException(nameof(householdDataRepository));
         }
 
         #endregion
@@ -56,7 +52,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                 return RedirectToAction("Dashboard", "Dashboard");
             }
 
-            var householdModel = new HouseholdModel
+            HouseholdModel householdModel = new HouseholdModel
             {
                 Identifier = householdIdentifier.Value
             };
@@ -87,7 +83,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return PartialView("_Empty");
                 }
 
-                var householdModel = GetHouseholdModel(householdIdentifier.Value);
+                HouseholdModel householdModel = GetHouseholdModel(householdIdentifier.Value);
 
                 ViewBag.EditMode = false;
 
@@ -114,7 +110,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return PartialView("_Empty");
                 }
 
-                var householdModel = GetHouseholdModel(householdIdentifier.Value);
+                HouseholdModel householdModel = GetHouseholdModel(householdIdentifier.Value);
 
                 ViewBag.EditMode = true;
 
@@ -138,14 +134,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             if (householdModel == null)
             {
-                throw new ArgumentNullException("householdModel");
+                throw new ArgumentNullException(nameof(householdModel));
             }
 
             try
             {
                 if (ModelState.IsValid == false)
                 {
-                    var reloadedHouseholdModel = GetHouseholdModel(householdModel.Identifier);
+                    HouseholdModel reloadedHouseholdModel = GetHouseholdModel(householdModel.Identifier);
                     householdModel.HouseholdMembers = reloadedHouseholdModel.HouseholdMembers;
 
                     ViewBag.EditMode = true;
@@ -153,10 +149,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return View("Manage", householdModel);
                 }
                 
-                var task = _householdDataRepository.UpdateHouseholdAsync(User.Identity, householdModel);
-                task.Wait();
+                HouseholdModel updatedHouseholdModel = _householdDataRepository.UpdateHouseholdAsync(User.Identity, householdModel)
+                    .GetAwaiter()
+                    .GetResult();
 
-                return RedirectToAction("Manage", "Household", new {householdIdentifier = task.Result.Identifier});
+                return RedirectToAction("Manage", "Household", new {householdIdentifier = updatedHouseholdModel.Identifier});
             }
             catch (AggregateException ex)
             {
@@ -182,7 +179,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return PartialView("_Empty");
                 }
 
-                var memberOfHouseholdModel = new MemberOfHouseholdModel
+                MemberOfHouseholdModel memberOfHouseholdModel = new MemberOfHouseholdModel
                 {
                     HouseholdIdentifier = householdIdentifier.Value
                 };
@@ -207,7 +204,7 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             if (memberOfHouseholdModel == null)
             {
-                throw new ArgumentNullException("memberOfHouseholdModel");
+                throw new ArgumentNullException(nameof(memberOfHouseholdModel));
             }
 
             try
@@ -225,10 +222,11 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
                     return View("Manage", householdModel);
                 }
 
-                var task = _householdDataRepository.AddHouseholdMemberToHouseholdAsync(User.Identity, memberOfHouseholdModel, Thread.CurrentThread.CurrentUICulture);
-                task.Wait();
+                MemberOfHouseholdModel addedHouseholdMember = _householdDataRepository.AddHouseholdMemberToHouseholdAsync(User.Identity, memberOfHouseholdModel, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult();
 
-                return RedirectToAction("Manage", "Household", new {householdIdentifier = task.Result.HouseholdIdentifier});
+                return RedirectToAction("Manage", "Household", new {householdIdentifier = addedHouseholdMember.HouseholdIdentifier});
             }
             catch (AggregateException ex)
             {
@@ -251,15 +249,16 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             if (memberOfHouseholdModel == null)
             {
-                throw new ArgumentNullException("memberOfHouseholdModel");
+                throw new ArgumentNullException(nameof(memberOfHouseholdModel));
             }
 
             try
             {
-                var task = _householdDataRepository.RemoveHouseholdMemberFromHouseholdAsync(User.Identity, memberOfHouseholdModel);
-                task.Wait();
+                MemberOfHouseholdModel removedHouseholdMember = _householdDataRepository.RemoveHouseholdMemberFromHouseholdAsync(User.Identity, memberOfHouseholdModel)
+                    .GetAwaiter()
+                    .GetResult();
 
-                return RedirectToAction("Manage", "Household", new { householdIdentifier = task.Result.HouseholdIdentifier });
+                return RedirectToAction("Manage", "Household", new { householdIdentifier = removedHouseholdMember.HouseholdIdentifier });
             }
             catch (AggregateException ex)
             {
@@ -280,15 +279,14 @@ namespace OSDevGrp.ReduceFoodWaste.WebApplication.Controllers
         {
             try
             {
-                var householdModel = new HouseholdModel
+                HouseholdModel householdModel = new HouseholdModel
                 {
                     Identifier = householdIdentifier
                 };
 
-                var task = _householdDataRepository.GetHouseholdAsync(User.Identity, householdModel, Thread.CurrentThread.CurrentUICulture);
-                task.Wait();
-
-                return task.Result;
+                return  _householdDataRepository.GetHouseholdAsync(User.Identity, householdModel, Thread.CurrentThread.CurrentUICulture)
+                    .GetAwaiter()
+                    .GetResult();
             }
             catch (AggregateException ex)
             {
