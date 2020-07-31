@@ -61,8 +61,8 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AutoMapper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -192,6 +192,7 @@
     <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteExceptionBase.cs" />
     <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteRepositoryException.cs" />
     <Compile Include="Infrastructure\Exceptions\ReduceFoodWasteSystemException.cs" />
+    <Compile Include="Infrastructure\Modules\HttpOverrides.cs" />
     <Compile Include="Infrastructure\Security\Authentication\IdentityHelper.cs" />
     <Compile Include="Infrastructure\Security\Providers\ILocalClaimProvider.cs" />
     <Compile Include="Infrastructure\Security\Providers\LocalClaimProvider.cs" />
